@@ -1,0 +1,289 @@
+﻿@page "/paau/agvstatus"
+@using System.Runtime.Serialization;
+@using Newtonsoft.Json;
+@using GoWMS.Server.Controllers;
+@using GoWMS.Server.Models.Hagv;
+@using System.Net.NetworkInformation;    
+
+
+@inject AgvService ObjAgvService;
+@inject IHttpClientFactory _clientFactory;
+@implements IDisposable;
+@inject UtilityServices ObjUtitityservice
+
+@if (Elements == null)
+{
+    // <p><em>Loading...</em></p>
+    <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
+}
+else
+{
+    <MudText Typo="Typo.h6" Color="Color.Primary"> @mPagecaption </MudText>
+    <MudTable Items="@Elements" FixedHeader="@fixed_header" FixedFooter="@fixed_footer" Height="@(fixed_header || fixed_footer ?"600px":"")" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<dataModel,bool>(FilterFunc)"  SortLabel="Sort By">
+        <ToolBarContent>
+            <MudSpacer />
+            <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+        </ToolBarContent>
+
+        <HeaderContent>
+            <MudTh><MudTableSortLabel SortBy="new Func<dataModel, object>(x=>x.robotCode)">AGV NO</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<dataModel, object>(x=>x.robotIp)">AGV IP</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<dataModel, object>(x=>x.battery)">POWER(%)</MudTableSortLabel></MudTh>
+            <MudTh>SPEED</MudTh>
+            <MudTh>STATUS</MudTh>
+            <MudTh>CONNECTION</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="AGV NO">@context.robotCode</MudTd>
+            <MudTd DataLabel="AGV IP">@context.robotIp</MudTd>
+            <MudTd DataLabel="POWER(%)">@context.battery</MudTd>
+            <MudTd DataLabel="SPEED">@context.speed</MudTd>
+
+            <MudTd DataLabel="STATUS">
+                @{
+                    int ind = @ElementsStatus.FindIndex(x => x.Status.ToString() == context.status);
+                    if (ind > -1)
+                    {
+                        string strmsg = @ElementsStatus[ind].Description;
+
+                        <MudText>@context.status - @strmsg</MudText>
+                        }
+                        else
+                        {
+                        <MudText>@context.status - Unknow</MudText>
+                        }
+                }
+            </MudTd>
+
+            <MudTd DataLabel="">
+                @if (@context.Online == true)
+                    {
+                    <MudChip Variant="Variant.Outlined" Color="Color.Success">Online</MudChip>
+                    }
+                    else
+                    {
+                    <MudChip Variant="Variant.Outlined" Color="Color.Error">Offline</MudChip>
+                    }
+            </MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />
+        </PagerContent>
+    </MudTable>
+}
+
+
+
+@code {
+    private string mPagecaption = "AGV STATUS";
+    [DataContract]
+    class Request
+    {
+        [DataMember]
+        public string reqCode { get; set; }
+        [DataMember]
+        public string mapShortName { get; set; }
+    }
+    class Response
+    {
+        [DataMember]
+        public string code { get; set; }
+        [DataMember]
+        [JsonProperty("data")]
+        public dataModel[] data { get; set; } = new dataModel[1];
+        [DataMember]
+        public string interrupt { get; set; }
+        [DataMember]
+        public string message { get; set; }
+        [DataMember]
+        public string reqCode { get; set; }
+    }
+    [DataContract]
+    class dataModel
+    {
+        [DataMember]
+        public string battery { get; set; }
+        [DataMember]
+        public string exclType { get; set; }
+        [DataMember]
+        public string mapCode { get; set; }
+        [JsonIgnore]
+        public string[] path { get; set; }
+        [DataMember]
+        public string podCode { get; set; }
+        [DataMember]
+        public string podDir { get; set; }
+        [DataMember]
+        public string posX { get; set; }
+        [DataMember]
+        public string posY { get; set; }
+        [DataMember]
+        public string robotCode { get; set; }
+        [DataMember]
+        public string robotDir { get; set; }
+        [DataMember]
+        public string robotIp { get; set; }
+        [DataMember]
+        public string speed { get; set; }
+        [DataMember]
+        public string status { get; set; }
+        [DataMember]
+        public string stop { get; set; }
+        [DataMember]
+        public string timestamp { get; set; }
+        [DataMember]
+        public bool Online { get; set; }
+    }
+
+    List<dataModel> Elements = new List<dataModel>();
+    List<Agv_Status> ElementsStatus = new List<Agv_Status>();
+    private bool dense = true;
+    private bool hover = true;
+    private bool striped = true;
+    private bool bordered = false;
+    private bool fixed_header = true;
+    private bool fixed_footer = true;
+    private string searchString = "";
+
+    private bool AGV192_168_200_32 { get; set; } = false;
+    private bool AGV192_168_200_33 { get; set; } = false;
+    private bool AGV192_168_200_34 { get; set; } = false;
+    private bool AGV192_168_200_35 { get; set; } = false;
+    private bool AGV192_168_200_36 { get; set; } = false;
+    private bool AGV192_168_200_37 { get; set; } = false;
+    private bool AGV192_168_200_38 { get; set; } = false;
+
+
+    void IDisposable.Dispose()
+    {
+        //while (bgWorker.IsBusy == true)
+        //{ }
+        timer.Enabled = false;
+        timer.Dispose();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        ElementsStatus = await Task.Run(() => ObjAgvService.GetAllAgvStatusDesc());
+
+        //ElementsStatus = ObjAgvService.GetAllAgvStatusDesc();
+        //await Task.Run(() => PingAGV());
+        await Task.Run(() => InitialTimer());
+
+        //InitialTimer();
+
+    }
+    bool FilterFunc(dataModel element)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.robotCode.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        return false;
+    }
+
+    void RefreshData()
+    {
+
+    }
+    async void ExecuteApi()
+    {
+        var client = _clientFactory.CreateClient();
+        System.Data.DataTable vDt = ObjAgvService.GetQueryAgvStatusApiName();
+
+        string vFullApiName = vDt.Rows[0]["full_api_name"].ToString();
+        Request vRequest = new Request();
+        vRequest.reqCode = "QAGV" + DateTime.Now.ToString("YYYYMMddHHmmss");
+        vRequest.mapShortName = vDt.Rows[0]["map_short_name"].ToString();
+
+        string vBody = Newtonsoft.Json.JsonConvert.SerializeObject(vRequest);
+        var vContent = new StringContent(vBody, System.Text.Encoding.UTF8, "application/json");
+        var vResponseMsg = client.PostAsync(vFullApiName, vContent).Result;
+        Response vResponse = null;
+        var vResult = vResponseMsg.Content.ReadAsStringAsync().Result;
+        if (vResponseMsg.StatusCode == System.Net.HttpStatusCode.OK)
+        {
+            Elements = new List<dataModel>();
+            vResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<Response>(vResult.ToString());
+            if (vResponse.code == "0" && vResponse.data != null)
+            {
+                for (int i = 0; i < vResponse.data.Length; i++)
+                {
+                    dataModel vTemp = new dataModel();
+                    vTemp.battery = vResponse.data[i].battery;
+                    vTemp.robotCode = vResponse.data[i].robotCode;
+                    vTemp.speed = vResponse.data[i].speed;
+                    vTemp.status = vResponse.data[i].status;
+                    vTemp.robotIp = vResponse.data[i].robotIp;
+                    switch(vResponse.data[i].robotIp)
+                    {
+                        case "192.168.200.32":
+                            vTemp.Online = AGV192_168_200_32;
+                            break;
+                        case "192.168.200.33":
+                            vTemp.Online = AGV192_168_200_33;
+                            break;
+                        case "192.168.200.34":
+                            vTemp.Online = AGV192_168_200_34;
+                            break;
+                        case "192.168.200.35":
+                            vTemp.Online = AGV192_168_200_35;
+                            break;
+                        case "192.168.200.36":
+                            vTemp.Online = AGV192_168_200_36;
+                            break;
+                        case "192.168.200.37":
+                            vTemp.Online = AGV192_168_200_37;
+                            break;
+                        case "192.168.200.38":
+                            vTemp.Online = AGV192_168_200_38;
+                            break;
+                        default:
+                            vTemp.Online = false;
+                            break;
+                    }
+
+                    //vTemp.Online = await ObjUtitityservice.PingAsync(vResponse.data[i].robotIp);
+                    Elements.Add(vTemp);
+                }
+                Elements = Elements.OrderBy(x => x.robotCode).ToList();
+            }
+        }
+    }
+    #region timer
+    System.Timers.Timer timer;
+    void InitialTimer()
+    {
+        timer = new System.Timers.Timer();
+        timer.Interval = 1000;
+        timer.Elapsed += TimerElapsed;
+        timer.Enabled = true;
+    }
+    void TimerElapsed(Object source, System.Timers.ElapsedEventArgs e)
+    {
+
+        if (timer.Interval <= 1000)
+            timer.Interval = 10000;
+
+        PingAGV();
+        ExecuteApi();
+        InvokeAsync(StateHasChanged);
+    }
+    #endregion
+
+
+    async void PingAGV()
+    {
+        AGV192_168_200_32 = await ObjUtitityservice.PingAsync("192.168.200.32");
+        AGV192_168_200_33 = await ObjUtitityservice.PingAsync("192.168.200.33");
+        AGV192_168_200_34 = await ObjUtitityservice.PingAsync("192.168.200.34");
+        AGV192_168_200_35 = await ObjUtitityservice.PingAsync("192.168.200.35");
+        AGV192_168_200_36 = await ObjUtitityservice.PingAsync("192.168.200.36");
+        AGV192_168_200_37 = await ObjUtitityservice.PingAsync("192.168.200.37");
+        AGV192_168_200_38 = await ObjUtitityservice.PingAsync("192.168.200.38");
+    }
+
+
+
+}

@@ -1,14 +1,18 @@
 ﻿@page "/"
 @page "/pages/authentication/login"
 @layout LoginLayout
+@using GoWMS.Server.Data;
+@using NETCore.Encrypt;
+
+@inject NavigationManager navigationManager
 
 
 
-<MudText Typo="Typo.h4" GutterBottom="true">Sign In</MudText>
+<MudText Typo="Typo.h4" GutterBottom="true">Sign In to GoWMS</MudText>
 
 <MudText>Don't have an account? <MudLink Href="/pages/authentication/register">Sign Up</MudLink></MudText>
 
-<MudTextField T="string" Value="@("admin@gowms.com")" Label="E-mail" Variant="Variant.Outlined" Class="my-6"></MudTextField>
+<MudTextField T="string" @bind-Value="@Userword" Label="UserID" Variant="Variant.Outlined" Class="my-6"></MudTextField>
 
 <MudTextField @bind-Value="@Password" Label="Password" Variant="Variant.Outlined" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="TogglePasswordVisibility" />
 
@@ -18,10 +22,10 @@
 </div>
 
 
-<MudButton Variant="Variant.Filled" Color="Color.Primary" Link="/personal/dashboard" Size="Size.Large" FullWidth="true">Sign In</MudButton>
+<MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" FullWidth="true" OnClick="@SetUser">Sign In</MudButton>
 
-@code {
-    string Password { get; set; } = "@dm1nistr@t0r";
+@code {string Password { get; set; } = "@dm1nistr@t0r";
+    string Userword { get; set; } = "admin@gowms.com";
 
     bool PasswordVisibility;
     InputType PasswordInput = InputType.Password;
@@ -29,17 +33,44 @@
 
     void TogglePasswordVisibility()
     {
-        @if (PasswordVisibility)
+@if (PasswordVisibility)
+{
+    PasswordVisibility = false;
+    PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+    PasswordInput = InputType.Password;
+}
+else
+{
+    PasswordVisibility = true;
+    PasswordInputIcon = Icons.Material.Filled.Visibility;
+    PasswordInput = InputType.Text;
+}}
+
+    void SetUser()
+    {
+        //GoWMS.Server.Data.CurrentUserName = Userword;
+        //GoWMS.Server.Data.VarGlobals.
+
+        VarGlobals.CurrentUserName = Userword;
+
+        /*
+        Action<VarGlobals> mduOptions = (opt =>
         {
-            PasswordVisibility = false;
-            PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
-            PasswordInput = InputType.Password;
-        }
-        else
-        {
-            PasswordVisibility = true;
-            PasswordInputIcon = Icons.Material.Filled.Visibility;
-            PasswordInput = InputType.Text;
-        }
+            opt.CurrentUserName = Userword;
+        });
+        */
+        var srcString = Password;
+        var key = "czsqO+DxnA1EcyurkKdllA==";
+        var encrypted = EncryptProvider.DESEncrypt(srcString, key);
+        var decrypted = EncryptProvider.DESDecrypt(encrypted, key);
+
+        VarGlobals.User.UserID = 1;
+        VarGlobals.User.UserName = Userword;
+        VarGlobals.User.DeepID = 1;
+        VarGlobals.User.GroupID = 1;
+
+        navigationManager.NavigateTo("/dashboard");
+        //navigationManager.NavigateTo("");
+
     }
 }

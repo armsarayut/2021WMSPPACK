@@ -25,7 +25,7 @@ else
     </MudItem>
 
     <MudItem xs="12" sm="6" md="4">
-        <MudTimePicker Label="Delivery Time " @bind-Time="time" TimeEditMode="TimeEditMode.Normal" />
+        <MudTimePicker Label="Delivery Time" @bind-Time="time" TimeEditMode="TimeEditMode.Normal" />
     </MudItem>
 
     <MudItem xs="12" sm="6" md="4">
@@ -42,19 +42,19 @@ else
               RowsPerPage="5">
         <ToolBarContent>
             <MudText Typo="Typo.h6">List Of Material Need</MudText>
-            <MudToolBarSpacer />
+            <MudSpacer />
             <MudTextField @bind-Value="searchStringLON" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
         </ToolBarContent>
 
         <HeaderContent>
-            <MudTh>Customer</MudTh>
-            <MudTh>Name</MudTh>
-            <MudTh>Product</MudTh>
-            <MudTh>ProductName</MudTh>
-            <MudTh>Material</MudTh>
-            <MudTh>Description</MudTh>
-            <MudTh>Quantity</MudTh>
-            <MudTh>Unit</MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Customer_Code)">Customer</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Customer_Description)">Name</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Finished_Product)">Product</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Finished_Product_Description)">ProductName</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Material_Code)">Material</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Material_Description)">Description</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Quantity)">Quantity</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Unit)">Unit</MudTableSortLabel></MudTh>
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="Customer">@context.Customer_Code</MudTd>
@@ -73,26 +73,24 @@ else
     @*for debug
         <MudText Inline="true">Selected items: @(selectLON==null ? "" : string.Join(", ", selectLON.OrderBy(x=>x.Efidx).Select(x=>x.Efidx)))</MudText>
         end debug*@
-    --x => x.myTextColumn.StartWith('abc')
-
     <MudTable Items="@Elements.Where(a => a.Dotype == @_doType2 && a.Material_Code.StartsWith(@_matfilter))" MultiSelection="true" @bind-SelectedItems="selectRES" Hover="@hover"
               Filter="new Func<Api_Deliveryorder_Go,bool>(FilterFuncRES)"
               RowsPerPage="5">
 
         <ToolBarContent>
             <MudText Typo="Typo.h6">Reserved Materials</MudText>
-            <MudToolBarSpacer />
+            <MudSpacer />
             <MudTextField @bind-Value="searchStringRES" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
         </ToolBarContent>
 
         <HeaderContent>
-            <MudTh>PackID</MudTh>
-            <MudTh>Material</MudTh>
-            <MudTh>Description</MudTh>
-            <MudTh>Warehouse</MudTh>
-            <MudTh>WarehouseName</MudTh>
-            <MudTh>Quantity</MudTh>
-            <MudTh>Unit</MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Package_Id)">PackID</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Material_Code)">Material</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Material_Description)">Description</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Wh_Code)">Warehouse</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Warehouse)">WarehouseName</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Quantity)">Quantity</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Unit)">Unit</MudTableSortLabel></MudTh>
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="PackID">@context.Package_Id</MudTd>
@@ -118,14 +116,14 @@ else
                   RowsPerPage="5">
             <ToolBarContent>
                 <MudText Typo="Typo.h6">List Of Material Need</MudText>
-                <MudToolBarSpacer />
+                <MudSpacer />
                 <MudTextField @bind-Value="searchStringLON" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
             </ToolBarContent>
             <HeaderContent>
-                    <MudTh>Product</MudTh>
-                    <MudTh>Material</MudTh>
-                    <MudTh>Quantity</MudTh>
-                    <MudTh>Unit</MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Finished_Product)">Product</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Material_Code)">Material</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Quantity)">Quantity</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Unit)">Unit</MudTableSortLabel></MudTh>
             </HeaderContent>
             <RowTemplate>
                 <MudTd DataLabel="Product">@context.Finished_Product</MudTd>
@@ -143,15 +141,15 @@ else
                   RowsPerPage="5">
             <ToolBarContent>
                 <MudText Typo="Typo.h6">Reserved Materials</MudText>
-                <MudToolBarSpacer />
+                <MudSpacer />
                 <MudTextField @bind-Value="searchStringRES" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
             </ToolBarContent>
 
             <HeaderContent>
-                    <MudTh>PackID</MudTh>
-                    <MudTh>Material</MudTh>
-                    <MudTh>Quantity</MudTh>
-                    <MudTh>Unit</MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Package_Id)">PackID</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Material_Code)">Material</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Quantity)">Quantity</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Unit)">Unit</MudTableSortLabel></MudTh>
             </HeaderContent>
             <RowTemplate>
                 <MudTd DataLabel="PackID">@context.Package_Id</MudTd>

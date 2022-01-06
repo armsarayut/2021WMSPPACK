@@ -1,4 +1,4 @@
-﻿@page "/inb/wcsqueue"
+﻿@page "/Pag/1/1_4"
 @using GoWMS.Server.Data
 @using GoWMS.Server.Controllers
 @using GoWMS.Server.Models
@@ -17,23 +17,23 @@ else
     <MudText Typo="Typo.h6" Color="Color.Primary">@mPageHeader</MudText>
     <MudTable Items="@Elements" FixedHeader="@fixed_header" FixedFooter="@fixed_footer" Height="@(fixed_header || fixed_footer ?"600px":"")" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<Inb_Putaway_Go,bool>(FilterFunc)" @bind-SelectedItem="selectedItem">
         <ToolBarContent>
-            <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.FileDownload" Style="background-color: mediumseagreen; color: white; width: 80px; height: 30px;">
-                Excel
-            </MudButton>
-            <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.FileDownload" Style="background-color: orangered; color: white; width: 80px; height: 30px;">
-                PDF
-            </MudButton>
-            <MudToolBarSpacer />
+            <MudTooltip Text="Export" Color="Color.Secondary" Placement="Placement.Top">
+                <MudMenu Icon="@Icons.Filled.Download" Color="Color.Primary">
+                    <MudMenuItem>Excel</MudMenuItem>
+                    <MudMenuItem>Pdf</MudMenuItem>
+                </MudMenu>
+            </MudTooltip>
+            <MudSpacer />
             <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
         </ToolBarContent>
         <HeaderContent>
-            <MudTh>Queue time</MudTh>
-            <MudTh>Masterpallet</MudTh>
-            <MudTh>Worktype</MudTh>
-            <MudTh>SRM</MudTh>
-            <MudTh>Location</MudTh>
-            <MudTh>Start time</MudTh>
-            <MudTh>End time</MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Created)">Queue time</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Palletno)">Masterpallet</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Puttype)">Worktype</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Storagearea)">SRM</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Storagebin)">Location</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Storagetime)">Start time</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Completed)">End time</MudTableSortLabel></MudTh>
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="Queuetime">@context.Created</MudTd>

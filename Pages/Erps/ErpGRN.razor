@@ -16,30 +16,31 @@ else
     <MudText Typo="Typo.h6" Color="Color.Primary"> @mPageHeader </MudText>
     <MudTable Items="@Elements" FixedHeader="@fixed_header" FixedFooter="@fixed_footer" Height="@(fixed_header || fixed_footer ?"600px":"")" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<V_Receiving_OrdersInfo,bool>(FilterFunc)" @bind-SelectedItem="selectedItem">
         <ToolBarContent>
-            <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.FileDownload" Style="background-color: mediumseagreen; color: white; width: 80px; height: 30px;">
-                Excel
-            </MudButton>
-            <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.FileDownload" Style="background-color: orangered; color: white; width: 80px; height: 30px;">
-                PDF
-            </MudButton>
-            <MudToolBarSpacer />
+            <MudTooltip Text="Export" Color="Color.Secondary" Placement="Placement.Top">
+                <MudMenu Icon="@Icons.Filled.Download" Color="Color.Primary">
+                    <MudMenuItem>Excel</MudMenuItem>
+                    <MudMenuItem>Pdf</MudMenuItem>
+                </MudMenu>
+            </MudTooltip>
+            <MudSpacer />
             <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
         </ToolBarContent>
 
         <HeaderContent>
-            <MudTh>Document</MudTh>
-            <MudTh>PackID</MudTh>
-            <MudTh>Material</MudTh>
-            <MudTh>Description</MudTh>
-            <MudTh>ReceivingDate</MudTh>
-            <MudTh>GRQty</MudTh>
-            <MudTh>Unit</MudTh>
-            <MudTh>GRWeight</MudTh>
-            <MudTh>WHCode</MudTh>
-            <MudTh>Warehouse</MudTh>
-            <MudTh>Location</MudTh>
-            <MudTh>Job</MudTh>
-            <MudTh>JobCode</MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<V_Receiving_OrdersInfo, object>(x=>x.Document_Number)">Document</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<V_Receiving_OrdersInfo, object>(x=>x.Package_ID)">PackID</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<V_Receiving_OrdersInfo, object>(x=>x.Material_Code)">Material</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<V_Receiving_OrdersInfo, object>(x=>x.Material_Description)">Description</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<V_Receiving_OrdersInfo, object>(x=>x.Receiving_Date)">ReceivingDate</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<V_Receiving_OrdersInfo, object>(x=>x.GR_Quantity)">GRQty</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<V_Receiving_OrdersInfo, object>(x=>x.Unit)">Unit</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<V_Receiving_OrdersInfo, object>(x=>x.GR_Quantity_KG)">GRWeight</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<V_Receiving_OrdersInfo, object>(x=>x.WH_Code)">WHCode</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<V_Receiving_OrdersInfo, object>(x=>x.Warehouse)">Warehouse</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<V_Receiving_OrdersInfo, object>(x=>x.Location)">Location</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<V_Receiving_OrdersInfo, object>(x=>x.Job)">Job</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<V_Receiving_OrdersInfo, object>(x=>x.Job_Code)">JobCode</MudTableSortLabel></MudTh>
+
         </HeaderContent>
         <RowTemplate>
 

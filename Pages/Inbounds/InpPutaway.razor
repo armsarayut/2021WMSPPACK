@@ -1,4 +1,4 @@
-﻿@page "/inb/storage"
+﻿@page "/Pag/1/1_5"
 @using GoWMS.Server.Data
 @using GoWMS.Server.Controllers
 @using GoWMS.Server.Models
@@ -11,7 +11,6 @@
 <MudText Typo="Typo.h6" Color="Color.Primary">@mPageHeader</MudText>
 
 <MudGrid>
-
     <MudItem xs="12">
         @if (elevation == 0) //Defult
         {
@@ -35,13 +34,17 @@
         }
     </MudItem>
     <MudItem xs="12">
-        <MudTextField @bind-Value="palletcode" @onkeyup="DoTheThing" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.QrCodeScanner" AdornmentColor="Color.Secondary" />
+        <div class="form-group">
+            <input style="width: 100%; height: 40px" type="text" class="form-control" @bind-value="palletcode" @onkeyup="@DoTheThing" placeholder="Input scan" />
+        </div>
+        @*<MudTextField @bind-Value="palletcode" @onkeyup="DoTheThing" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.QrCodeScanner" AdornmentColor="Color.Secondary" />*@
     </MudItem>
 </MudGrid>
 
 @*<MudText Typo="Typo.h6" Color="Color.Secondary" Class="mb-4">Master Pallet : [ @mPalletcode ]</MudText>
     <MudSkeleton Animation="Animation.False" />*@
 @*<MudText Typo="Typo.h6" Color="Color.Info" Class="mb-4">PackID : [ @mPackid ]</MudText>*@
+
 @if (Elements == null)
 {
     // <p><em>Loading...</em></p>
@@ -52,17 +55,17 @@ else
     <MudTable Items="@Elements" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<Inb_Putaway_Go,bool>(FilterFunc)" @bind-SelectedItem="selectedItem">
         <ToolBarContent>
             <MudText Typo="Typo.h6">Master Pallet : [ @mPalletcode ]</MudText>
-            <MudToolBarSpacer />
+            <MudSpacer />
             <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
         </ToolBarContent>
         <HeaderContent>
-            <MudTh>Queue time</MudTh>
-            <MudTh>Masterpallet</MudTh>
-            <MudTh>Worktype</MudTh>
-            <MudTh>SRM</MudTh>
-            <MudTh>Location</MudTh>
-            <MudTh>Start time</MudTh>
-            <MudTh>End time</MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Created)">Queue time</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Palletno)">Masterpallet</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Puttype)">Worktype</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Storagearea)">SRM</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Storagebin)">Location</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Storagetime)">Start time</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Completed)">End time</MudTableSortLabel></MudTh>
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="Queuetime">@context.Created</MudTd>
@@ -98,7 +101,7 @@ else
 
     private IEnumerable<Inb_Putaway_Go> MasterQueue = new List<Inb_Putaway_Go>();
 
-    public int elevation = 0;
+    public int elevation = 0 ;
 
     protected override async Task OnInitializedAsync()
     {
@@ -106,7 +109,6 @@ else
         Elements = await Task.Run(() => objCS.GetAllInbPutawayGos());
         MasterStotageBins = ObjMasService.GetAllMasterStorageBins();
         //MasterQueue = ObjInboundService.GetAllInbPutawayGos();
-
     }
 
     private void setstr(string str)
@@ -179,7 +181,7 @@ else
             return true;
         if (element.Storagebin.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-        if ($"{element.Storagearea} ".Contains(searchString))
+        if ($"{element.Storagearea}".Contains(searchString))
             return true;
         return false;
     }
@@ -190,11 +192,8 @@ else
         msgAction = "Cancle successfully";
         ObjCustomService.CancelReceivingOrderbypack(mPalletcode, pack);
 
-
         CustomerService objGR = new CustomerService();
         Elements = objGR.GetReceivingOrdersbypallet(mPalletcode);
         */
     }
-
-
 }

@@ -1,0 +1,110 @@
+﻿@page "/wcs/mccmd"
+@page "/wcs/mccmd/{mccode}"
+
+@using GoWMS.Server.Controllers;
+@using GoWMS.Server.Models.Wcs;
+
+@inject WcsService ObjWcsService;
+@inject NavigationManager navigationManager
+
+
+@if (Elements != null)
+{
+    <MudText Typo="Typo.h6" Color="Color.Primary">Machine - @mPagecaption</MudText>
+
+    <MudGrid>
+        <MudItem xs="12">
+            <br />
+            @{if (@McstatusAlarm)
+                {
+                    <MudAlert Severity="Severity.Error" Variant="Variant.Outlined">STATUS : @McstatusNo - @McstatusDesc</MudAlert>
+                }
+                else
+                {
+                    <MudAlert Severity="Severity.Info" Variant="Variant.Outlined">STATUS : @McstatusNo - @McstatusDesc</MudAlert>
+                }
+            }
+
+            <br />
+            <MudSelect Label="Command " HelperText="Pick the Command" @bind-SelectedValues="selectedItems">
+                @foreach (var cmd in Elements)
+                    {
+                    <MudSelectItem Value="@cmd">@cmd.St_no - @cmd.St_desc_th</MudSelectItem>
+                    }
+            </MudSelect>
+
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="SetCommand">SET</MudButton>
+        </MudItem>
+        <MudItem xs="12">
+            <br /><br />
+            Selected Command: @string.Join(", ", selectedItems.Select(x => x.St_no));
+        </MudItem>
+    </MudGrid>
+
+}
+
+
+@code {
+    [Parameter]
+    public string Mccode { get; set; }
+    public Int32 McstatusNo { get; set; }
+    public bool McstatusAlarm { get; set; }
+    public string McstatusDesc { get; set; }
+
+    private HashSet<Vmachine_command> selectedItems = new HashSet<Vmachine_command>();
+    private IEnumerable<Vmachine_command> Elements = new List<Vmachine_command>();
+    List<Vmachine> ElementsBuff = new List<Vmachine>();
+    List<Vmachine> ElementsStatus = new List<Vmachine>();
+
+    private string mPagecaption { get; set; } = "-";
+
+    protected override async Task OnInitializedAsync()
+    {
+        mPagecaption = Mccode;
+        Elements = await Task.Run(() => ObjWcsService.GetCommandMachine(Mccode));
+        await Task.Run(() => ExecuteStatus());
+
+    }
+
+    async void ExecuteStatus()
+    {
+        ElementsBuff = ObjWcsService.GetAllMachine();
+
+        var listStatus = ElementsBuff.Where(a => a.Mccode == Mccode).ToList();
+
+        foreach (var item in listStatus)
+        {
+
+            McstatusNo = item.St_no.Value;
+            McstatusAlarm = item.Is_alert.Value;
+            McstatusDesc = item.Desc_th.ToString();
+
+        }
+
+    }
+
+
+    void SetCommand()
+    {
+        if (selectedItems != null)
+        {
+
+            bool bRet;
+            Int32 iCmd = 0;
+            foreach (var item in selectedItems)
+            {
+
+                iCmd = item.St_no.Value;
+
+            }
+            bRet = ObjWcsService.CreateCommandMC(Mccode, iCmd);
+
+
+
+            navigationManager.NavigateTo("/paau/asrsstatus");
+        }
+
+    }
+
+
+}

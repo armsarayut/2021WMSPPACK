@@ -405,7 +405,6 @@ namespace GoWMS.Server.Data
                     OleDbDataReader rdr = cmd.ExecuteReader();
                     while (await rdr.ReadAsync())
                     {
-
                         ITEMS objrd = new ITEMS
                         {
                             ITEM_CODE = rdr["ITEM_CODE"].ToString(),
@@ -420,7 +419,6 @@ namespace GoWMS.Server.Data
                 }
                 catch (Exception e)
                 {
-
                     throw;
                 }
                 con.Close();

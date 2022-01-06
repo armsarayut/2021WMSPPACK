@@ -1,16 +1,32 @@
-﻿<MudCard Elevation="0" Square="true" Class="@Class" Style="@Style">
+﻿@using GoWMS.Server.Data;
+
+<MudCard Elevation="0" Square="true" Class="@Class" Style="@Style">
     <MudCardHeader>
         <CardHeaderAvatar>
-            <MudAvatar Image="images/freedev.png" />
+            @if (VarGlobals.User.GroupID == 1)
+            {
+                <MudAvatar Image="images/programmer.png" />
+            }
+            else if (VarGlobals.User.GroupID == 2)
+            {
+                 <MudAvatar Image="images/businessman.png" />
+            }
+            else if (VarGlobals.User.GroupID == 3)
+            {
+                <MudAvatar Image="images/man.png" />
+            }
+            else
+            {
+                <MudAvatar Image="images/maori.png" />
+            }
+
         </CardHeaderAvatar>
         <CardHeaderContent>
-            <MudText Typo="Typo.body2">Admin</MudText>
-            <MudText Typo="Typo.caption">Administrator</MudText>
+            <MudText Typo="Typo.body2">Welcome</MudText>
+            <MudText Typo="Typo.caption">@VarGlobals.User.UserName</MudText>
         </CardHeaderContent>
     </MudCardHeader>
 </MudCard>
 
-@code {
-    [Parameter] public string Class { get; set; }
-    [Parameter] public string Style { get; set; }
-}
+@code { [Parameter] public string Class { get; set; }
+            [Parameter] public string Style { get; set; } }

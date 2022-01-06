@@ -1,10 +1,11 @@
-﻿@page "/inb/receiveorders"
+﻿@page "/Pag/1/1_1"
 @using GoWMS.Server.Data
 @using GoWMS.Server.Controllers
 @using GoWMS.Server.Models.Api
 @using GoWMS.Server.Models.Inb
 
 @inject CustomerService ObjCustomService
+@inject ReportService UserlogService
 
 @if (Elements == null)
 {
@@ -13,30 +14,32 @@
 }
 else
 {
-    <MudText Typo="Typo.h6" Color="Color.Primary"> Receiving Order </MudText>
+    <MudText Typo="Typo.h6" Color="Color.Primary">Receiving Order</MudText>
     <MudTable Items="@Elements" FixedHeader="@fixed_header" FixedFooter="@fixed_footer" Height="@(fixed_header || fixed_footer ?"600px":"")" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<Inb_Goodreceipt_Go,bool>(FilterFunc)" @bind-SelectedItem="selectedItem">
         <ToolBarContent>
-            <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.FileDownload" Style="background-color: mediumseagreen; color: white; width: 80px; height: 30px;">
-                Excel
-            </MudButton>
-            <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.FileDownload" Style="background-color: orangered; color: white; width: 80px; height: 30px;">
-                PDF
-            </MudButton>
-            <MudToolBarSpacer />
+
+            <MudTooltip Text="Export" Color="Color.Secondary" Placement="Placement.Top">
+                <MudMenu Icon="@Icons.Filled.Download" Color="Color.Primary">
+                    <MudMenuItem>Excel</MudMenuItem>
+                    <MudMenuItem>Pdf</MudMenuItem>
+                </MudMenu>
+            </MudTooltip>
+
+            <MudSpacer />
             <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
         </ToolBarContent>
 
         <HeaderContent>
-            <MudTh>ReceivingDate</MudTh>
-            <MudTh>Document</MudTh>
-            <MudTh>PackID</MudTh>
-            <MudTh>Material</MudTh>
-            <MudTh>Description</MudTh>
-            <MudTh>GRQty</MudTh>
-            <MudTh>Unit</MudTh>
-            <MudTh>GRWeight</MudTh>
-            <MudTh>Job</MudTh>
-            <MudTh>JobCode</MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Goodreceipt_Go, object>(x=>x.Docdate)">ReceivingDate</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Goodreceipt_Go, object>(x=>x.Pono)">Document</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Goodreceipt_Go, object>(x=>x.Pallettag)">PackID</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Goodreceipt_Go, object>(x=>x.Itemcode)">Material</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Goodreceipt_Go, object>(x=>x.Itemname)">Description</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Goodreceipt_Go, object>(x=>x.Quantity)">GRQty</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Goodreceipt_Go, object>(x=>x.Unit)">Unit</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Goodreceipt_Go, object>(x=>x.Weight)">GRWeight</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Goodreceipt_Go, object>(x=>x.Docno)">Job</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Goodreceipt_Go, object>(x=>x.Docnote)">JobCode</MudTableSortLabel></MudTh>
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="ReceivingDate">@context.Docdate</MudTd>
@@ -54,6 +57,7 @@ else
             <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />
 
         </PagerContent>
+
     </MudTable>
 }
 
@@ -80,6 +84,7 @@ else
         InboundService objCS = new InboundService();
         //Elements = await Task.Run(() => objCS.GetReceivingOrdersbypallet(mPalletcode));
         Elements = await Task.Run(() => objCS.GetAllInbGoodreceiptGos());
+        InsertAuditrial("1.1-Receiving Order","Admin");
     }
 
     private void setstr(string str)
@@ -134,6 +139,16 @@ else
         if ($"{element.Itemname} {element.Docno} {element.Pono} {element.Docnote}".Contains(searchString))
             return true;
         return false;
+    }
+
+    public void Dispose()
+    {
+
+    }
+
+    private void InsertAuditrial(String actdesc, String munname)
+    {
+        bool bRet = UserlogService.InsertAudittrial(actdesc, VarGlobals.CurrentUserName);
     }
 
 }

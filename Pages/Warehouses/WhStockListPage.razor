@@ -24,23 +24,24 @@ else
             <MudText Typo="Typo.h6" Color="Color.Primary"> @mPageHeader </MudText>
             <MudTable Items="@Elements" FixedHeader="@fixed_header" FixedFooter="@fixed_footer" Height="@(fixed_header || fixed_footer ?"600px":"")" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<InvStockList,bool>(FilterFunc)" @bind-SelectedItem="selectedItem">
                 <ToolBarContent>
-                    <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.FileDownload" Style="background-color: mediumseagreen; color: white; width: 80px; height: 30px;">
-                        Excel
-                    </MudButton>
-                    <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.FileDownload" Style="background-color: orangered; color: white; width: 80px; height: 30px;">
-                        PDF
-                    </MudButton>                   
-                    <MudToolBarSpacer />
+                    <MudTooltip Text="Export" Color="Color.Secondary" Placement="Placement.Top">
+                        <MudMenu Icon="@Icons.Filled.Download" Color="Color.Primary">
+                            <MudMenuItem>Excel</MudMenuItem>
+                            <MudMenuItem>Pdf</MudMenuItem>
+                        </MudMenu>
+                    </MudTooltip>
+                    <MudSpacer />
                     <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
                 </ToolBarContent>
                 <HeaderContent>
-                    <MudTh>Material</MudTh>
-                    <MudTh>Description</MudTh>
-                    <MudTh>Stock</MudTh>
-                    <MudTh>PackID</MudTh>
-                    <MudTh>MasterPallet</MudTh>
-                    <MudTh>Area</MudTh>
-                    <MudTh>Location</MudTh>
+                    <MudTh><MudTableSortLabel SortBy="new Func<InvStockList, object>(x=>x.Item_code)">Material</MudTableSortLabel></MudTh>
+
+                    <MudTh><MudTableSortLabel SortBy="new Func<InvStockList, object>(x=>x.Item_name)">Description</MudTableSortLabel></MudTh>
+                    <MudTh><MudTableSortLabel SortBy="new Func<InvStockList, object>(x=>x.Qty)">Stock</MudTableSortLabel></MudTh>
+                    <MudTh><MudTableSortLabel SortBy="new Func<InvStockList, object>(x=>x.Su_no)">PackID</MudTableSortLabel></MudTh>
+                    <MudTh><MudTableSortLabel SortBy="new Func<InvStockList, object>(x=>x.Palletcode)">MasterPallet</MudTableSortLabel></MudTh>
+                    <MudTh><MudTableSortLabel SortBy="new Func<InvStockList, object>(x=>x.StorageArae)">Area</MudTableSortLabel></MudTh>
+                    <MudTh><MudTableSortLabel SortBy="new Func<InvStockList, object>(x=>x.Shelfname)">Location</MudTableSortLabel></MudTh>
                 </HeaderContent>
                 <RowTemplate>
                     <MudTd DataLabel="Material">@context.Item_code</MudTd>
@@ -61,13 +62,13 @@ else
             <MudText Typo="Typo.h6" Color="Color.Primary"> @mPageHeader </MudText>
             <MudTable Items="@Elements_" FixedHeader="@fixed_header" FixedFooter="@fixed_footer" Height="@(fixed_header || fixed_footer ?"600px":"")" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<InvStockSum,bool>(FilterFunc_)" @bind-SelectedItem="selectedItem_">
                 <ToolBarContent>
-                    <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.FileDownload" Style="background-color: mediumseagreen; color: white; width: 80px; height: 30px;">
-                        Excel
-                    </MudButton>
-                    <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.FileDownload" Style="background-color: orangered; color: white; width: 80px; height: 30px;">
-                        PDF
-                    </MudButton>
-                    <MudToolBarSpacer />
+                    <MudTooltip Text="Export" Color="Color.Secondary" Placement="Placement.Top">
+                        <MudMenu Icon="@Icons.Filled.Download" Color="Color.Primary">
+                            <MudMenuItem>Excel</MudMenuItem>
+                            <MudMenuItem>Pdf</MudMenuItem>
+                        </MudMenu>
+                    </MudTooltip>
+                    <MudSpacer />
                     <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
                 </ToolBarContent>
                 <HeaderContent>

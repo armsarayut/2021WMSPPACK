@@ -53,6 +53,12 @@ namespace GoWMS.Server.Controllers
             return "Cancel Successfully";
         }
 
+        public string ClaerReceivingOrderbypack(string pack)
+        {
+            objDAL.ClaerReceivingOrdersBypack( pack);
+            return "Cancel Successfully";
+        }
+
         public string UpdateReceivingOrderbypallet(string pallet)
         {
             objDAL.UpdateReceivingOrdersBypallet(pallet);
@@ -83,6 +89,12 @@ namespace GoWMS.Server.Controllers
             return "Map Successfully";
         }
 
+        public string SetMappedPalletAgv(string pallet, string source, string destination)
+        {
+            objDAL.SetMappPalletAgv(pallet, source, destination);
+            return "Map Successfully";
+        }
+
         public List<Api_Deliveryorder_Go> GetAllApiDeliveryorder()
         {
             List<Api_Deliveryorder_Go> retlist = objDAL.GetAllDeliveryorderGo().ToList();
@@ -94,6 +106,13 @@ namespace GoWMS.Server.Controllers
             List<Api_Deliveryorder_Go> retlist = objDAL.GetAllDeliveryorderGoByMo(mocode).ToList();
             return retlist;
         }
+
+        public string SetPick(string jsonLon, string jsonRes , DateTime DeliverDate, Int64 idistination, ref  Int32 iret , ref string sret )
+        {
+            objDAL.SetPicking(jsonLon, jsonRes, DeliverDate , idistination, ref iret , ref sret);
+            return sret;
+        }
+
 
 
 

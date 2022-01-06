@@ -1,0 +1,245 @@
+﻿@page "/paau/agvqueue"
+@using System
+@using System.IO
+@using System.Linq
+@using System.Text
+@using System.Threading
+@using System.Threading.Tasks
+@using System.Collections.Generic
+
+@using GoWMS.Server.Data
+@using GoWMS.Server.Controllers
+@using GoWMS.Server.Models
+@using GoWMS.Server.Models.Wcs
+@using GoWMS.Server.Reports
+
+@inject IJSRuntime JSRuntime
+@inject AgvService AgvObjService
+
+
+@if (Elements == null)
+{
+    // <p><em>Loading...</em></p>
+    <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
+}
+else
+{
+    <MudText Typo="Typo.h6" Color="Color.Primary"> @mPagecaption </MudText>
+    <MudTable Items="@Elements" FixedHeader="@fixed_header" FixedFooter="@fixed_footer" Height="@(fixed_header || fixed_footer ?"600px":"")" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<Tas_Agvworks,bool>(FilterFunc)" @bind-SelectedItem="selectedItem" SortLabel="Sort By">
+        <ToolBarContent>
+            <MudTooltip Text="Export" Color="Color.Secondary" Placement="Placement.Top">
+                <MudMenu Icon="@Icons.Filled.Download" Color="Color.Primary">
+                    <MudMenuItem>Excel</MudMenuItem>
+                    <MudMenuItem>Pdf</MudMenuItem>
+                </MudMenu>
+            </MudTooltip>
+            <MudSpacer />
+            <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+        </ToolBarContent>
+
+        <HeaderContent>
+            <MudTh>Q-TIME</MudTh>
+            <MudTh>PALLET</MudTh>
+            <MudTh>FROM</MudTh>
+            <MudTh>TO</MudTh>
+            <MudTh>WORKTYPE</MudTh>
+            <MudTh>AGV</MudTh>
+            <MudTh>Q-STATUS</MudTh>
+            <MudTh>CANCEL</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Q-TIME">@context.Ctime</MudTd>
+            <MudTd DataLabel="PALLET">@context.Lpncode</MudTd>
+            <MudTd DataLabel="FROM">@context.Gate_Source</MudTd>
+            <MudTd DataLabel="TO">@context.Gate_Dest</MudTd>
+            <MudTd DataLabel="WORKTYPE">@context.Work_Code</MudTd>
+            <MudTd DataLabel="AGV">@context.Agv_Name</MudTd>
+            <MudTd DataLabel="">
+                @if (@context.Work_Status == 0)
+                    {
+                    <MudChip Variant="Variant.Outlined" Color="Color.Primary">QUEUE</MudChip>
+                    }
+                    else
+                    {
+                    @if (@context.Work_Status == 1)
+                        {
+                        <MudChip Variant="Variant.Outlined" Color="Color.Secondary">QUEUE</MudChip>
+                        }
+                        else
+                        {
+                        @if (@context.Work_Status == 2)
+                            {
+                            <MudChip Variant="Variant.Outlined" Color="Color.Info">PROCESS</MudChip>
+                            }
+                            else
+                            {
+                            @if (@context.Work_Status == 3)
+                                {
+                                <MudChip Variant="Variant.Outlined" Color="Color.Success">COMPLETE</MudChip>
+                                }
+                                else
+                                {
+                                <MudChip Variant="Variant.Outlined" Color="Color.Error">ERROR</MudChip>
+                                }
+
+                            }
+                        }
+                    }
+            </MudTd>
+            <MudTd DataLabel="">
+                <MudFab @onclick="@(()=>CancleTask(@context.Lpncode))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Cancel" Size="Size.Small" IconSize="Size.Small" />
+            </MudTd>
+
+            @*
+        <MudTd DataLabel="Itemname" Style="@(AddressContext.OrderPositionStatus == PositionStatus.rdy ? $"background:{Colors.BlueGrey.Darken4};" : $"background:{Colors.Cyan.Darken1};")">@AddressContext.orderItem.ItemName</MudTd>
+
+
+        <MudChip Label="true" Color="@context.St_Color">@context.St_desc</MudChip>
+            *@
+
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />
+        </PagerContent>
+    </MudTable>
+}
+
+@code {
+
+    private string stColor = "background-color:yellow;";
+
+    IEnumerable<int> pageSizeOptions = new int[] { 10, 20, 30, 50, 100 };
+
+    private readonly string mPagecaption = "AGV-QUEUE";
+    private string msgAction = "Enter Palletcode";
+    private string mPalletcode { get; set; } = "";
+    private string mPackid { get; set; } = "";
+    private string palletcode { get; set; }
+    private bool dense = true;
+    private bool hover = true;
+    private bool striped = true;
+    private bool bordered = false;
+    private bool fixed_header = true;
+    private bool fixed_footer = true;
+    private string searchString = "";
+    private Tas_Agvworks selectedItem = null;
+    private HashSet<Tas_Agvworks> selectedItems = new HashSet<Tas_Agvworks>();
+    private IEnumerable<Tas_Agvworks> Elements = new List<Tas_Agvworks>();
+
+    private IEnumerable<Functionreturn> Funcreturn = new List<Functionreturn>();
+
+    public int elevation = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        AgvService objCS = new AgvService();
+        //Elements = await Task.Run(() => objCS.GetReceivingOrdersbypallet(mPalletcode));
+        Elements = await Task.Run(() => objCS.GetAllTaskAgv());
+    }
+
+    private void setstr(string str)
+    {
+        //if (mPalletcode.Length <= 0)
+        //{
+        //    mPalletcode = str;
+        //    msgAction = "Enter Pack ID";
+        //    elevation = 3;
+        //}
+        //else
+        //{
+        //    if (str == mPalletcode)
+        //    {
+        //        elevation = 2;
+        //        msgAction = "Mapping successfully";
+        //        ObjCustomService.UpdateReceivingOrderbypallet(mPalletcode);
+        //        mPalletcode = "";
+        //    }
+        //    else
+        //    {
+        //        mPackid = str;
+        //        ObjCustomService.UpdateReceivingOrderbypack(mPalletcode, mPackid);
+        //    }
+        //}
+
+        //CustomerService objGR = new CustomerService();
+        //Elements = objGR.GetReceivingOrdersbypallet(mPalletcode);
+    }
+
+    private string stxtInput { get; set; }
+
+    private void DoTheThing(KeyboardEventArgs eventArgs)
+    {
+        if (eventArgs.Key == "Enter")        // fire on enter
+        {
+            setstr(palletcode);
+            palletcode = "";
+        }
+    }
+
+    private bool FilterFunc(Tas_Agvworks element)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.Lpncode.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        return false;
+    }
+
+    public async Task DownloadExcelDocument()
+    {
+        /*
+        try
+        {
+            WhShelfListPageRptExcel excelReport = new WhShelfListPageRptExcel();
+            List<Tas_Agvworks> listExcelReport = new List<Tas_Agvworks>();
+            listExcelReport = Elements.ToList();
+            var fileName = $"{mPagecaption.ToString()}-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+            await JSRuntime.InvokeAsync<object>("jsSaveAsFile", fileName, Convert.ToBase64String(excelReport.Report(listExcelReport)));
+        }
+        catch (Exception e)
+        {
+            var exmsg = e.Message.ToString();
+        }
+        */
+    }
+
+    public async Task DownloadPdfDocument()
+    {
+        /*
+        try
+        {
+            WhShelfListPageRptPdf pdfReport = new WhShelfListPageRptPdf();
+
+            List<Vrpt_shelf_listInfo> listPdfReport = new List<Vrpt_shelf_listInfo>();
+            listPdfReport = Elements.ToList();
+            var fileName = $"{mPagecaption.ToString()}-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.pdf";
+            //await JSRuntime.InvokeAsync<object>("jsSaveAsFile", fileName, Convert.ToBase64String(pdfReport.Report(listPdfReport)));
+            await JSRuntime.InvokeAsync<object>("jsSaveAsFile", fileName, Convert.ToBase64String(pdfReport.ExportPDF(listPdfReport)));
+
+        }
+        catch (Exception e)
+        {
+            var exmsg = e.Message.ToString();
+        }
+        */
+    }
+
+    private void CancleTask(string pallet)
+    {
+        msgAction = "Cancle successfully";
+
+
+        Funcreturn = AgvObjService.CancleTaskAGV(pallet);
+
+        var Retchk = Funcreturn.Select(x => x.Retchk).LastOrDefault();
+        var Retmsg = Funcreturn.Select(x => x.Retmsg).LastOrDefault();
+
+
+
+        Elements = AgvObjService.GetAllTaskAgv();
+
+
+    }
+
+
+}

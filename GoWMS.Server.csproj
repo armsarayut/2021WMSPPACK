@@ -21,11 +21,13 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
-    <PackageReference Include="MudBlazor" Version="5.0.15" />
+    <PackageReference Include="MudBlazor" Version="5.1.4" />
     <PackageReference Include="MudBlazor.ThemeManager" Version="1.0.3" />
+    <PackageReference Include="NETCore.Encrypt" Version="2.0.9.1" />
     <PackageReference Include="Npgsql" Version="5.0.7" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.7" />
     <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="2.19.120" />
+    <PackageReference Include="Serilog.AspNetCore" Version="4.1.0" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
     <PackageReference Include="System.Data.OleDb" Version="5.0.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
@@ -34,10 +36,17 @@
   <ItemGroup>
     <Folder Include="Pages\Admins\" />
     <Folder Include="Pages\Automations\" />
+    <Folder Include="Pages\PaService\" />
+    <Folder Include="Pages\PaAdmin\" />
+    <Folder Include="Pages\PaSetup\" />
+    <Folder Include="Pages\PaReport\" />
+    <Folder Include="Pages\PaOutbound\" />
+    <Folder Include="Pages\PaInventory\" />
+    <Folder Include="Pages\PaInbound\" />
+    <Folder Include="Pages\PaDashboard\" />
     <Folder Include="Pages\Services\" />
     <Folder Include="Pages\Setups\" />
     <Folder Include="Pages\Reports\" />
-    <Folder Include="Reports\NewFolder\" />
   </ItemGroup>
 
 </Project>

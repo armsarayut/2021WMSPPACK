@@ -26,45 +26,78 @@ else
     <MudText Typo="Typo.h6" Color="Color.Primary"> @mPagecaption </MudText>
     <MudTable Items="@Elements" FixedHeader="@fixed_header" FixedFooter="@fixed_footer" Height="@(fixed_header || fixed_footer ?"600px":"")" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<Vrpt_shelf_listInfo,bool>(FilterFunc)" @bind-SelectedItem="selectedItem" SortLabel="Sort By">
         <ToolBarContent>
-            <MudButton OnClick="DownloadExcelDocument" Variant="Variant.Filled" EndIcon="@Icons.Custom.FileFormats.FileExcel" Style="background-color: mediumseagreen; color: white; width: 80px; height: 30px;">
-                Excel
-            </MudButton>
-            <MudButton OnClick="DownloadPdfDocument" Variant="Variant.Filled" EndIcon="@Icons.Custom.FileFormats.FilePdf" Style="background-color: orangered; color: white; width: 80px; height: 30px;">
-                PDF
-            </MudButton>
-            <MudToolBarSpacer />
+            <MudTooltip Text="Export" Color="Color.Secondary" Placement="Placement.Top">
+                <MudMenu Icon="@Icons.Filled.Download" Color="Color.Primary">
+                    <MudMenuItem>Excel</MudMenuItem>
+                    <MudMenuItem>Pdf</MudMenuItem>
+                </MudMenu>
+            </MudTooltip>
+            <MudSpacer />
             <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
         </ToolBarContent>
 
         <HeaderContent>
-            <MudTh>Location</MudTh>
-            <MudTh>LANE</MudTh>
-            <MudTh>BANK</MudTh>
-            <MudTh>BAY</MudTh>
-            <MudTh>LEVEL</MudTh>
-            <MudTh>MasterPallet</MudTh>
-            <MudTh>Status</MudTh>
-            <MudTh>LastUpdate</MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Vrpt_shelf_listInfo, object>(x=>x.Shelfcode)">LOCATION</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Vrpt_shelf_listInfo, object>(x=>x.Srm_no)">LANE</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Vrpt_shelf_listInfo, object>(x=>x.Shelfbank)">BANK</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Vrpt_shelf_listInfo, object>(x=>x.Shelfbay)">BAY</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Vrpt_shelf_listInfo, object>(x=>x.Shelflevel)">LEVEL</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Vrpt_shelf_listInfo, object>(x=>x.Lpncode)">PALLET</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Vrpt_shelf_listInfo, object>(x=>x.Modified)">UPDATED</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Vrpt_shelf_listInfo, object>(x=>x.St_desc)">STATUS</MudTableSortLabel></MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="Location">@context.Shelfcode</MudTd>
-            <MudTd DataLabel="SRM">@context.Srm_no</MudTd>
+            <MudTd DataLabel="LOCATION">@context.Shelfcode</MudTd>
+            <MudTd DataLabel="LANE">@context.Srm_no</MudTd>
             <MudTd DataLabel="BANK">@context.Shelfbank</MudTd>
             <MudTd DataLabel="BAY">@context.Shelfbay</MudTd>
             <MudTd DataLabel="LEVEL">@context.Shelflevel</MudTd>
-            <MudTd DataLabel="MasterPallet">@context.Lpncode</MudTd>
-            <MudTd DataLabel="Status">@context.St_desc</MudTd>
-            <MudTd DataLabel="LastUpdate">@context.Modified</MudTd>
+            <MudTd DataLabel="PALLET">@context.Lpncode</MudTd>
+            <MudTd DataLabel="UPDATED">@context.Modified</MudTd>
+            <MudTd DataLabel="">
+                @if (@context.St_desc == "ว่างไม่มีพาเลท")
+                    {
+
+                    <MudChip Variant="Variant.Outlined" Color="Color.Primary">@context.St_desc</MudChip>
+
+                    @*
+                        <MudRating ReadOnly="true" SelectedValue="1" />
+                    <MudAvatar Color="Color.Primary">@context.St_desc</MudAvatar>
+
+            <MudIcon Icon="@Icons.Material.Filled.HourglassEmpty" Size="Size.Small" IconSize="Size.Small"></MudIcon>
+                    *@
+                    }
+                    else
+                    {
+                    <MudChip Variant="Variant.Outlined" Color="Color.Secondary">@context.St_desc</MudChip>
+
+
+                    @*
+                         <MudRating ReadOnly="true" SelectedValue="2" />
+                    <MudAvatar Color="Color.Secondary">@context.St_desc</MudAvatar>
+
+            <MudIcon Icon="@Icons.Material.Filled.LocationOn" Size="Size.Small" IconSize="Size.Small"></MudIcon>
+                    *@
+                    }
+            </MudTd>
+            
+
+                     @*
+        <MudTd DataLabel="Itemname" Style="@(AddressContext.OrderPositionStatus == PositionStatus.rdy ? $"background:{Colors.BlueGrey.Darken4};" : $"background:{Colors.Cyan.Darken1};")">@AddressContext.orderItem.ItemName</MudTd>
+
+
+        <MudChip Label="true" Color="@context.St_Color">@context.St_desc</MudChip>
+            *@
         </RowTemplate>
         <PagerContent>
-            <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />
+            <MudTablePager PageSizeOptions="new int[]{10,20,50,100}"/>
         </PagerContent>
     </MudTable>
 }
 
 @code {
 
-
+    private string stColor = "background-color:yellow;";
 
     IEnumerable<int> pageSizeOptions = new int[] { 10, 20, 30, 50, 100 };
 
@@ -162,7 +195,7 @@ else
         try
         {
             WhShelfListPageRptPdf pdfReport = new WhShelfListPageRptPdf();
-           
+
             List<Vrpt_shelf_listInfo> listPdfReport = new List<Vrpt_shelf_listInfo>();
             listPdfReport = Elements.ToList();
             var fileName = $"{mPagecaption.ToString()}-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.pdf";

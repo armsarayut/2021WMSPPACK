@@ -10,6 +10,7 @@ using GoWMS.Server.Models;
 using GoWMS.Server.Models.Inb;
 using NpgsqlTypes;
 using System.Text;
+using Serilog;
 
 namespace GoWMS.Server.Data
 {
@@ -22,46 +23,56 @@ namespace GoWMS.Server.Data
             List<Inb_Goodreceipt_Go> lstobj = new List<Inb_Goodreceipt_Go>();
             using (NpgsqlConnection con = new NpgsqlConnection(connectionString))
             {
-                NpgsqlCommand cmd = new NpgsqlCommand("select * " +
+                try
+                {
+                    NpgsqlCommand cmd = new NpgsqlCommand("select * " +
                     "from wms.inb_goodreceipt_go  " +
                     "order by efidx", con)
-                {
-                    CommandType = CommandType.Text
-                };
-                con.Open();
-                NpgsqlDataReader rdr = cmd.ExecuteReader();
-                while (rdr.Read())
-                {
-                    Inb_Goodreceipt_Go objrd = new Inb_Goodreceipt_Go
                     {
-                        Efidx = rdr["efidx"] == DBNull.Value ? null : (Int64?)rdr["efidx"],
-                        Efstatus = rdr["efstatus"] == DBNull.Value ? null : (Int32?)rdr["efstatus"],
-                        Created = rdr["created"] == DBNull.Value ? null : (DateTime?)rdr["created"],
-                        Modified = rdr["modified"] == DBNull.Value ? null : (DateTime?)rdr["modified"],
-                        Innovator = rdr["innovator"] == DBNull.Value ? null : (Int64?)rdr["innovator"],
-                        Device = rdr["device"].ToString(),
-                        Pono = rdr["pono"].ToString(),
-                        Pallettag = rdr["pallettag"].ToString(),
-                        Itemtag = rdr["itemtag"].ToString(),
-                        Itemcode = rdr["itemcode"].ToString(),
-                        Itemname = rdr["itemname"].ToString(),
-                        Itembar = rdr["itembar"].ToString(),
-                        Unit = rdr["unit"].ToString(),
-                        Weightunit = rdr["weightunit"].ToString(),
-                        Quantity = rdr["quantity"] == DBNull.Value ? null : (decimal?)rdr["quantity"],
-                        Weight = rdr["weight"] == DBNull.Value ? null : (decimal?)rdr["weight"],
-                        Lotno = rdr["lotno"].ToString(),
-                        Totalquantity = rdr["totalquantity"] == DBNull.Value ? null : (decimal?)rdr["totalquantity"],
-                        Totalweight = rdr["totalweight"] == DBNull.Value ? null : (decimal?)rdr["totalweight"],
-                        Docno = rdr["docno"].ToString(),
-                        Docby = rdr["docby"].ToString(),
-                        Docdate = rdr["docdate"] == DBNull.Value ? null : (DateTime?)rdr["docdate"],
-                        Docnote = rdr["docnote"].ToString(),
-                        Grntype = rdr["grntype"].ToString()
+                        CommandType = CommandType.Text
                     };
-                    lstobj.Add(objrd);
+                    con.Open();
+                    NpgsqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        Inb_Goodreceipt_Go objrd = new Inb_Goodreceipt_Go
+                        {
+                            Efidx = rdr["efidx"] == DBNull.Value ? null : (Int64?)rdr["efidx"],
+                            Efstatus = rdr["efstatus"] == DBNull.Value ? null : (Int32?)rdr["efstatus"],
+                            Created = rdr["created"] == DBNull.Value ? null : (DateTime?)rdr["created"],
+                            Modified = rdr["modified"] == DBNull.Value ? null : (DateTime?)rdr["modified"],
+                            Innovator = rdr["innovator"] == DBNull.Value ? null : (Int64?)rdr["innovator"],
+                            Device = rdr["device"].ToString(),
+                            Pono = rdr["pono"].ToString(),
+                            Pallettag = rdr["pallettag"].ToString(),
+                            Itemtag = rdr["itemtag"].ToString(),
+                            Itemcode = rdr["itemcode"].ToString(),
+                            Itemname = rdr["itemname"].ToString(),
+                            Itembar = rdr["itembar"].ToString(),
+                            Unit = rdr["unit"].ToString(),
+                            Weightunit = rdr["weightunit"].ToString(),
+                            Quantity = rdr["quantity"] == DBNull.Value ? null : (decimal?)rdr["quantity"],
+                            Weight = rdr["weight"] == DBNull.Value ? null : (decimal?)rdr["weight"],
+                            Lotno = rdr["lotno"].ToString(),
+                            Totalquantity = rdr["totalquantity"] == DBNull.Value ? null : (decimal?)rdr["totalquantity"],
+                            Totalweight = rdr["totalweight"] == DBNull.Value ? null : (decimal?)rdr["totalweight"],
+                            Docno = rdr["docno"].ToString(),
+                            Docby = rdr["docby"].ToString(),
+                            Docdate = rdr["docdate"] == DBNull.Value ? null : (DateTime?)rdr["docdate"],
+                            Docnote = rdr["docnote"].ToString(),
+                            Grntype = rdr["grntype"].ToString()
+                        };
+                        lstobj.Add(objrd);
+                    }
                 }
-                con.Close();
+                catch (NpgsqlException ex)
+                {
+                    Log.Error(ex.ToString());
+                }
+                finally
+                {
+                    con.Close();
+                }
             }
             return lstobj;
         }
@@ -71,55 +82,65 @@ namespace GoWMS.Server.Data
             List<Inb_Goodreceive_Go> lstobj = new List<Inb_Goodreceive_Go>();
             using (NpgsqlConnection con = new NpgsqlConnection(connectionString))
             {
-                NpgsqlCommand cmd = new NpgsqlCommand("select * " +
+                try
+                {
+                    NpgsqlCommand cmd = new NpgsqlCommand("select * " +
                     "from wms.inb_goodreceive_go  " +
                     "order by efidx", con)
-                {
-                    CommandType = CommandType.Text
-                };
-                con.Open();
-                NpgsqlDataReader rdr = cmd.ExecuteReader();
-                while (rdr.Read())
-                {
-                    Inb_Goodreceive_Go objrd = new Inb_Goodreceive_Go
                     {
-                        Efidx = rdr["efidx"] == DBNull.Value ? null : (Int64?)rdr["efidx"],
-                        Efstatus = rdr["efstatus"] == DBNull.Value ? null : (Int32?)rdr["efstatus"],
-                        Created = rdr["created"] == DBNull.Value ? null : (DateTime?)rdr["created"],
-                        Modified = rdr["modified"] == DBNull.Value ? null : (DateTime?)rdr["modified"],
-                        Innovator = rdr["innovator"] == DBNull.Value ? null : (Int64?)rdr["innovator"],
-                        Device = rdr["device"].ToString(),
-                        Pono = rdr["pono"].ToString(),
-                        Pallettag = rdr["pallettag"].ToString(),
-                        Itemtag = rdr["itemtag"].ToString(),
-                        Itemcode = rdr["itemcode"].ToString(),
-                        Itemname = rdr["itemname"].ToString(),
-                        Itembar = rdr["itembar"].ToString(),
-                        Unit = rdr["unit"].ToString(),
-                        Weightunit = rdr["weightunit"].ToString(),
-                        Quantity = rdr["quantity"] == DBNull.Value ? null : (decimal?)rdr["quantity"],
-                        Weight = rdr["weight"] == DBNull.Value ? null : (decimal?)rdr["weight"],
-                        Lotno = rdr["lotno"].ToString(),
-                        Totalquantity = rdr["totalquantity"] == DBNull.Value ? null : (decimal?)rdr["totalquantity"],
-                        Totalweight = rdr["totalweight"] == DBNull.Value ? null : (decimal?)rdr["totalweight"],
-                        Docno = rdr["docno"].ToString(),
-                        Docby = rdr["docby"].ToString(),
-                        Docdate = rdr["docdate"] == DBNull.Value ? null : (DateTime?)rdr["docdate"],
-                        Docnote = rdr["docnote"].ToString(),
-                        Grnrefer = rdr["grnrefer"] == DBNull.Value ? null : (Int64?)rdr["grnrefer"],
-                        Grntime = rdr["grntime"] == DBNull.Value ? null : (DateTime?)rdr["grntime"],
-                        Grtime = rdr["grtime"] == DBNull.Value ? null : (DateTime?)rdr["grtime"],
-                        Grtype = rdr["grtype"].ToString(),
-                        Pallteno = rdr["pallteno"].ToString(),
-                        Palltmapkey = rdr["palltmapkey"].ToString(),
-                        Storagetime = rdr["storagetime"] == DBNull.Value ? null : (DateTime?)rdr["storagetime"],
-                        Storageno = rdr["storageno"].ToString(),
-                        Storagearea = rdr["storagearea"].ToString(),
-                        Storagebin = rdr["storagebin"].ToString()
+                        CommandType = CommandType.Text
                     };
-                    lstobj.Add(objrd);
+                    con.Open();
+                    NpgsqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        Inb_Goodreceive_Go objrd = new Inb_Goodreceive_Go
+                        {
+                            Efidx = rdr["efidx"] == DBNull.Value ? null : (Int64?)rdr["efidx"],
+                            Efstatus = rdr["efstatus"] == DBNull.Value ? null : (Int32?)rdr["efstatus"],
+                            Created = rdr["created"] == DBNull.Value ? null : (DateTime?)rdr["created"],
+                            Modified = rdr["modified"] == DBNull.Value ? null : (DateTime?)rdr["modified"],
+                            Innovator = rdr["innovator"] == DBNull.Value ? null : (Int64?)rdr["innovator"],
+                            Device = rdr["device"].ToString(),
+                            Pono = rdr["pono"].ToString(),
+                            Pallettag = rdr["pallettag"].ToString(),
+                            Itemtag = rdr["itemtag"].ToString(),
+                            Itemcode = rdr["itemcode"].ToString(),
+                            Itemname = rdr["itemname"].ToString(),
+                            Itembar = rdr["itembar"].ToString(),
+                            Unit = rdr["unit"].ToString(),
+                            Weightunit = rdr["weightunit"].ToString(),
+                            Quantity = rdr["quantity"] == DBNull.Value ? null : (decimal?)rdr["quantity"],
+                            Weight = rdr["weight"] == DBNull.Value ? null : (decimal?)rdr["weight"],
+                            Lotno = rdr["lotno"].ToString(),
+                            Totalquantity = rdr["totalquantity"] == DBNull.Value ? null : (decimal?)rdr["totalquantity"],
+                            Totalweight = rdr["totalweight"] == DBNull.Value ? null : (decimal?)rdr["totalweight"],
+                            Docno = rdr["docno"].ToString(),
+                            Docby = rdr["docby"].ToString(),
+                            Docdate = rdr["docdate"] == DBNull.Value ? null : (DateTime?)rdr["docdate"],
+                            Docnote = rdr["docnote"].ToString(),
+                            Grnrefer = rdr["grnrefer"] == DBNull.Value ? null : (Int64?)rdr["grnrefer"],
+                            Grntime = rdr["grntime"] == DBNull.Value ? null : (DateTime?)rdr["grntime"],
+                            Grtime = rdr["grtime"] == DBNull.Value ? null : (DateTime?)rdr["grtime"],
+                            Grtype = rdr["grtype"].ToString(),
+                            Pallteno = rdr["pallteno"].ToString(),
+                            Palltmapkey = rdr["palltmapkey"].ToString(),
+                            Storagetime = rdr["storagetime"] == DBNull.Value ? null : (DateTime?)rdr["storagetime"],
+                            Storageno = rdr["storageno"].ToString(),
+                            Storagearea = rdr["storagearea"].ToString(),
+                            Storagebin = rdr["storagebin"].ToString()
+                        };
+                        lstobj.Add(objrd);
+                    }
                 }
-                con.Close();
+                catch (NpgsqlException ex)
+                {
+                    Log.Error(ex.ToString());
+                }
+                finally
+                {
+                    con.Close();
+                }
             }
             return lstobj;
         }
@@ -129,40 +150,179 @@ namespace GoWMS.Server.Data
             List<Inb_Putaway_Go> lstobj = new List<Inb_Putaway_Go>();
             using (NpgsqlConnection con = new NpgsqlConnection(connectionString))
             {
-                NpgsqlCommand cmd = new NpgsqlCommand("select * " +
+                try
+                {
+                    NpgsqlCommand cmd = new NpgsqlCommand("select * " +
                     "from wms.inb_putaway_go  " +
+                     "where puttype = @puttype  " +
                     "order by efidx", con)
-                {
-                    CommandType = CommandType.Text
-                };
-                con.Open();
-                NpgsqlDataReader rdr = cmd.ExecuteReader();
-                while (rdr.Read())
-                {
-                    Inb_Putaway_Go objrd = new Inb_Putaway_Go
                     {
-                        Efidx = rdr["efidx"] == DBNull.Value ? null : (Int64?)rdr["efidx"],
-                        Efstatus = rdr["efstatus"] == DBNull.Value ? null : (Int32?)rdr["efstatus"],
-                        Created = rdr["created"] == DBNull.Value ? null : (DateTime?)rdr["created"],
-                        Modified = rdr["modified"] == DBNull.Value ? null : (DateTime?)rdr["modified"],
-                        Innovator = rdr["innovator"] == DBNull.Value ? null : (Int64?)rdr["innovator"],
-                        Device = rdr["device"].ToString(),
-                        Palletmapkey = rdr["palletmapkey"].ToString(),
-                        Puttype = rdr["puttype"].ToString(),
-                        Palletno = rdr["palletno"].ToString(),
-                        Started = rdr["started"] == DBNull.Value ? null : (DateTime?)rdr["started"],
-                        Loadted = rdr["loadted"] == DBNull.Value ? null : (DateTime?)rdr["loadted"],
-                        Completed = rdr["completed"] == DBNull.Value ? null : (DateTime?)rdr["completed"],
-                        Storagetime = rdr["storagetime"] == DBNull.Value ? null : (DateTime?)rdr["storagetime"],
-                        Storageno = rdr["storageno"].ToString(),
-                        Storagearea = rdr["storagearea"].ToString(),
-                        Storagebin = rdr["storagebin"].ToString()
+                        CommandType = CommandType.Text
                     };
-                    lstobj.Add(objrd);
+                    con.Open();
+                    cmd.Parameters.AddWithValue("@puttype", NpgsqlDbType.Varchar, "01");
+                    NpgsqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        Inb_Putaway_Go objrd = new Inb_Putaway_Go
+                        {
+                            Efidx = rdr["efidx"] == DBNull.Value ? null : (Int64?)rdr["efidx"],
+                            Efstatus = rdr["efstatus"] == DBNull.Value ? null : (Int32?)rdr["efstatus"],
+                            Created = rdr["created"] == DBNull.Value ? null : (DateTime?)rdr["created"],
+                            Modified = rdr["modified"] == DBNull.Value ? null : (DateTime?)rdr["modified"],
+                            Innovator = rdr["innovator"] == DBNull.Value ? null : (Int64?)rdr["innovator"],
+                            Device = rdr["device"].ToString(),
+                            Palletmapkey = rdr["palletmapkey"].ToString(),
+                            Puttype = rdr["puttype"].ToString(),
+                            Palletno = rdr["palletno"].ToString(),
+                            Started = rdr["started"] == DBNull.Value ? null : (DateTime?)rdr["started"],
+                            Loadted = rdr["loadted"] == DBNull.Value ? null : (DateTime?)rdr["loadted"],
+                            Completed = rdr["completed"] == DBNull.Value ? null : (DateTime?)rdr["completed"],
+                            Storagetime = rdr["storagetime"] == DBNull.Value ? null : (DateTime?)rdr["storagetime"],
+                            Storageno = rdr["storageno"].ToString(),
+                            Storagearea = rdr["storagearea"].ToString(),
+                            Storagebin = rdr["storagebin"].ToString()
+                        };
+                        lstobj.Add(objrd);
+                    }
                 }
-                con.Close();
+                catch (NpgsqlException ex)
+                {
+                    Log.Error(ex.ToString());
+                }
+                finally
+                {
+                    con.Close();
+                }
             }
             return lstobj;
+        }
+
+        public Boolean ValidatepalletInbPutawayGo(string spallet)
+        {
+            Boolean bret = false;
+            using (NpgsqlConnection con = new NpgsqlConnection(connectionString))
+            {
+                try
+                {
+                    NpgsqlCommand cmd = new NpgsqlCommand("select * " +
+                    "from wms.inb_putaway_go  " +
+                    "where palletno = @palletno  " +
+                    "order by efidx", con)
+                    {
+                        CommandType = CommandType.Text
+                    };
+                    con.Open();
+                    cmd.Parameters.AddWithValue("@palletno", NpgsqlDbType.Varchar, spallet.ToUpper());
+                    NpgsqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        bret = true;
+                    }
+                }
+                catch (NpgsqlException ex)
+                {
+                    Log.Error(ex.ToString());
+                }
+                finally
+                {
+                    con.Close();
+                }
+            }
+            return bret;
+        }
+
+        public IEnumerable<Inb_Putaway_Go> GetAllInbPutawayGoAgv()
+        {
+            List<Inb_Putaway_Go> lstobj = new List<Inb_Putaway_Go>();
+            using (NpgsqlConnection con = new NpgsqlConnection(connectionString))
+            {
+                try
+                {
+                    NpgsqlCommand cmd = new NpgsqlCommand("select * " +
+                    "from wms.inb_putaway_go " +
+                    "where puttype = @puttype  " +
+                     "and efstatus = @efstatus  " +
+                    "order by efidx", con)
+                    {
+                        CommandType = CommandType.Text
+                    };
+                    con.Open();
+                    cmd.Parameters.AddWithValue("@puttype", NpgsqlDbType.Varchar, "01");
+                    cmd.Parameters.AddWithValue("@efstatus", NpgsqlDbType.Integer, 0);
+                    NpgsqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        Inb_Putaway_Go objrd = new Inb_Putaway_Go
+                        {
+                            Efidx = rdr["efidx"] == DBNull.Value ? null : (Int64?)rdr["efidx"],
+                            Efstatus = rdr["efstatus"] == DBNull.Value ? null : (Int32?)rdr["efstatus"],
+                            Created = rdr["created"] == DBNull.Value ? null : (DateTime?)rdr["created"],
+                            Modified = rdr["modified"] == DBNull.Value ? null : (DateTime?)rdr["modified"],
+                            Innovator = rdr["innovator"] == DBNull.Value ? null : (Int64?)rdr["innovator"],
+                            Device = rdr["device"].ToString(),
+                            Palletmapkey = rdr["palletmapkey"].ToString(),
+                            Puttype = rdr["puttype"].ToString(),
+                            Palletno = rdr["palletno"].ToString(),
+                            Started = rdr["started"] == DBNull.Value ? null : (DateTime?)rdr["started"],
+                            Loadted = rdr["loadted"] == DBNull.Value ? null : (DateTime?)rdr["loadted"],
+                            Completed = rdr["completed"] == DBNull.Value ? null : (DateTime?)rdr["completed"],
+                            Storagetime = rdr["storagetime"] == DBNull.Value ? null : (DateTime?)rdr["storagetime"],
+                            Storageno = rdr["storageno"].ToString(),
+                            Storagearea = rdr["storagearea"].ToString(),
+                            Storagebin = rdr["storagebin"].ToString()
+                        };
+                        lstobj.Add(objrd);
+                    }
+                }
+                catch (NpgsqlException ex)
+                {
+                    Log.Error(ex.ToString());
+                }
+                finally
+                {
+                    con.Close();
+                }
+            }
+            return lstobj;
+        }
+
+        public Boolean ValidateInbPutawayGoAgv(string spallet)
+        {
+            Boolean bret = false;
+            using (NpgsqlConnection con = new NpgsqlConnection(connectionString))
+            {
+                try
+                {
+                    NpgsqlCommand cmd = new NpgsqlCommand("select * " +
+                    "from wms.inb_putaway_go " +
+                    "where puttype = @puttype  " +
+                     "and efstatus = @efstatus  " +
+                       "and palletno = @palletno  " +
+                    "order by efidx", con)
+                    {
+                        CommandType = CommandType.Text
+                    };
+                    con.Open();
+                    cmd.Parameters.AddWithValue("@puttype", NpgsqlDbType.Varchar, "01");
+                    cmd.Parameters.AddWithValue("@efstatus", NpgsqlDbType.Integer, 0);
+                    cmd.Parameters.AddWithValue("@palletno", NpgsqlDbType.Varchar, spallet);
+                    NpgsqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        bret = true;
+                    }
+                }
+                catch (NpgsqlException ex)
+                {
+                    Log.Error(ex.ToString());
+                }
+                finally
+                {
+                    con.Close();
+                }
+            }
+            return bret;
         }
 
 
@@ -171,41 +331,51 @@ namespace GoWMS.Server.Data
             List<Inb_Putaway_Go> lstobj = new List<Inb_Putaway_Go>();
             using (NpgsqlConnection con = new NpgsqlConnection(connectionString))
             {
-                NpgsqlCommand cmd = new NpgsqlCommand("select * " +
+                try
+                {
+                    NpgsqlCommand cmd = new NpgsqlCommand("select * " +
                     "from wms.inb_putaway_go  " +
                      "where palletno = @palletno  " +
                     "order by efidx", con)
-                {
-                    CommandType = CommandType.Text
-                };
-                con.Open();
-                cmd.Parameters.AddWithValue("@palletno", NpgsqlDbType.Varchar, pallet);
-
-                NpgsqlDataReader rdr = cmd.ExecuteReader();
-                while (rdr.Read())
-                {
-                    Inb_Putaway_Go objrd = new Inb_Putaway_Go
                     {
-                        Efidx = rdr["efidx"] == DBNull.Value ? null : (Int64?)rdr["efidx"],
-                        Efstatus = rdr["efstatus"] == DBNull.Value ? null : (Int32?)rdr["efstatus"],
-                        Created = rdr["created"] == DBNull.Value ? null : (DateTime?)rdr["created"],
-                        Modified = rdr["modified"] == DBNull.Value ? null : (DateTime?)rdr["modified"],
-                        Innovator = rdr["innovator"] == DBNull.Value ? null : (Int64?)rdr["innovator"],
-                        Device = rdr["device"].ToString(),
-                        Palletmapkey = rdr["palletmapkey"].ToString(),
-                        Puttype = rdr["puttype"].ToString(),
-                        Palletno = rdr["palletno"].ToString(),
-                        Started = rdr["started"] == DBNull.Value ? null : (DateTime?)rdr["started"],
-                        Loadted = rdr["loadted"] == DBNull.Value ? null : (DateTime?)rdr["loadted"],
-                        Completed = rdr["completed"] == DBNull.Value ? null : (DateTime?)rdr["completed"],
-                        Storagetime = rdr["storagetime"] == DBNull.Value ? null : (DateTime?)rdr["storagetime"],
-                        Storageno = rdr["storageno"].ToString(),
-                        Storagearea = rdr["storagearea"].ToString(),
-                        Storagebin = rdr["storagebin"].ToString()
+                        CommandType = CommandType.Text
                     };
-                    lstobj.Add(objrd);
+                    con.Open();
+                    cmd.Parameters.AddWithValue("@palletno", NpgsqlDbType.Varchar, pallet);
+
+                    NpgsqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        Inb_Putaway_Go objrd = new Inb_Putaway_Go
+                        {
+                            Efidx = rdr["efidx"] == DBNull.Value ? null : (Int64?)rdr["efidx"],
+                            Efstatus = rdr["efstatus"] == DBNull.Value ? null : (Int32?)rdr["efstatus"],
+                            Created = rdr["created"] == DBNull.Value ? null : (DateTime?)rdr["created"],
+                            Modified = rdr["modified"] == DBNull.Value ? null : (DateTime?)rdr["modified"],
+                            Innovator = rdr["innovator"] == DBNull.Value ? null : (Int64?)rdr["innovator"],
+                            Device = rdr["device"].ToString(),
+                            Palletmapkey = rdr["palletmapkey"].ToString(),
+                            Puttype = rdr["puttype"].ToString(),
+                            Palletno = rdr["palletno"].ToString(),
+                            Started = rdr["started"] == DBNull.Value ? null : (DateTime?)rdr["started"],
+                            Loadted = rdr["loadted"] == DBNull.Value ? null : (DateTime?)rdr["loadted"],
+                            Completed = rdr["completed"] == DBNull.Value ? null : (DateTime?)rdr["completed"],
+                            Storagetime = rdr["storagetime"] == DBNull.Value ? null : (DateTime?)rdr["storagetime"],
+                            Storageno = rdr["storageno"].ToString(),
+                            Storagearea = rdr["storagearea"].ToString(),
+                            Storagebin = rdr["storagebin"].ToString()
+                        };
+                        lstobj.Add(objrd);
+                    }
                 }
-                con.Close();
+                catch (NpgsqlException ex)
+                {
+                    Log.Error(ex.ToString());
+                }
+                finally
+                {
+                    con.Close();
+                }
             }
             return lstobj;
         }
@@ -237,17 +407,14 @@ namespace GoWMS.Server.Data
                     sRet = rdr["retmsg"].ToString();
                 }
             }
-            catch (NpgsqlException exp)
+            catch (NpgsqlException ex)
             {
-                //Response.Write(exp.ToString());
+                Log.Error(ex.ToString());
             }
             finally
             {
                 con.Close();
             }
         }
-
-
-
     }
 }

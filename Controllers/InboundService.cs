@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GoWMS.Server.Data;
@@ -30,6 +31,12 @@ namespace GoWMS.Server.Controllers
             return retlist;
         }
 
+        public List<Inb_Putaway_Go> GetAllInbPutawayGoAgv()
+        {
+            List<Inb_Putaway_Go> retlist = objDAL.GetAllInbPutawayGoAgv().ToList();
+            return retlist;
+        }
+
         public List<Inb_Putaway_Go> GetAllInbPutawayGosByPallet(string pallet)
         {
             List<Inb_Putaway_Go> retlist = objDAL.GetAllInbPutawayGoBypallet(pallet).ToList();
@@ -41,8 +48,20 @@ namespace GoWMS.Server.Controllers
             objDAL.SetStorageComplete(pallet, bin);
             return "Map Successfully";
         }
-        
 
+        public Boolean ValidatepalletInbPutawayGo(string spallet)
+        {
+            Boolean bret = false;
+            bret = objDAL.ValidatepalletInbPutawayGo(spallet);
+            return bret;
+        }
+
+        public Boolean ValidateInbPutawayGoAgv(string spallet)
+        {
+            Boolean bret = false;
+            bret = objDAL.ValidateInbPutawayGoAgv(spallet);
+            return bret;
+        }
 
     }
 }

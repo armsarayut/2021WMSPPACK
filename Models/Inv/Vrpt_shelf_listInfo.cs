@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -23,5 +24,7 @@ namespace GoWMS.Server.Models.Inv
         public Int32? Actual_size { get; set; }
         public string Desc_size { get; set; }
         public string St_desc { get; set; }
+        public MudBlazor.Color St_Color { get; set; }
+
     }
 }

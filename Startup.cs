@@ -17,6 +17,11 @@ using GoWMS.Server.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using System.Net.Http;
+using Microsoft.AspNetCore.Http.Connections;
+using Microsoft.Extensions.Localization;
+using System.Reflection;
+using Microsoft.AspNetCore.Localization;
+
 // BLAZOR COOKIE Auth Code (end)
 // ******
 
@@ -36,23 +41,18 @@ namespace GoWMS.Server
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            // ******
-            // BLAZOR COOKIE Auth Code (begin)
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
-            });
-            services.AddAuthentication(
-                CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie();
-            // BLAZOR COOKIE Auth Code (end)
-            // ******
+            services.AddControllers();
+
+            services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+
+            services.AddMudServices();      
             services.AddResponseCaching();
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddMudServices();
             services.AddSingleton<WeatherForecastService>();
+
             services.AddSingleton<CustomerService>();
             services.AddSingleton<ErpApiService>();
             services.AddSingleton<StoreinService>();
@@ -62,16 +62,41 @@ namespace GoWMS.Server
             services.AddSingleton<InboundService>();
             services.AddSingleton<MasService>();
             services.AddSingleton<WgcService>();
-            // ******
-            // BLAZOR COOKIE Auth Code (begin)
-            // From: https://github.com/aspnet/Blazor/issues/1554
-            // HttpContextAccessor
+            services.AddSingleton<StoreoutService>();
+            services.AddSingleton<ReportService>();
+            services.AddSingleton<PublicService>();
+            services.AddSingleton<AgvService>();
+            services.AddSingleton<UtilityServices>();
+            services.AddSingleton<DashService>();
+            services.AddSingleton<WcsService>();
+
             services.AddHttpContextAccessor();
             services.AddScoped<HttpContextAccessor>();
             services.AddHttpClient();
             services.AddScoped<HttpClient>();
-            // BLAZOR COOKIE Auth Code (end)
-            // ******
+
+
+            services.AddServerSideBlazor()
+                .AddHubOptions(options =>
+                {
+                    options.ClientTimeoutInterval = TimeSpan.FromMinutes(10);
+                    options.KeepAliveInterval = TimeSpan.FromSeconds(3);
+                    options.HandshakeTimeout = TimeSpan.FromMinutes(10);
+                });
+
+        }
+
+        private RequestLocalizationOptions GetlocalizationOptions()
+        {
+            var cultures = Configuration.GetSection("Cultures")
+                .GetChildren().ToDictionary(x => x.Key, x => x.Value);
+            var supportedCultures = cultures.Keys.ToArray();
+            var localizationOptions = new RequestLocalizationOptions()
+                .AddSupportedCultures(supportedCultures)
+                .AddSupportedUICultures(supportedCultures);
+
+            return localizationOptions;
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -90,19 +115,18 @@ namespace GoWMS.Server
             app.UseResponseCaching();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseRouting();
-            // ******
-            // BLAZOR COOKIE Auth Code (begin)
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
 
-            app.UseCookiePolicy();
-            app.UseAuthentication();
-            // BLAZOR COOKIE Auth Code (end)
-            // ******
+            app.UseRequestLocalization(GetlocalizationOptions());
+
+
+            app.UseRouting();
+
+
+           
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapBlazorHub();
+                endpoints.MapControllers();
+                endpoints.MapBlazorHub(options => { options.Transports = HttpTransportType.LongPolling; });
                 endpoints.MapFallbackToPage("/_Host");
             });
 
