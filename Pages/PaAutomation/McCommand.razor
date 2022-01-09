@@ -15,13 +15,31 @@
     <MudGrid>
         <MudItem xs="12">
             <br />
+           <MudAlert Severity="Severity.Info" Variant="Variant.Outlined" Dense="true" Class="my-2">@McInfo</MudAlert>
+        </MudItem>
+        <MudItem xs="12">
+            
             @{if (@McstatusAlarm)
                 {
-                    <MudAlert Severity="Severity.Error" Variant="Variant.Outlined">STATUS : @McstatusNo - @McstatusDesc</MudAlert>
+                        <MudAlert 
+                        Severity="Severity.Error" 
+                        Variant="Variant.Filled" 
+                        Dense="true" 
+                        Style="@($"color:{FocColor}; background:{BakColor};")" >
+                        @McstatusNo - @McstatusDesc
+                        </MudAlert>
+
                 }
                 else
                 {
-                    <MudAlert Severity="Severity.Info" Variant="Variant.Outlined">STATUS : @McstatusNo - @McstatusDesc</MudAlert>
+                    
+                      <MudAlert  
+                        Severity="Severity.Normal" 
+                        Variant="Variant.Filled" 
+                        Dense="true"  
+                        Style="@($"color:{FocColor}; background:{BakColor};")" >
+                        @McstatusNo - @McstatusDesc
+                        </MudAlert>
                 }
             }
 
@@ -32,9 +50,9 @@
                     <MudSelectItem Value="@cmd">@cmd.St_no - @cmd.St_desc_th</MudSelectItem>
                     }
             </MudSelect>
-
             <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="SetCommand">SET</MudButton>
         </MudItem>
+        
         <MudItem xs="12">
             <br /><br />
             Selected Command: @string.Join(", ", selectedItems.Select(x => x.St_no));
@@ -50,7 +68,9 @@
     public Int32 McstatusNo { get; set; }
     public bool McstatusAlarm { get; set; }
     public string McstatusDesc { get; set; }
-
+    public string FocColor { get; set; }
+    public string BakColor { get; set; }
+    public string McInfo { get; set; }
     private HashSet<Vmachine_command> selectedItems = new HashSet<Vmachine_command>();
     private IEnumerable<Vmachine_command> Elements = new List<Vmachine_command>();
     List<Vmachine> ElementsBuff = new List<Vmachine>();
@@ -68,7 +88,9 @@
 
     async void ExecuteStatus()
     {
-        ElementsBuff = ObjWcsService.GetAllMachine();
+        //ElementsBuff = ObjWcsService.GetAllMachine();
+        ElementsBuff = await Task.Run(() => ObjWcsService.GetAllMachine());
+
 
         var listStatus = ElementsBuff.Where(a => a.Mccode == Mccode).ToList();
 
@@ -78,9 +100,13 @@
             McstatusNo = item.St_no.Value;
             McstatusAlarm = item.Is_alert.Value;
             McstatusDesc = item.Desc_th.ToString();
+            McInfo = item.Information.ToString();
+            FocColor =item.Focecolor.ToString();
+            BakColor = item.Backcolor.ToString();
+
 
         }
-
+        InvokeAsync(StateHasChanged); 
     }
 
 

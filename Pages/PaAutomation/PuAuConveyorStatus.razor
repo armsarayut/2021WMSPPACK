@@ -20,7 +20,16 @@
 else
 {
     <MudText Typo="Typo.h6" Color="Color.Primary"> @mPagecaption </MudText>
-    <MudTable Items="@Elements" FixedHeader="@fixed_header" FixedFooter="@fixed_footer" Height="@(fixed_header || fixed_footer ?"600px":"")" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<Vmachine,bool>(FilterFunc)" SortLabel="Sort By">
+    <MudTable Items="@Elements" 
+    FixedHeader="@fixed_header" 
+    FixedFooter="@fixed_footer" 
+    Height="@(fixed_header || fixed_footer ?"600px":"")" 
+    Dense="@dense" 
+    Hover="@hover" 
+    Bordered="@bordered" 
+    Striped="@striped" 
+    Filter="new Func<Vmachine,bool>(FilterFunc)" 
+        SortLabel="Sort By">
         <ToolBarContent>
             <MudIconButton OnClick="NavigateToNewTab" Icon="@Icons.Material.Filled.TouchApp" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" Class="ma-2" Title="HMI" />
             <MudSpacer />
@@ -29,31 +38,44 @@ else
 
         <HeaderContent>
             <MudTh><MudTableSortLabel SortBy="new Func<Vmachine, object>(x=>x.Mccode)">MC CODE</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Vmachine, object>(x=>x.Information)">INFO</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel SortBy="new Func<Vmachine, object>(x=>x.St_no)">STATUS</MudTableSortLabel></MudTh>
             <MudTh>ACTION</MudTh>
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="MC CODE">@context.Mccode</MudTd>
-            <MudTd DataLabel="STATUS">
+             <MudTd DataLabel="INFO">@context.Information</MudTd>
+             <MudTd DataLabel="STATUS" >
                 @{if (@context.Is_alert == true)
-                        {
-                        <MudAlert Severity="Severity.Error" Variant="Variant.Filled">@context.St_no - @context.Desc_th</MudAlert>
-                        /*
-                        <MudChip Variant="Variant.Outlined" Color="Color.Error">@context.St_no - @context.Desc_th</MudChip>
-                        */
-                        }
-                        else
-                        {
-                        <MudAlert Severity="Severity.Info" Variant="Variant.Filled">@context.St_no - @context.Desc_th</MudAlert>
-                        /*
-                    <MudChip Variant="Variant.Outlined" Color="Color.Primary">@context.St_no - @context.Desc_th</MudChip>
-                        */
-                        }
+                 {
+                        <MudAlert 
+                        Severity="Severity.Error" 
+                        Variant="Variant.Filled" 
+                        Dense="true" 
+                        Style="@($"color:{context.Focecolor}; background:{context.Backcolor};")" >
+                        @context.St_no - @context.Desc_th
+                        </MudAlert>
+                   }
+                  else
+                   {
+                        <MudAlert  
+                        Severity="Severity.Normal" 
+                        Variant="Variant.Filled" 
+                        Dense="true"  
+                        Style="@($"color:{context.Focecolor}; background:{context.Backcolor};")" >
+                        @context.St_no - @context.Desc_th
+                        </MudAlert>
+                   }
                 }
             </MudTd>
 
             <MudTd DataLabel="">
-                <MudFab @onclick="@(()=>SetCommand(@context.Mccode))" Color="Color.Secondary" Icon="@Icons.Material.Filled.SettingsApplications" Size="Size.Small" IconSize="Size.Small" />
+            
+                @if (@context.Is_cmd == true)
+                {
+                     <MudFab @onclick="@(()=>SetCommand(@context.Mccode))" Color="Color.Secondary" Icon="@Icons.Material.Filled.SettingsApplications" Size="Size.Small" IconSize="Size.Small" />
+                }
+               
             </MudTd>
 
         </RowTemplate>
@@ -76,8 +98,15 @@ else
     private string McCommand { get; set; }
     private string setMcCommand { get; set; } = "wcs/mccmd/";
 
+
+
+
     List<Vmachine> Elements = new List<Vmachine>();
 
+
+
+
+   
 
 
     void IDisposable.Dispose()

@@ -29,8 +29,19 @@ namespace GoWMS.Server.Controllers
             return bRet;
         }
 
+        public Boolean CreatePotocalMC(string mccode, Int32 startpos, Int32 stoppos, Int32 unittyp, string palletid, Int32 weight, Int32 command)
+        {
+            Boolean bRet = false;
+            bRet = objDAL.CreatePotocalMC( mccode,  startpos,  stoppos,  unittyp,  palletid,  weight,  command);
+            return bRet;
+        }
 
 
+        public List<Vset_gate_rgv> GetGateRgv()
+        {
+            List<Vset_gate_rgv> retlist = objDAL.GetGateRgv().ToList();
+            return retlist;
+        }
 
     }
 }
