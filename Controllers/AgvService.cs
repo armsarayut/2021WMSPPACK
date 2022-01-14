@@ -57,7 +57,6 @@ namespace GoWMS.Server.Controllers
             return retlist;
         }
 
-
         public System.Data.DataTable GetQueryAgvStatusApiName()
         {
             return objDAL.GetQueryAgvStatusApiName();
@@ -67,9 +66,10 @@ namespace GoWMS.Server.Controllers
             return objDAL.GetAllAgvStatusDesc();
         }
 
-
-
-
-
+        public List<AgvRptEODStation> GetEndofDayStation()
+        {
+            List<AgvRptEODStation> retlist = objDAL.GetEndofDayStation().ToList();
+            return retlist;
+        }
     }
 }

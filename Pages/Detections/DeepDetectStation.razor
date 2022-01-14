@@ -1,0 +1,212 @@
+﻿@page "/Detection"
+
+@using Newtonsoft.Json;
+@using GoWMS.Server.Controllers;
+@using GoWMS.Server.Models;
+@using GoWMS.Server.Data;
+@inject IHttpClientFactory _clientFactory;
+@inject IModalService modal;
+@inject UserServices ObjUser;
+@inject ISnackbar Snackbar
+
+@attribute [Authorize]
+
+
+@if (Elements == null)
+{
+    // <p><em>Loading...</em></p>
+    <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
+}
+else
+{
+    <MudText Typo="Typo.h6" Color="Color.Primary">@mPageHeader</MudText>
+
+    <MudTable Items="@Elements" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<dataModel, bool>(FilterFunc)" Style="width:100%;">
+        <ToolBarContent>
+            <MudToolBarSpacer />
+            <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh>Date/Time</MudTh>
+            <MudTh>Camera IP</MudTh>
+            <MudTh>Station</MudTh>
+            <MudTh>Object</MudTh>
+            <MudTh>Image</MudTh>
+            <MudTh></MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd>@context.Modified</MudTd>
+            <MudTd>@context.CameraIp</MudTd>
+            <MudTd>@context.GateName</MudTd>
+            <MudTd>@context.ObjectName</MudTd>
+            <MudTd>
+                @*<MudIconButton Color="@Color.Default" Icon="@Icons.Filled.Image" @onclick="@(()=> modal.Show<Automations.DeepDetectImgPopup>("Detection Image Capture"))">
+                </MudIconButton>*@
+                <MudIconButton Color="@Color.Default" Icon="@Icons.Filled.PhotoCamera" @onclick="@(()=> OnclickImgPopup(context.CameraIp, context.GateName, context.ObjectName))">
+                </MudIconButton>
+            </MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager PageSizeOptions="new int[] { 10, 20, 50, 100 }" />
+        </PagerContent>
+    </MudTable>
+}
+
+@code {
+    class dataModel
+    {
+        public DateTime? Modified { get; set; }
+        public string GateName { get; set; }
+        public string ObjectName { get; set; }
+        public string CameraIp { get; set; }
+    }
+    private string mPageHeader = "Detection";
+    List<Userroleinfo> Roles = new List<Userroleinfo>();
+    List<dataModel> Elements = new List<dataModel>();
+    private bool dense = true;
+    private bool hover = true;
+    private bool striped = true;
+    private bool bordered = false;
+    private bool fixed_header = true;
+    private bool fixed_footer = true;
+    private string searchString = "";
+
+    string detectionUrl = "https://localhost:44302/api/Detection";
+
+    protected override async Task OnInitializedAsync()
+    {
+        //InitialTimer();
+        //ExecuteApi();
+        Roles =  await Task.Run(() => ObjUser.GetUserRole("6.2.B Order Receive Summary Report", VarGlobals.User.GroupID ));
+        await Task.Run(() => DbGetDeepDetect());
+
+    }
+    bool FilterFunc(dataModel element)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.CameraIp.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.GateName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.ObjectName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        return false;
+    }
+    async void ExecuteApi()
+    {
+        Elements = new List<dataModel>();
+        var httpRequestMessage = new HttpRequestMessage(
+        HttpMethod.Get, detectionUrl + @"/DeepDetectStation");
+        var client = _clientFactory.CreateClient();
+        var vResponseMsg = client.SendAsync(httpRequestMessage).Result;
+        if (vResponseMsg.IsSuccessStatusCode == false)
+            return;
+
+        var vResult = vResponseMsg.Content.ReadAsStringAsync().Result;
+        Elements = Newtonsoft.Json.JsonConvert.DeserializeObject<List<dataModel>>(vResult);
+    }
+    void DbGetDeepDetect()
+    {
+        Elements = new List<dataModel>();
+        string connectionString = GoWMS.Server.Data.ConnGlobals.GetConnLocalDBPG();
+        System.Data.DataTable vDt = new System.Data.DataTable();
+        using (Npgsql.NpgsqlConnection con = new Npgsql.NpgsqlConnection(connectionString))
+        {
+            System.Text.StringBuilder sql = new System.Text.StringBuilder();
+            sql.AppendLine("SELECT * ");
+            sql.AppendLine("FROM cira.vdeep_detect");
+            //sql.AppendLine("WHERE api_name='cancelTask'");
+            sql.AppendLine(";");
+            System.Data.DataSet _ds = new System.Data.DataSet();
+            using (Npgsql.NpgsqlCommand vCmd = new Npgsql.NpgsqlCommand())
+            {
+                con.Open();
+                vCmd.Connection = con;
+                vCmd.CommandType = System.Data.CommandType.Text;
+                vCmd.CommandText = sql.ToString();
+                Npgsql.NpgsqlDataAdapter da = new Npgsql.NpgsqlDataAdapter(vCmd);
+                da.Fill(_ds);
+                vDt = _ds.Tables[0];
+            }
+        }
+        if (vDt.Rows.Count == 0)
+            return;
+        for(int i=0; i<vDt.Rows.Count; i++)
+        {
+            dataModel vTemp = new dataModel();
+            vTemp.CameraIp = vDt.Rows[i]["camera_ip"].ToString();
+            vTemp.GateName = vDt.Rows[i]["gate_name"].ToString();
+            vTemp.Modified = Convert.ToDateTime(vDt.Rows[i]["modified"].ToString());
+            vTemp.ObjectName = vDt.Rows[i]["object_name"].ToString();
+            Elements.Add(vTemp);
+        }
+    }
+    async void OnclickImgPopup(string pCameraIp, string sGate, string sObject)
+    {
+        if (Roles.Where(x => x.Role_apv == true).Count()>0)
+        {
+            //var httpRequestMessage = new HttpRequestMessage(
+            //HttpMethod.Get, detectionUrl + @"/DeepDetectStationCaptureImage?gateName=" + pGateName);
+            //var client = _clientFactory.CreateClient();
+            //var vResponseMsg = client.SendAsync(httpRequestMessage).Result;
+            //string vBase64 = "";
+            //if (vResponseMsg.IsSuccessStatusCode == true)
+            //{
+            //    //var vResult = vResponseMsg.Content.ReadAsStringAsync().Result;
+            //    vBase64 = vResponseMsg.Content.ReadAsStringAsync().Result;
+            //}
+            ////https://github.com/Blazored/Modal
+            ////https://learnwithsundar.com/2021/02/18/modal-popup-window-in-blazor-webassembly/
+            //var parameters = new ModalParameters();
+            //parameters.Add(nameof(Automations.DeepDetectImgPopup.ImgBase64), vBase64);
+            //modal.Show<Automations.DeepDetectImgPopup>("Detection Capture Image", parameters);
+
+            string connectionString = GoWMS.Server.Data.ConnGlobals.GetConnLocalDBPG();
+            System.Data.DataTable vDt = new System.Data.DataTable();
+            using (Npgsql.NpgsqlConnection con = new Npgsql.NpgsqlConnection(connectionString))
+            {
+                System.Text.StringBuilder sql = new System.Text.StringBuilder();
+                sql.AppendLine("SELECT img_base64 ");
+                sql.AppendLine("FROM cira.set_hik_camera");
+                sql.AppendLine("WHERE entity_lock = 0 and camera_ip='" + pCameraIp + "'");
+                //sql.AppendLine("WHERE api_name='cancelTask'");
+                sql.AppendLine(";");
+                System.Data.DataSet _ds = new System.Data.DataSet();
+                using (Npgsql.NpgsqlCommand vCmd = new Npgsql.NpgsqlCommand())
+                {
+                    con.Open();
+                    vCmd.Connection = con;
+                    vCmd.CommandType = System.Data.CommandType.Text;
+                    vCmd.CommandText = sql.ToString();
+                    Npgsql.NpgsqlDataAdapter da = new Npgsql.NpgsqlDataAdapter(vCmd);
+                    da.Fill(_ds);
+                    vDt = _ds.Tables[0];
+                }
+            }
+            string vBase64 = "";
+
+
+            if (vDt.Rows.Count > 0)
+            {
+                vBase64 = vDt.Rows[0]["img_base64"].ToString();
+
+            }
+            var parameters = new ModalParameters();
+            parameters.Add(nameof(Detections.DeepDetectImgPopup.ImgBase64), vBase64);
+            modal.Show<Detections.DeepDetectImgPopup>("CAMERA: " + pCameraIp + " STATION:" + sGate + " OBJECT:" + sObject , parameters);
+        }
+        else
+        {
+            ShowSnackbar("You do not have access !", Defaults.Classes.Position.TopCenter, Severity.Warning);
+        }
+    }
+
+      void ShowSnackbar(string message, string position, Severity Severity )
+    {
+        Snackbar.Clear();
+        Snackbar.Configuration.PositionClass = position;
+        Snackbar.Add(message, Severity);
+    }
+
+}

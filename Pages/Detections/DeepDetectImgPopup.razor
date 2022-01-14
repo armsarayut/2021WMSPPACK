@@ -1,0 +1,19 @@
+﻿@page "/DeepDetectImgPopup"
+@inject IModalService modal
+
+<MudContainer MaxWidth="MaxWidth.Small" Class="d-flex align-center" Style="height:auto;">
+    @if (string.IsNullOrEmpty(ImgBase64) == false)
+    {
+        <img src="@ImgBase64" style="width:100%; display:block; margin-left:auto; margin-right:auto; z-index:1000;" />
+    }
+    else
+    {
+        <img src="./images/img not found.png" style="z-index:1000;" />
+    }
+</MudContainer>
+
+
+@code {
+    [Parameter]
+    public string ImgBase64 { get; set; }
+}

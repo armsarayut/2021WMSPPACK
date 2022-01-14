@@ -485,5 +485,55 @@ namespace GoWMS.Server.Data
             }
             return lstobj;
         }
+
+        public IEnumerable<AgvRptEODStation> GetEndofDayStation()
+        {
+            List<AgvRptEODStation> lstobj = new List<AgvRptEODStation>();
+            using (NpgsqlConnection con = new NpgsqlConnection(connectionString))
+            {
+                try
+                {
+                    StringBuilder sql = new StringBuilder();
+
+                    sql.AppendLine("SELECT date_trunc('day'::text, etime) AS w_date");
+                    sql.AppendLine(", gate_source, gate_dest");
+                    sql.AppendLine(", count(loadtime) AS w_count");
+                    sql.AppendLine("FROM wcs.vrptqueueloadtimeagv");
+                    sql.AppendLine("where etime is not null");
+                    sql.AppendLine("group by date_trunc('day'::text, etime), gate_source, gate_dest ");
+                    sql.AppendLine("order by w_date, gate_source, gate_dest");
+                    sql.AppendLine(";");
+
+                    NpgsqlCommand cmd = new NpgsqlCommand(sql.ToString(), con)
+                    {
+                        CommandType = CommandType.Text
+                    };
+                    con.Open();
+
+                    NpgsqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        AgvRptEODStation objrd = new AgvRptEODStation
+                        {
+                            W_date = rdr["w_date"] == DBNull.Value ? null : (DateTime?)rdr["w_date"],
+                            Gate_source = rdr["gate_source"].ToString(),
+                            Gate_dest = rdr["gate_dest"].ToString(),
+                            W_count = rdr["w_count"] == DBNull.Value ? null : (long?)rdr["w_count"]
+                        };
+                        lstobj.Add(objrd);
+                    }
+                }
+                catch (NpgsqlException ex)
+                {
+                    Log.Error(ex.ToString());
+                }
+                finally
+                {
+                    con.Close();
+                }
+            }
+            return lstobj;
+        }
+
     }
 }

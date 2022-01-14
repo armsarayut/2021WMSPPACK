@@ -14,11 +14,11 @@ namespace GoWMS.Server.Data
 
         #region Local Database
 
-        private static readonly string NpgServer = "localhost"; // Develop
-        //private static readonly string NpgServer = "192.168.200.141"; // Production
+        //private static readonly string NpgServer = "localhost"; // Develop
+        private static readonly string NpgServer = "192.168.200.141"; // Production
 
-        private static readonly string NpgDB = "PPACK"; // Develop
-        //private static readonly string NpgDB = "Gowes"; // Production
+        //private static readonly string NpgDB = "PPACK"; // Develop
+        private static readonly string NpgDB = "Gowes"; // Production
 
         private static readonly string NpgUser = "postgres";
         private static readonly string NpgPass = "@ei0u2020";

@@ -20,19 +20,24 @@ using System.Net.Http;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.Extensions.Localization;
 using System.Reflection;
-using Microsoft.AspNetCore.Localization;
-
+using Microsoft.AspNetCore.Mvc;
 // BLAZOR COOKIE Auth Code (end)
 // ******
+
+
+using Blazored.Modal;
 
 
 namespace GoWMS.Server
 {
     public class Startup
     {
+   
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+    
         }
 
         public IConfiguration Configuration { get; }
@@ -41,10 +46,15 @@ namespace GoWMS.Server
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+         
+
+            services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
+
+
+            // Add Controllers for WebAPI
             services.AddControllers();
 
             services.AddLocalization(options => options.ResourcesPath = "Resources");
-
 
             services.AddMudServices();      
             services.AddResponseCaching();
@@ -69,12 +79,14 @@ namespace GoWMS.Server
             services.AddSingleton<UtilityServices>();
             services.AddSingleton<DashService>();
             services.AddSingleton<WcsService>();
+            services.AddSingleton<UserServices>();
 
             services.AddHttpContextAccessor();
             services.AddScoped<HttpContextAccessor>();
             services.AddHttpClient();
             services.AddScoped<HttpClient>();
 
+            services.AddBlazoredModal();
 
             services.AddServerSideBlazor()
                 .AddHubOptions(options =>
@@ -83,6 +95,20 @@ namespace GoWMS.Server
                     options.KeepAliveInterval = TimeSpan.FromSeconds(3);
                     options.HandshakeTimeout = TimeSpan.FromMinutes(10);
                 });
+
+
+
+            // Add Authentication
+            // https://docs.microsoft.com/en-us/aspnet/core/security/authentication/cookie
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                    .AddCookie(options =>
+                    {
+                        options.Cookie.Name = "gowmauth";
+                        options.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Strict;
+                        options.EventsType = typeof(Controllers.CookieAuthenticationEvents);
+
+                    });
+            services.AddScoped<Controllers.CookieAuthenticationEvents>();
 
         }
 
@@ -115,14 +141,11 @@ namespace GoWMS.Server
             app.UseResponseCaching();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRequestLocalization(GetlocalizationOptions());
 
-
             app.UseRouting();
+            app.UseAuthentication();
 
-
-           
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

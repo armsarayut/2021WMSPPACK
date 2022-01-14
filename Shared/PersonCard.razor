@@ -1,32 +1,61 @@
-﻿@using GoWMS.Server.Data;
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@using System.Security.Claims
+
+
+@using GoWMS.Server.Data;
+
 
 <MudCard Elevation="0" Square="true" Class="@Class" Style="@Style">
     <MudCardHeader>
         <CardHeaderAvatar>
-            @if (VarGlobals.User.GroupID == 1)
+            @if (VarGlobals.User.GroupID  == 1)
             {
-                <MudAvatar Image="images/programmer.png" />
+                <MudAvatar Image="images/programmer.png"/>
             }
-            else if (VarGlobals.User.GroupID == 2)
+            else if (VarGlobals.User.GroupID  == 2)
             {
-                 <MudAvatar Image="images/businessman.png" />
+                 <MudAvatar Image="images/businessman.png"/>
             }
-            else if (VarGlobals.User.GroupID == 3)
+            else if (VarGlobals.User.GroupID  == 3)
             {
-                <MudAvatar Image="images/man.png" />
+                <MudAvatar Image="images/man.png"/>
             }
             else
             {
-                <MudAvatar Image="images/maori.png" />
+                <MudAvatar Image="images/maori.png"/>
             }
 
         </CardHeaderAvatar>
         <CardHeaderContent>
             <MudText Typo="Typo.body2">Welcome</MudText>
-            <MudText Typo="Typo.caption">@VarGlobals.User.UserName</MudText>
+            <MudText Typo="Typo.caption">@(sRole)</MudText>
         </CardHeaderContent>
     </MudCardHeader>
 </MudCard>
 
-@code { [Parameter] public string Class { get; set; }
-            [Parameter] public string Style { get; set; } }
+@code { 
+    [Parameter] public string Class { get; set; }
+    [Parameter] public string Style { get; set; } 
+
+    string sUsername { get; set; } = "";
+    string sRole{ get; set; } = "";
+    string sGroupID{ get; set; } = "";
+    string sUserID{ get; set; } = "";
+
+        protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        sUsername = user.Identity.Name;
+        sRole= user.Claims.FirstOrDefault(
+             c => c.Type == ClaimTypes.Email)?.Value;
+
+             sGroupID= user.Claims.FirstOrDefault(
+             c => c.Type == ClaimTypes.GroupSid)?.Value;
+
+                sUserID= user.Claims.FirstOrDefault(
+             c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+    }
+        
+        }

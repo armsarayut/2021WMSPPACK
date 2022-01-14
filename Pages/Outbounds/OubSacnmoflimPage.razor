@@ -35,6 +35,7 @@ else
     </MudItem>
 </MudGrid>
 
+<br/>
 
 <MudHidden Breakpoint="Breakpoint.Xs">
     <MudTable Items="@Elements.Where(a => a.Dotype == @_doType1 && a.Material_Code.StartsWith(@_matfilter))" MultiSelection="true" @bind-SelectedItems="selectLON" Hover="@hover"

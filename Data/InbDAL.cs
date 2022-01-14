@@ -298,7 +298,7 @@ namespace GoWMS.Server.Data
                     "from wms.inb_putaway_go " +
                     "where puttype = @puttype  " +
                      "and efstatus = @efstatus  " +
-                       "and palletno = @palletno  " +
+                     "and palletno = @palletno  " +
                     "order by efidx", con)
                     {
                         CommandType = CommandType.Text

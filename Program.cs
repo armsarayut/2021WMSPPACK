@@ -8,7 +8,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Serilog;
 
-
 namespace GoWMS.Server
 {
     public class Program
@@ -23,6 +22,9 @@ namespace GoWMS.Server
                     outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level:u3}] {Message:lj}{NewLine}{Exception}")
             .CreateLogger();
             CreateHostBuilder(args).Build().Run();
+
+      
+
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
