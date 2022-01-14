@@ -44,24 +44,23 @@ else
                     <MudMenuItem>Pdf</MudMenuItem>
                 </MudMenu>
             </MudTooltip>
-                     <MudSpacer />     
-             <MudGrid>
-
-
-                <MudItem xs="3">
-                     <MudDatePicker Label="FROM DATE" @bind-Date="date" />
-                </MudItem>
-                <MudItem xs="3">
-                      <MudDatePicker Label="TO DATE" @bind-Date="date" />
-                </MudItem>
-                <MudItem xs="3">
-                     <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
-                </MudItem>
-                <MudItem xs="3">
-                      <MudButton>Find</MudButton>
-                </MudItem>
-            </MudGrid>
-
+                     
+                     <MudGrid>
+                           <MudSpacer />   
+                          <MudItem xs=6 >
+                             <MudDateRangePicker @ref="_picker" Label="Search Date" @bind-DateRange="_dateRange">
+                                <PickerActions>
+                                    <MudButton Class="mr-auto align-self-start" OnClick="@(() => _picker.Clear())">Clear</MudButton>
+                                    <MudButton OnClick="@(() => setFindDate(false))">Cancel</MudButton>
+                                    <MudButton Color="Color.Primary" OnClick="@(() => setFindDate(true))">Ok</MudButton>
+                                </PickerActions>
+                            </MudDateRangePicker>
+                         </MudItem>
+                        
+                            <MudItem xs=6 >
+                                <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                            </MudItem>
+                         </MudGrid>
              @*
             <MudItem xs=6 sm=3>
                 <MudDatePicker Label="FROM DATE" @bind-Date="date" />
@@ -119,15 +118,30 @@ else
     private HashSet<AgvRptEODStation> selectedItems = new HashSet<AgvRptEODStation>();
     private IEnumerable<AgvRptEODStation> Elements = new List<AgvRptEODStation>();
 
+    private IEnumerable<AgvRptEODStation> Elementsource = new List<AgvRptEODStation>();
+
+    private List<AgvRptEODStation> Filter = new List<AgvRptEODStation>();
+
+
     public int elevation = 0;
-     DateTime? date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day); 
+    DateTime? date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day); 
+
+    MudDateRangePicker _picker;
+    DateRange _dateRange = new DateRange(DateTime.Now.Date, DateTime.Now.AddDays(5).Date);
 
     protected override async Task OnInitializedAsync()
     {
         AgvService objCS = new AgvService();
         //Elements = await Task.Run(() => objCS.GetReceivingOrdersbypallet(mPalletcode));
-        Elements = await Task.Run(() => objCS.GetEndofDayStation());
+        Elementsource = await Task.Run(() => objCS.GetEndofDayStation());
+
+        Elements = Elementsource;
+
     }
+
+
+
+
 
     private void setstr(string str)
     {
@@ -172,11 +186,11 @@ else
     {
         /*
         if (string.IsNullOrWhiteSpace(searchString))
-            return true;
+        return true;
         if (element.W_hour.Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
+        return true;
         if (element.Agv_name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
+        return true;
         if ($"{element.Gate_source} {element.Gate_dest} ".Contains(searchString))
             return true;
         return false;
@@ -189,17 +203,17 @@ else
         /*
         try
         {
-            IbpOrderQueueRptExcel excelReport = new IbpOrderQueueRptExcel();
-            List<Sap_Storeout> listExcelReport = new List<Sap_Storeout>();
-            listExcelReport = Elements.ToList();
-            var fileName = $"{mPagecaption.ToString()}-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
-            //await JSRuntime.InvokeAsync<object>("jsSaveAsFile", fileName, Convert.ToBase64String(excelReport.Report(listExcelReport)));
-        }
-        catch (Exception e)
+        IbpOrderQueueRptExcel excelReport = new IbpOrderQueueRptExcel();
+        List<Sap_Storeout> listExcelReport = new List<Sap_Storeout>();
+        listExcelReport = Elements.ToList();
+        var fileName = $"{mPagecaption.ToString()}-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+        //await JSRuntime.InvokeAsync<object>("jsSaveAsFile", fileName, Convert.ToBase64String(excelReport.Report(listExcelReport)));
+    }
+    catch (Exception e)
         {
-            var exmsg = e.Message.ToString();
-        }
-        */
+        var exmsg = e.Message.ToString();
+    }
+    */
     }
 
     public async Task DownloadPdfDocument()
@@ -207,19 +221,32 @@ else
         /*
         try
         {
-
-
-            IbpOrderQueueRptPdf pdfReport = new IbpOrderQueueRptPdf();
-            List<Sap_Storeout> listPdfReport = new List<Sap_Storeout>();
-            listPdfReport = Elements.ToList();
-            var fileName = $"{mPagecaption.ToString()}-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.pdf";
-            //await JSRuntime.InvokeAsync<object>("jsSaveAsFile", fileName, Convert.ToBase64String(pdfReport.ExportPDF(listPdfReport)));
-
-        }
-        catch (Exception e)
-        {
-            var exmsg = e.Message.ToString();
-        }
-        */
+        IbpOrderQueueRptPdf pdfReport = new IbpOrderQueueRptPdf();
+        List<Sap_Storeout> listPdfReport = new List<Sap_Storeout>();
+        listPdfReport = Elements.ToList();
+        var fileName = $"{mPagecaption.ToString()}-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.pdf";
+        //await JSRuntime.InvokeAsync<object>("jsSaveAsFile", fileName, Convert.ToBase64String(pdfReport.ExportPDF(listPdfReport)));
     }
+    catch (Exception e)
+        {
+        var exmsg = e.Message.ToString();
+    }
+    */
+    }
+
+    void setFindDate(bool bOk)
+    {
+        _picker.Close();
+
+        if (bOk)
+        {
+            DateTime dtStart = _dateRange.Start.Value;
+            DateTime dtEnd = _dateRange.End.Value;
+            Elements = Elementsource.Where(x => x.W_date >= dtStart.Date && x.W_date <= dtEnd.Date).ToList();
+            StateHasChanged();
+        }
+    }
+
+
+    
 }
