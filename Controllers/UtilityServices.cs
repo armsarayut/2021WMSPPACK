@@ -8,8 +8,6 @@ namespace GoWMS.Server.Controllers
 {
     public class UtilityServices
     {
-
-
         public  async Task<bool> PingAsync(string hostUrl)
         {
             //var hostUrl = "www.code4it.dev";
@@ -19,7 +17,6 @@ namespace GoWMS.Server.Controllers
             PingReply result = await ping.SendPingAsync(hostUrl, 15);
             return result.Status == IPStatus.Success;
         }
-
 
     }
 }

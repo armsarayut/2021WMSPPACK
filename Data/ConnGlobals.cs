@@ -12,7 +12,7 @@ namespace GoWMS.Server.Data
             return "server=DESKTOP-NQ62BHU\\MSSQL; database=GoSQL;Trusted_Connection=True;";
         }
 
-        #region Local Database
+        #region Load Database
 
         //private static readonly string NpgServer = "localhost"; // Develop
         private static readonly string NpgServer = "192.168.200.141"; // Production
@@ -23,7 +23,7 @@ namespace GoWMS.Server.Data
         private static readonly string NpgUser = "postgres";
         private static readonly string NpgPass = "@ei0u2020";
         private static readonly string NpgPort = "5432";
-        private static readonly string NpgContime = "60";
+        private static readonly string NpgContime = "0";
 
         /// <summary>
         /// GetConnLocalDBPG
@@ -32,7 +32,7 @@ namespace GoWMS.Server.Data
         /// <returns></returns>
         public static string GetConnLocalDBPG()
         {
-            return "Server=" + NpgServer + " ;Port=" + NpgPort + ";Database=" + NpgDB + ";User Id=" + NpgUser + ";Password=" + NpgPass + ";Timeout=" + NpgContime + ";";
+            return "Server=" + NpgServer + " ;Port=" + NpgPort + ";Database=" + NpgDB + ";User Id=" + NpgUser + ";Password=" + NpgPass + ";commandtimeout=" + NpgContime + ";";
         }
         #endregion
 
@@ -86,5 +86,6 @@ namespace GoWMS.Server.Data
             return "Provider = OraOLEDB.Oracle; Data Source = WGRB; User Id = WGRB; Password = WGRB2021LINK; OLEDB.NET = True;";
         }
         #endregion
+
     }
 }

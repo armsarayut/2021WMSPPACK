@@ -252,7 +252,75 @@ namespace GoWMS.Server.Data
         }
 
 
+        public IEnumerable<Tas_WorksInfo> GetASRSWork()
+        {
+            List<Tas_WorksInfo> lstobj = new List<Tas_WorksInfo>();
+            using (NpgsqlConnection con = new NpgsqlConnection(connectionString))
+            {
+                try
+                {
+                    StringBuilder sql = new StringBuilder();
+                    sql.AppendLine("SELECT idx, created, entity_lock, modified, client_id, client_ip");
+                    sql.AppendLine(", su_no, lpncode, work_code, work_status, work_srm, work_location");
+                    sql.AppendLine(", work_weight, actual_weight, work_size, actual_size, work_gate, work_ref");
+                    sql.AppendLine(", ctime, stime, etime, work_priority");
+                    sql.AppendLine("from wcs.tas_works");
+                    sql.AppendLine("order by created");
 
+                    NpgsqlCommand cmd = new NpgsqlCommand(sql.ToString(), con)
+                    {
+                        CommandType = CommandType.Text
+                    };
+                    con.Open();
+
+
+                    NpgsqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+
+                        Tas_WorksInfo objrd = new Tas_WorksInfo
+                        {
+                            Idx = rdr["idx"] == DBNull.Value ? null : (Int64?)rdr["idx"],
+                            Created = rdr["created"] == DBNull.Value ? null : (DateTime?)rdr["created"],
+                            Entity_Lock = rdr["entity_lock"] == DBNull.Value ? null : (Int32?)rdr["entity_lock"],
+                            Modified = rdr["modified"] == DBNull.Value ? null : (DateTime?)rdr["modified"],
+                            Client_Id = rdr["client_id"] == DBNull.Value ? null : (Int64?)rdr["client_id"],
+                            Client_Ip = rdr["client_ip"].ToString(),
+                            Su_No = rdr["su_no"].ToString(),
+                            Lpncode = rdr["lpncode"].ToString(),
+                            Work_Code = rdr["work_code"].ToString(),
+
+                            Work_Status = rdr["work_status"].ToString(),
+                            Work_Srm = rdr["work_srm"].ToString(),
+                            Work_Location = rdr["work_location"].ToString(),
+                            Work_Weight = rdr["work_weight"] == DBNull.Value ? null : (decimal?)rdr["work_weight"],
+                            Actual_Weight = rdr["actual_weight"] == DBNull.Value ? null : (decimal?)rdr["actual_weight"],
+                            Work_Size = rdr["work_size"] == DBNull.Value ? null : (Int32?)rdr["work_size"],
+                            Actual_Size = rdr["actual_size"] == DBNull.Value ? null : (Int32?)rdr["actual_size"],
+                            Work_Gate = rdr["work_gate"].ToString(),
+                            Work_Ref = rdr["work_ref"].ToString(),
+
+                            Ctime = rdr["ctime"] == DBNull.Value ? null : (DateTime?)rdr["ctime"],
+                            Stime = rdr["stime"] == DBNull.Value ? null : (DateTime?)rdr["stime"],
+                            Etime = rdr["etime"] == DBNull.Value ? null : (DateTime?)rdr["etime"],
+                            Work_Priority = rdr["work_priority"] == DBNull.Value ? null : (Int32?)rdr["work_priority"],
+
+
+                        };
+                        lstobj.Add(objrd);
+                    }
+                }
+                catch (NpgsqlException ex)
+                {
+                    Log.Error(ex.ToString());
+                }
+                finally
+                {
+                    con.Close();
+                }
+            }
+            return lstobj;
+        }
 
 
 

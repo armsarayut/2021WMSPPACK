@@ -34,7 +34,22 @@ else
                 </MudMenu>
             </MudTooltip>
             <MudSpacer />
-            <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+            <MudGrid>
+                           <MudSpacer />   
+                          <MudItem xs=6 >
+                             <MudDateRangePicker @ref="_picker" Label="Search Date" @bind-DateRange="_dateRange">
+                                <PickerActions>
+                                    <MudButton Class="mr-auto align-self-start" OnClick="@(() => _picker.Clear())">Clear</MudButton>
+                                    <MudButton OnClick="@(() => setFindDate(false))">Cancel</MudButton>
+                                    <MudButton Color="Color.Primary" OnClick="@(() => setFindDate(true))">Ok</MudButton>
+                                </PickerActions>
+                            </MudDateRangePicker>
+                         </MudItem>
+                        
+                            <MudItem xs=6 >
+                                <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                            </MudItem>
+                         </MudGrid>
         </ToolBarContent>
 
         <HeaderContent>
@@ -80,14 +95,21 @@ else
     private Class6_7_F selectedItem = null;
     private HashSet<Class6_7_F> selectedItems = new HashSet<Class6_7_F>();
     private IEnumerable<Class6_7_F> Elements = new List<Class6_7_F>();
+    private IEnumerable<Class6_7_F> Elementsource = new List<Class6_7_F>();
 
     public int elevation = 0;
+
+    MudDateRangePicker _picker;
+    DateRange _dateRange = new DateRange(DateTime.Now.Date, DateTime.Now.AddDays(5).Date);
+
 
     protected override async Task OnInitializedAsync()
     {
         PublicService objCS = new PublicService();
         //Elements = await Task.Run(() => objCS.GetReceivingOrdersbypallet(mPalletcode));
-        Elements = await Task.Run(() => objCS.GetAllMenu6_7F());
+        Elementsource = await Task.Run(() => objCS.GetAllMenu6_7F());
+        Elements = Elementsource;
+
         this.InsertAuditrial("View", mMenudesc);
     }
 
@@ -155,4 +177,16 @@ else
         bool bRet = UserlogService.InsertAudittrial(actdesc, munname);
     }
 
+     void setFindDate(bool bOk)
+    {
+        _picker.Close();
+
+        if (bOk)
+        {
+            DateTime dtStart = _dateRange.Start.Value;
+            DateTime dtEnd = _dateRange.End.Value;
+            Elements = Elementsource.Where(x => x.W_date >= dtStart.Date && x.W_date <= dtEnd.Date).ToList();
+            StateHasChanged();
+        }
+    }
 }

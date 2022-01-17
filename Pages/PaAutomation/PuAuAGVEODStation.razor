@@ -139,20 +139,16 @@ else
 
     }
 
-
-
-
-
     private void setstr(string str)
     {
-        //if (mPalletcode.Length <= 0)
-        //{
+        //  if (mPalletcode.Length <= 0)
+        //  {
         //    mPalletcode = str;
         //    msgAction = "Enter Pack ID";
         //    elevation = 3;
         //}
-        //else
-        //{
+        //  else
+        //  {
         //    if (str == mPalletcode)
         //    {
         //        elevation = 2;
@@ -208,12 +204,12 @@ else
         listExcelReport = Elements.ToList();
         var fileName = $"{mPagecaption.ToString()}-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
         //await JSRuntime.InvokeAsync<object>("jsSaveAsFile", fileName, Convert.ToBase64String(excelReport.Report(listExcelReport)));
-    }
-    catch (Exception e)
-        {
-        var exmsg = e.Message.ToString();
-    }
-    */
+        }
+        catch (Exception e)
+            {
+            var exmsg = e.Message.ToString();
+        }
+        */
     }
 
     public async Task DownloadPdfDocument()
@@ -226,12 +222,12 @@ else
         listPdfReport = Elements.ToList();
         var fileName = $"{mPagecaption.ToString()}-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.pdf";
         //await JSRuntime.InvokeAsync<object>("jsSaveAsFile", fileName, Convert.ToBase64String(pdfReport.ExportPDF(listPdfReport)));
-    }
-    catch (Exception e)
-        {
-        var exmsg = e.Message.ToString();
-    }
-    */
+        }
+        catch (Exception e)
+            {
+            var exmsg = e.Message.ToString();
+        }
+        */
     }
 
     void setFindDate(bool bOk)

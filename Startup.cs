@@ -80,6 +80,7 @@ namespace GoWMS.Server
             services.AddSingleton<DashService>();
             services.AddSingleton<WcsService>();
             services.AddSingleton<UserServices>();
+            services.AddSingleton<PublicFunServices>();
 
             services.AddHttpContextAccessor();
             services.AddScoped<HttpContextAccessor>();

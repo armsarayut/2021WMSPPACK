@@ -30,5 +30,11 @@ namespace GoWMS.Server.Controllers
             return ListRet;
         }
 
+        public Task<IEnumerable<Inv_Stock_GoInfo>> GetStockListInfo()
+        {
+            return objDAL.GetStockListInfo();
+        }
+
+
     }
 }

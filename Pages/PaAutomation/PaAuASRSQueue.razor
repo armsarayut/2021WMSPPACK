@@ -11,8 +11,9 @@
 @using GoWMS.Server.Controllers
 @using GoWMS.Server.Models
 @using GoWMS.Server.Models.Inb
+@using GoWMS.Server.Models.Wcs
 
-@inject InboundService ObjInboundService
+@inject WcsService ObjWcsService
 
 
 @if (Elements == null)
@@ -23,7 +24,7 @@
 else
 {
     <MudText Typo="Typo.h6" Color="Color.Primary">@mPageHeader</MudText>
-    <MudTable Items="@Elements" FixedHeader="@fixed_header" FixedFooter="@fixed_footer" Height="@(fixed_header || fixed_footer ?"600px":"")" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<Inb_Putaway_Go,bool>(FilterFunc)" @bind-SelectedItem="selectedItem">
+    <MudTable Items="@Elements" FixedHeader="@fixed_header" FixedFooter="@fixed_footer" Height="@(fixed_header || fixed_footer ?"600px":"")" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<Tas_WorksInfo,bool>(FilterFunc)" @bind-SelectedItem="selectedItem">
         <ToolBarContent>
             <MudTooltip Text="Export" Color="Color.Secondary" Placement="Placement.Top">
                 <MudMenu Icon="@Icons.Filled.Download" Color="Color.Primary">
@@ -35,22 +36,22 @@ else
             <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
         </ToolBarContent>
         <HeaderContent>
-            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Created)">Queue time</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Palletno)">Masterpallet</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Puttype)">Worktype</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Storagearea)">SRM</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Storagebin)">Location</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Storagetime)">Start time</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Completed)">End time</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Tas_WorksInfo, object>(x=>x.Created)">Queue time</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Tas_WorksInfo, object>(x=>x.Lpncode)">Masterpallet</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Tas_WorksInfo, object>(x=>x.Work_Code)">Worktype</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Tas_WorksInfo, object>(x=>x.Work_Srm)">SRM</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Tas_WorksInfo, object>(x=>x.Work_Location)">Location</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Tas_WorksInfo, object>(x=>x.Stime)">Start time</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Tas_WorksInfo, object>(x=>x.Etime)">End time</MudTableSortLabel></MudTh>
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="Queuetime">@context.Created</MudTd>
-            <MudTd DataLabel="Masterpallet">@context.Palletno</MudTd>
-            <MudTd DataLabel="Worktype">@context.Puttype</MudTd>
-            <MudTd DataLabel="SRM">@context.Storagearea</MudTd>
-            <MudTd DataLabel="Location">@context.Storagebin</MudTd>
-            <MudTd DataLabel="Starttime">@context.Storagetime</MudTd>
-            <MudTd DataLabel="Endtime">@context.Completed</MudTd>
+            <MudTd DataLabel="Masterpallet">@context.Lpncode</MudTd>
+            <MudTd DataLabel="Worktype">@context.Work_Code</MudTd>
+            <MudTd DataLabel="SRM">@context.Work_Srm</MudTd>
+            <MudTd DataLabel="Location">@context.Work_Location</MudTd>
+            <MudTd DataLabel="Starttime">@context.Stime</MudTd>
+            <MudTd DataLabel="Endtime">@context.Etime</MudTd>
         </RowTemplate>
         <PagerContent>
             <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />
@@ -71,17 +72,17 @@ else
     private bool fixed_header = true;
     private bool fixed_footer = true;
     private string searchString = "";
-    private Inb_Putaway_Go selectedItem = null;
-    private HashSet<Inb_Putaway_Go> selectedItems = new HashSet<Inb_Putaway_Go>();
-    private IEnumerable<Inb_Putaway_Go> Elements = new List<Inb_Putaway_Go>();
+    private Tas_WorksInfo selectedItem = null;
+    private HashSet<Tas_WorksInfo> selectedItems = new HashSet<Tas_WorksInfo>();
+    private IEnumerable<Tas_WorksInfo> Elements = new List<Tas_WorksInfo>();
 
     public int elevation = 0;
 
     protected override async Task OnInitializedAsync()
     {
-        InboundService objCS = new InboundService();
+        WcsService objCS = new WcsService();
         //Elements = await Task.Run(() => objCS.GetReceivingOrdersbypallet(mPalletcode));
-        Elements = await Task.Run(() => objCS.GetAllInbPutawayGos());
+        Elements = await Task.Run(() => objCS.GetASRSWork());
     }
 
     private void setstr(string str)
@@ -100,15 +101,15 @@ else
         }
     }
 
-    private bool FilterFunc(Inb_Putaway_Go element)
+    private bool FilterFunc(Tas_WorksInfo element)
     {
         if (string.IsNullOrWhiteSpace(searchString))
             return true;
-        if (element.Palletno.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        if (element.Lpncode.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-        if (element.Palletmapkey.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        if (element.Work_Location.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-        if ($"{element.Puttype} {element.Storageno} {element.Storagearea} {element.Storagebin} {element.Efstatus}".Contains(searchString))
+        if ($"{element.Work_Code} {element.Work_Srm} {element.Work_Gate} {element.Work_Status}".Contains(searchString))
             return true;
         return false;
     }
