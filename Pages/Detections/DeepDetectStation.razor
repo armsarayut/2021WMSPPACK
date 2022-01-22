@@ -38,12 +38,35 @@ else
             <MudTd>@context.Modified</MudTd>
             <MudTd>@context.CameraIp</MudTd>
             <MudTd>@context.GateName</MudTd>
-            <MudTd>@context.ObjectName</MudTd>
+            <MudTd >
+                @switch (@context.ObjectName)
+                    {
+                        case "NotAvaliableLocation":
+                        <MudAlert Severity="Severity.Warning" Variant="Variant.Filled" Dense="true">@context.ObjectName</MudAlert>
+                            break;
+                        case "AvaliableLocation":
+                        <MudAlert Severity="Severity.Info" Variant="Variant.Filled" Dense="true">@context.ObjectName</MudAlert>
+                            break;
+                        case "FullPalletOnLocation":
+                        <MudAlert Severity="Severity.Success" Variant="Variant.Filled" Dense="true">@context.ObjectName</MudAlert>
+                            break;
+                        case "EmptyPalletOnLocation":
+                        <MudAlert Severity="Severity.Info" Variant="Variant.Filled" Dense="true">@context.ObjectName</MudAlert>
+                            break;
+                        default:
+                        <MudAlert Severity="Severity.Error" Variant="Variant.Filled" Dense="true">@context.ObjectName</MudAlert>
+                            break;
+                    }
+            </MudTd>
             <MudTd>
                 @*<MudIconButton Color="@Color.Default" Icon="@Icons.Filled.Image" @onclick="@(()=> modal.Show<Automations.DeepDetectImgPopup>("Detection Image Capture"))">
+        </MudIconButton>*@
+                @*<MudIconButton Color="@Color.Default" Icon="@Icons.Filled.PhotoCamera" @onclick="@(()=> OnclickImgPopup(context.CameraIp, context.GateName, context.ObjectName))">
                 </MudIconButton>*@
-                <MudIconButton Color="@Color.Default" Icon="@Icons.Filled.PhotoCamera" @onclick="@(()=> OnclickImgPopup(context.CameraIp, context.GateName, context.ObjectName))">
+
+                <MudIconButton Color="@Color.Default" Icon="@Icons.Filled.PhotoCamera" @onclick="@(()=> OnclickImgPopupAPI( context.GateName))">
                 </MudIconButton>
+
             </MudTd>
         </RowTemplate>
         <PagerContent>
@@ -78,6 +101,7 @@ else
         //InitialTimer();
         //ExecuteApi();
         Roles =  await Task.Run(() => ObjUser.GetUserRole("6.2.B Order Receive Summary Report", VarGlobals.User.GroupID ));
+        await Task.Run(() => DbGetDetectionAPI());
         await Task.Run(() => DbGetDeepDetect());
 
     }
@@ -115,8 +139,8 @@ else
         {
             System.Text.StringBuilder sql = new System.Text.StringBuilder();
             sql.AppendLine("SELECT * ");
-            sql.AppendLine("FROM cira.vdeep_detect");
-            //sql.AppendLine("WHERE api_name='cancelTask'");
+            sql.AppendLine("FROM cira.vagvgate_status");
+            sql.AppendLine("WHERE gate_name not in ('ASRS-G01','ASRS-G02','ASRS-G03','ASRS-G05')");
             sql.AppendLine(";");
             System.Data.DataSet _ds = new System.Data.DataSet();
             using (Npgsql.NpgsqlCommand vCmd = new Npgsql.NpgsqlCommand())
@@ -138,7 +162,7 @@ else
             vTemp.CameraIp = vDt.Rows[i]["camera_ip"].ToString();
             vTemp.GateName = vDt.Rows[i]["gate_name"].ToString();
             vTemp.Modified = Convert.ToDateTime(vDt.Rows[i]["modified"].ToString());
-            vTemp.ObjectName = vDt.Rows[i]["object_name"].ToString();
+            vTemp.ObjectName = vDt.Rows[i]["gate_status_desc"].ToString();
             Elements.Add(vTemp);
         }
     }
@@ -168,8 +192,8 @@ else
             {
                 System.Text.StringBuilder sql = new System.Text.StringBuilder();
                 sql.AppendLine("SELECT img_base64 ");
-                sql.AppendLine("FROM cira.set_hik_camera");
-                sql.AppendLine("WHERE entity_lock = 0 and camera_ip='" + pCameraIp + "'");
+                sql.AppendLine("FROM cira.deep_detect_base64");
+                sql.AppendLine("WHERE entity_lock = 0 and ref_st_no='" + pCameraIp + "'");
                 //sql.AppendLine("WHERE api_name='cancelTask'");
                 sql.AppendLine(";");
                 System.Data.DataSet _ds = new System.Data.DataSet();
@@ -186,11 +210,9 @@ else
             }
             string vBase64 = "";
 
-
             if (vDt.Rows.Count > 0)
             {
                 vBase64 = vDt.Rows[0]["img_base64"].ToString();
-
             }
             var parameters = new ModalParameters();
             parameters.Add(nameof(Detections.DeepDetectImgPopup.ImgBase64), vBase64);
@@ -202,11 +224,57 @@ else
         }
     }
 
-      void ShowSnackbar(string message, string position, Severity Severity )
+    void ShowSnackbar(string message, string position, Severity Severity )
     {
         Snackbar.Clear();
         Snackbar.Configuration.PositionClass = position;
         Snackbar.Add(message, Severity);
     }
+
+    void DbGetDetectionAPI()
+    {
+        string vSql = "select base_url from cira.set_detection_api where api_name='StationCaptureImage'";
+        string connectionString = GoWMS.Server.Data.ConnGlobals.GetConnLocalDBPG();
+        System.Data.DataTable vDt = new System.Data.DataTable();
+        using (Npgsql.NpgsqlConnection con = new Npgsql.NpgsqlConnection(connectionString))
+        {
+            System.Data.DataSet _ds = new System.Data.DataSet();
+            using (Npgsql.NpgsqlCommand vCmd = new Npgsql.NpgsqlCommand())
+            {
+                con.Open();
+                vCmd.Connection = con;
+                vCmd.CommandType = System.Data.CommandType.Text;
+                vCmd.CommandText = vSql;
+                Npgsql.NpgsqlDataAdapter da = new Npgsql.NpgsqlDataAdapter(vCmd);
+                da.Fill(_ds);
+                vDt = _ds.Tables[0];
+            }
+        }
+
+        if (vDt.Rows.Count == 0)
+            return;
+
+        detectionUrl = vDt.Rows[0]["base_url"].ToString();
+    }
+    async void OnclickImgPopupAPI(string pGateName)
+    {
+        string vUrl = detectionUrl.Replace("$val01", pGateName);
+        var httpRequestMessage = new HttpRequestMessage(
+        HttpMethod.Get, vUrl);
+        var client = _clientFactory.CreateClient();
+        var vResponseMsg = client.SendAsync(httpRequestMessage).Result;
+        string vBase64 = "";
+        if (vResponseMsg.IsSuccessStatusCode == true)
+        {
+            //var vResult = vResponseMsg.Content.ReadAsStringAsync().Result;
+            vBase64 = vResponseMsg.Content.ReadAsStringAsync().Result;
+        }
+        //https://github.com/Blazored/Modal
+        //https://learnwithsundar.com/2021/02/18/modal-popup-window-in-blazor-webassembly/
+        var parameters = new ModalParameters();
+        parameters.Add(nameof(Detections.DeepDetectImgPopup.ImgBase64), vBase64);
+        modal.Show<Detections.DeepDetectImgPopup>("Detection Capture Image", parameters);
+    }
+
 
 }

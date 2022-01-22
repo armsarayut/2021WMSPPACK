@@ -1,4 +1,4 @@
-﻿@page "/wh/Unplaned"
+﻿@page "/wh/stockcount"
 @using GoWMS.Server.Data
 @using GoWMS.Server.Controllers
 @using GoWMS.Server.Models
@@ -46,6 +46,7 @@ else
                 <MudToolBarSpacer />
                 <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
             </ToolBarContent>
+
             <HeaderContent>
                 <MudTh>@L["ItemCode"]</MudTh>
                 <MudTh>@L["ItemName"]</MudTh>
@@ -264,7 +265,7 @@ else
 
         string cus = "MANUAL";
         //string so = "U-" + DateTime.Now.ToString("yyMMddHH");
-        string so =ObjFunService.GetRunning("sq002", 4);
+        string so = ObjFunService.GetRunning("sq002", 4);
 
         string lot = "-";
         string batch = "-";
@@ -281,7 +282,7 @@ else
         var iReturn = 0;
         var sReturn = "Call";
 
-        ObjApiService.SetPickUnplaned(jsonRES, ref iReturn, ref sReturn);
+        ObjApiService.SetAuduitASrsUnplaned(jsonRES, ref iReturn, ref sReturn);
 
         if (selectedItems.Count > 0)
         {

@@ -2,19 +2,12 @@
 @using GoWMS.Server.Data
 @using GoWMS.Server.Controllers
 @using GoWMS.Server.Models
-@using GoWMS.Server.Models.Api
-@using GoWMS.Server.Models.Mas
 @using GoWMS.Server.Models.Public
 @using System.Threading
 
 @inject WhService ObjWhService
-
-@inject ErpService ObjErpService
-@inject ErpApiService ObjErpApiService
-@inject MasService ObjMasService
-
 @inject WcsService ObjWcsService
-
+@inject MasService ObjMasService
 @inject ISnackbar Snackbar
 
 <MudText Typo="Typo.h6" Color="Color.Primary">@mPageHeader</MudText>
@@ -27,13 +20,8 @@
     </MudItem>
 </MudGrid>
 
-@*<MudText Typo="Typo.h6" Color="Color.Secondary" Class="mb-4">Master Pallet : [ @mPalletcode ]</MudText>
-    <MudSkeleton Animation="Animation.False" />*@
-@*<MudText Typo="Typo.h6" Color="Color.Info" Class="mb-4">PackID : [ @mPackid ]</MudText>*@
-
 @if (Elements == null)
 {
-    // <p><em>Loading...</em></p>
     <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
 }
 else
@@ -46,22 +34,20 @@ else
     Striped="@striped" 
     Filter="new Func<Sap_StoreoutInfo,bool>(FilterFunc)" @bind-SelectedItem="selectedItem">
         <ToolBarContent>
-            <MudText Typo="Typo.h6">Master Pallet : [ @mPalletcode ]</MudText>
+            <MudText Typo="Typo.h6">Pallet:[@mPalletcode]</MudText>
             <MudSpacer />
             <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
         </ToolBarContent>
         <HeaderContent>
-            <MudTh><MudTableSortLabel SortBy="new Func<Sap_StoreoutInfo, object>(x=>x.Bcount)">CountOK</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Sap_StoreoutInfo, object>(x=>x.Su_No)">PackID</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Sap_StoreoutInfo, object>(x=>x.Item_Code)">Material</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Sap_StoreoutInfo, object>(x=>x.Stock_Qty)">Qty</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Sap_StoreoutInfo, object>(x=>x.Unit)">Unit</MudTableSortLabel></MudTh>
-            <MudTh>Checked</MudTh>
-            <MudTh>Remove</MudTh>
-            <MudTh>Reset</MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Sap_StoreoutInfo, object>(x=>x.Bcount)">STATE</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Sap_StoreoutInfo, object>(x=>x.Su_No)">PACKID</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Sap_StoreoutInfo, object>(x=>x.Item_Code)">MATERIAL</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Sap_StoreoutInfo, object>(x=>x.Stock_Qty)">QTY</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Sap_StoreoutInfo, object>(x=>x.Unit)">UNIT</MudTableSortLabel></MudTh>
+            <MudTh>ACTION</MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="CountOK" >
+            <MudTd DataLabel="STATE" >
                 @{if (@context.Bcount == true)
                  {
                          <MudCheckBox Checked="true" Size="Size.Medium" Color="Color.Tertiary" ReadOnly="true" >@context.Movement_Type</MudCheckBox>
@@ -72,18 +58,13 @@ else
                    }
                 }
             </MudTd>
-            <MudTd DataLabel="PackID">@context.Su_No</MudTd>
-            <MudTd DataLabel="Material">@context.Item_Code</MudTd>
-            <MudTd DataLabel="Qty">@context.Stock_Qty</MudTd>
-            <MudTd DataLabel="Unit">@context.Unit</MudTd>
-
-            <MudTd DataLabel="Checked">
-                <MudFab @onclick="@(()=>CountMap(@context.Su_No))" Color="Color.Primary" Icon="@Icons.Material.Filled.Check" Size="Size.Small" IconSize="Size.Small" />
-            </MudTd>
-            <MudTd DataLabel="Remove">
+            <MudTd DataLabel="PACKID">@context.Su_No</MudTd>
+            <MudTd DataLabel="MATERIAL">@context.Item_Code</MudTd>
+            <MudTd DataLabel="QTY">@context.Stock_Qty</MudTd>
+            <MudTd DataLabel="UNIT">@context.Unit</MudTd>
+            <MudTd DataLabel="">
+                <MudFab @onclick="@(()=>CountMap(@context.Su_No))" Color="Color.Primary" Icon="@Icons.Material.Filled.Check" Size="Size.Small" IconSize="Size.Small"  />
                 <MudFab @onclick="@(()=>DeleteMap(@context.Su_No))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Clear" Size="Size.Small" IconSize="Size.Small" />
-            </MudTd>
-            <MudTd DataLabel="Reset">
                 <MudFab @onclick="@(()=>ResetMap(@context.Su_No))" Color="Color.Warning" Icon="@Icons.Material.Filled.Restore" Size="Size.Small" IconSize="Size.Small" />
             </MudTd>
         </RowTemplate>
@@ -102,20 +83,18 @@ else
     Striped="@striped" 
     Filter="new Func<Sap_StoreoutInfo,bool>(FilterFunc)" @bind-SelectedItem="selectedItem">
         <ToolBarContent>
-            <MudText Typo="Typo.h6">Master Pallet : [ @mPalletcode ]</MudText>
+            <MudText Typo="Typo.h6">Pallet:[@mPalletcode]</MudText>
             <MudSpacer />
             <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
         </ToolBarContent>
         <HeaderContent>
-            <MudTh><MudTableSortLabel SortBy="new Func<Sap_StoreoutInfo, object>(x=>x.Bcount)">CountOK</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Sap_StoreoutInfo, object>(x=>x.Su_No)">PackID</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Sap_StoreoutInfo, object>(x=>x.Stock_Qty)">Qty</MudTableSortLabel></MudTh>
-            <MudTh>Checked</MudTh>
-            <MudTh>Remove</MudTh>
-            <MudTh>Reset</MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Sap_StoreoutInfo, object>(x=>x.Bcount)">STATE</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Sap_StoreoutInfo, object>(x=>x.Su_No)">PACKID</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Sap_StoreoutInfo, object>(x=>x.Stock_Qty)">QTY</MudTableSortLabel></MudTh>
+            <MudTh>ACTION</MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="CountOK" >
+            <MudTd DataLabel="STATE" >
                 @{if (@context.Bcount == true)
                  {
                          <MudCheckBox Checked="true" Size="Size.Medium" Color="Color.Tertiary" ReadOnly="true" >@context.Movement_Type</MudCheckBox>
@@ -126,29 +105,25 @@ else
                    }
                 }
             </MudTd>
-            <MudTd DataLabel="PackID">@context.Su_No</MudTd>
-            <MudTd DataLabel="Qty">@context.Stock_Qty</MudTd>
-            <MudTd DataLabel="Checked">
+            <MudTd DataLabel="PACKID">@context.Su_No</MudTd>
+            <MudTd DataLabel="QTY">@context.Stock_Qty</MudTd>
+            <MudTd DataLabel="">
                 <MudFab @onclick="@(()=>CountMap(@context.Su_No))" Color="Color.Primary" Icon="@Icons.Material.Filled.Check" Size="Size.Small" IconSize="Size.Small" />
-            </MudTd>
-            <MudTd DataLabel="Remove">
                 <MudFab @onclick="@(()=>DeleteMap(@context.Su_No))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Clear" Size="Size.Small" IconSize="Size.Small" />
-            </MudTd>
-            <MudTd DataLabel="Reset">
                 <MudFab @onclick="@(()=>ResetMap(@context.Su_No))" Color="Color.Warning" Icon="@Icons.Material.Filled.Restore" Size="Size.Small" IconSize="Size.Small" />
             </MudTd>
+       
         </RowTemplate>
 
         <PagerContent>
             <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />
         </PagerContent>
     </MudTable>
-     </MudHidden>
-   
+    </MudHidden>
 }
 
 @code {
-    private string mPageHeader = "Master Mapping";
+    private string mPageHeader = "Counting Stock ASRS";
     private string msgAction = "Enter MasterPallet";
     private string mPalletcode { get; set; } = "";
     private string mPackid { get; set; } = null;
@@ -197,6 +172,7 @@ else
     {
         WhService objCS = new WhService();
         cOld = Elements.Count();
+
         //MasterPallets = await Task.Run(() => ObjMasService.GetAllMasterPallets());
 
         //MasterPallets = ObjMasService.GetAllMasterPallets();
@@ -303,9 +279,7 @@ else
                         bCheck = ObjWhService.SapComplete(mPalletcode);
                         if (bCheck)
                         {
-
                             bCheck = ObjWcsService.CreateCommandMC("G04", 88);
-
                             mPalletcode = "";
                             Snackbar.Add("Audit successfully", Severity.Success);
                         }

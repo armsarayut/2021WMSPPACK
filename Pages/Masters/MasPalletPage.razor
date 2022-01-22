@@ -68,7 +68,11 @@ else
     {
         MasService objCS = new MasService();
         //Elements = await Task.Run(() => objCS.GetReceivingOrdersbypallet(mPalletcode));
+        
         Elements = await Task.Run(() => objCS.GetAllMasterPallets());
+
+        //Elements = objCS.GetAllMasterPallets();
+
     }
 
     private void setstr(string str)

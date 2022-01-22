@@ -1,4 +1,4 @@
-﻿@page "/paau/asrsstatus"
+﻿@page "/paau/asrsstatuspopup"
 @using System.Runtime.Serialization;
 @using Newtonsoft.Json;
 @using GoWMS.Server.Controllers;
@@ -86,7 +86,7 @@ else
 
 
 @code {
-    private string mPagecaption = "ASRS-STATUS";
+    private string mPagecaption = "ASRS-ALARM";
     private bool dense = true;
     private bool hover = true;
     private bool striped = true;
@@ -112,17 +112,22 @@ else
     {
         //while (bgWorker.IsBusy == true)
         //{ }
-        timer.Enabled = false;
-        timer.Dispose();
+        //timer.Enabled = false;
+        //timer.Dispose();
     }
 
 
     protected override async Task OnInitializedAsync()
     {
 
-        ExecuteStatus();
+        //ExecuteStatus();
+        //await Task.Run(() => ExecuteStatus());
 
-        await Task.Run(() => InitialTimer());
+        //await Task.Run(() => InitialTimer());
+
+        //Elements = ObjWcsService.GetAllMachine();
+
+        Elements = await Task.Run(() => ObjWcsService.GetAllMachine().Where(x => x.Is_alert == true).ToList());
 
     }
 
@@ -181,13 +186,12 @@ else
         await jsRuntime.InvokeAsync<object>("open", url, "_blank");
     }
 
-
     private void OpenDialog(string mccode)
     {
-        DialogOptions closeOnEscapeKey = new DialogOptions() {CloseButton = true };
+        DialogOptions closeOnEscapeKey = new DialogOptions() { CloseButton = true };
         var parameters = new DialogParameters { ["Mccode"] = mccode };
 
- 
+
         var dialog = DialogService.Show<DialogKeyboardNavigationExample_Dialog>(mccode, parameters);
 
 

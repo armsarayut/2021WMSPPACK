@@ -278,6 +278,7 @@ namespace GoWMS.Server.Data
                     {
                         CommandType = CommandType.Text
                     };
+
                     cmd.Parameters.AddWithValue(":sSeq", NpgsqlDbType.Varchar, sSeq);
                     cmd.Parameters.AddWithValue(":istation", NpgsqlDbType.Integer, istation);
 

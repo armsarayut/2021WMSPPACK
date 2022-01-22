@@ -119,6 +119,13 @@ namespace GoWMS.Server.Controllers
             return sret;
         }
 
+        public string SetAuduitASrsUnplaned(string jsonRes, ref Int32 iret, ref string sret)
+        {
+            objDAL.SetAuduitASrsUnplaned(jsonRes, ref iret, ref sret);
+            return sret;
+        }
+
+      
 
 
 

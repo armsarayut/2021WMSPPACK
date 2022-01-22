@@ -1,0 +1,71 @@
+﻿@using System;
+@using System.Timers;
+@using GoWMS.Server.Models.Wcs;
+@using GoWMS.Server.Controllers;
+
+@inject WcsService ObjWcsService;
+@inject NavigationManager navigationManager;
+@inject IModalService modal;
+
+@if (cNoti > 0)
+{
+    <MudBadge Content="@cNoti" Color="Color.Error" Overlap="true" Class="d-flex ml-auto">
+        <MudIcon Icon="@Icons.Material.Filled.Notifications" Color="Color.Inherit" @onclick="@((e) => GotoMachine())" />
+        @*<MudIconButton Icon="@Icons.Material.Filled.Notifications" Color="Color.Inherit" OnClick="@((e) => Noti())" />*@
+    </MudBadge>
+}
+else
+{
+    <MudIcon Icon="@Icons.Material.Filled.Notifications" Color="Color.Inherit" />
+}
+
+@code {
+    int cNoti { get; set; } = 0;
+
+    List<Vmachine> Vmachines = new List<Vmachine>();
+
+    private Timer timer = new(2500);
+
+    protected override void OnInitialized()
+    {
+        ExecuteStatus();
+        timer.Elapsed += (sender, eventArgs) => OnTimerCallback();
+        timer.Start();
+    }
+
+    private void OnTimerCallback()
+    {
+        _ = InvokeAsync(() =>
+        {
+
+            ExecuteStatus();
+
+            StateHasChanged();
+        });
+    }
+
+    public void Dispose() => timer.Dispose();
+
+    async void ExecuteStatus()
+    {
+        //Vmachines = ObjWcsService.GetAllMachine();
+
+        Vmachines = await Task.Run(() => ObjWcsService.GetAllMachine());
+
+        cNoti = Vmachines.Where(x => x.Is_alert == true).Count();
+
+    }
+
+    void GotoMachine()
+    {
+        if (cNoti > 0)
+        {
+            //navigationManager.NavigateTo("/paau/asrsstatus");
+
+            modal.Show<Pages.PaAutomation.PaAuConveyorStatusPopup>();
+        }
+
+    }
+
+
+}

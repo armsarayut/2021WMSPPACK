@@ -55,9 +55,7 @@ else
         </RowTemplate>
         <PagerContent>
             <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />
-
         </PagerContent>
-
     </MudTable>
 }
 
@@ -84,7 +82,7 @@ else
         InboundService objCS = new InboundService();
         //Elements = await Task.Run(() => objCS.GetReceivingOrdersbypallet(mPalletcode));
         Elements = await Task.Run(() => objCS.GetAllInbGoodreceiptGos());
-        InsertAuditrial("1.1-Receiving Order","Admin");
+        //InsertAuditrial("1.1-Receiving Order","Admin");
     }
 
     private void setstr(string str)
