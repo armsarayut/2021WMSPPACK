@@ -90,7 +90,8 @@ namespace GoWMS.Server.Data
                     StringBuilder sql = new StringBuilder();
 
                     sql.AppendLine("SELECT * ");
-                    sql.AppendLine("FROM hagv.vset_agv_gate;");
+                    sql.AppendLine("FROM hagv.vset_agv_gate ");
+                    sql.AppendLine("ORDER BY gate_name");
                     sql.AppendLine(";");
 
                     NpgsqlCommand cmd = new NpgsqlCommand(sql.ToString(), con)
@@ -109,7 +110,10 @@ namespace GoWMS.Server.Data
                             Client_Id = rdr["client_id"] == DBNull.Value ? null : (long?)rdr["client_id"],
                             Client_Ip = rdr["client_ip"].ToString(),
                             Gate_Name = rdr["gate_name"].ToString(),
-                            Position_Code = rdr["position_code"].ToString()
+                            Position_Code = rdr["position_code"].ToString(),
+                            Area = rdr["area"].ToString(),
+                            Gate_type = rdr["gate_type"] == DBNull.Value ? null : (Int32?)rdr["gate_type"],
+
                         };
                         lstobj.Add(objrd);
                     }

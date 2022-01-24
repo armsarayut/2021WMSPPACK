@@ -11,6 +11,7 @@ using GoWMS.Server.Models.Erp;
 using GoWMS.Server.Models.Api;
 using GoWMS.Server.Models.Inb;
 using Serilog;
+using System.Text;
 
 namespace GoWMS.Server.Data
 {
@@ -479,6 +480,85 @@ namespace GoWMS.Server.Data
             }
             return lstobj;
         }
+
+
+        public IEnumerable<V_CylinderInfo> GetAllErpCylindersbytag()
+        {
+            List<V_CylinderInfo> lstobj = new List<V_CylinderInfo>();
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    StringBuilder Sql = new StringBuilder();
+                    Sql.AppendLine("SELECT Material,Material_Description");
+                    Sql.AppendLine(",Customer_Code,Customer_Description,Customer_Reference");
+                    Sql.AppendLine(",Color_1,Cylinder1");
+                    Sql.AppendLine(",Color_2,Cylinder2");
+                    Sql.AppendLine(",Color_3,Cylinder3");
+                    Sql.AppendLine(",Color_4,Cylinder4");
+                    Sql.AppendLine(",Color_5,Cylinder5");
+                    Sql.AppendLine(",Color_6,Cylinder6");
+                    Sql.AppendLine(",Color_7,Cylinder7");
+                    Sql.AppendLine(",Color_8,Cylinder8");
+                    Sql.AppendLine(",Color_9,Cylinder9");
+                    Sql.AppendLine(",Color_10,Cylinder10");
+                    Sql.AppendLine("FROM dbo.V_Cylinder");
+                
+
+
+                    SqlCommand cmd = new SqlCommand(Sql.ToString(), con)
+                    {
+                        CommandType = CommandType.Text
+                    };
+
+
+                    con.Open();
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        V_CylinderInfo objrd = new V_CylinderInfo
+                        {
+                            Material = rdr["Material"].ToString(),
+                            Material_Description = rdr["Material_Description"].ToString(),
+                            Customer_Code = rdr["Customer_Code"].ToString(),
+                            Customer_Description = rdr["Customer_Description"].ToString(),
+                            Customer_Reference = rdr["Customer_Reference"].ToString(),
+                            Color_1 = rdr["Color_1"].ToString(),
+                            Cylinder1 = rdr["Cylinder1"].ToString(),
+                            Color_2 = rdr["Color_2"].ToString(),
+                            Cylinder2 = rdr["Cylinder2"].ToString(),
+                            Color_3 = rdr["Color_3"].ToString(),
+                            Cylinder3 = rdr["Cylinder3"].ToString(),
+                            Color_4 = rdr["Color_4"].ToString(),
+                            Cylinder4 = rdr["Cylinder4"].ToString(),
+                            Color_5 = rdr["Color_5"].ToString(),
+                            Cylinder5 = rdr["Cylinder5"].ToString(),
+                            Color_6 = rdr["Color_6"].ToString(),
+                            Cylinder6 = rdr["Cylinder6"].ToString(),
+                            Color_7 = rdr["Color_7"].ToString(),
+                            Cylinder7 = rdr["Cylinder7"].ToString(),
+                            Color_8 = rdr["Color_8"].ToString(),
+                            Cylinder8 = rdr["Cylinder8"].ToString(),
+                            Color_9 = rdr["Color_9"].ToString(),
+                            Cylinder9 = rdr["Cylinder9"].ToString(),
+                            Color_10 = rdr["Color_10"].ToString(),
+                            Cylinder10 = rdr["Cylinder10"].ToString()
+                        };
+                        lstobj.Add(objrd);
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    Log.Error(ex.ToString());
+                }
+                finally
+                {
+                    con.Close();
+                }
+            }
+            return lstobj;
+        }
+
 
 
 

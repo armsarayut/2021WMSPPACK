@@ -89,6 +89,12 @@ namespace GoWMS.Server.Controllers
             return "Map Successfully";
         }
 
+        public string SetMappedPalletCylinder(string pallet)
+        {
+            objDAL.SetMappPalletCylinder(pallet);
+            return "Map Successfully";
+        }
+
         public string SetMappedPalletAgv(string pallet, string source, string destination)
         {
             objDAL.SetMappPalletAgv(pallet, source, destination);

@@ -26,16 +26,16 @@ else
         </ToolBarContent>
 
         <HeaderContent>
-            <MudTh><MudTableSortLabel SortBy="new Func<dataModel, object>(x=>x.robotCode)">AGV NO</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<dataModel, object>(x=>x.robotIp)">AGV IP</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<dataModel, object>(x=>x.robotCode)">AGVNO</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<dataModel, object>(x=>x.robotIp)">AGVIP</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel SortBy="new Func<dataModel, object>(x=>x.battery)">POWER(%)</MudTableSortLabel></MudTh>
             <MudTh>SPEED</MudTh>
             <MudTh>STATUS</MudTh>
             <MudTh>CONNECTION</MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="AGV NO">@context.robotCode</MudTd>
-            <MudTd DataLabel="AGV IP">@context.robotIp</MudTd>
+            <MudTd DataLabel="AGVNO">@context.robotCode</MudTd>
+            <MudTd DataLabel="AGVIP">@context.robotIp</MudTd>
             <MudTd DataLabel="POWER(%)">@context.battery</MudTd>
             <MudTd DataLabel="SPEED">@context.speed</MudTd>
 
@@ -55,7 +55,7 @@ else
                 }
             </MudTd>
 
-            <MudTd DataLabel="">
+            <MudTd DataLabel="CONNECTION">
                 @if (@context.Online == true)
                     {
                     <MudChip Variant="Variant.Filled" Color="Color.Success">Online</MudChip>

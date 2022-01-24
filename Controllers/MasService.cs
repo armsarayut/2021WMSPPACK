@@ -54,14 +54,31 @@ namespace GoWMS.Server.Controllers
             return retlist;
         }
 
-
         public Boolean ValidateMasterpallet(string spallet)
         {
             Boolean bret = false;
-
             bret = objDAL.ValidateMasterpallet(spallet);
-
             return bret;
         }
+
+
+        public List<Mas_Cylinder_Go> GetAllCylinderGo()
+        {
+            List<Mas_Cylinder_Go> retlist = objDAL.GetAllCylinderGo().ToList();
+            return retlist;
+        }
+
+        public List<Mas_Cylinder_Go> GetAllCylinderGobypallet(string pallet)
+        {
+            List<Mas_Cylinder_Go> retlist = objDAL.GetAllCylinderGobypallet(pallet).ToList();
+            return retlist;
+        }
+
+        public List<Mas_Cylinder_Go> GetAllCylinderGobytag(string itemtag)
+        {
+            List<Mas_Cylinder_Go> retlist = objDAL.GetAllCylinderGobytag(itemtag).ToList();
+            return retlist;
+        }
+
     }
 }

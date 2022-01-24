@@ -31,8 +31,8 @@ else
 
             <MudTooltip Text="Export" Color="Color.Secondary" Placement="Placement.Top">
                 <MudMenu Icon="@Icons.Filled.Download" Color="Color.Primary">
-                    <MudMenuItem>Excel</MudMenuItem>
-                    <MudMenuItem>Pdf</MudMenuItem>
+                    <MudMenuItem>EXCEL</MudMenuItem>
+                    <MudMenuItem>PDF</MudMenuItem>
                 </MudMenu>
             </MudTooltip>
 
@@ -50,13 +50,13 @@ else
             <MudTh><MudTableSortLabel SortBy="new Func<Vrptqueueloadtimeagv, object>(x=>x.Loadtime)">TIME</MudTableSortLabel></MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="CREATED">@context.Ctime</MudTd>
+            <MudTd DataLabel="CREATED">@Convert.ToDateTime(context.Ctime).ToString(VarGlobals.FormatDT)</MudTd>
             <MudTd DataLabel="PALLET">@context.Lpncode</MudTd>
             <MudTd DataLabel="AGV">@context.Agv_name</MudTd>
             <MudTd DataLabel="FROM">@context.Gate_source</MudTd>
             <MudTd DataLabel="TO">@context.Gate_dest</MudTd>
-            <MudTd DataLabel="STARTED">@context.Stime</MudTd>
-            <MudTd DataLabel="COMPLETED">@context.Etime</MudTd>
+            <MudTd DataLabel="STARTED">@Convert.ToDateTime(context.Stime).ToString(VarGlobals.FormatDT)</MudTd>
+            <MudTd DataLabel="COMPLETED">@Convert.ToDateTime(context.Etime).ToString(VarGlobals.FormatDT)</MudTd>
             <MudTd DataLabel="TIME">@context.Loadtime</MudTd>
         </RowTemplate>
         <PagerContent>

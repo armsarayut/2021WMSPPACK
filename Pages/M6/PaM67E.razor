@@ -35,38 +35,47 @@ else
             </MudTooltip>
             <MudSpacer />
             <MudGrid>
-                           <MudSpacer />   
-                          <MudItem xs=6 >
-                             <MudDateRangePicker @ref="_picker" Label="Search Date" @bind-DateRange="_dateRange" DateFormat="@VarGlobals.FormatD">
-                                <PickerActions>
-                                    <MudButton Class="mr-auto align-self-start" OnClick="@(() => _picker.Clear())">Clear</MudButton>
-                                    <MudButton OnClick="@(() => setFindDate(false))">Cancel</MudButton>
-                                    <MudButton Color="Color.Primary" OnClick="@(() => setFindDate(true))">Ok</MudButton>
-                                </PickerActions>
-                            </MudDateRangePicker>
-                         </MudItem>
-                        
-                            <MudItem xs=6 >
-                                <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
-                            </MudItem>
-                         </MudGrid>
+                <MudSpacer />   
+                <MudItem xs=6 >
+                    <MudDateRangePicker 
+                                        @ref="_picker" 
+                                        Label="Search Date" 
+                                        @bind-DateRange="_dateRange" 
+                                        DateFormat="@VarGlobals.FormatD">
+                        <PickerActions>
+                            <MudButton Class="mr-auto align-self-start" OnClick="@(() => _picker.Clear())">Clear</MudButton>
+                            <MudButton OnClick="@(() => setFindDate(false))">Cancel</MudButton>
+                            <MudButton Color="Color.Primary" OnClick="@(() => setFindDate(true))">Ok</MudButton>
+                        </PickerActions>
+                    </MudDateRangePicker>
+                </MudItem>  
+                <MudItem xs=6 >
+                    <MudTextField 
+                                  @bind-Value="searchString" 
+                                  Placeholder="Search" 
+                                  Adornment="Adornment.Start" 
+                                  AdornmentIcon="@Icons.Material.Filled.Search" 
+                                  IconSize="Size.Medium" 
+                                  Class="mt-0">
+                    </MudTextField>
+                </MudItem>
+            </MudGrid>
         </ToolBarContent>
-
         <HeaderContent>
             <MudTh><MudTableSortLabel SortBy="new Func<Class6_7_F, object>(x=>x.W_date)">DATE</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel SortBy="new Func<Class6_7_F, object>(x=>x.Wtotal)">TOTAL</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Class6_7_F, object>(x=>x.W01)">INBOUND</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Class6_7_F, object>(x=>x.W05)">OUTBOUND</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Class6_7_F, object>(x=>x.W101)">EMPTYIN</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Class6_7_F, object>(x=>x.W102)">EMPTYOUT</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Class6_7_F, object>(x=>x.W01)">STORE-IN</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Class6_7_F, object>(x=>x.W05)">STORE-OUT</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Class6_7_F, object>(x=>x.W101)">EMPTY-IN</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Class6_7_F, object>(x=>x.W102)">EMPTY-OUT</MudTableSortLabel></MudTh>
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="DATE">@Convert.ToDateTime(context.W_date).ToString(VarGlobals.FormatD)</MudTd>
             <MudTd DataLabel="TOTAL">@context.Wtotal</MudTd>
-            <MudTd DataLabel="INBOUND">@context.W01</MudTd>
-            <MudTd DataLabel="OUTBOUND">@context.W05</MudTd>
-            <MudTd DataLabel="EMPTYIN">@context.W101</MudTd>
-            <MudTd DataLabel="EMPTYOUT">@context.W102</MudTd>
+            <MudTd DataLabel="STORE-IN">@context.W01</MudTd>
+            <MudTd DataLabel="STORE-OUT">@context.W05</MudTd>
+            <MudTd DataLabel="EMPTY-IN">@context.W101</MudTd>
+            <MudTd DataLabel="EMPTY-OUT">@context.W102</MudTd>
         </RowTemplate>
         <PagerContent>
             <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />

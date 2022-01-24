@@ -38,23 +38,23 @@ else
         </ToolBarContent>
 
         <HeaderContent>
-            <MudTh>Q-TIME</MudTh>
+            <MudTh>QUEUING</MudTh>
             <MudTh>PALLET</MudTh>
             <MudTh>FROM</MudTh>
             <MudTh>TO</MudTh>
-            <MudTh>WORKTYPE</MudTh>
+            <MudTh>TASKTYPE</MudTh>
             <MudTh>AGV</MudTh>
             <MudTh>Q-STATUS</MudTh>
             <MudTh>CANCEL</MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="Q-TIME">@context.Ctime</MudTd>
+            <MudTd DataLabel="QUEUING">@Convert.ToDateTime(context.Ctime).ToString(VarGlobals.FormatDT)</MudTd>
             <MudTd DataLabel="PALLET">@context.Lpncode</MudTd>
             <MudTd DataLabel="FROM">@context.Gate_Source</MudTd>
             <MudTd DataLabel="TO">@context.Gate_Dest</MudTd>
-            <MudTd DataLabel="WORKTYPE">@context.Work_Code</MudTd>
+            <MudTd DataLabel="TASKTYPE">@context.Work_Code</MudTd>
             <MudTd DataLabel="AGV">@context.Agv_Name</MudTd>
-            <MudTd DataLabel="">
+            <MudTd DataLabel="CANCEL">
                 @if (@context.Work_Status == 0)
                     {
                     <MudChip Variant="Variant.Filled" Color="Color.Primary">QUEUE</MudChip>
@@ -89,13 +89,6 @@ else
             <MudTd DataLabel="">
                 <MudFab @onclick="@(()=>CancleTask(@context.Lpncode))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Cancel" Size="Size.Small" IconSize="Size.Small" />
             </MudTd>
-
-            @*
-        <MudTd DataLabel="Itemname" Style="@(AddressContext.OrderPositionStatus == PositionStatus.rdy ? $"background:{Colors.BlueGrey.Darken4};" : $"background:{Colors.Cyan.Darken1};")">@AddressContext.orderItem.ItemName</MudTd>
-
-
-        <MudChip Label="true" Color="@context.St_Color">@context.St_desc</MudChip>
-            *@
 
         </RowTemplate>
         <PagerContent>

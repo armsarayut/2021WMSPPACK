@@ -17,5 +17,7 @@ namespace GoWMS.Server.Models.Inv
 
         public string StorageArae { get; set; }
 
+        public Int32? Efstatus { get; set; }
+
     }
 }

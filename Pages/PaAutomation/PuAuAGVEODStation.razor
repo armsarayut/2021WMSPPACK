@@ -40,15 +40,14 @@ else
                        
                   <MudTooltip Text="Export" Color="Color.Secondary" Placement="Placement.Top">
                 <MudMenu Icon="@Icons.Filled.Download" Color="Color.Primary">
-                    <MudMenuItem>Excel</MudMenuItem>
-                    <MudMenuItem>Pdf</MudMenuItem>
+                    <MudMenuItem>EXCEL</MudMenuItem>
+                    <MudMenuItem>PDF</MudMenuItem>
                 </MudMenu>
             </MudTooltip>
-                     
                      <MudGrid>
                            <MudSpacer />   
                           <MudItem xs=6 >
-                             <MudDateRangePicker @ref="_picker" Label="Search Date" @bind-DateRange="_dateRange">
+                             <MudDateRangePicker @ref="_picker" Label="Search Date" @bind-DateRange="_dateRange" DateFormat="@VarGlobals.FormatD">
                                 <PickerActions>
                                     <MudButton Class="mr-auto align-self-start" OnClick="@(() => _picker.Clear())">Clear</MudButton>
                                     <MudButton OnClick="@(() => setFindDate(false))">Cancel</MudButton>
@@ -56,31 +55,11 @@ else
                                 </PickerActions>
                             </MudDateRangePicker>
                          </MudItem>
-                        
                             <MudItem xs=6 >
                                 <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
                             </MudItem>
                          </MudGrid>
-             @*
-            <MudItem xs=6 sm=3>
-                <MudDatePicker Label="FROM DATE" @bind-Date="date" />
-                <MudDatePicker Label="TO DATE" @bind-Date="date" />
-                <MudButton>Find</MudButton>
-                <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
-            </MudItem>
-            
-
-            
-             <MudItem xs=6 sm=3>
-                <MudDatePicker Label="FROM DATE" @bind-Date="date" />
-                <MudDatePicker Label="TO DATE" @bind-Date="date" />
-            </MudItem>
-            <MudSpacer />
-            <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
-            *@
             </ToolBarContent>
-
-
         <HeaderContent>
             <MudTh><MudTableSortLabel SortBy="new Func<AgvRptEODStation, object>(x=>x.W_date)">DATE</MudTableSortLabel></MudTh>
              <MudTh><MudTableSortLabel SortBy="new Func<AgvRptEODStation, object>(x=>x.Gate_source)">SOURCE</MudTableSortLabel></MudTh>
@@ -88,7 +67,7 @@ else
             <MudTh><MudTableSortLabel SortBy="new Func<AgvRptEODStation, object>(x=>x.W_count)">COUNT</MudTableSortLabel></MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="DATETIME">@Convert.ToDateTime(context.W_date).ToShortDateString()</MudTd>
+            <MudTd DataLabel="DATE">@Convert.ToDateTime(context.W_date).ToString(VarGlobals.FormatD)</MudTd>
             <MudTd DataLabel="SOURCE">@context.Gate_source</MudTd>
             <MudTd DataLabel="DESTINATION">@context.Gate_dest</MudTd>
             <MudTd DataLabel="COUNT">@context.W_count</MudTd>

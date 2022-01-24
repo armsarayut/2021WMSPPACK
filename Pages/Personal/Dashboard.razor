@@ -34,7 +34,7 @@
     </MudItem>
     <MudItem xs="12" sm="6" md="3">
         <MudPaper Elevation="25" Class="d-flex flex-row pt-6 pb-4" Style="height:80px;">
-            <MudIcon Icon="@Icons.Material.Filled.ShoppingCart" Color="Color.Success" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
+            <MudIcon Icon="@Icons.Material.Filled.ShoppingCart" Color="Color.Success" Class="mx-4" Style="width:40px; height:40px;"></MudIcon>
             <div>
                 <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@L["Pendingpicking"]</MudText>
                 <MudText Typo="Typo.subtitle1">0</MudText>
@@ -61,7 +61,7 @@
     </MudItem>
     <MudItem xs="12" sm="6" md="3">
         <MudPaper Elevation="25" Class="d-flex flex-row pt-6 pb-4" Style="height:80px;">
-            <MudIcon Icon="@Icons.Material.Filled.Logout" Color="Color.Secondary" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
+            <MudIcon Icon="@Icons.Material.Filled.Logout" Color="Color.Secondary" Class="mx-4" Style="width:40px; height:40px;"></MudIcon>
             <div>
                 <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@L["ASRSRetrieval"]</MudText>
                 <MudText Typo="Typo.subtitle1">@mretrieval</MudText>
@@ -308,19 +308,19 @@
 
     private int Index1 = -1; //default value cannot be 0 -> first selectedindex is 0.
     int dataSize1 = 2;
-    double[] data1 = { 90, 10 };
-    string[] labels1 = { "Occupied", "Free" };
+    double[] data1 = { 90, 10, 10 };
+    string[] labels1 = { "Occupied", "Free", "Block/Error" };
 
     private int Index2 = -1; //default value cannot be 0 -> first selectedindex is 0.
     int dataSize2 = 2;
-    double[] data2 = { 80, 10 };
-    string[] labels2 = { "Occupied", "Free" };
+    double[] data2 = { 80, 10,10 };
+    string[] labels2 = { "Occupied", "Free", "Block/Error" };
     string[] xlabels2 = { "80", "100" };
 
     private int Index3 = -1; //default value cannot be 0 -> first selectedindex is 0.
     int dataSize3 = 2;
-    double[] data3 = { 50, 10 };
-    string[] labels3 = { "Occupied", "Free" };
+    double[] data3 = { 50, 10,10 };
+    string[] labels3 = { "Occupied", "Free", "Block/Error" };
 
     string agvtasktimenow { get; set; } = "";
     Int64 agvtaskcompletenow { get; set; } = 0;
@@ -485,11 +485,9 @@
         {
             foreach (var val in allCorrect1)
             {
-                //data1.Concat(new double[] { (double)val.Locavl }).ToArray();
-                //data1.Concat(new double[] { (double)val.Locemp }).ToArray();
-
                 data1[0] = (double)val.Locavl;
                 data1[1] = (double)val.Locemp;
+                data1[2] = (double)val.Plerr;
 
                 L1Total = (Int64)val.Total;
                 L1Use = (Int64)val.Locavl;
@@ -511,10 +509,11 @@
         {
             foreach (var val in allCorrect2)
             {
-                //data2.Concat(new double[] { (double)val.Locavl }).ToArray();
-                //data2.Concat(new double[] { (double)val.Locemp }).ToArray();
+
                 data2[0] = (double)val.Locavl;
                 data2[1] = (double)val.Locemp;
+                data2[2] = (double)val.Plerr;
+
                 L2Total = (Int64)val.Total;
                 L2Use = (Int64)val.Locavl;
                 L2Emp = (Int64)val.Locemp;
@@ -537,10 +536,11 @@
         {
             foreach (var val in allCorrect3)
             {
-                //data3.Concat(new double[] { (double)val.Locavl }).ToArray();
-                //data3.Concat(new double[] { (double)val.Locemp }).ToArray();
+
                 data3[0] = (double)val.Locavl;
                 data3[1] = (double)val.Locemp;
+                data3[2] = (double)val.Plerr;
+
                 L3Total = (Int64)val.Total;
                 L3Use = (Int64)val.Locavl;
                 L3Emp = (Int64)val.Locemp;

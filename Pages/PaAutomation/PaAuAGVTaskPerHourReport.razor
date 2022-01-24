@@ -44,7 +44,7 @@ else
             <MudTh><MudTableSortLabel SortBy="new Func<RptTaskHourCount, object>(x=>x.W_count)">COUNT</MudTableSortLabel></MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="DATETIME">@context.W_hour</MudTd>
+            <MudTd DataLabel="DATETIME">@Convert.ToDateTime(context.W_hour).ToString(VarGlobals.FormatDTHM)</MudTd>
             <MudTd DataLabel="COUNT">@context.W_count</MudTd>
         </RowTemplate>
         <PagerContent>

@@ -59,5 +59,12 @@ namespace GoWMS.Server.Controllers
             return bRet;
         }
 
+        public Boolean SetDestinationAGV(string batch_no, string station)
+        {
+            Boolean bRet = false;
+            bRet = objDAL.SetDestinationAGV(batch_no, station);
+            return bRet;
+        }
+
     }
 }

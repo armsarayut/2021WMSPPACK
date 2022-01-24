@@ -38,13 +38,13 @@ else
         </ToolBarContent>
 
         <HeaderContent>
-            <MudTh><MudTableSortLabel SortBy="new Func<Vmachine, object>(x=>x.Mccode)">MC CODE</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Vmachine, object>(x=>x.Mccode)">MCCODE</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel SortBy="new Func<Vmachine, object>(x=>x.Information)">INFO</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel SortBy="new Func<Vmachine, object>(x=>x.St_no)">STATUS</MudTableSortLabel></MudTh>
             <MudTh>ACTION</MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="MC CODE">@context.Mccode</MudTd>
+            <MudTd DataLabel="MCCODE">@context.Mccode</MudTd>
             <MudTd DataLabel="INFO">@context.Information</MudTd>
             <MudTd DataLabel="STATUS">
                 @{if (@context.Is_alert == true)

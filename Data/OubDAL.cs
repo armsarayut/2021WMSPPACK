@@ -396,5 +396,43 @@ namespace GoWMS.Server.Data
             }
             return bRet;
         }
+
+        public Boolean SetDestinationAGV(string batch_no, string station)
+        {
+            Boolean bRet = false;
+            using (NpgsqlConnection con = new NpgsqlConnection(connectionString))
+            {
+                try
+                {
+                    StringBuilder sqlQurey = new StringBuilder();
+                    sqlQurey.AppendLine("update public.sap_storeout");
+                    sqlQurey.AppendLine("set  requisitioner = :requisitioner");
+                    sqlQurey.AppendLine("where batch_no = :batch_no ;");
+
+                    NpgsqlCommand cmd = new NpgsqlCommand(sqlQurey.ToString(), con)
+                    {
+                        CommandType = CommandType.Text
+                    };
+                    cmd.Parameters.AddWithValue(":requisitioner", NpgsqlDbType.Varchar, station);
+                    cmd.Parameters.AddWithValue(":batch_no", NpgsqlDbType.Varchar, batch_no);
+
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    bRet = true;
+                }
+                catch (NpgsqlException ex)
+                {
+                    Log.Error(ex.ToString());
+                }
+                finally
+                {
+                    con.Close();
+                }
+            }
+            return bRet;
+        }
+
+
+
     }
 }

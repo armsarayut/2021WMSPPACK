@@ -13,5 +13,7 @@ namespace GoWMS.Server.Models.Hagv
 		public string Client_Ip { get; set; }
 		public string Gate_Name { get; set; }
 		public string Position_Code { get; set; }
+		public string Area { get; set; }
+		public Int32? Gate_type { get; set; }
 	}
 }

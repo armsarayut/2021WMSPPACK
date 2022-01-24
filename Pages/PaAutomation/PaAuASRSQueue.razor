@@ -36,22 +36,22 @@ else
             <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
         </ToolBarContent>
         <HeaderContent>
-            <MudTh><MudTableSortLabel SortBy="new Func<Tas_WorksInfo, object>(x=>x.Created)">Queue time</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Tas_WorksInfo, object>(x=>x.Lpncode)">Masterpallet</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Tas_WorksInfo, object>(x=>x.Work_Code)">Worktype</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Tas_WorksInfo, object>(x=>x.Created)">QUEUING</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Tas_WorksInfo, object>(x=>x.Lpncode)">PALLET</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Tas_WorksInfo, object>(x=>x.Work_Code)">TASKTYPE</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel SortBy="new Func<Tas_WorksInfo, object>(x=>x.Work_Srm)">SRM</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Tas_WorksInfo, object>(x=>x.Work_Location)">Location</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Tas_WorksInfo, object>(x=>x.Stime)">Start time</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Tas_WorksInfo, object>(x=>x.Etime)">End time</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Tas_WorksInfo, object>(x=>x.Work_Location)">STORAGEBIN</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Tas_WorksInfo, object>(x=>x.Stime)">STARTED</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Tas_WorksInfo, object>(x=>x.Etime)">COMPLETED</MudTableSortLabel></MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="Queuetime">@context.Created</MudTd>
-            <MudTd DataLabel="Masterpallet">@context.Lpncode</MudTd>
-            <MudTd DataLabel="Worktype">@context.Work_Code</MudTd>
+            <MudTd DataLabel="QUEUING">@Convert.ToDateTime(context.Created).ToString(VarGlobals.FormatDT)</MudTd>
+            <MudTd DataLabel="PALLET">@context.Lpncode</MudTd>
+            <MudTd DataLabel="TASKTYPE">@context.Work_Code</MudTd>
             <MudTd DataLabel="SRM">@context.Work_Srm</MudTd>
-            <MudTd DataLabel="Location">@context.Work_Location</MudTd>
-            <MudTd DataLabel="Starttime">@context.Stime</MudTd>
-            <MudTd DataLabel="Endtime">@context.Etime</MudTd>
+            <MudTd DataLabel="STORAGEBIN">@context.Work_Location</MudTd>
+            <MudTd DataLabel="STARTED">@Convert.ToDateTime(context.Stime).ToString(VarGlobals.FormatDT)</MudTd>
+            <MudTd DataLabel="COMPLETED">@Convert.ToDateTime(context.Etime).ToString(VarGlobals.FormatDT)</MudTd>
         </RowTemplate>
         <PagerContent>
             <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />

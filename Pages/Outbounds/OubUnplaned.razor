@@ -3,6 +3,7 @@
 @using GoWMS.Server.Controllers
 @using GoWMS.Server.Models
 @using GoWMS.Server.Models.Inv
+@using GoWMS.Server.Models.Hagv
 @using System.Text.Json
 @inject InvService ObjService
 @inject PublicFunServices ObjFunService
@@ -11,6 +12,7 @@
 
 
 @inject WgcService ObjErpService
+@inject StoreoutService ObjStoreoutService
 @inject ISnackbar Snackbar
 @inject ErpApiService ObjApiService
 @inject IStringLocalizer<OubUnplaned> L
@@ -44,7 +46,24 @@ else
                     START
                 </MudButton>
                 <MudToolBarSpacer />
-                <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                <MudSelect T="string"
+                           Label="Destination Station"
+                           @bind-Value="destvalue">
+                    @foreach (var state in myGatesArray)
+                            {
+                        <MudSelectItem T="string" Value="@state">@state</MudSelectItem>
+                            }
+                </MudSelect>
+
+                <MudToolBarSpacer />
+                <MudTextField @bind-Value="searchString"
+                              Placeholder="Search"
+                              Adornment="Adornment.Start"
+                              AdornmentIcon="@Icons.Material.Filled.Search"
+                              IconSize="Size.Medium"
+                              Class="mt-0">
+                </MudTextField>
+
             </ToolBarContent>
             <HeaderContent>
                 <MudTh>@L["ItemCode"]</MudTh>
@@ -119,13 +138,24 @@ else
 
     protected List<string> References { get; set; } = new List<string>();
 
+    private IEnumerable<Set_Agv_Gate> MasterGate = new List<Set_Agv_Gate>();
+    public string[] myGatesArray;
+    private string destvalue { get; set; }
+    private IEnumerable<string> destoptions { get; set; } = new List<string>() { "00" };
 
     protected override async Task OnInitializedAsync()
     {
         InvService objCS = new InvService();
         //Elements = await Task.Run(() => objCS.GetReceivingOrdersbypallet(mPalletcode));
+        AgvService objAgv = new AgvService();
+        MasterGate = await Task.Run(() => objAgv.GetAllGateAgv());
+
+        myGatesArray = MasterGate.Select(x => x.Gate_Name).ToArray();
+
 
         Elements = await Task.Run(() => objCS.GetStockListInfo());
+
+
 
         OnSelectChange();
     }
@@ -204,11 +234,8 @@ else
         parameters.Add("Color", Color.Success);
 
         var formModal = DialogService.Show<DialogTemplateExample_Dialog>("Confirm", parameters);
-
         var resultModal = await Task.Run(() => formModal.Result);
-
         var formModal1 = await Task.Run(() => DialogService.ShowMessageBox("AA", "XX"));
-
     }
 
     private async void OnButtonOrderSelected()
@@ -260,11 +287,10 @@ else
             WriteIndented = true
         };
 
-
-
         string cus = "MANUAL";
         //string so = "U-" + DateTime.Now.ToString("yyMMddHH");
-        string so =ObjFunService.GetRunning("sq002", 4);
+        string so = ObjFunService.GetRunning("sq002", 4);
+        string agvdestination = destvalue;
 
         string lot = "-";
         string batch = "-";
@@ -291,6 +317,8 @@ else
             }
             else
             {
+                //update
+                ObjStoreoutService.SetDestinationAGV(so, agvdestination);
                 Snackbar.Add("Order picking created", Severity.Success);
             }
         }

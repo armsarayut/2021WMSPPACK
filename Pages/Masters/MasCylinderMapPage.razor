@@ -1,4 +1,4 @@
-﻿@page "/Pag/1/1_2"
+﻿@page "/mas/cylinder"
 @using GoWMS.Server.Data
 @using GoWMS.Server.Controllers
 @using GoWMS.Server.Models
@@ -40,7 +40,7 @@
 
     <MudItem xs="12">
         <div class="form-group">
-            <input style="width: 100%; height: 40px;" type="text" class="form-control" @bind-value="stringputkey" @onkeyup="@DoTheThing" placeholder="Input scan" />
+            <input style="width: 100%; height: 40px" type="text" class="form-control" @bind-value="stringputkey" @onkeyup="@DoTheThing" placeholder="Input scan" />
         </div>
     </MudItem>
 </MudGrid>
@@ -59,11 +59,22 @@
 else
 {
 
-    <MudTable Items="@Elements" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<Api_Receivingorders_Go,bool>(FilterFunc)" @bind-SelectedItem="selectedItem">
+    <MudTable Items="@Elements" 
+              Dense="@dense" 
+              Hover="@hover" 
+              Bordered="@bordered" 
+              Striped="@striped" 
+              Filter="new Func<Api_Receivingorders_Go,bool>(FilterFunc)" 
+              @bind-SelectedItem="selectedItem">
         <ToolBarContent>
             <MudText Typo="Typo.h6">PALLET:[@mPalletcode]</MudText>
             <MudSpacer />
-            <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+            <MudTextField @bind-Value="searchString" 
+                          Placeholder="Search" 
+                          Adornment="Adornment.Start" 
+                          AdornmentIcon="@Icons.Material.Filled.Search" 
+                          IconSize="Size.Medium" Class="mt-0">
+            </MudTextField>
         </ToolBarContent>
         <HeaderContent>
             <MudTh Style="width: 120px;"><MudTableSortLabel SortBy="new Func<Api_Receivingorders_Go, object>(x=>x.Lpncode)">PALLET</MudTableSortLabel></MudTh>
@@ -92,7 +103,7 @@ else
 }
 
 @code {
-    private string mPageHeader = "Master Mapping";
+    private string mPageHeader = "Cylinder Mapping";
     private string msgAction = "Enter MasterPallet";
     private string mPalletcode { get; set; } = "";
     private string mPackid { get; set; } = null;
@@ -125,8 +136,6 @@ else
     {
         if (args.Key == "Enter")
         {
-            //KeyPressed = "";
-            //EventInfo = "";
             StringKeyPressed = "";
             KeyPressed = "Key Pressed is " + args.Key;
             EventInfo = "Event Type " + args.Type;
@@ -137,26 +146,16 @@ else
     {
         ErpApiService objCS = new ErpApiService();
         cOld = Elements.Count();
-        //MasterPallets = await Task.Run(() => ObjMasService.GetAllMasterPallets());
-
-        //MasterPallets = ObjMasService.GetAllMasterPallets();
-
         Elements = await Task.Run(() => objCS.GetAllApiRecevingorderGosypallet(mPalletcode));
-
         cNew = Elements.Count();
-
-        //Elements = await Task.Run(() => objCS.GetReceivivgOrder());
     }
 
     async Task setstr(string str)
     {
         if (mPalletcode.Length <= 0)
         {
-           // var allCorrect = MasterPallets.Where(a => a.Palletno.ToUpper() == str.ToUpper()).ToList();
-
             Boolean bValidate = false;
             bValidate = ObjMasService.ValidateMasterpallet(str.ToUpper());
-
 
             if (bValidate)
             {
@@ -183,8 +182,7 @@ else
                     elevation = 2;
                     msgAction = "Mapping successfully";
 
-                    //ObjErpApiService.UpdateReceivingOrderbypallet(mPalletcode);
-                    ObjErpApiService.SetMappedPallet(mPalletcode);
+                    ObjErpApiService.SetMappedPalletCylinder(mPalletcode);
                     mPalletcode = "";
                     Snackbar.Add("Mapping successfully", Severity.Success);
                 }
@@ -209,15 +207,7 @@ else
                 if (MapPalletItem.ToList().Count > 0)
                 {
                     Task<string> retString;
-
-                    //ObjErpApiService.CancelReceivingOrderbypack(mPalletcode, mPackid);
-
-                    //ObjErpApiService.ClaerReceivingOrderbypack(mPackid);
-
-
                     retString = ObjErpApiService.InsertReceivingOrderbypackAsync(MapPalletItem.ToList(), mPalletcode);
-
-                    //ObjErpApiService.UpdateReceivingOrderbypack(mPalletcode, mPackid);
                     msgAction = "Enter PackID or Pallet code for complete";
                     elevation = 1;
                     Snackbar.Add("Enter PackID or Pallet code for complete", Severity.Info);
@@ -231,8 +221,6 @@ else
             }
         }
 
-        // ErpApiService objGR = new ErpApiService();
-        // Elements = objGR.GetAllApiRecevingorderGosypallet(mPalletcode);
     }
 
     private string stxtInput { get; set; }
@@ -241,16 +229,10 @@ else
     {
         if (eventArgs.Key == "Enter")        // fire on enter
         {
-            //Console.WriteLine("Done the thing: " + MyValue);
-            //stxtInput = MyValue
-            //StateHasChanged();
+
             string pallettemp = stringputkey;
 
-            //setstr(pallettemp);
-
             await Task.Run(() => setstr(pallettemp));
-
-            //Reset();
 
             this.stringputkey = null;
             this.mPackid = null;
@@ -258,7 +240,6 @@ else
 
             Elements = await Task.Run(() => ObjErpApiService.GetAllApiRecevingorderGosypallet(mPalletcode));
 
-            //Elements = ObjErpApiService.GetAllApiRecevingorderGosypallet(mPalletcode);
             cNew = Elements.Count();
 
             if (cOld == cNew)
@@ -296,11 +277,6 @@ else
 
         ObjErpApiService.CancelReceivingOrderbypack(mPalletcode, pack);
 
-        //ErpApiService objGR = new ErpApiService();
-        // Elements = objGR.GetAllApiRecevingorderGosypallet(mPalletcode);
-
-        //Elements = ObjErpApiService.GetAllApiRecevingorderGosypallet(mPalletcode);
-
         cOld = Elements.Count();
         Elements = ObjErpApiService.GetAllApiRecevingorderGosypallet(mPalletcode);
         cNew = Elements.Count();
@@ -312,16 +288,11 @@ else
         this.stringputkey = null;
         this.mPackid = null;
 
-        //Elements = ObjErpApiService.GetAllApiRecevingorderGosypallet(mPalletcode);
         cOld = Elements.Count();
 
         Elements = ObjErpApiService.GetAllApiRecevingorderGosypallet(mPalletcode);
 
-        //Elements = await Task.Run(() => ObjErpApiService.GetAllApiRecevingorderGosypallet(mPalletcode));
-
         cNew = Elements.Count();
-
-        //await Task.Delay(1_000);
 
         StateHasChanged();
     }
