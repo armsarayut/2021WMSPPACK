@@ -42,22 +42,16 @@ else
             <MudTh><MudTableSortLabel SortBy="new Func<Class6_7_D, object>(x=>x.Lpn_No)">PALLET</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel SortBy="new Func<Class6_7_D, object>(x=>x.Work_Type)">TASKTYPE</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel SortBy="new Func<Class6_7_D, object>(x=>x.Srm_No)">LANE</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Class6_7_D, object>(x=>x.Loc_No)">BIN</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Class6_7_D, object>(x=>x.Loc_No)">STORAGEBIN</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel SortBy="new Func<Class6_7_D, object>(x=>x.Loadtime)">TIME</MudTableSortLabel></MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="">@context.Su_No</MudTd>
-            <MudTd DataLabel="">@context.Lpn_No</MudTd>
-            <MudTd DataLabel="">@context.Work_Type</MudTd>
-            <MudTd DataLabel="">@context.Srm_No</MudTd>
-            <MudTd DataLabel="">@context.Loc_No</MudTd>
-            <MudTd DataLabel="">@context.Loadtime</MudTd>
-
-            @*
-                <MudTd DataLabel="">@context.Desc_Th</MudTd>
-                <MudTd DataLabel="">@context.Desc_En</MudTd>
-                <MudTd DataLabel="">@Convert.ToDateTime(context.Created).ToShortDateString()</MudTd>
-            *@
+            <MudTd DataLabel="PACKID">@context.Su_No</MudTd>
+            <MudTd DataLabel="PALLET">@context.Lpn_No</MudTd>
+            <MudTd DataLabel="TASKTYPE">@context.Work_Type</MudTd>
+            <MudTd DataLabel="LANE">@context.Srm_No</MudTd>
+            <MudTd DataLabel="STORAGEBIN">@context.Loc_No</MudTd>
+            <MudTd DataLabel="TIME">@context.Loadtime</MudTd>
         </RowTemplate>
         <PagerContent>
             <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />

@@ -26,12 +26,12 @@ else
             <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
         </ToolBarContent>
         <HeaderContent>
-            <MudTh><MudTableSortLabel SortBy="new Func<Mas_Worktype_Go, object>(x=>x.Workcode)">Workcode</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Mas_Worktype_Go, object>(x=>x.Description)">Description</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Mas_Worktype_Go, object>(x=>x.Workcode)">TASKTYPE</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Mas_Worktype_Go, object>(x=>x.Description)">DESCRIPTION</MudTableSortLabel></MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="Workcode">@context.Workcode</MudTd>
-            <MudTd DataLabel="Description">@context.Description</MudTd>
+            <MudTd DataLabel="TASKTYPE">@context.Workcode</MudTd>
+            <MudTd DataLabel="DESCRIPTION">@context.Description</MudTd>
         </RowTemplate>
         <PagerContent>
             <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />

@@ -30,16 +30,16 @@ else
 
         <HeaderContent>
 
-            <MudTh><MudTableSortLabel SortBy="new Func<Class6_3_B, object>(x=>x.Item_Code)">MaterialCode</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Class6_3_B, object>(x=>x.Item_Name)">MaterialName</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Class6_3_B, object>(x=>x.Totalstock)">TotalStock </MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Class6_3_B, object>(x=>x.Countpallet)">TotalPallet </MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Class6_3_B, object>(x=>x.Item_Code)">MATERIALCODE</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Class6_3_B, object>(x=>x.Item_Name)">MATERIALNAME</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Class6_3_B, object>(x=>x.Totalstock)">STOCK </MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Class6_3_B, object>(x=>x.Countpallet)">PALLET </MudTableSortLabel></MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="MaterialCode">@context.Item_Code</MudTd>
-            <MudTd DataLabel="MaterialName">@context.Item_Name</MudTd>
-            <MudTd DataLabel="TotalStock">@context.Totalstock</MudTd>
-            <MudTd DataLabel="TotalPallet">@context.Countpallet</MudTd>
+            <MudTd DataLabel="MATERIALCODE">@context.Item_Code</MudTd>
+            <MudTd DataLabel="MATERIALNAME">@context.Item_Name</MudTd>
+            <MudTd DataLabel="STOCK">@string.Format(VarGlobals.FormatN2, context.Totalstock)</MudTd>
+            <MudTd DataLabel="PALLET">@context.Countpallet</MudTd>
         </RowTemplate>
         <PagerContent>
             <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />

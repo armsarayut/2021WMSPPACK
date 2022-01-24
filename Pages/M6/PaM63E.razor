@@ -30,20 +30,20 @@ else
 
         <HeaderContent>
 
-            <MudTh><MudTableSortLabel SortBy="new Func<Class6_3_E, object>(x=>x.Item_Code)">MaterialCode</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Class6_3_E, object>(x=>x.Item_Name)">MaterialName</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Class6_3_E, object>(x=>x.Qty)">TotalStock </MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Class6_3_E, object>(x=>x.Su_No)">PackID </MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Class6_3_E, object>(x=>x.Palletcode)">Pallet </MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Class6_3_E, object>(x=>x.Shelfname)">Location </MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Class6_3_E, object>(x=>x.Item_Code)">MATERIALCODE</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Class6_3_E, object>(x=>x.Item_Name)">MATERIALNAME</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Class6_3_E, object>(x=>x.Qty)">STOCK</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Class6_3_E, object>(x=>x.Su_No)">PACKID</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Class6_3_E, object>(x=>x.Palletcode)">PALLET</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Class6_3_E, object>(x=>x.Shelfname)">STORAGEBIN </MudTableSortLabel></MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="MaterialCode">@context.Item_Code</MudTd>
-            <MudTd DataLabel="MaterialName">@context.Item_Name</MudTd>
-            <MudTd DataLabel="TotalStock">@context.Qty</MudTd>
-            <MudTd DataLabel="PackID">@context.Su_No</MudTd>
-            <MudTd DataLabel="Pallet">@context.Palletcode</MudTd>
-            <MudTd DataLabel="Location">@context.Shelfname</MudTd>
+            <MudTd DataLabel="MATERIALCODE">@context.Item_Code</MudTd>
+            <MudTd DataLabel="MATERIALNAME">@context.Item_Name</MudTd>
+            <MudTd DataLabel="STOCK">@string.Format(VarGlobals.FormatN2, context.Qty)</MudTd>
+            <MudTd DataLabel="PACKID">@context.Su_No</MudTd>
+            <MudTd DataLabel="PALLET">@context.Palletcode</MudTd>
+            <MudTd DataLabel="STORAGEBIN">@context.Shelfname</MudTd>
         </RowTemplate>
         <PagerContent>
             <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />

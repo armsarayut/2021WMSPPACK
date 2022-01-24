@@ -48,14 +48,14 @@ else
             <MudTh><MudTableSortLabel SortBy="new Func<Class6_4_D, object>(x=>x.Loadtime)">PICKED</MudTableSortLabel></MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="">@context.Batch_No</MudTd>
-            <MudTd DataLabel="">@context.Delivery_Pio</MudTd>
-            <MudTd DataLabel="">@context.Cdate</MudTd>
-            <MudTd DataLabel="">@context.Count_Do</MudTd>
-            <MudTd DataLabel="">@context.Ctime</MudTd>
-            <MudTd DataLabel="">@context.Stime</MudTd>
-            <MudTd DataLabel="">@context.Mtime</MudTd>
-            <MudTd DataLabel="">@context.Loadtime</MudTd>
+            <MudTd DataLabel="WAVENO">@context.Batch_No</MudTd>
+            <MudTd DataLabel="PRIORITY">@context.Delivery_Pio</MudTd>
+            <MudTd DataLabel="DATE">@Convert.ToDateTime(context.Cdate).ToString(VarGlobals.FormatD)</MudTd>
+            <MudTd DataLabel="PACKID(COUNT)">@context.Count_Do</MudTd>
+            <MudTd DataLabel="CREATED">@Convert.ToDateTime(context.Ctime).ToString(VarGlobals.FormatDT)</MudTd>
+            <MudTd DataLabel="STARTED">@Convert.ToDateTime(context.Stime).ToString(VarGlobals.FormatDT)</MudTd>
+            <MudTd DataLabel="COMPLETED">@Convert.ToDateTime(context.Mtime).ToString(VarGlobals.FormatDT)</MudTd>
+            <MudTd DataLabel="PICKED">@Convert.ToDateTime(context.Loadtime).ToString(VarGlobals.FormatDT)</MudTd>
         </RowTemplate>
         <PagerContent>
             <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />
@@ -65,7 +65,7 @@ else
 
 @code {
     private string msgAction = "Enter Palletcode";
-    private string mMenudesc = "Wave Picking ";
+    private string mMenudesc = "Wave Picking";
     private string mPalletcode { get; set; } = "";
     private string mPackid { get; set; } = "";
     private string palletcode { get; set; }

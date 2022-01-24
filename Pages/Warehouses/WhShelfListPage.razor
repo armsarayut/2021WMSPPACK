@@ -37,57 +37,31 @@ else
         </ToolBarContent>
 
         <HeaderContent>
-            <MudTh><MudTableSortLabel SortBy="new Func<Vrpt_shelf_listInfo, object>(x=>x.Shelfcode)">LOCATION</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Vrpt_shelf_listInfo, object>(x=>x.Srm_no)">LANE</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Vrpt_shelf_listInfo, object>(x=>x.Shelfbank)">BANK</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Vrpt_shelf_listInfo, object>(x=>x.Shelfbay)">BAY</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Vrpt_shelf_listInfo, object>(x=>x.Shelflevel)">LEVEL</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Vrpt_shelf_listInfo, object>(x=>x.Lpncode)">PALLET</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Vrpt_shelf_listInfo, object>(x=>x.Modified)">UPDATED</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Vrpt_shelf_listInfo, object>(x=>x.Shelfcode)">STORAGEBIN</MudTableSortLabel></MudTh>
+            <MudTh Style="width: 80px;"><MudTableSortLabel SortBy="new Func<Vrpt_shelf_listInfo, object>(x=>x.Srm_no)">LANE</MudTableSortLabel></MudTh>
+            <MudTh Style="width: 80px;"><MudTableSortLabel SortBy="new Func<Vrpt_shelf_listInfo, object>(x=>x.Shelfbank)">BANK</MudTableSortLabel></MudTh>
+            <MudTh Style="width: 80px;"><MudTableSortLabel SortBy="new Func<Vrpt_shelf_listInfo, object>(x=>x.Shelfbay)">BAY</MudTableSortLabel></MudTh>
+            <MudTh Style="width: 80px;"><MudTableSortLabel SortBy="new Func<Vrpt_shelf_listInfo, object>(x=>x.Shelflevel)">LEVEL</MudTableSortLabel></MudTh>
+            <MudTh Style="width: 120px;"><MudTableSortLabel SortBy="new Func<Vrpt_shelf_listInfo, object>(x=>x.Lpncode)">PALLET</MudTableSortLabel></MudTh>
+            <MudTh Style="width: 190px;"><MudTableSortLabel SortBy="new Func<Vrpt_shelf_listInfo, object>(x=>x.Modified)">UPDATED</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel SortBy="new Func<Vrpt_shelf_listInfo, object>(x=>x.St_desc)">STATUS</MudTableSortLabel></MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="LOCATION">@context.Shelfcode</MudTd>
-            <MudTd DataLabel="LANE">@context.Srm_no</MudTd>
-            <MudTd DataLabel="BANK">@context.Shelfbank</MudTd>
-            <MudTd DataLabel="BAY">@context.Shelfbay</MudTd>
-            <MudTd DataLabel="LEVEL">@context.Shelflevel</MudTd>
-            <MudTd DataLabel="PALLET">@context.Lpncode</MudTd>
-            <MudTd DataLabel="UPDATED">@context.Modified</MudTd>
-            <MudTd DataLabel="">
-                @if (@context.St_desc == "ว่างไม่มีพาเลท")
-                    {
-
-                    <MudChip Variant="Variant.Outlined" Color="Color.Primary">@context.St_desc</MudChip>
-
-                    @*
-                        <MudRating ReadOnly="true" SelectedValue="1" />
-                    <MudAvatar Color="Color.Primary">@context.St_desc</MudAvatar>
-
-            <MudIcon Icon="@Icons.Material.Filled.HourglassEmpty" Size="Size.Small" IconSize="Size.Small"></MudIcon>
-                    *@
-                    }
-                    else
-                    {
-                    <MudChip Variant="Variant.Outlined" Color="Color.Secondary">@context.St_desc</MudChip>
-
-
-                    @*
-                         <MudRating ReadOnly="true" SelectedValue="2" />
-                    <MudAvatar Color="Color.Secondary">@context.St_desc</MudAvatar>
-
-            <MudIcon Icon="@Icons.Material.Filled.LocationOn" Size="Size.Small" IconSize="Size.Small"></MudIcon>
-                    *@
-                    }
+            <MudTd Class="clm-row-small" DataLabel="STORAGEBIN">@context.Shelfcode</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="LANE">@context.Srm_no</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="BANK">@context.Shelfbank</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="BAY">@context.Shelfbay</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="LEVEL">@context.Shelflevel</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="PALLET">@context.Lpncode</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="UPDATED">
+                @if (context.Modified != null)
+                {
+                    @Convert.ToDateTime(context.Modified).ToString(VarGlobals.FormatDT)
+                }
             </MudTd>
-            
-
-                     @*
-        <MudTd DataLabel="Itemname" Style="@(AddressContext.OrderPositionStatus == PositionStatus.rdy ? $"background:{Colors.BlueGrey.Darken4};" : $"background:{Colors.Cyan.Darken1};")">@AddressContext.orderItem.ItemName</MudTd>
-
-
-        <MudChip Label="true" Color="@context.St_Color">@context.St_desc</MudChip>
-            *@
+            <MudTd Class="clm-row-small" DataLabel="STATUS">
+                <MudChip Variant="Variant.Filled" Color="@context.St_Color">@context.St_desc</MudChip>
+            </MudTd>
         </RowTemplate>
         <PagerContent>
             <MudTablePager PageSizeOptions="new int[]{10,20,50,100}"/>
@@ -101,7 +75,7 @@ else
 
     IEnumerable<int> pageSizeOptions = new int[] { 10, 20, 30, 50, 100 };
 
-    private readonly string mPagecaption = "Location";
+    private readonly string mPagecaption = "STORAGE";
     private string msgAction = "Enter Palletcode";
     private string mPalletcode { get; set; } = "";
     private string mPackid { get; set; } = "";
@@ -128,30 +102,6 @@ else
 
     private void setstr(string str)
     {
-        //if (mPalletcode.Length <= 0)
-        //{
-        //    mPalletcode = str;
-        //    msgAction = "Enter Pack ID";
-        //    elevation = 3;
-        //}
-        //else
-        //{
-        //    if (str == mPalletcode)
-        //    {
-        //        elevation = 2;
-        //        msgAction = "Mapping successfully";
-        //        ObjCustomService.UpdateReceivingOrderbypallet(mPalletcode);
-        //        mPalletcode = "";
-        //    }
-        //    else
-        //    {
-        //        mPackid = str;
-        //        ObjCustomService.UpdateReceivingOrderbypack(mPalletcode, mPackid);
-        //    }
-        //}
-
-        //CustomerService objGR = new CustomerService();
-        //Elements = objGR.GetReceivingOrdersbypallet(mPalletcode);
     }
 
     private string stxtInput { get; set; }

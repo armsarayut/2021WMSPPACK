@@ -27,20 +27,20 @@ else
         </ToolBarContent>
 
         <HeaderContent>
-            <MudTh><MudTableSortLabel SortBy="new Func<Mas_Item_Go, object>(x=>x.Itemcode)">Material</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Mas_Item_Go, object>(x=>x.Itemname)">Description</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Mas_Item_Go, object>(x=>x.Itemunit)">Unit</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Mas_Item_Go, object>(x=>x.Weightnet)">Netweight</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Mas_Item_Go, object>(x=>x.Weightgross)">Grossweight</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Mas_Item_Go, object>(x=>x.Weightuint)">Weightunit</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Mas_Item_Go, object>(x=>x.Itemcode)">MATERIAL</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Mas_Item_Go, object>(x=>x.Itemname)">DESCRIPTION</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Mas_Item_Go, object>(x=>x.Itemunit)">UNIT</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Mas_Item_Go, object>(x=>x.Weightnet)">NETWEIGHT</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Mas_Item_Go, object>(x=>x.Weightgross)">GROSSWEIGHT</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Mas_Item_Go, object>(x=>x.Weightuint)">WEIGHTUNIT</MudTableSortLabel></MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="Material">@context.Itemcode</MudTd>
-            <MudTd DataLabel="Description">@context.Itemname</MudTd>
-            <MudTd DataLabel="Unit">@context.Itemunit</MudTd>
-            <MudTd DataLabel="Netweight">@context.Weightnet</MudTd>
-            <MudTd DataLabel="Grossweight">@context.Weightgross</MudTd>
-            <MudTd DataLabel="Weightunit">@context.Weightuint</MudTd>
+            <MudTd DataLabel="MATERIAL">@context.Itemcode</MudTd>
+            <MudTd DataLabel="DESCRIPTION">@context.Itemname</MudTd>
+            <MudTd DataLabel="UNIT">@context.Itemunit</MudTd>
+            <MudTd DataLabel="NETWEIGHT">@context.Weightnet</MudTd>
+            <MudTd DataLabel="GROSSWEIGHT">@context.Weightgross</MudTd>
+            <MudTd DataLabel="WEIGHTUNIT">@context.Weightuint</MudTd>
         </RowTemplate>
         <PagerContent>
             <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />

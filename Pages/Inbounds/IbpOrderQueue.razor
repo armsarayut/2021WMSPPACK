@@ -28,8 +28,8 @@ else
         <ToolBarContent>
             <MudTooltip Text="Export" Color="Color.Secondary" Placement="Placement.Top">
                 <MudMenu Icon="@Icons.Filled.Download" Color="Color.Primary">
-                    <MudMenuItem>Excel</MudMenuItem>
-                    <MudMenuItem>Pdf</MudMenuItem>
+                    <MudMenuItem>EXCEL</MudMenuItem>
+                    <MudMenuItem>PDF</MudMenuItem>
                 </MudMenu>
             </MudTooltip>
 
@@ -37,25 +37,24 @@ else
             <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
         </ToolBarContent>
         <HeaderContent>
-            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Goodreceive_Go, object>(x=>x.Created)">QueuDate</MudTableSortLabel></MudTh>
-
-            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Goodreceive_Go, object>(x=>x.Pallteno)">Masterpallet</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Goodreceive_Go, object>(x=>x.Docno)">Document</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Goodreceive_Go, object>(x=>x.Itemtag)">PackID</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Goodreceive_Go, object>(x=>x.Itemcode)">Material</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Goodreceive_Go, object>(x=>x.Itemname)">Description</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Goodreceive_Go, object>(x=>x.Quantity)">Qty</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Goodreceive_Go, object>(x=>x.Unit)">Unit</MudTableSortLabel></MudTh>
+            <MudTh Style="width: 190px;"><MudTableSortLabel SortBy="new Func<Inb_Goodreceive_Go, object>(x=>x.Created)">QUEUEING</MudTableSortLabel></MudTh>
+            <MudTh Style="width: 120px;"><MudTableSortLabel SortBy="new Func<Inb_Goodreceive_Go, object>(x=>x.Pallteno)">PALLET</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Goodreceive_Go, object>(x=>x.Docno)">DOCUMENT</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Goodreceive_Go, object>(x=>x.Itemtag)">PACKID</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Goodreceive_Go, object>(x=>x.Itemcode)">MATERIAL</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Goodreceive_Go, object>(x=>x.Itemname)">DESCRIPTION</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Goodreceive_Go, object>(x=>x.Quantity)">QTY</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Goodreceive_Go, object>(x=>x.Unit)">UNIT</MudTableSortLabel></MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="QueuDate">@context.Created</MudTd>
-            <MudTd DataLabel="Masterpallet">@context.Pallteno</MudTd>
-            <MudTd DataLabel="Ducument">@context.Docno</MudTd>
-            <MudTd DataLabel="PackID">@context.Itemtag</MudTd>
-            <MudTd DataLabel="Material">@context.Itemcode</MudTd>
-            <MudTd DataLabel="Description">@context.Itemname</MudTd>
-            <MudTd DataLabel="Qty">@context.Quantity</MudTd>
-            <MudTd DataLabel="Unit">@context.Unit</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="QUEUEING">@Convert.ToDateTime(context.Created).ToString(VarGlobals.FormatDT)</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="PALLET">@context.Pallteno</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="DOCUMENT">@context.Docno</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="PACKID">@context.Itemtag</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="MATERIAL">@context.Itemcode</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="DESCRIPTION">@context.Itemname</MudTd>
+            <MudTd Class="clm-row-small" Style="text-align:right" DataLabel="QTY">@string.Format(VarGlobals.FormatN2, context.Quantity)</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="UNIT">@context.Unit</MudTd>
         </RowTemplate>
         <PagerContent>
             <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />

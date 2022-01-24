@@ -34,23 +34,22 @@ else
                     <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
                 </ToolBarContent>
                 <HeaderContent>
-                    <MudTh><MudTableSortLabel SortBy="new Func<InvStockList, object>(x=>x.Item_code)">Material</MudTableSortLabel></MudTh>
-
-                    <MudTh><MudTableSortLabel SortBy="new Func<InvStockList, object>(x=>x.Item_name)">Description</MudTableSortLabel></MudTh>
-                    <MudTh><MudTableSortLabel SortBy="new Func<InvStockList, object>(x=>x.Qty)">Stock</MudTableSortLabel></MudTh>
-                    <MudTh><MudTableSortLabel SortBy="new Func<InvStockList, object>(x=>x.Su_no)">PackID</MudTableSortLabel></MudTh>
-                    <MudTh><MudTableSortLabel SortBy="new Func<InvStockList, object>(x=>x.Palletcode)">MasterPallet</MudTableSortLabel></MudTh>
-                    <MudTh><MudTableSortLabel SortBy="new Func<InvStockList, object>(x=>x.StorageArae)">Area</MudTableSortLabel></MudTh>
-                    <MudTh><MudTableSortLabel SortBy="new Func<InvStockList, object>(x=>x.Shelfname)">Location</MudTableSortLabel></MudTh>
+                    <MudTh><MudTableSortLabel SortBy="new Func<InvStockList, object>(x=>x.Item_code)">MATERIAL</MudTableSortLabel></MudTh>
+                    <MudTh><MudTableSortLabel SortBy="new Func<InvStockList, object>(x=>x.Item_name)">DESCRIPTION</MudTableSortLabel></MudTh>
+                    <MudTh><MudTableSortLabel SortBy="new Func<InvStockList, object>(x=>x.Qty)">STOCK</MudTableSortLabel></MudTh>
+                    <MudTh><MudTableSortLabel SortBy="new Func<InvStockList, object>(x=>x.Su_no)">PACKID</MudTableSortLabel></MudTh>
+                    <MudTh Style="width: 120px;"><MudTableSortLabel SortBy="new Func<InvStockList, object>(x=>x.Palletcode)">PALLET</MudTableSortLabel></MudTh>
+                    <MudTh><MudTableSortLabel SortBy="new Func<InvStockList, object>(x=>x.StorageArae)">AREA</MudTableSortLabel></MudTh>
+                    <MudTh><MudTableSortLabel SortBy="new Func<InvStockList, object>(x=>x.Shelfname)">STROAGEBIN</MudTableSortLabel></MudTh>
                 </HeaderContent>
                 <RowTemplate>
-                    <MudTd DataLabel="Material">@context.Item_code</MudTd>
-                    <MudTd DataLabel="Description">@context.Item_name</MudTd>
-                    <MudTd DataLabel="Stock">@context.Qty</MudTd>
-                    <MudTd DataLabel="PackID">@context.Su_no</MudTd>
-                    <MudTd DataLabel="MasterPallet">@context.Palletcode</MudTd>
-                    <MudTd DataLabel="Area">@context.StorageArae</MudTd>
-                    <MudTd DataLabel="Location">@context.Shelfname</MudTd>
+                    <MudTd Class="clm-row-small" DataLabel="MATERIAL">@context.Item_code</MudTd>
+                    <MudTd Class="clm-row-small" DataLabel="DESCRIPTION">@context.Item_name</MudTd>
+                    <MudTd Class="clm-row-small" DataLabel="STOCK" Style="text-align:right">@string.Format(VarGlobals.FormatN2, context.Qty)</MudTd>
+                    <MudTd Class="clm-row-small" DataLabel="PACKID">@context.Su_no</MudTd>
+                    <MudTd Class="clm-row-small" DataLabel="PALLET">@context.Palletcode</MudTd>
+                    <MudTd Class="clm-row-small" DataLabel="AREA">@context.StorageArae</MudTd>
+                    <MudTd Class="clm-row-small" DataLabel="STROAGEBIN">@context.Shelfname</MudTd>
                 </RowTemplate>
                 <PagerContent>
                     <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />
@@ -72,16 +71,16 @@ else
                     <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
                 </ToolBarContent>
                 <HeaderContent>
-                    <MudTh>Material</MudTh>
-                    <MudTh>Description</MudTh>
-                    <MudTh>TotalStock</MudTh>
-                    <MudTh>TotalMasterPallet</MudTh>
+                    <MudTh>MATERIAL</MudTh>
+                    <MudTh>DESCRIPTION</MudTh>
+                    <MudTh>STOCK</MudTh>
+                    <MudTh>TOTAL(PALLET)</MudTh>
                 </HeaderContent>
                 <RowTemplate>
-                    <MudTd DataLabel="Material">@context.Item_code</MudTd>
-                    <MudTd DataLabel="Description">@context.Item_name</MudTd>
-                    <MudTd DataLabel="TotalStock">@context.Totalstock</MudTd>
-                    <MudTd DataLabel="TotalMasterPallet">@context.Countpallet</MudTd>
+                    <MudTd Class="clm-row-small" DataLabel="MATERIAL">@context.Item_code</MudTd>
+                    <MudTd Class="clm-row-small" DataLabel="DESCRIPTION">@context.Item_name</MudTd>
+                    <MudTd Class="clm-row-small" DataLabel="STOCK" Style="text-align:right">@string.Format(VarGlobals.FormatN2, context.Totalstock)</MudTd>
+                    <MudTd Class="clm-row-small" DataLabel="TOTAL(PALLET)" Style="text-align:right">@string.Format(VarGlobals.FormatN0, context.Countpallet)</MudTd>
                 </RowTemplate>
                 <PagerContent>
                     <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />

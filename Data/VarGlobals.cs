@@ -30,6 +30,15 @@ namespace GoWMS.Server.Data
             public static long GroupID { get; set; }
         }
 
+        public static string FormatN0 { get; set; } = "{0:N0}";
+        public static string FormatN2 { get; set; } = "{0:N2}";
+        public static string FormatDT { get; set; } = "yyyy-MM-dd HH:mm:ss";
+
+        public static string FormatDTHM { get; set; } = "yyyy-MM-dd HH:mm";
+
+        public static string FormatT { get; set; } = "HH:mm:ss";
+        public static string FormatTHM { get; set; } = "HH:mm";
+        public static string FormatD { get; set; } = "yyyy-MM-dd";
 
     }
 }

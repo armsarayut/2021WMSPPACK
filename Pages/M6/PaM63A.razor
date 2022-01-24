@@ -38,7 +38,7 @@ else
         <RowTemplate>
             <MudTd DataLabel="MATERIALCODE">@context.Item_Code</MudTd>
             <MudTd DataLabel="MATERIALNAME">@context.Item_Name</MudTd>
-            <MudTd DataLabel="QTY">@context.Qty</MudTd>
+            <MudTd DataLabel="QTY">@string.Format(VarGlobals.FormatN2, context.Qty)</MudTd>
             <MudTd DataLabel="PACKID">@context.Su_No</MudTd>
             <MudTd DataLabel="LOCATION">@context.Shelfname</MudTd>
         </RowTemplate>

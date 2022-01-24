@@ -29,16 +29,16 @@ else
         </ToolBarContent>
 
         <HeaderContent>
-            <MudTh><MudTableSortLabel SortBy="new Func<Class6_2_B, object>(x=>x.Created)">Date/time</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Class6_2_B, object>(x=>x.Item_Code)">MaterialCode</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Class6_2_B, object>(x=>x.Item_Name)">MaterialName</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Class6_2_B, object>(x=>x.Result_Qty)">Qty</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Class6_2_B, object>(x=>x.Created)">DATE</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Class6_2_B, object>(x=>x.Item_Code)">MATERIALCODE</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Class6_2_B, object>(x=>x.Item_Name)">MATERIALNAME</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Class6_2_B, object>(x=>x.Result_Qty)">QTY</MudTableSortLabel></MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="Date/time">@context.Created</MudTd>
-            <MudTd DataLabel="MaterialCode">@context.Item_Code</MudTd>
-            <MudTd DataLabel="MaterialName">@context.Item_Name</MudTd>
-            <MudTd DataLabel="Qty">@context.Result_Qty</MudTd>
+            <MudTd DataLabel="DATE">@Convert.ToDateTime(context.Created).ToString(VarGlobals.FormatD)</MudTd>
+            <MudTd DataLabel="MATERIALCODE">@context.Item_Code</MudTd>
+            <MudTd DataLabel="MATERIALNAME">@context.Item_Name</MudTd>
+            <MudTd DataLabel="QTY">@string.Format(VarGlobals.FormatN2, context.Result_Qty)</MudTd>
         </RowTemplate>
         <PagerContent>
             <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />

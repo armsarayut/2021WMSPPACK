@@ -32,9 +32,9 @@ else
             <MudTh><MudTableSortLabel SortBy="new Func<MaterialInfo, object>(x=>x.Unit)">Unit</MudTableSortLabel></MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="Material">@context.Material_Code</MudTd>
-            <MudTd DataLabel="Description">@context.Material_Description</MudTd>     
-            <MudTd DataLabel="Unit">@context.Unit</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="Material">@context.Material_Code</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="Description">@context.Material_Description</MudTd>     
+            <MudTd Class="clm-row-small" DataLabel="Unit">@context.Unit</MudTd>
         </RowTemplate>
         <PagerContent>
             <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />

@@ -9,12 +9,10 @@
 
 @inject AgvService ObjAgvService
 @inject DashService ObjDashService
-
-
 @inject IStringLocalizer<Dashboard> L
 
 
-<MudText Typo="Typo.h5" Color="Color.Primary" Class="mb-4">@L["Dashboard"]</MudText>
+<MudText Typo="Typo.h6" Color="Color.Primary" Class="mb-4">@L["Dashboard"]</MudText>
 <MudGrid>
     <MudItem xs="12" sm="6" md="3">
         <MudPaper Elevation="25" Class="d-flex flex-row pt-6 pb-4" Style="height:80px;">
@@ -173,7 +171,7 @@
             </MudHidden>
 
             <br />
-            <MudChart ChartType="ChartType.Pie" InputData="@data1" @bind-SelectedIndex="Index1" InputLabels="@labels1" Width="150px" Height="150px" />
+            <MudChart ChartType="ChartType.Donut" InputData="@data1" @bind-SelectedIndex="Index1" InputLabels="@labels1" Width="28%" Height="28%" />
         </MudCard>
     </MudItem>
     <MudItem xs="12" sm="6" md="4">
@@ -217,7 +215,7 @@
                 </MudPaper>
             </MudHidden>
             <br />
-            <MudChart ChartType="ChartType.Pie" InputData="@data2" @bind-SelectedIndex="Index2" InputLabels="@labels2" Width="150px" Height="150px" />
+            <MudChart ChartType="ChartType.Donut" InputData="@data2" @bind-SelectedIndex="Index2" InputLabels="@labels2" Width="28%" Height="28%"/>
         </MudCard>
     </MudItem>
     <MudItem xs="12" sm="6" md="4">
@@ -261,7 +259,7 @@
                 </MudPaper>
             </MudHidden>
             <br />
-            <MudChart ChartType="ChartType.Pie" InputData="@data3" @bind-SelectedIndex="Index3" InputLabels="@labels3" Width="150px" Height="150px" />
+            <MudChart ChartType="ChartType.Donut" InputData="@data3" @bind-SelectedIndex="Index3" InputLabels="@labels3" Width="28%" Height="28%"/>
         </MudCard>
     </MudItem>
 

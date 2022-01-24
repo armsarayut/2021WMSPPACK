@@ -186,7 +186,8 @@ namespace GoWMS.Server.Data
                             Actual_size = rdr["actual_size"] == DBNull.Value ? null : (Int32?)rdr["actual_size"],
                             Desc_size = rdr["desc_size"].ToString(),
                             St_desc = rdr["st_desc"].ToString(),
-                            St_Color = stColor
+                            St_Color = stColor,
+                            Modified = rdr["modified"] == DBNull.Value ? null : (DateTime?)rdr["modified"]
                         };
                         lstobj.Add(objrd);
                     }

@@ -38,19 +38,19 @@ else
         </ToolBarContent>
 
         <HeaderContent>
-            <MudTh><MudTableSortLabel SortBy="new Func<Class6_5_A, object>(x=>x.Created)">DATETIME</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Class6_5_A, object>(x=>x.Created)">CREATED</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel SortBy="new Func<Class6_5_A, object>(x=>x.Mccode)">MC</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Class6_5_A, object>(x=>x.Status)">DATE</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Class6_5_A, object>(x=>x.Desc_Th)">PACKID(COUNT)</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Class6_5_A, object>(x=>x.Desc_En)">CREATED</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Class6_5_A, object>(x=>x.Status)">STATUS</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Class6_5_A, object>(x=>x.Desc_Th)">DESCRIPTION(TH)</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Class6_5_A, object>(x=>x.Desc_En)">DESCRIPTION(EN)</MudTableSortLabel></MudTh>
          
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="">@context.Created</MudTd>
-            <MudTd DataLabel="">@context.Mccode</MudTd>
-            <MudTd DataLabel="">@context.Status</MudTd>
-            <MudTd DataLabel="">@context.Desc_Th</MudTd>
-            <MudTd DataLabel="">@context.Desc_En</MudTd>
+            <MudTd DataLabel="CREATED">@Convert.ToDateTime(context.Created).ToString(VarGlobals.FormatDT)</MudTd>
+            <MudTd DataLabel="MC">@context.Mccode</MudTd>
+            <MudTd DataLabel="STATUS">@context.Status</MudTd>
+            <MudTd DataLabel="DESCRIPTION(TH)">@context.Desc_Th</MudTd>
+            <MudTd DataLabel="DESCRIPTION(EN)">@context.Desc_En</MudTd>
         </RowTemplate>
         <PagerContent>
             <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />

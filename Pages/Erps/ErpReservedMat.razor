@@ -40,17 +40,17 @@ else
             <MudTh><MudTableSortLabel SortBy="new Func<V_Reserved_MaterialsInfo, object>(x=>x.MO_Barcode)">MOBarcode</MudTableSortLabel></MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="PackID">@context.Package_ID</MudTd>
-            <MudTd DataLabel="RollID">@context.Roll_ID</MudTd>
-            <MudTd DataLabel="Material">@context.Material_Code</MudTd>
-            <MudTd DataLabel="Description">@context.Description</MudTd>
-            <MudTd DataLabel="WHCode">@context.WH_Code</MudTd>
-            <MudTd DataLabel="Warehouse">@context.Warehouse</MudTd>
-            <MudTd DataLabel="Quantity">@context.Quantity</MudTd>
-            <MudTd DataLabel="Unit">@context.Unit</MudTd>
-            <MudTd DataLabel="Job">@context.Job</MudTd>
-            <MudTd DataLabel="JobCode">@context.Job_Code</MudTd>
-            <MudTd DataLabel="MOBarcode">@context.MO_Barcode</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="PackID">@context.Package_ID</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="RollID">@context.Roll_ID</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="Material">@context.Material_Code</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="Description">@context.Description</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="WHCode">@context.WH_Code</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="Warehouse">@context.Warehouse</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="Quantity">@string.Format(VarGlobals.FormatN2, context.Quantity)</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="Unit">@context.Unit</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="Job">@context.Job</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="JobCode">@context.Job_Code</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="MOBarcode">@context.MO_Barcode</MudTd>
         </RowTemplate>
         <PagerContent>
             <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />

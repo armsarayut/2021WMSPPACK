@@ -19,30 +19,22 @@ else
         <ToolBarContent>
             <MudTooltip Text="Export" Color="Color.Secondary" Placement="Placement.Top">
                 <MudMenu Icon="@Icons.Filled.Download" Color="Color.Primary">
-                    <MudMenuItem>Excel</MudMenuItem>
-                    <MudMenuItem>Pdf</MudMenuItem>
+                    <MudMenuItem>EXCEL</MudMenuItem>
+                    <MudMenuItem>PDF</MudMenuItem>
                 </MudMenu>
             </MudTooltip>
             <MudSpacer />
             <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
         </ToolBarContent>
         <HeaderContent>
-            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Created)">Queue time</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Palletno)">Masterpallet</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Puttype)">Worktype</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Storagearea)">SRM</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Storagebin)">Location</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Storagetime)">Start time</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Completed)">End time</MudTableSortLabel></MudTh>
+            <MudTh Style="width: 190px;"><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Created)">QUEUEING</MudTableSortLabel></MudTh>
+            <MudTh Style="width: 120px;"><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Palletno)">PALLET</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Puttype)">TASKTYPE</MudTableSortLabel></MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="Queuetime">@context.Created</MudTd>
-            <MudTd DataLabel="Masterpallet">@context.Palletno</MudTd>
-            <MudTd DataLabel="Worktype">@context.Puttype</MudTd>
-            <MudTd DataLabel="SRM">@context.Storagearea</MudTd>
-            <MudTd DataLabel="Location">@context.Storagebin</MudTd>
-            <MudTd DataLabel="Starttime">@context.Storagetime</MudTd>
-            <MudTd DataLabel="Endtime">@context.Completed</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="QUEUEING">@Convert.ToDateTime(context.Created).ToString(VarGlobals.FormatDT)</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="PALLET">@context.Palletno</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="TASKTYPE">@context.Puttype</MudTd>
         </RowTemplate>
         <PagerContent>
             <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />

@@ -17,8 +17,8 @@ else
         <ToolBarContent>
             <MudTooltip Text="Export" Color="Color.Secondary" Placement="Placement.Top">
                 <MudMenu Icon="@Icons.Filled.Download" Color="Color.Primary">
-                    <MudMenuItem>Excel</MudMenuItem>
-                    <MudMenuItem>Pdf</MudMenuItem>
+                    <MudMenuItem>EXCEL</MudMenuItem>
+                    <MudMenuItem>PDF</MudMenuItem>
                 </MudMenu>
             </MudTooltip>
             <MudSpacer />
@@ -26,24 +26,22 @@ else
         </ToolBarContent>
 
         <HeaderContent>
-            <MudTh><MudTableSortLabel SortBy="new Func<WhStorageCapacity, object>(x=>x.Rn)">No</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel InitialDirection="SortDirection.Ascending" SortBy="new Func<WhStorageCapacity, object>(x=>x.Srmname)">Lane</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<WhStorageCapacity, object>(x=>x.Locavlt1)">Occupied</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<WhStorageCapacity, object>(x=>x.Locemp)">Mass</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<WhStorageCapacity, object>(x=>x.Perr)">Block/Error</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<WhStorageCapacity, object>(x=>x.Prohloc)">Prohibited Location</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<WhStorageCapacity, object>(x=>x.Total)">Total</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<WhStorageCapacity, object>(x=>x.OccRate)">Occupancy Rate</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel InitialDirection="SortDirection.Ascending" SortBy="new Func<WhStorageCapacity, object>(x=>x.Srmname)">LANE</MudTableSortLabel></MudTh>
+            <MudTh Style="text-align:right"><MudTableSortLabel SortBy="new Func<WhStorageCapacity, object>(x=>x.Locavlt1)">OCCUPIED</MudTableSortLabel></MudTh>
+            <MudTh Style="text-align:right" ><MudTableSortLabel SortBy="new Func<WhStorageCapacity, object>(x=>x.Locemp)">EMPTY</MudTableSortLabel></MudTh>
+            <MudTh Style="text-align:right"><MudTableSortLabel SortBy="new Func<WhStorageCapacity, object>(x=>x.Perr)">BLOCK/ERROR</MudTableSortLabel></MudTh>
+            <MudTh Style="text-align:right"><MudTableSortLabel SortBy="new Func<WhStorageCapacity, object>(x=>x.Prohloc)">PROHIBITED</MudTableSortLabel></MudTh>
+            <MudTh Style="text-align:right"><MudTableSortLabel SortBy="new Func<WhStorageCapacity, object>(x=>x.Total)">TOTAL</MudTableSortLabel></MudTh>
+            <MudTh Style="text-align:right"><MudTableSortLabel SortBy="new Func<WhStorageCapacity, object>(x=>x.OccRate)">RATE</MudTableSortLabel></MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="No">@context.Rn</MudTd>
-            <MudTd DataLabel="Lane">@context.Srmname</MudTd>
-            <MudTd DataLabel="Occupied [Type A]">@context.Locavlt1</MudTd>
-            <MudTd DataLabel="Empty">@context.Locemp</MudTd>
-            <MudTd DataLabel="Block/Error">@context.Perr</MudTd>
-            <MudTd DataLabel="Prohibited Location">@context.Prohloc</MudTd>
-            <MudTd DataLabel="Total">@context.Total</MudTd>
-            <MudTd DataLabel="Occupancy Rate">@context.OccRate</MudTd> 
+            <MudTd Class="clm-row-small" DataLabel="Lane">@context.Srmname</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="OCCUPIED" Style="text-align:right">@string.Format(VarGlobals.FormatN0, context.Locavlt1)</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="Empty" Style="text-align:right" >@string.Format(VarGlobals.FormatN0, context.Locemp)</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="BLOCK/ERROR" Style="text-align:right">@string.Format(VarGlobals.FormatN0, context.Perr)</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="PROHIBITED" Style="text-align:right">@string.Format(VarGlobals.FormatN0, context.Prohloc)</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="TOTAL" Style="text-align:right">@string.Format(VarGlobals.FormatN0, context.Total)</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="RATE" Style="text-align:right" >@context.OccRate %</MudTd> 
         </RowTemplate>
         <PagerContent>
             <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />

@@ -58,11 +58,11 @@ else
                    }
                 }
             </MudTd>
-            <MudTd DataLabel="PACKID">@context.Su_No</MudTd>
-            <MudTd DataLabel="MATERIAL">@context.Item_Code</MudTd>
-            <MudTd DataLabel="QTY">@context.Stock_Qty</MudTd>
-            <MudTd DataLabel="UNIT">@context.Unit</MudTd>
-            <MudTd DataLabel="">
+            <MudTd Class="clm-row-small" DataLabel="PACKID">@context.Su_No</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="MATERIAL">@context.Item_Code</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="QTY">@string.Format(VarGlobals.FormatN2, context.Stock_Qty)</MudTd>
+            <MudTd Class="clm-row-small"DataLabel="UNIT">@context.Unit</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="">
                 <MudFab @onclick="@(()=>CountMap(@context.Su_No))" Color="Color.Primary" Icon="@Icons.Material.Filled.Check" Size="Size.Small" IconSize="Size.Small"  />
                 <MudFab @onclick="@(()=>DeleteMap(@context.Su_No))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Clear" Size="Size.Small" IconSize="Size.Small" />
                 <MudFab @onclick="@(()=>ResetMap(@context.Su_No))" Color="Color.Warning" Icon="@Icons.Material.Filled.Restore" Size="Size.Small" IconSize="Size.Small" />

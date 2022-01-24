@@ -29,19 +29,19 @@ else
         </ToolBarContent>
 
         <HeaderContent>
-            <MudTh><MudTableSortLabel SortBy="new Func<Class6_1, object>(x=>x.Created)">Date/time</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Class6_1, object>(x=>x.Menu_Name)">Menu</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Class6_1, object>(x=>x.Action_Desc)">Action</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Class6_1, object>(x=>x.Usid)">Actor</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Class6_1, object>(x=>x.Client_ip)">ClientIP</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Class6_1, object>(x=>x.Created)">DATETIME</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Class6_1, object>(x=>x.Menu_Name)">MENU</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Class6_1, object>(x=>x.Action_Desc)">ACTION</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Class6_1, object>(x=>x.Usid)">ACTOR</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Class6_1, object>(x=>x.Client_ip)">IPADDRESS</MudTableSortLabel></MudTh>
 
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="Date/time">@context.Created</MudTd>
-            <MudTd DataLabel="Menu">@context.Menu_Name</MudTd>
-            <MudTd DataLabel="Action">@context.Action_Desc</MudTd>
-            <MudTd DataLabel="Actor">@context.Usid</MudTd>
-            <MudTd DataLabel="ClientIP">@context.Client_ip</MudTd>
+            <MudTd DataLabel="DATETIME">@Convert.ToDateTime(context.Created).ToString(VarGlobals.FormatDT)</MudTd>
+            <MudTd DataLabel="MENU">@context.Menu_Name</MudTd>
+            <MudTd DataLabel="ACTION">@context.Action_Desc</MudTd>
+            <MudTd DataLabel="ACTOR">@context.Usid</MudTd>
+            <MudTd DataLabel="IPADDRESS">@context.Client_ip</MudTd>
         </RowTemplate>
         <PagerContent>
             <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />
@@ -52,7 +52,7 @@ else
 
 @code {
     private string msgAction = "Enter Palletcode";
-    private string mMenudesc = "Report -> Audit trail";
+    private string mMenudesc = "Audit trail";
     private string mPalletcode { get; set; } = "";
     private string mPackid { get; set; } = "";
     private string palletcode { get; set; }

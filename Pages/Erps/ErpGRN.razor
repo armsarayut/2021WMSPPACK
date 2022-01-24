@@ -44,19 +44,19 @@ else
         </HeaderContent>
         <RowTemplate>
 
-            <MudTd DataLabel="Document">@context.Document_Number</MudTd>
-            <MudTd DataLabel="PackID">@context.Package_ID</MudTd>
-            <MudTd DataLabel="Material">@context.Material_Code</MudTd>
-            <MudTd DataLabel="Description">@context.Material_Description</MudTd>
-            <MudTd DataLabel="ReceivingDate">@context.Receiving_Date</MudTd>
-            <MudTd DataLabel="GRQty">@context.GR_Quantity</MudTd>
-            <MudTd DataLabel="Unit">@context.Unit</MudTd>
-            <MudTd DataLabel="GRWeight">@context.GR_Quantity_KG</MudTd>
-            <MudTd DataLabel="WHCode">@context.WH_Code</MudTd>
-            <MudTd DataLabel="Warehouse">@context.Warehouse</MudTd>
-            <MudTd DataLabel="Location">@context.Location</MudTd>
-            <MudTd DataLabel="Job">@context.Job</MudTd>
-            <MudTd DataLabel="JobCode">@context.Job_Code</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="Document">@context.Document_Number</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="PackID">@context.Package_ID</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="Material">@context.Material_Code</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="Description">@context.Material_Description</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="ReceivingDate">@Convert.ToDateTime(context.Receiving_Date).ToString(VarGlobals.FormatD)</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="GRQty">@string.Format(VarGlobals.FormatN2, context.GR_Quantity)</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="Unit">@context.Unit</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="GRWeight">@string.Format(VarGlobals.FormatN2, context.GR_Quantity_KG)</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="WHCode">@context.WH_Code</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="Warehouse">@context.Warehouse</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="Location">@context.Location</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="Job">@context.Job</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="JobCode">@context.Job_Code</MudTd>
         </RowTemplate>
         <PagerContent>
             <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />

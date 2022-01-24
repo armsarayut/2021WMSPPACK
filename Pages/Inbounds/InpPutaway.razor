@@ -37,44 +37,31 @@
         <div class="form-group">
             <input style="width: 100%; height: 40px" type="text" class="form-control" @bind-value="palletcode" @onkeyup="@DoTheThing" placeholder="Input scan" />
         </div>
-        @*<MudTextField @bind-Value="palletcode" @onkeyup="DoTheThing" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.QrCodeScanner" AdornmentColor="Color.Secondary" />*@
+
     </MudItem>
 </MudGrid>
 
-@*<MudText Typo="Typo.h6" Color="Color.Secondary" Class="mb-4">Master Pallet : [ @mPalletcode ]</MudText>
-    <MudSkeleton Animation="Animation.False" />*@
-@*<MudText Typo="Typo.h6" Color="Color.Info" Class="mb-4">PackID : [ @mPackid ]</MudText>*@
-
 @if (Elements == null)
 {
-    // <p><em>Loading...</em></p>
     <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
 }
 else
 {
     <MudTable Items="@Elements" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<Inb_Putaway_Go,bool>(FilterFunc)" @bind-SelectedItem="selectedItem">
         <ToolBarContent>
-            <MudText Typo="Typo.h6">Master Pallet : [ @mPalletcode ]</MudText>
+            <MudText Typo="Typo.h6">PALLET:[@mPalletcode]</MudText>
             <MudSpacer />
             <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
         </ToolBarContent>
         <HeaderContent>
-            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Created)">Queue time</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Palletno)">Masterpallet</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Puttype)">Worktype</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Storagearea)">SRM</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Storagebin)">Location</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Storagetime)">Start time</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Completed)">End time</MudTableSortLabel></MudTh>
+            <MudTh Style="width: 190px;"><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Created)">QUEUEING</MudTableSortLabel></MudTh>
+            <MudTh Style="width: 120px;"><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Palletno)">PALLET</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Puttype)">TASKTYPE</MudTableSortLabel></MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="Queuetime">@context.Created</MudTd>
-            <MudTd DataLabel="Masterpallet">@context.Palletno</MudTd>
-            <MudTd DataLabel="Worktype">@context.Puttype</MudTd>
-            <MudTd DataLabel="SRM">@context.Storagearea</MudTd>
-            <MudTd DataLabel="Location">@context.Storagebin</MudTd>
-            <MudTd DataLabel="Starttime">@context.Storagetime</MudTd>
-            <MudTd DataLabel="Endtime">@context.Completed</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="QUEUEING">@Convert.ToDateTime(context.Created).ToString(VarGlobals.FormatDT)</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="PALLET">@context.Palletno</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="TASKTYPE">@context.Puttype</MudTd>
         </RowTemplate>
         <PagerContent>
             <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />

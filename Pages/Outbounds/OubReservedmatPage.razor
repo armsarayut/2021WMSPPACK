@@ -27,32 +27,32 @@ else
         </ToolBarContent>
 
         <HeaderContent>
-            <MudTh><MudTableSortLabel SortBy="new Func<Api_Reservedmaterials_Go, object>(x=>x.Mo_Barcode)">MoBarcode</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Api_Reservedmaterials_Go, object>(x=>x.Job)">Job</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Api_Reservedmaterials_Go, object>(x=>x.Job_Code)">JobCode</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Api_Reservedmaterials_Go, object>(x=>x.Package_Id)">PackID</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Api_Reservedmaterials_Go, object>(x=>x.Material_Code)">Material</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Api_Reservedmaterials_Go, object>(x=>x.Material_Description)">Description</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Api_Reservedmaterials_Go, object>(x=>x.Quantity)">Quantity</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Api_Reservedmaterials_Go, object>(x=>x.Unit)">Unit</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Api_Reservedmaterials_Go, object>(x=>x.Roll_Id)">RollID</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Api_Reservedmaterials_Go, object>(x=>x.Wh_Code)">WhCode</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Api_Reservedmaterials_Go, object>(x=>x.Warehouse)">Warehouse</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Api_Reservedmaterials_Go, object>(x=>x.Locationno)">Location</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Api_Reservedmaterials_Go, object>(x=>x.Mo_Barcode)">MOBARCODE</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Api_Reservedmaterials_Go, object>(x=>x.Job)">JOB</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Api_Reservedmaterials_Go, object>(x=>x.Job_Code)">JOBCODE</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Api_Reservedmaterials_Go, object>(x=>x.Package_Id)">PACKID</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Api_Reservedmaterials_Go, object>(x=>x.Material_Code)">MATERIAL</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Api_Reservedmaterials_Go, object>(x=>x.Material_Description)">DESCRIPTION</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Api_Reservedmaterials_Go, object>(x=>x.Quantity)">QTY</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Api_Reservedmaterials_Go, object>(x=>x.Unit)">UNIT</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Api_Reservedmaterials_Go, object>(x=>x.Roll_Id)">ROLLID</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Api_Reservedmaterials_Go, object>(x=>x.Wh_Code)">WHCODE</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Api_Reservedmaterials_Go, object>(x=>x.Warehouse)">WAREHOUSE</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Api_Reservedmaterials_Go, object>(x=>x.Locationno)">LOCATION</MudTableSortLabel></MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="MoBarcode">@context.Mo_Barcode</MudTd>
-            <MudTd DataLabel="Job">@context.Job</MudTd>
-            <MudTd DataLabel="JobCode">@context.Job_Code</MudTd>
-            <MudTd DataLabel="PackID">@context.Package_Id</MudTd>
-            <MudTd DataLabel="Material">@context.Material_Code</MudTd>
-            <MudTd DataLabel="Description">@context.Material_Description</MudTd>
-            <MudTd DataLabel="Quantity">@context.Quantity</MudTd>
-            <MudTd DataLabel="Unit">@context.Unit</MudTd>
-            <MudTd DataLabel="RollID">@context.Roll_Id</MudTd>
-            <MudTd DataLabel="WhCode">@context.Wh_Code</MudTd>
-            <MudTd DataLabel="Warehouse">@context.Warehouse</MudTd>
-            <MudTd DataLabel="Location">@context.Locationno</MudTd>
+            <MudTd DataLabel="MOBARCODE">@context.Mo_Barcode</MudTd>
+            <MudTd DataLabel="JOB">@context.Job</MudTd>
+            <MudTd DataLabel="JOBCODE">@context.Job_Code</MudTd>
+            <MudTd DataLabel="PACKID">@context.Package_Id</MudTd>
+            <MudTd DataLabel="MATERIAL">@context.Material_Code</MudTd>
+            <MudTd DataLabel="DESCRIPTION">@context.Material_Description</MudTd>
+            <MudTd DataLabel="QTY">@string.Format(VarGlobals.FormatN2, context.Quantity)</MudTd>
+            <MudTd DataLabel="UNIT">@context.Unit</MudTd>
+            <MudTd DataLabel="ROLLID">@context.Roll_Id</MudTd>
+            <MudTd DataLabel="WHCODE">@context.Wh_Code</MudTd>
+            <MudTd DataLabel="WAREHOUSE">@context.Warehouse</MudTd>
+            <MudTd DataLabel="LOCATION">@context.Locationno</MudTd>
         </RowTemplate>
         <PagerContent>
             <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />

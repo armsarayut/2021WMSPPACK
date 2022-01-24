@@ -61,27 +61,27 @@ else
 
     <MudTable Items="@Elements" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<Api_Receivingorders_Go,bool>(FilterFunc)" @bind-SelectedItem="selectedItem">
         <ToolBarContent>
-            <MudText Typo="Typo.h6">Master Pallet : [ @mPalletcode ]</MudText>
+            <MudText Typo="Typo.h6">PALLET:[@mPalletcode]</MudText>
             <MudSpacer />
             <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
         </ToolBarContent>
         <HeaderContent>
-            <MudTh><MudTableSortLabel SortBy="new Func<Api_Receivingorders_Go, object>(x=>x.Lpncode)">MasterPallet</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Api_Receivingorders_Go, object>(x=>x.Package_Id)">PackID</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Api_Receivingorders_Go, object>(x=>x.Material_Code)">Material</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Api_Receivingorders_Go, object>(x=>x.Material_Description)">Description</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Api_Receivingorders_Go, object>(x=>x.Gr_Quantity)">Qty</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Api_Receivingorders_Go, object>(x=>x.Unit)">Unit</MudTableSortLabel></MudTh>
-            <MudTh>Action</MudTh>
+            <MudTh Style="width: 120px;"><MudTableSortLabel SortBy="new Func<Api_Receivingorders_Go, object>(x=>x.Lpncode)">PALLET</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Api_Receivingorders_Go, object>(x=>x.Package_Id)">PACKID</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Api_Receivingorders_Go, object>(x=>x.Material_Code)">MATERIAL</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Api_Receivingorders_Go, object>(x=>x.Material_Description)">DESCRIPTION</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Api_Receivingorders_Go, object>(x=>x.Gr_Quantity)">QTY</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Api_Receivingorders_Go, object>(x=>x.Unit)">UNIT</MudTableSortLabel></MudTh>
+            <MudTh>ACTION</MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="MasterPallet">@context.Lpncode</MudTd>
-            <MudTd DataLabel="PackID">@context.Package_Id</MudTd>
-            <MudTd DataLabel="Material">@context.Material_Code</MudTd>
-            <MudTd DataLabel="Description">@context.Material_Description</MudTd>
-            <MudTd DataLabel="Qty">@context.Gr_Quantity</MudTd>
-            <MudTd DataLabel="Unit">@context.Unit</MudTd>
-            <MudTd DataLabel="">
+            <MudTd Class="clm-row-small" DataLabel="PALLET">@context.Lpncode</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="PACKID">@context.Package_Id</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="MATERIAL">@context.Material_Code</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="DESCRIPTION">@context.Material_Description</MudTd>
+            <MudTd Class="clm-row-small" Style="text-align:right" DataLabel="QTY">@string.Format(VarGlobals.FormatN2, context.Gr_Quantity)</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="UNIT">@context.Unit</MudTd>
+            <MudTd DataLabel="ACTION">
                 <MudFab @onclick="@(()=>DeleteMap(@context.Package_Id))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small" />
             </MudTd>
         </RowTemplate>

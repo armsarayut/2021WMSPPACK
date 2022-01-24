@@ -27,14 +27,14 @@ else
         </ToolBarContent>
 
         <HeaderContent>
-            <MudTh><MudTableSortLabel SortBy="new Func<Mas_Storage_Go, object>(x=>x.Stocode)">Storeno</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Mas_Storage_Go, object>(x=>x.Stoname)">Name</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Mas_Storage_Go, object>(x=>x.Stoaddress)">Address</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Mas_Storage_Go, object>(x=>x.Stocode)">STORE</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Mas_Storage_Go, object>(x=>x.Stoname)">NAME</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Mas_Storage_Go, object>(x=>x.Stoaddress)">ADDRESS</MudTableSortLabel></MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="Storeno">@context.Stocode</MudTd>
-            <MudTd DataLabel="Name">@context.Stoname</MudTd>
-            <MudTd DataLabel="Address">@context.Stoaddress</MudTd>
+            <MudTd DataLabel="STORE">@context.Stocode</MudTd>
+            <MudTd DataLabel="NAME">@context.Stoname</MudTd>
+            <MudTd DataLabel="ADDRESS">@context.Stoaddress</MudTd>
         </RowTemplate>
         <PagerContent>
             <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />

@@ -27,12 +27,12 @@ else
         </ToolBarContent>
 
         <HeaderContent>
-            <MudTh><MudTableSortLabel SortBy="new Func<Mas_Reason_Go, object>(x=>x.Rescode)">Reason</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Mas_Reason_Go, object>(x=>x.Description)">Description</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Mas_Reason_Go, object>(x=>x.Rescode)">REASON</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Mas_Reason_Go, object>(x=>x.Description)">DESCRIPTION</MudTableSortLabel></MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="Reason">@context.Rescode</MudTd>
-            <MudTd DataLabel="Description">@context.Description</MudTd>
+            <MudTd DataLabel="REASON">@context.Rescode</MudTd>
+            <MudTd DataLabel="DESCRIPTION">@context.Description</MudTd>
         </RowTemplate>
         <PagerContent>
             <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />

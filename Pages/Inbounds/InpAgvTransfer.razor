@@ -78,13 +78,9 @@
             <div class="form-group">
                 <input style="width: 100%; height: 40px" type="text" class="form-control" @bind-value="palletcode" @onkeyup="@DoTheThing" placeholder="Input scan" />
             </div>
-            @*<MudTextField @bind-Value="palletcode" @onkeyup="DoTheThing" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.QrCodeScanner" AdornmentColor="Color.Secondary" />*@
+
         </MudItem>
     </MudGrid>
-
-    @*<MudText Typo="Typo.h6" Color="Color.Secondary" Class="mb-4">Master Pallet : [ @mPalletcode ]</MudText>
-        <MudSkeleton Animation="Animation.False" />*@
-    @*<MudText Typo="Typo.h6" Color="Color.Info" Class="mb-4">PackID : [ @mPackid ]</MudText>*@
 
     @if (Elements == null)
     {
@@ -96,31 +92,31 @@
         <MudTable Items="@Elements" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<Inb_Putaway_Go,bool>(FilterFunc)" @bind-SelectedItem="selectedItem">
             <ToolBarContent>
                 <MudHidden Breakpoint="Breakpoint.Xs">
-                    <MudText Typo="Typo.h6">Pallet : [ @mPalletcode ]</MudText>
+                    <MudText Typo="Typo.h6">PALLET:[@mPalletcode]</MudText>
                 </MudHidden>
                 <MudHidden Breakpoint="Breakpoint.Xs" Invert="true">
-                    <MudText Typo="Typo.subtitle1">Pallet : [ @mPalletcode ]</MudText>
+                    <MudText Typo="Typo.subtitle1">PALLET:[@mPalletcode]</MudText>
                 </MudHidden>
                 <MudSpacer />
                 <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
             </ToolBarContent>
             <HeaderContent>
-                <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Created)">Queue time</MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Palletno)">Masterpallet</MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Puttype)">Worktype</MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Storagearea)">Source</MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Storagebin)">Destination</MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Storagetime)">Start time</MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Completed)">End time</MudTableSortLabel></MudTh>
+                <MudTh Style="width: 190px;"><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Created)">QUEUEING</MudTableSortLabel></MudTh>
+                <MudTh Style="width: 120px;"><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Palletno)">PALLET</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Puttype)">TASKTYPE</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Storagearea)">SOURCE</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Storagebin)">DESTINATION</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Storagetime)">STARTED</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Completed)">COMPLETED</MudTableSortLabel></MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd DataLabel="Queuetime">@context.Created</MudTd>
-                <MudTd DataLabel="Masterpallet">@context.Palletno</MudTd>
-                <MudTd DataLabel="Worktype">@context.Puttype</MudTd>
-                <MudTd DataLabel="Source">@context.Storagearea</MudTd>
-                <MudTd DataLabel="Destination">@context.Storagebin</MudTd>
-                <MudTd DataLabel="Starttime">@context.Storagetime</MudTd>
-                <MudTd DataLabel="Endtime">@context.Completed</MudTd>
+                <MudTd Class="clm-row-small" DataLabel="QUEUEING">@context.Created</MudTd>
+                <MudTd Class="clm-row-small" DataLabel="PALLET">@context.Palletno</MudTd>
+                <MudTd Class="clm-row-small" DataLabel="TASKTYPE">@context.Puttype</MudTd>
+                <MudTd Class="clm-row-small" DataLabel="SOURCE">@context.Storagearea</MudTd>
+                <MudTd Class="clm-row-small" DataLabel="DESTINATION">@context.Storagebin</MudTd>
+                <MudTd Class="clm-row-small" DataLabel="STARTED">@context.Storagetime</MudTd>
+                <MudTd Class="clm-row-small" DataLabel="COMPLETED">@context.Completed</MudTd>
             </RowTemplate>
             <PagerContent>
                 <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />
@@ -171,8 +167,8 @@
             AgvService objAgv = new AgvService();
             MasterGate = await Task.Run(() => objAgv.GetAllGateAgv());
             myGatesArray = MasterGate.Select(x => x.Gate_Name).ToArray();
-            Elements = await Task.Run(() => objCS.GetAllInbPutawayGoAgv());
-            MasterQueue = ObjInboundService.GetAllInbPutawayGos();
+            //Elements = await Task.Run(() => objCS.GetAllInbPutawayGoAgv());
+            //MasterQueue = ObjInboundService.GetAllInbPutawayGos();
         }
 
         private void setstr(string str)
@@ -194,14 +190,14 @@
                 else
                 {
                     //-----------------------Production ----------------------
-                    
+
                     //mPalletcode = "";
                     //elevation = 4;
                     //Snackbar.Add("Enter Pallet please", Severity.Error);
-                    
+
                     //-----------------------Production ----------------------
 
-                    //-----------------------for Test Pypass---------------------
+                    //-----------------------for Test Pypass----------------------
                     mPalletcode = str;
                     SetTeansAGV();
                     //-----------------------for Test Pypass----------------------

@@ -52,14 +52,14 @@ else
                 <MudTh>@L["ItemName"]</MudTh>
                 <MudTh>@L["Stock"]</MudTh>
                 <MudTh>@L["SEQ"]</MudTh>
-                <MudTh>@L["PalletGo"]</MudTh>
+                <MudTh Style="width: 120px;">@L["PalletGo"]</MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd DataLabel="ItemCode">@context.Itemcode</MudTd>
-                <MudTd DataLabel="ItemName">@context.Itemname</MudTd>
-                <MudTd DataLabel="Stock">@context.Quantity</MudTd>
-                <MudTd DataLabel="SEQ">@context.Pallettag</MudTd>
-                <MudTd DataLabel="PalletGo">@context.Pallteno</MudTd>
+                <MudTd Class="clm-row-small" DataLabel="MATERIAL">@context.Itemcode</MudTd>
+                <MudTd Class="clm-row-small" DataLabel="DESCRIPTION">@context.Itemname</MudTd>
+                <MudTd Class="clm-row-small" DataLabel="STOCK" Style="text-align:right">@string.Format(VarGlobals.FormatN2, context.Quantity)</MudTd>
+                <MudTd Class="clm-row-small" DataLabel="PACKID">@context.Pallettag</MudTd>
+                <MudTd Class="clm-row-small" DataLabel="PALLET">@context.Pallteno</MudTd>
             </RowTemplate>
             <PagerContent>
                 <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />

@@ -51,24 +51,24 @@ else
             </ToolBarContent>
 
             <HeaderContent>
-                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Customer_Code)">Customer</MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Customer_Description)">Name</MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Finished_Product)">Product</MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Finished_Product_Description)">ProductName</MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Material_Code)">Material</MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Material_Description)">Description</MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Quantity)">Quantity</MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Unit)">Unit</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Customer_Code)">CUSCODE</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Customer_Description)">CUSTOMER</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Finished_Product)">PRODUCT</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Finished_Product_Description)">NAME</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Material_Code)">MATERIAL</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Material_Description)">DESCRIPTION</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Quantity)">QTY</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Unit)">UNIT</MudTableSortLabel></MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd DataLabel="Customer">@context.Customer_Code</MudTd>
-                <MudTd DataLabel="Name">@context.Customer_Description</MudTd>
-                <MudTd DataLabel="Product">@context.Finished_Product</MudTd>
-                <MudTd DataLabel="ProductName">@context.Finished_Product_Description</MudTd>
-                <MudTd DataLabel="Material">@context.Material_Code</MudTd>
-                <MudTd DataLabel="Description">@context.Material_Description</MudTd>
-                <MudTd DataLabel="Quantity">@context.Quantity</MudTd>
-                <MudTd DataLabel="Unit">@context.Unit</MudTd>
+                <MudTd DataLabel="CUSCODE">@context.Customer_Code</MudTd>
+                <MudTd DataLabel="CUSTOMER">@context.Customer_Description</MudTd>
+                <MudTd DataLabel="PRODUCT">@context.Finished_Product</MudTd>
+                <MudTd DataLabel="NAME">@context.Finished_Product_Description</MudTd>
+                <MudTd DataLabel="MATERIAL">@context.Material_Code</MudTd>
+                <MudTd DataLabel="DESCRIPTION">@context.Material_Description</MudTd>
+                <MudTd DataLabel="QTY">@string.Format(VarGlobals.FormatN2, context.Quantity)</MudTd>
+                <MudTd DataLabel="UNIT">@context.Unit</MudTd>
             </RowTemplate>
             <PagerContent>
                 <MudTablePager PageSizeOptions="new int[]{5}" />
@@ -88,22 +88,22 @@ else
             </ToolBarContent>
 
             <HeaderContent>
-                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Package_Id)">PackID</MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Material_Code)">Material</MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Material_Description)">Description</MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Wh_Code)">Warehouse</MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Warehouse)">WarehouseName</MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Quantity)">Quantity</MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Unit)">Unit</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Package_Id)">PACKID</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Material_Code)">MATERIAL</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Material_Description)">DESCRIPTION</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Wh_Code)">WHCODE</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Warehouse)">WAREHOUSE</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Quantity)">QTY</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Unit)">UNIT</MudTableSortLabel></MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd DataLabel="PackID">@context.Package_Id</MudTd>
-                <MudTd DataLabel="Material">@context.Material_Code</MudTd>
-                <MudTd DataLabel="Description">@context.Material_Description</MudTd>
-                <MudTd DataLabel="Warehouse">@context.Wh_Code</MudTd>
-                <MudTd DataLabel="WarehouseName">@context.Warehouse</MudTd>
-                <MudTd DataLabel="Quantity">@context.Quantity</MudTd>
-                <MudTd DataLabel="Unit">@context.Unit</MudTd>
+                <MudTd DataLabel="PACKID">@context.Package_Id</MudTd>
+                <MudTd DataLabel="MATERIAL">@context.Material_Code</MudTd>
+                <MudTd DataLabel="DESCRIPTION">@context.Material_Description</MudTd>
+                <MudTd DataLabel="WHCODE">@context.Wh_Code</MudTd>
+                <MudTd DataLabel="WAREHOUSE">@context.Warehouse</MudTd>
+                <MudTd DataLabel="QTY">@string.Format(VarGlobals.FormatN2, context.Quantity)</MudTd>
+                <MudTd DataLabel="UNIT">@context.Unit</MudTd>
             </RowTemplate>
             <PagerContent>
                 <MudTablePager PageSizeOptions="new int[]{5}" />
@@ -124,17 +124,17 @@ else
                 <MudTextField @bind-Value="searchStringLON" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
             </ToolBarContent>
             <HeaderContent>
-                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Finished_Product)">Product</MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Material_Code)">Material</MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Quantity)">Quantity</MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Unit)">Unit</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Finished_Product)">PRODUCT</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Material_Code)">MATERIAL</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Quantity)">QTY</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Unit)">UNIT</MudTableSortLabel></MudTh>
 
             </HeaderContent>
             <RowTemplate>
-                <MudTd DataLabel="Product">@context.Finished_Product</MudTd>
-                <MudTd DataLabel="Material">@context.Material_Code</MudTd>
-                <MudTd DataLabel="Quantity">@context.Quantity</MudTd>
-                <MudTd DataLabel="Unit">@context.Unit</MudTd>
+                <MudTd DataLabel="PRODUCT">@context.Finished_Product</MudTd>
+                <MudTd DataLabel="MATERIAL">@context.Material_Code</MudTd>
+                <MudTd DataLabel="QTY">@string.Format(VarGlobals.FormatN2, context.Quantity)</MudTd>
+                <MudTd DataLabel="UNIT">@context.Unit</MudTd>
             </RowTemplate>
             <PagerContent>
                 <MudTablePager PageSizeOptions="new int[]{5}" />
@@ -151,16 +151,16 @@ else
             </ToolBarContent>
 
             <HeaderContent>
-                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Package_Id)">PackID</MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Material_Code)">Material</MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Quantity)">Quantity</MudTableSortLabel></MudTh>
-                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Unit)">Unit</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Package_Id)">PACKID</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Material_Code)">MATERIAL</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Quantity)">QTY</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Unit)">UNIT</MudTableSortLabel></MudTh>
             </HeaderContent>
             <RowTemplate>
-                <MudTd DataLabel="PackID">@context.Package_Id</MudTd>
-                <MudTd DataLabel="Material">@context.Material_Code</MudTd>
-                <MudTd DataLabel="Quantity">@context.Quantity</MudTd>
-                <MudTd DataLabel="Unit">@context.Unit</MudTd>
+                <MudTd DataLabel="PACKID">@context.Package_Id</MudTd>
+                <MudTd DataLabel="MATERIAL">@context.Material_Code</MudTd>
+                <MudTd DataLabel="QTY">@string.Format(VarGlobals.FormatN2, context.Quantity)</MudTd>
+                <MudTd DataLabel="UNIT">@context.Unit</MudTd>
             </RowTemplate>
             <PagerContent>
                 <MudTablePager PageSizeOptions="new int[]{5}" />

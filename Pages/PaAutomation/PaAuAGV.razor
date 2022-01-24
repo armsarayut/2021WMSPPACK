@@ -57,13 +57,13 @@ else
             <MudTd DataLabel="">
                 @if (@context.Work_Status == 0)
                     {
-                    <MudChip Variant="Variant.Outlined" Color="Color.Primary">QUEUE</MudChip>
+                    <MudChip Variant="Variant.Filled" Color="Color.Primary">QUEUE</MudChip>
                     }
                     else
                     {
                     @if (@context.Work_Status == 1)
                         {
-                        <MudChip Variant="Variant.Outlined" Color="Color.Secondary">QUEUE</MudChip>
+                        <MudChip Variant="Variant.Filled" Color="Color.Secondary">QUEUE</MudChip>
                         }
                         else
                         {
@@ -75,11 +75,11 @@ else
                             {
                             @if (@context.Work_Status == 3)
                                 {
-                                <MudChip Variant="Variant.Outlined" Color="Color.Success">COMPLETE</MudChip>
+                                <MudChip Variant="Variant.Filled" Color="Color.Success">COMPLETE</MudChip>
                                 }
                                 else
                                 {
-                                <MudChip Variant="Variant.Outlined" Color="Color.Error">ERROR</MudChip>
+                                <MudChip Variant="Variant.Filled" Color="Color.Error">ERROR</MudChip>
                                 }
 
                             }

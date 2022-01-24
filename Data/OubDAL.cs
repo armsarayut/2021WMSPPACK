@@ -24,13 +24,21 @@ namespace GoWMS.Server.Data
             {
                 try
                 {
-                    NpgsqlCommand cmd = new NpgsqlCommand("select * " +
-                    "from public.sap_storeout  " +
-                    "order by idx", con)
+                    StringBuilder sql = new StringBuilder();
+                    sql.AppendLine("SELECT * ");
+                    sql.AppendLine("FROM public.sap_storeout");
+                    sql.AppendLine("WHERE status < @status");
+                    sql.AppendLine("ORDER BY idx");
+
+                    NpgsqlCommand cmd = new NpgsqlCommand(sql.ToString(), con)
                     {
                         CommandType = CommandType.Text
                     };
+
+                    cmd.Parameters.AddWithValue("@status", 3);
+
                     con.Open();
+
                     NpgsqlDataReader rdr = cmd.ExecuteReader();
                     while (rdr.Read())
                     {
@@ -104,14 +112,19 @@ namespace GoWMS.Server.Data
             {
                 try
                 {
-                    NpgsqlCommand cmd = new NpgsqlCommand("select * " +
-                    "from public.sap_storeout  " +
-                    "where (1=1)  " +
-                    "and status =0 " +
-                    "order by idx", con)
+                    StringBuilder sql = new StringBuilder();
+                    sql.AppendLine("SELECT * ");
+                    sql.AppendLine("FROM public.sap_storeout");
+                    sql.AppendLine("WHERE status = @status");
+                    sql.AppendLine("ORDER BY idx");
+
+                    NpgsqlCommand cmd = new NpgsqlCommand(sql.ToString(), con)
                     {
                         CommandType = CommandType.Text
                     };
+
+                    cmd.Parameters.AddWithValue("@status", 0);
+
                     con.Open();
                     NpgsqlDataReader rdr = cmd.ExecuteReader();
                     while (rdr.Read())

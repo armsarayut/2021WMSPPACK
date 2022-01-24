@@ -42,8 +42,8 @@ else
             <MudTh><MudTableSortLabel SortBy="new Func<Class6_7_A, object>(x=>x.W_Count)">TASKCOUNT</MudTableSortLabel></MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="">@context.W_Hour</MudTd>
-            <MudTd DataLabel="">@context.W_Count</MudTd>
+            <MudTd DataLabel="DATETIME">@Convert.ToDateTime(context.W_Hour).ToString(VarGlobals.FormatDTHM)</MudTd>
+            <MudTd DataLabel="TASKCOUNT">@context.W_Count</MudTd>
             @*
         <MudTd DataLabel="">@context.Desc_Th</MudTd>
         <MudTd DataLabel="">@context.Desc_En</MudTd>

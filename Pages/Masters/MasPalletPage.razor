@@ -27,12 +27,12 @@ else
         </ToolBarContent>
 
         <HeaderContent>
-            <MudTh><MudTableSortLabel SortBy="new Func<Mas_Pallet_Go, object>(x=>x.Palletno)">Masterpallet</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Mas_Pallet_Go, object>(x=>x.Pallettype)">Type</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Mas_Pallet_Go, object>(x=>x.Palletno)">PALLET</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Mas_Pallet_Go, object>(x=>x.Pallettype)">TYPE</MudTableSortLabel></MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="Masterpallet">@context.Palletno</MudTd>
-            <MudTd DataLabel="Type">@context.Pallettype</MudTd>
+            <MudTd DataLabel="PALLET">@context.Palletno</MudTd>
+            <MudTd DataLabel="TYPE">@context.Pallettype</MudTd>
         </RowTemplate>
         <PagerContent>
             <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />
