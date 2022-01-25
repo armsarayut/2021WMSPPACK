@@ -26,13 +26,7 @@ namespace GoWMS.Server.Data
                 try
                 {
                     StringBuilder sqlQurey = new StringBuilder();
-                    /*
-                    sqlQurey.AppendLine("select row_number() over(order by srm_no asc) AS rn");
-                    sqlQurey.AppendLine(", srm_name, srm_no, locavlt1, locavlt2 , locemp, plemp, plerr, prohloc, total, percen/100.00 AS percen");
-                    sqlQurey.AppendLine("from wcs.vrpt_shelfsummary_bytype");
-                    sqlQurey.AppendLine("order by srm_no asc");
-                    sqlQurey.AppendLine(";");
-                    */
+
                     sqlQurey.AppendLine("select row_number() over(order by srm_no asc) AS rn");
                     sqlQurey.AppendLine(", srm_name, srm_no, locavl, locemp, plemp, plerr, prohloc, total, percen");
                     sqlQurey.AppendLine("from wcs.vrpt_shelfsummary");
@@ -186,6 +180,8 @@ namespace GoWMS.Server.Data
             return lstModels;
         }
 
+      
+
 
         public bool UpdateCount(List<Sap_StoreoutInfo> listupdate)
         {
@@ -268,7 +264,7 @@ namespace GoWMS.Server.Data
             bool bRet = false;
             string sRet = "";
             Int32? iRet = 0;
-            string cmdcode = "CMD08";
+  
             using (NpgsqlConnection con = new NpgsqlConnection(connectionString))
             {
                 try
@@ -306,7 +302,6 @@ namespace GoWMS.Server.Data
             }
             return bRet;
         }
-
 
     }
 }

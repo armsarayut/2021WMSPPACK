@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using GoWMS.Server.Data;
 using GoWMS.Server.Models;
 using GoWMS.Server.Models.Oub;
+using GoWMS.Server.Models.Public;
 using Microsoft.AspNetCore.Mvc;
+
 
 namespace GoWMS.Server.Controllers
 {
@@ -65,6 +67,14 @@ namespace GoWMS.Server.Controllers
             bRet = objDAL.SetDestinationAGV(batch_no, station);
             return bRet;
         }
+
+        public List<Sap_StoreoutInfo> GetPicking(string sPallet)
+        {
+            List<Sap_StoreoutInfo> retlist = objDAL.GetPicking(sPallet).ToList();
+            return retlist;
+        }
+
+
 
     }
 }

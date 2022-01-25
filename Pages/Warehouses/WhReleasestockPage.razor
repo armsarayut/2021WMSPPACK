@@ -1,4 +1,4 @@
-﻿@page "/wh/holdstock"
+﻿@page "/wh/relesstock"
 @using GoWMS.Server.Data
 @using GoWMS.Server.Controllers
 @using GoWMS.Server.Models
@@ -116,7 +116,7 @@ else
     public bool StkGroup { get; set; }
     private bool _multiSelect = true;
 
-    private Int32 iState { get; set; } = 0;
+    private Int32 iState { get; set; } = -1;
 
     protected List<string> References { get; set; } = new List<string>();
     string mboxheader { get; set; } = "HOLD LIST";
@@ -223,7 +223,7 @@ else
 
             var ListHold = selectedItems.ToList();
 
-            ObjService.UpdateHoldStock(ListHold.ToList());
+            ObjService.UpdateReleaseStock(ListHold.ToList());
 
         }
 

@@ -74,13 +74,13 @@ else
                     <MudTh>MATERIAL</MudTh>
                     <MudTh>DESCRIPTION</MudTh>
                     <MudTh>STOCK</MudTh>
-                    <MudTh>TOTAL(PALLET)</MudTh>
+                    <MudTh>COUNT(PACK)</MudTh>
                 </HeaderContent>
                 <RowTemplate>
                     <MudTd Class="clm-row-small" DataLabel="MATERIAL">@context.Item_code</MudTd>
                     <MudTd Class="clm-row-small" DataLabel="DESCRIPTION">@context.Item_name</MudTd>
                     <MudTd Class="clm-row-small" DataLabel="STOCK" Style="text-align:right">@string.Format(VarGlobals.FormatN2, context.Totalstock)</MudTd>
-                    <MudTd Class="clm-row-small" DataLabel="TOTAL(PALLET)" Style="text-align:right">@string.Format(VarGlobals.FormatN0, context.Countpallet)</MudTd>
+                    <MudTd Class="clm-row-small" DataLabel="COUNT(PACK)" Style="text-align:right">@string.Format(VarGlobals.FormatN0, context.Countpallet)</MudTd>
                 </RowTemplate>
                 <PagerContent>
                     <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />

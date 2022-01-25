@@ -35,6 +35,16 @@ namespace GoWMS.Server.Controllers
             return objDAL.GetStockListInfo();
         }
 
+        public async Task UpdateHoldStock(List<InvStockList> liststock)
+        {
+            await objDAL.UpdateHoldStock(liststock);
+        }
+
+        public async Task UpdateReleaseStock(List<InvStockList> liststock)
+        {
+            await objDAL.UpdateReleaseStock(liststock);
+        }
+
 
     }
 }

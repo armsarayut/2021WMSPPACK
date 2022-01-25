@@ -25,10 +25,12 @@ namespace GoWMS.Server.Data
                 try
                 {
                     StringBuilder Sql = new StringBuilder();
-                    Sql.AppendLine("select row_number() over(order by  itemcode asc) AS rn, efstatus, ");
+                    
+                    Sql.AppendLine("SELECT row_number() over(order by  itemcode asc) AS rn, efstatus, ");
                     Sql.AppendLine("itemcode, itemname, quantity, pallettag, pallteno, storagearea, storagebin");
-                    Sql.AppendLine("from wms.inv_stock_go ");
-                    Sql.AppendLine("order by itemcode");
+                    Sql.AppendLine("FROM wms.inv_stock_go ");
+                    Sql.AppendLine("WHERE allocatequantity < quantity");
+                    Sql.AppendLine("ORDER BY itemcode");
 
                     NpgsqlCommand cmd = new NpgsqlCommand(Sql.ToString(), con)
                     {
@@ -75,11 +77,12 @@ namespace GoWMS.Server.Data
                 {
                     StringBuilder Sql = new StringBuilder();
 
-                    Sql.AppendLine("select row_number() over(order by itemcode asc) AS rn,");
-                    Sql.AppendLine("itemcode, itemname, sum(quantity) as totalstock, count(pallteno) as countpallet");
-                    Sql.AppendLine("from wms.inv_stock_go ");
-                    Sql.AppendLine("group by itemcode, itemname");
-                    Sql.AppendLine("order by itemcode");
+                    Sql.AppendLine("SELECT row_number() over(order by itemcode asc) AS rn,");
+                    Sql.AppendLine("itemcode, itemname, sum(quantity) as totalstock, count(pallettag) as countpallet");
+                    Sql.AppendLine("FROM wms.inv_stock_go ");
+                    Sql.AppendLine("WHERE allocatequantity < quantity");
+                    Sql.AppendLine("GROUP BY itemcode, itemname");
+                    Sql.AppendLine("ORDER BY itemcode");
 
                     NpgsqlCommand cmd = new NpgsqlCommand(Sql.ToString(), con)
                     {
@@ -278,5 +281,102 @@ namespace GoWMS.Server.Data
             }
             return lstobj;
         }
+
+        public async Task UpdateHoldStock(List<InvStockList> liststock)
+        {
+            using NpgsqlConnection con = new NpgsqlConnection(connectionString);
+            try
+            {
+                StringBuilder sql = new StringBuilder();
+                sql.AppendLine("Update wms.inv_stock_go");
+                sql.AppendLine("Set efstatus = @efstatus");
+                sql.AppendLine("Where pallettag in (");
+
+                using var cmd = new NpgsqlCommand(connection: con, cmdText: null);
+
+                int iState = -1;
+                string sParamState = "@efstatus";
+
+                cmd.Parameters.Add(new NpgsqlParameter<int>(sParamState, iState));
+
+                var i = 0;
+                foreach (var s in liststock)
+                {
+                    if (i != 0) sql.Append(",");
+                    var pallettag = "pallettag" + i.ToString();
+
+
+                    sql.Append("@").Append(pallettag);
+
+                    cmd.Parameters.Add(new NpgsqlParameter<string>(pallettag, s.Su_no));
+
+
+                    i++;
+                }
+                sql.AppendLine(")");
+
+                con.Open();
+                cmd.CommandText = sql.ToString();
+                await cmd.ExecuteNonQueryAsync();
+
+            }
+            catch (NpgsqlException ex)
+            {
+                Log.Error(ex.ToString());
+            }
+            finally
+            {
+                con.Close();
+            }
+        }
+
+        public async Task UpdateReleaseStock(List<InvStockList> liststock)
+        {
+            using NpgsqlConnection con = new NpgsqlConnection(connectionString);
+            try
+            {
+                StringBuilder sql = new StringBuilder();
+                sql.AppendLine("Update wms.inv_stock_go");
+                sql.AppendLine("Set efstatus = @efstatus");
+                sql.AppendLine("Where pallettag in (");
+
+                using var cmd = new NpgsqlCommand(connection: con, cmdText: null);
+
+                int iState = 0;
+                string sParamState = "@efstatus";
+
+                cmd.Parameters.Add(new NpgsqlParameter<int>(sParamState, iState));
+
+                var i = 0;
+                foreach (var s in liststock)
+                {
+                    if (i != 0) sql.Append(",");
+                    var pallettag = "pallettag" + i.ToString();
+
+
+                    sql.Append("@").Append(pallettag);
+
+                    cmd.Parameters.Add(new NpgsqlParameter<string>(pallettag, s.Su_no));
+
+
+                    i++;
+                }
+                sql.AppendLine(")");
+
+                con.Open();
+                cmd.CommandText = sql.ToString();
+                await cmd.ExecuteNonQueryAsync();
+
+            }
+            catch (NpgsqlException ex)
+            {
+                Log.Error(ex.ToString());
+            }
+            finally
+            {
+                con.Close();
+            }
+        }
+
     }
 }

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using GoWMS.Server.Controllers;
 using GoWMS.Server.Models.Oub;
+using GoWMS.Server.Models.Public;
 using NpgsqlTypes;
 using System.Text;
 using Serilog;
@@ -407,7 +408,7 @@ namespace GoWMS.Server.Data
                     StringBuilder sqlQurey = new StringBuilder();
                     sqlQurey.AppendLine("update public.sap_storeout");
                     sqlQurey.AppendLine("set  requisitioner = :requisitioner");
-                    sqlQurey.AppendLine("where batch_no = :batch_no ;");
+                    sqlQurey.AppendLine("where order_no = :batch_no ;");
 
                     NpgsqlCommand cmd = new NpgsqlCommand(sqlQurey.ToString(), con)
                     {
@@ -430,6 +431,54 @@ namespace GoWMS.Server.Data
                 }
             }
             return bRet;
+        }
+
+        public IEnumerable<Sap_StoreoutInfo> GetPicking(string sPallet)
+        {
+            List<Sap_StoreoutInfo> lstModels = new List<Sap_StoreoutInfo>();
+            using (NpgsqlConnection con = new NpgsqlConnection(connectionString))
+            {
+                StringBuilder sqlQurey = new StringBuilder();
+
+                sqlQurey.AppendLine("SELECT row_number() over(order by t1.item_code asc) AS rn, t1.idx, ");
+                sqlQurey.AppendLine("t1.item_code, t1.item_name, t1.request_qty, t1.unit, t1.su_no, ");
+                sqlQurey.AppendLine("t1.pallet_no, t1.stock_qty, t1.transfer_qty, t1.movement_type ");
+                sqlQurey.AppendLine("from public.sap_storeout t1");
+                sqlQurey.AppendLine("WHERE (status = @status)");
+                sqlQurey.AppendLine("AND t1.pallet_no = @pallet_no");
+                sqlQurey.AppendLine("ORDER BY t1.item_code asc ");
+                sqlQurey.AppendLine(";");
+
+                NpgsqlCommand cmd = new NpgsqlCommand(sqlQurey.ToString(), con)
+                {
+                    CommandType = CommandType.Text
+                };
+                con.Open();
+                cmd.Parameters.AddWithValue("@status", NpgsqlDbType.Integer, 3);
+                cmd.Parameters.AddWithValue("@pallet_no", NpgsqlDbType.Varchar, sPallet);
+
+                NpgsqlDataReader rdr = cmd.ExecuteReader();
+                while (rdr.Read())
+                {
+                    Sap_StoreoutInfo listRead = new Sap_StoreoutInfo
+                    {
+                        Idx = rdr["idx"] == DBNull.Value ? null : (Int64?)rdr["idx"],
+                        Bcount = false,
+                        Item_Code = rdr["item_code"].ToString(),
+                        Item_Name = rdr["item_name"].ToString(),
+                        Request_Qty = rdr["request_qty"] == DBNull.Value ? null : (decimal?)rdr["request_qty"],
+                        Unit = rdr["unit"].ToString(),
+                        Su_No = rdr["su_no"].ToString(),
+                        Pallet_No = rdr["pallet_no"].ToString(),
+                        Stock_Qty = rdr["stock_qty"] == DBNull.Value ? null : (decimal?)rdr["stock_qty"],
+                        Transfer_Qty = rdr["transfer_qty"] == DBNull.Value ? null : (decimal?)rdr["transfer_qty"],
+                        Movement_Type = rdr["movement_type"].ToString()
+                    };
+                    lstModels.Add(listRead);
+                }
+                con.Close();
+            }
+            return lstModels;
         }
 
 
