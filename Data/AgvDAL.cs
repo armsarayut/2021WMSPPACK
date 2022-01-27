@@ -539,5 +539,32 @@ namespace GoWMS.Server.Data
             return lstobj;
         }
 
+        public DataTable ApiAgvTask(string pFromDate, string pToDate)
+        {
+            DataTable vDt = new DataTable();
+            using (NpgsqlConnection con = new NpgsqlConnection(connectionString))
+            {
+                StringBuilder sql = new StringBuilder();
+                sql.AppendLine("SELECT *");
+                sql.AppendLine("FROM hagv.vgo_api_genagvschedulingtask");
+                sql.AppendLine("WHERE created between '" + pFromDate + "'::timestamp without time zone  and '" + pToDate + "'::timestamp without time zone");
+                sql.AppendLine("AND api_name='genAgvSchedulingTask'");
+                sql.AppendLine(";");
+                DataSet _ds = new DataSet();
+                using (NpgsqlCommand vCmd = new NpgsqlCommand())
+                {
+                    con.Open();
+                    vCmd.Connection = con;
+                    vCmd.CommandType = CommandType.Text;
+                    vCmd.CommandText = sql.ToString();
+                    NpgsqlDataAdapter da = new NpgsqlDataAdapter(vCmd);
+                    da.Fill(_ds);
+                    vDt = _ds.Tables[0];
+                }
+            }
+            return vDt;
+        }
+
+
     }
 }

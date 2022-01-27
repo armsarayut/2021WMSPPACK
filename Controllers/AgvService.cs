@@ -71,5 +71,12 @@ namespace GoWMS.Server.Controllers
             List<AgvRptEODStation> retlist = objDAL.GetEndofDayStation().ToList();
             return retlist;
         }
+
+        public System.Data.DataTable ApiAgvTask(DateTime pFromDate, TimeSpan pFromTime, DateTime pToDate, TimeSpan pToTime)
+        {
+            string vFromDate = pFromDate.ToString("yyyy-MM-dd") + " " + pFromTime.ToString(@"hh\:mm\:ss");
+            string vToDate = pToDate.ToString("yyyy-MM-dd") + " " + pToTime.ToString(@"hh\:mm\:ss");
+            return objDAL.ApiAgvTask(vFromDate, vToDate);
+        }
     }
 }

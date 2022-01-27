@@ -68,6 +68,7 @@ else
             <MudTh><MudTableSortLabel SortBy="new Func<Class6_7_F, object>(x=>x.W05)">STORE-OUT</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel SortBy="new Func<Class6_7_F, object>(x=>x.W101)">EMPTY-IN</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel SortBy="new Func<Class6_7_F, object>(x=>x.W102)">EMPTY-OUT</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Class6_7_F, object>(x=>x.W09)">MOVE</MudTableSortLabel></MudTh>
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="DATE">@Convert.ToDateTime(context.W_date).ToString(VarGlobals.FormatD)</MudTd>
@@ -76,6 +77,7 @@ else
             <MudTd DataLabel="STORE-OUT">@context.W05</MudTd>
             <MudTd DataLabel="EMPTY-IN">@context.W101</MudTd>
             <MudTd DataLabel="EMPTY-OUT">@context.W102</MudTd>
+            <MudTd DataLabel="MOVE">@context.W09</MudTd>
         </RowTemplate>
         <PagerContent>
             <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />

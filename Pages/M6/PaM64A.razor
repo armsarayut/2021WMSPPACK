@@ -38,7 +38,7 @@ else
         </ToolBarContent>
 
         <HeaderContent>
-            <MudTh><MudTableSortLabel SortBy="new Func<Class6_4_A, object>(x=>x.Created_Date)">DATE</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Class6_4_A, object>(x=>x.Created)">DATE</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel SortBy="new Func<Class6_4_A, object>(x=>x.Seq_No)">SEQNO</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel SortBy="new Func<Class6_4_A, object>(x=>x.Work_Type)">TASKTYPE</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel SortBy="new Func<Class6_4_A, object>(x=>x.Order_No)">ORDERNO</MudTableSortLabel></MudTh>
@@ -49,7 +49,7 @@ else
     
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="DATE">@Convert.ToDateTime(context.Created_Date).ToString(VarGlobals.FormatD)</MudTd>
+            <MudTd DataLabel="DATE">@Convert.ToDateTime(context.Created).ToString(VarGlobals.FormatD)</MudTd>
             <MudTd DataLabel="SEQNO">@context.Seq_No</MudTd>
             <MudTd DataLabel="TASKTYPE">@context.Work_Type</MudTd>
             <MudTd DataLabel="ORDERNO">@context.Order_No</MudTd>

@@ -48,5 +48,18 @@ namespace GoWMS.Server.Controllers
             List<Tas_WorksInfo> retlist = objDAL.GetASRSWork().ToList();
             return retlist;
         }
+
+        public List<Tas_Mcworks> GetASRSWorks()
+        {
+            List<Tas_Mcworks> retlist = objDAL.GetASRSWorks().ToList();
+            return retlist;
+        }
+
+        public List<Tas_Rgvworks> GetRGVWorks()
+        {
+            List<Tas_Rgvworks> retlist = objDAL.GetRGVWorks().ToList();
+            return retlist;
+        }
+
     }
 }

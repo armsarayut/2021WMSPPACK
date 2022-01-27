@@ -1,0 +1,179 @@
+﻿@page "/paau/agvtaskhist"
+
+@using GoWMS.Server.Controllers;
+@using GoWMS.Server.Data;
+
+@inject AgvService ObjAgvService;
+
+
+<MudText Typo="Typo.h6" Color="Color.Primary">@mPageHeader</MudText>
+<MudGrid>
+    @*<MudGrid Class="d-flex flex-row">
+            <MudItem Class="d-flex flex-row">
+                <MudDatePicker Label="From Date" @bind-Date="fromDate" DateFormat="dd/MM/yyyy" />
+            </MudItem>
+            <MudItem Class="d-flex flex-row">
+                <MudTimePicker Label="From Time" @bind-Time="fromTime" />
+            </MudItem>
+        </MudGrid>
+        <MudGrid Class="">
+            <MudItem Class="d-flex flex-row">
+                <MudDatePicker Label="To Date" @bind-Date="fromDate" DateFormat="dd/MM/yyyy" />
+            </MudItem>
+            <MudItem Class="d-flex flex-row">
+                <MudTimePicker Label="To Time" @bind-Time="fromTime" />
+            </MudItem>
+        </MudGrid>*@
+    <MudItem Class="d-flex flex-row">
+        <MudItem>
+            <MudDatePicker Class="" Label="From Date" @bind-Date="fromDate" DateFormat="@VarGlobals.FormatD" />
+        </MudItem>
+        <MudItem>
+            <MudTimePicker Class="px-2" Label="From Time" @bind-Time="fromTime" />
+        </MudItem>
+    </MudItem>
+    <MudItem Class="d-flex flex-row">
+        <MudItem>
+            <MudDatePicker Class="" Label="To Date" @bind-Date="toDate" DateFormat="@VarGlobals.FormatD" />
+        </MudItem>
+        <MudItem>
+            <MudTimePicker Class="px-2" Label="To Time" @bind-Time="toTime" />
+        </MudItem>
+    </MudItem>
+    <MudItem Class="d-flex flex-row align-self-end">
+        <MudButton OnClick="OnclickSearch" Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Search" Size="Size.Medium">Search</MudButton>
+    </MudItem>
+</MudGrid>
+<MudGrid Class="py-2">
+    <MudTable Items="@Elements"
+              FixedHeader="@fixed_header"
+              FixedFooter="@fixed_footer"
+              Height="@(fixed_header || fixed_footer ? "500px" : "")"
+              Dense="@dense"
+              Hover="@hover"
+              Bordered="@bordered" Striped="@striped" Filter="new Func<PageModel, bool>(FilterFunc)" Style="width:100%;">
+        <ToolBarContent>
+            <MudToolBarSpacer />
+            <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh>Datetime</MudTh>
+            <MudTh>TaskCode</MudTh>
+            <MudTh>Soruce</MudTh>
+            <MudTh>Destination</MudTh>
+            <MudTh>HTTP Reponse</MudTh>
+            <MudTh>Message</MudTh>
+            <MudTh>State</MudTh>
+            <MudTh>Status</MudTh>
+            <MudTh>API</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            @{
+                if (Convert.ToInt16(context.code) > 0 || context.http_response_code != "OK")
+                {
+                    textClass = "color:red; font-weight: bold; width: 190px;";
+                }
+                else
+                {
+                    textClass = "width: 190px;";
+                }
+            }
+            <MudTd DataLabel="Datetime" Style="@textClass" Class="">@Convert.ToDateTime(context.created).ToString(VarGlobals.FormatDTHM)</MudTd>
+            <MudTd DataLabel="TaskCode"  Style="@textClass">@context.task_code</MudTd>
+            <MudTd DataLabel="Soruce"  Style="@textClass">@context.gate_source</MudTd>
+            <MudTd DataLabel="Destination"  Style="@textClass">@context.gate_dest</MudTd>
+            <MudTd DataLabel="HTTP Reponse"  Style="@textClass">@context.http_response_code</MudTd>
+            <MudTd DataLabel="Message" Style="@textClass">@context.message</MudTd>
+            <MudTd DataLabel="State" Style="@textClass">@context.code</MudTd>
+            <MudTd DataLabel="Status" Style="@textClass">@context.code_desc</MudTd>
+            <MudTd DataLabel="API"Style="@textClass">@context.api_name</MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager PageSizeOptions="new int[] { 10, 20, 50, 100 }" />
+        </PagerContent>
+    </MudTable>
+</MudGrid>
+
+<style type="text/css">
+    bold-red {
+        color: red;
+        font-weight: bold;
+    }
+</style>
+
+@code {
+    class PageModel
+    {
+        public DateTime created { get; set; }
+        public string api_name { get; set; }
+        public string http_response_code { get; set; }
+        public string message { get; set; }
+        public string code { get; set; }
+        public string code_desc { get; set; }
+        public string task_code { get; set; }
+        public string gate_source { get; set; }
+        public string gate_dest { get; set; }
+        public string task_typ { get; set; }
+    }
+    private string mPageHeader = "AGV-Task";
+    DateTime? fromDate = DateTime.Today;
+    TimeSpan? fromTime = DateTime.Now.AddHours(-1).TimeOfDay;
+    DateTime? toDate = DateTime.Today;
+    TimeSpan? toTime = DateTime.Now.TimeOfDay;
+    string textClass = "";
+    private bool dense = true;
+    private bool hover = true;
+    private bool striped = true;
+    private bool bordered = false;
+    private bool fixed_header = true;
+    private bool fixed_footer = true;
+    private string searchString = "";
+
+    List<PageModel> Elements = new List<PageModel>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        DbGetData();
+    }
+    bool FilterFunc(PageModel element)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.api_name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.code.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.code_desc.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.http_response_code.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.message.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        return false;
+    }
+    async void OnclickSearch()
+    {
+        DbGetData();
+        StateHasChanged();
+    }
+    void DbGetData()
+    {
+        System.Data.DataTable vDt = ObjAgvService.ApiAgvTask(fromDate.Value, fromTime.Value, toDate.Value, toTime.Value);
+        Elements = new List<PageModel>();
+        for (int i = 0; i < vDt.Rows.Count; i++)
+        {
+            PageModel vTemp = new PageModel();
+            vTemp.api_name = vDt.Rows[i]["api_name"].ToString();
+            vTemp.code = vDt.Rows[i]["code"].ToString();
+            vTemp.code_desc = vDt.Rows[i]["code_desc"].ToString();
+            vTemp.created = Convert.ToDateTime(vDt.Rows[i]["created"].ToString());
+            vTemp.gate_dest = vDt.Rows[i]["gate_dest"].ToString();
+            vTemp.gate_source = vDt.Rows[i]["gate_source"].ToString();
+            vTemp.message = vDt.Rows[i]["message"].ToString();
+            vTemp.task_code = vDt.Rows[i]["task_code"].ToString();
+            vTemp.task_typ = vDt.Rows[i]["task_typ"].ToString();
+            vTemp.http_response_code = vDt.Rows[i]["http_response_code"].ToString();
+            Elements.Add(vTemp);
+        }
+    }
+}

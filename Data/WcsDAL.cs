@@ -322,7 +322,168 @@ namespace GoWMS.Server.Data
             return lstobj;
         }
 
+        public IEnumerable<Tas_Mcworks> GetASRSWorks()
+        {
+            List<Tas_Mcworks> lstobj = new List<Tas_Mcworks>();
+            using (NpgsqlConnection con = new NpgsqlConnection(connectionString))
+            {
+                try
+                {
+                    StringBuilder sql = new StringBuilder();
+                    sql.AppendLine("SELECT idx, created, entity_lock, modified, client_id, client_ip");
+                    sql.AppendLine(", lpncode, work_code, work_status, work_id");
+                    sql.AppendLine(", srm_no, srm_from, srm_to, srm_status");
+                    sql.AppendLine(", rgv_no, rgv_from, rgv_to, rgv_status");
+                    sql.AppendLine(", cvy_no, cvy_from, cvy_to, cvy_status");
+                    sql.AppendLine(", pallet_no, pallet_hight, pallet_width, pallet_size");
+                    sql.AppendLine(", ctime, stime, etime, gate_out, work_priority");
+                    sql.AppendLine("FROM wcs.tas_mcworks");
+                    sql.AppendLine("order by ctime");
 
+                    NpgsqlCommand cmd = new NpgsqlCommand(sql.ToString(), con)
+                    {
+                        CommandType = CommandType.Text
+                    };
+                    con.Open();
+
+
+                    NpgsqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+
+                        Tas_Mcworks objrd = new Tas_Mcworks
+                        {
+                            Idx = rdr["idx"] == DBNull.Value ? null : (Int64?)rdr["idx"],
+                            Created = rdr["created"] == DBNull.Value ? null : (DateTime?)rdr["created"],
+                            Entity_Lock = rdr["entity_lock"] == DBNull.Value ? null : (Int32?)rdr["entity_lock"],
+                            Modified = rdr["modified"] == DBNull.Value ? null : (DateTime?)rdr["modified"],
+                            Client_Id = rdr["client_id"] == DBNull.Value ? null : (Int64?)rdr["client_id"],
+                            Client_Ip = rdr["client_ip"].ToString(),
+                            Lpncode = rdr["lpncode"].ToString(),
+                            Work_Code = rdr["work_code"].ToString(),
+                            Work_Status = rdr["work_status"] == DBNull.Value ? null : (Int32?)rdr["work_status"],
+                            Work_Id = rdr["work_id"] == DBNull.Value ? null : (Int64?)rdr["work_id"],
+                            Srm_No = rdr["srm_no"] == DBNull.Value ? null : (Int32?)rdr["srm_no"],
+                            Srm_From = rdr["srm_from"] == DBNull.Value ? null : (Int32?)rdr["srm_from"],
+                            Srm_To = rdr["srm_to"] == DBNull.Value ? null : (Int32?)rdr["srm_to"],
+                            Srm_Status = rdr["srm_status"] == DBNull.Value ? null : (Int32?)rdr["srm_status"],
+
+                            Rgv_No = rdr["rgv_no"] == DBNull.Value ? null : (Int32?)rdr["rgv_no"],
+                            Rgv_From = rdr["rgv_from"] == DBNull.Value ? null : (Int32?)rdr["rgv_from"],
+                            Rgv_To = rdr["rgv_to"] == DBNull.Value ? null : (Int32?)rdr["rgv_to"],
+                            Rgv_Status = rdr["rgv_status"] == DBNull.Value ? null : (Int32?)rdr["rgv_status"],
+
+                            Cvy_No = rdr["cvy_no"] == DBNull.Value ? null : (Int32?)rdr["cvy_no"],
+                            Cvy_From = rdr["cvy_from"] == DBNull.Value ? null : (Int32?)rdr["cvy_from"],
+                            Cvy_To = rdr["cvy_to"] == DBNull.Value ? null : (Int32?)rdr["cvy_to"],
+                            Cvy_Status = rdr["cvy_status"] == DBNull.Value ? null : (Int32?)rdr["cvy_status"],
+
+                            Pallet_No = rdr["pallet_no"] == DBNull.Value ? null : (Int32?)rdr["pallet_no"],
+                            Pallet_Hight = rdr["pallet_hight"] == DBNull.Value ? null : (Int32?)rdr["pallet_hight"],
+                            Pallet_Width = rdr["pallet_width"] == DBNull.Value ? null : (Int32?)rdr["pallet_width"],
+                            Pallet_Size = rdr["pallet_size"] == DBNull.Value ? null : (Int32?)rdr["pallet_size"],
+
+
+
+                            Ctime = rdr["ctime"] == DBNull.Value ? null : (DateTime?)rdr["ctime"],
+                            Stime = rdr["stime"] == DBNull.Value ? null : (DateTime?)rdr["stime"],
+                            Etime = rdr["etime"] == DBNull.Value ? null : (DateTime?)rdr["etime"],
+                            Gate_Out = rdr["gate_out"] == DBNull.Value ? null : (Int32?)rdr["gate_out"],
+                            Work_Priority = rdr["work_priority"] == DBNull.Value ? null : (Int32?)rdr["work_priority"]
+
+                        };
+                        lstobj.Add(objrd);
+                    }
+                }
+                catch (NpgsqlException ex)
+                {
+                    Log.Error(ex.ToString());
+                }
+                finally
+                {
+                    con.Close();
+                }
+            }
+            return lstobj;
+        }
+
+        public IEnumerable<Tas_Rgvworks> GetRGVWorks()
+        {
+            List<Tas_Rgvworks> lstobj = new List<Tas_Rgvworks>();
+            using (NpgsqlConnection con = new NpgsqlConnection(connectionString))
+            {
+                try
+                {
+                    StringBuilder sql = new StringBuilder();
+                    sql.AppendLine("SELECT idx, created, entity_lock, modified, client_id, client_ip");
+                    sql.AppendLine(", lpncode, work_code, work_status, work_id");
+                    sql.AppendLine(", rgv_no, rgv_from, rgv_to, rgv_status");
+                    sql.AppendLine(", cvy_no, cvy_from, cvy_to, cvy_status");
+                    sql.AppendLine(", pallet_no, pallet_hight, pallet_width, pallet_size");
+                    sql.AppendLine(", ctime, stime, etime, gate_out, work_priority");
+                    sql.AppendLine("FROM wcs.tas_rgvworks");
+                    sql.AppendLine("order by ctime");
+
+                    NpgsqlCommand cmd = new NpgsqlCommand(sql.ToString(), con)
+                    {
+                        CommandType = CommandType.Text
+                    };
+                    con.Open();
+
+
+                    NpgsqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+
+                        Tas_Rgvworks objrd = new Tas_Rgvworks
+                        {
+                            Idx = rdr["idx"] == DBNull.Value ? null : (Int64?)rdr["idx"],
+                            Created = rdr["created"] == DBNull.Value ? null : (DateTime?)rdr["created"],
+                            Entity_Lock = rdr["entity_lock"] == DBNull.Value ? null : (Int32?)rdr["entity_lock"],
+                            Modified = rdr["modified"] == DBNull.Value ? null : (DateTime?)rdr["modified"],
+                            Client_Id = rdr["client_id"] == DBNull.Value ? null : (Int64?)rdr["client_id"],
+                            Client_Ip = rdr["client_ip"].ToString(),
+                            Lpncode = rdr["lpncode"].ToString(),
+                            Work_Code = rdr["work_code"].ToString(),
+                            Work_Status = rdr["work_status"] == DBNull.Value ? null : (Int32?)rdr["work_status"],
+                            Work_Id = rdr["work_id"] == DBNull.Value ? null : (Int64?)rdr["work_id"],
+                          
+                            Rgv_No = rdr["rgv_no"] == DBNull.Value ? null : (Int32?)rdr["rgv_no"],
+                            Rgv_From = rdr["rgv_from"] == DBNull.Value ? null : (Int32?)rdr["rgv_from"],
+                            Rgv_To = rdr["rgv_to"] == DBNull.Value ? null : (Int32?)rdr["rgv_to"],
+                            Rgv_Status = rdr["rgv_status"] == DBNull.Value ? null : (Int32?)rdr["rgv_status"],
+
+                            Cvy_No = rdr["cvy_no"] == DBNull.Value ? null : (Int32?)rdr["cvy_no"],
+                            Cvy_From = rdr["cvy_from"] == DBNull.Value ? null : (Int32?)rdr["cvy_from"],
+                            Cvy_To = rdr["cvy_to"] == DBNull.Value ? null : (Int32?)rdr["cvy_to"],
+                            Cvy_Status = rdr["cvy_status"] == DBNull.Value ? null : (Int32?)rdr["cvy_status"],
+
+                            Pallet_No = rdr["pallet_no"] == DBNull.Value ? null : (Int32?)rdr["pallet_no"],
+                            Pallet_Hight = rdr["pallet_hight"] == DBNull.Value ? null : (Int32?)rdr["pallet_hight"],
+                            Pallet_Width = rdr["pallet_width"] == DBNull.Value ? null : (Int32?)rdr["pallet_width"],
+                            Pallet_Size = rdr["pallet_size"] == DBNull.Value ? null : (Int32?)rdr["pallet_size"],
+
+                            Ctime = rdr["ctime"] == DBNull.Value ? null : (DateTime?)rdr["ctime"],
+                            Stime = rdr["stime"] == DBNull.Value ? null : (DateTime?)rdr["stime"],
+                            Etime = rdr["etime"] == DBNull.Value ? null : (DateTime?)rdr["etime"],
+                            Gate_Out = rdr["gate_out"] == DBNull.Value ? null : (Int32?)rdr["gate_out"],
+                            Work_Priority = rdr["work_priority"] == DBNull.Value ? null : (Int32?)rdr["work_priority"]
+
+                        };
+                        lstobj.Add(objrd);
+                    }
+                }
+                catch (NpgsqlException ex)
+                {
+                    Log.Error(ex.ToString());
+                }
+                finally
+                {
+                    con.Close();
+                }
+            }
+            return lstobj;
+        }
 
     }
 }
