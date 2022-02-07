@@ -481,6 +481,295 @@ namespace GoWMS.Server.Data
             return lstModels;
         }
 
+        public IEnumerable<Sap_StoreoutInfo> GetPickingID(string SPackID)
+        {
+            List<Sap_StoreoutInfo> lstModels = new List<Sap_StoreoutInfo>();
+            using (NpgsqlConnection con = new NpgsqlConnection(connectionString))
+            {
+                StringBuilder sqlQurey = new StringBuilder();
+
+                sqlQurey.AppendLine("SELECT row_number() over(order by t1.item_code asc) AS rn, t1.idx, ");
+                sqlQurey.AppendLine("t1.item_code, t1.item_name, t1.request_qty, t1.unit, t1.su_no, ");
+                sqlQurey.AppendLine("t1.pallet_no, t1.stock_qty, t1.transfer_qty, t1.movement_type ");
+                sqlQurey.AppendLine("from public.sap_storeout t1");
+                sqlQurey.AppendLine("WHERE (status = @status)");
+                sqlQurey.AppendLine("AND t1.su_no = @su_no");
+                sqlQurey.AppendLine("ORDER BY t1.item_code asc ");
+                sqlQurey.AppendLine(";");
+
+                NpgsqlCommand cmd = new NpgsqlCommand(sqlQurey.ToString(), con)
+                {
+                    CommandType = CommandType.Text
+                };
+                con.Open();
+                cmd.Parameters.AddWithValue("@status", NpgsqlDbType.Integer, 3);
+                cmd.Parameters.AddWithValue("@su_no", NpgsqlDbType.Varchar, SPackID);
+
+                NpgsqlDataReader rdr = cmd.ExecuteReader();
+                while (rdr.Read())
+                {
+                    Sap_StoreoutInfo listRead = new Sap_StoreoutInfo
+                    {
+                        Idx = rdr["idx"] == DBNull.Value ? null : (Int64?)rdr["idx"],
+                        Bcount = false,
+                        Item_Code = rdr["item_code"].ToString(),
+                        Item_Name = rdr["item_name"].ToString(),
+                        Request_Qty = rdr["request_qty"] == DBNull.Value ? null : (decimal?)rdr["request_qty"],
+                        Unit = rdr["unit"].ToString(),
+                        Su_No = rdr["su_no"].ToString(),
+                        Pallet_No = rdr["pallet_no"].ToString(),
+                        Stock_Qty = rdr["stock_qty"] == DBNull.Value ? null : (decimal?)rdr["stock_qty"],
+                        Transfer_Qty = rdr["transfer_qty"] == DBNull.Value ? null : (decimal?)rdr["transfer_qty"],
+                        Movement_Type = rdr["movement_type"].ToString()
+                    };
+                    lstModels.Add(listRead);
+                }
+                con.Close();
+            }
+            return lstModels;
+        }
+
+        public IEnumerable<Oub_Delivery_Go> GetDeliveryAll()
+        {
+            List<Oub_Delivery_Go> lstModels = new List<Oub_Delivery_Go>();
+            using (NpgsqlConnection con = new NpgsqlConnection(connectionString))
+            {
+                StringBuilder sqlQurey = new StringBuilder();
+
+                sqlQurey.AppendLine("SELECT efidx, efstatus, created, modified, innovator, device");
+                sqlQurey.AppendLine(", package_id, roll_id, material_code, material_description ");
+                sqlQurey.AppendLine(", matelement, quantity, picked, unit, wh_code, warehouse");
+                sqlQurey.AppendLine(", locationno, job, job_code, customer_code, customer_description");
+                sqlQurey.AppendLine(", finished_product, finished_product_description");
+                sqlQurey.AppendLine(", mo_barcode, dotype, apiid, toagvstation, refuuid");
+                sqlQurey.AppendLine(", pallet_no, stockqty, deliveryto");
+                sqlQurey.AppendLine("FROM wms.oub_delivery_go");
+                //sqlQurey.AppendLine("WHERE pallet_no = @pallet_no");
+                sqlQurey.AppendLine("ORDER BY package_id ASC");
+                sqlQurey.AppendLine(";");
+
+                NpgsqlCommand cmd = new NpgsqlCommand(sqlQurey.ToString(), con)
+                {
+                    CommandType = CommandType.Text
+                };
+
+                //cmd.Parameters.AddWithValue("@pallet_no", NpgsqlDbType.Varchar, sPallet);
+
+                con.Open();
+
+
+                NpgsqlDataReader rdr = cmd.ExecuteReader();
+                while (rdr.Read())
+                {
+                    Oub_Delivery_Go listRead = new Oub_Delivery_Go
+                    {
+
+                        Efidx = rdr["efidx"] == DBNull.Value ? null : (long?)rdr["efidx"],
+                        Efstatus = rdr["efstatus"] == DBNull.Value ? null : (Int32?)rdr["efstatus"],
+                        Created = rdr["created"] == DBNull.Value ? null : (DateTime?)rdr["created"],
+                        Modified = rdr["modified"] == DBNull.Value ? null : (DateTime?)rdr["modified"],
+                        Innovator = rdr["innovator"] == DBNull.Value ? null : (long?)rdr["innovator"],
+                        Device = rdr["device"].ToString(),
+                        Package_Id = rdr["package_id"].ToString(),
+                        Roll_Id = rdr["roll_id"].ToString(),
+                        Material_Code = rdr["material_code"].ToString(),
+                        Material_Description = rdr["material_description"].ToString(),
+                        Matelement = rdr["matelement"].ToString(),
+                        Quantity = rdr["quantity"] == DBNull.Value ? null : (Decimal?)rdr["quantity"],
+                        Picked = rdr["picked"] == DBNull.Value ? null : (Decimal?)rdr["picked"],
+                        Unit = rdr["unit"].ToString(),
+                        Wh_Code = rdr["wh_code"].ToString(),
+                        Warehouse = rdr["warehouse"].ToString(),
+                        Locationno = rdr["locationno"].ToString(),
+                        Job = rdr["job"].ToString(),
+                        Job_Code = rdr["job_code"].ToString(),
+                        Customer_Code = rdr["customer_code"].ToString(),
+                        Customer_Description = rdr["customer_description"].ToString(),
+                        Finished_Product = rdr["finished_product"].ToString(),
+                        Finished_Product_Description = rdr["finished_product_description"].ToString(),
+                        Mo_Barcode = rdr["mo_barcode"].ToString(),
+                        Dotype = rdr["dotype"].ToString(),
+                        Apiid = rdr["apiid"] == DBNull.Value ? null : (long?)rdr["apiid"],
+                        Toagvstation = rdr["toagvstation"] == DBNull.Value ? null : (long?)rdr["toagvstation"],
+                        Refuuid = rdr["refuuid"].ToString(),
+                        Pallet_No = rdr["pallet_no"].ToString(),
+                        Stockqty = rdr["stockqty"] == DBNull.Value ? null : (Decimal?)rdr["stockqty"],
+                        Deliveryto = rdr["deliveryto"].ToString()
+                    };
+                    lstModels.Add(listRead);
+                }
+                con.Close();
+            }
+            return lstModels;
+        }
+
+
+        public IEnumerable<Oub_Delivery_Go> GetDeliveryList(string sPallet)
+        {
+            List<Oub_Delivery_Go> lstModels = new List<Oub_Delivery_Go>();
+            using (NpgsqlConnection con = new NpgsqlConnection(connectionString))
+            {
+                StringBuilder sqlQurey = new StringBuilder();
+
+                sqlQurey.AppendLine("SELECT efidx, efstatus, created, modified, innovator, device");
+                sqlQurey.AppendLine(", package_id, roll_id, material_code, material_description ");
+                sqlQurey.AppendLine(", matelement, quantity, picked, unit, wh_code, warehouse");
+                sqlQurey.AppendLine(", locationno, job, job_code, customer_code, customer_description");
+                sqlQurey.AppendLine(", finished_product, finished_product_description");
+                sqlQurey.AppendLine(", mo_barcode, dotype, apiid, toagvstation, refuuid");
+                sqlQurey.AppendLine(", pallet_no, stockqty, deliveryto");
+                sqlQurey.AppendLine("FROM wms.oub_delivery_go");
+                sqlQurey.AppendLine("WHERE pallet_no = @pallet_no");
+                sqlQurey.AppendLine("ORDER BY package_id ASC");
+                sqlQurey.AppendLine(";");
+
+                NpgsqlCommand cmd = new NpgsqlCommand(sqlQurey.ToString(), con)
+                {
+                    CommandType = CommandType.Text
+                };
+
+                cmd.Parameters.AddWithValue("@pallet_no", NpgsqlDbType.Varchar, sPallet);
+
+                con.Open();
+              
+
+                NpgsqlDataReader rdr = cmd.ExecuteReader();
+                while (rdr.Read())
+                {
+                    Oub_Delivery_Go listRead = new Oub_Delivery_Go
+                    {
+            
+                        Efidx = rdr["efidx"] == DBNull.Value ? null : (long?)rdr["efidx"],
+                        Efstatus = rdr["efstatus"] == DBNull.Value ? null : (Int32?)rdr["efstatus"],
+                        Created = rdr["created"] == DBNull.Value ? null : (DateTime?)rdr["created"],
+                        Modified = rdr["modified"] == DBNull.Value ? null : (DateTime?)rdr["modified"],
+                        Innovator = rdr["innovator"] == DBNull.Value ? null : (long?)rdr["innovator"],
+                        Device = rdr["device"].ToString(),
+                        Package_Id = rdr["package_id"].ToString(),
+                        Roll_Id = rdr["roll_id"].ToString(),
+                        Material_Code = rdr["material_code"].ToString(),
+                        Material_Description = rdr["material_description"].ToString(),
+                        Matelement = rdr["matelement"].ToString(),
+                        Quantity  = rdr["quantity"] == DBNull.Value ? null : (Decimal?)rdr["quantity"],
+                        Picked = rdr["picked"] == DBNull.Value ? null : (Decimal?)rdr["picked"],
+                        Unit = rdr["unit"].ToString(),
+                        Wh_Code = rdr["wh_code"].ToString(),
+                        Warehouse = rdr["warehouse"].ToString(),
+                        Locationno = rdr["locationno"].ToString(),
+                        Job = rdr["job"].ToString(),
+                        Job_Code =  rdr["job_code"].ToString(),
+                        Customer_Code = rdr["customer_code"].ToString(),
+                        Customer_Description = rdr["customer_description"].ToString(),
+                        Finished_Product = rdr["finished_product"].ToString(),
+                        Finished_Product_Description = rdr["finished_product_description"].ToString(),
+                        Mo_Barcode = rdr["mo_barcode"].ToString(),
+                        Dotype = rdr["dotype"].ToString(),
+                        Apiid = rdr["apiid"] == DBNull.Value ? null : (long?)rdr["apiid"],
+                        Toagvstation = rdr["toagvstation"] == DBNull.Value ? null : (long?)rdr["toagvstation"],
+                        Refuuid = rdr["refuuid"].ToString(),
+                        Pallet_No = rdr["pallet_no"].ToString(),
+                        Stockqty = rdr["stockqty"] == DBNull.Value ? null : (Decimal?)rdr["stockqty"],
+                        Deliveryto = rdr["deliveryto"].ToString()
+                    };
+                    lstModels.Add(listRead);
+                }
+                con.Close();
+            }
+            return lstModels;
+        }
+
+        public void SetConsolMappallet(string pallet, string packid)
+        {
+            Int32? iRet = 0;
+            string sRet = "Calling";
+            NpgsqlConnection con = new NpgsqlConnection(connectionString);
+            try
+            {
+                con.Open();
+                StringBuilder sql = new StringBuilder();
+                sql.AppendLine("Call wms.poc_oub_mappalletconsol(");
+                sql.AppendLine("@spalletno, @spackid, @retchk, @retmsg)");
+                NpgsqlCommand cmd = new NpgsqlCommand(sql.ToString(), con)
+                {
+                    CommandType = CommandType.Text
+                };
+
+                cmd.Parameters.AddWithValue("@spalletno", pallet);
+                cmd.Parameters.AddWithValue("@spackid", packid);
+                cmd.Parameters.AddWithValue("@retchk", iRet);
+                cmd.Parameters.AddWithValue("@retmsg", sRet);
+                NpgsqlDataReader rdr = cmd.ExecuteReader();
+                while (rdr.Read())
+                {
+                    iRet = rdr["retchk"] == DBNull.Value ? null : (Int32?)rdr["retchk"];
+                    sRet = rdr["retmsg"].ToString();
+                }
+            }
+            catch (NpgsqlException ex)
+            {
+                Log.Error(ex.ToString());
+            }
+            finally
+            {
+                con.Close();
+            }
+        }
+
+        public void CancelConsolBypack(string pack)
+        {
+            using NpgsqlConnection con = new NpgsqlConnection(connectionString);
+            try
+            {
+                StringBuilder sql = new StringBuilder();
+                sql.AppendLine("delete from wms.oub_delivery_go");
+                sql.AppendLine("Where package_id = @Pack ");
+
+                NpgsqlCommand cmd = new NpgsqlCommand(sql.ToString(), con)
+                {
+                    CommandType = CommandType.Text
+                };
+
+                cmd.Parameters.AddWithValue("@Pack", pack);
+                con.Open();
+                cmd.ExecuteNonQuery();
+            }
+            catch (NpgsqlException ex)
+            {
+                Log.Error(ex.ToString());
+            }
+            finally
+            {
+                con.Close();
+            }
+        }
+
+        public void CancelConsolByID(Int64 pack)
+        {
+            using NpgsqlConnection con = new NpgsqlConnection(connectionString);
+            try
+            {
+                StringBuilder sql = new StringBuilder();
+                sql.AppendLine("delete from wms.oub_delivery_go");
+                sql.AppendLine("Where efidx = @efidx ");
+
+                NpgsqlCommand cmd = new NpgsqlCommand(sql.ToString(), con)
+                {
+                    CommandType = CommandType.Text
+                };
+
+                cmd.Parameters.AddWithValue("@efidx", pack);
+                con.Open();
+                cmd.ExecuteNonQuery();
+            }
+            catch (NpgsqlException ex)
+            {
+                Log.Error(ex.ToString());
+            }
+            finally
+            {
+                con.Close();
+            }
+        }
 
 
     }

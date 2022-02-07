@@ -119,6 +119,13 @@ namespace GoWMS.Server.Controllers
             return sret;
         }
 
+        public string SetPickStation(string jsonLon, string jsonRes, DateTime DeliverDate, string sdestination, ref Int32 iret, ref string sret)
+        {
+            objDAL.SetPickingByStation(jsonLon, jsonRes, DeliverDate, sdestination, ref iret, ref sret);
+            return sret;
+        }
+
+
         public string SetPickUnplaned(string jsonRes, ref Int32 iret, ref string sret)
         {
             objDAL.SetPickingUnplaned(jsonRes, ref iret, ref sret);

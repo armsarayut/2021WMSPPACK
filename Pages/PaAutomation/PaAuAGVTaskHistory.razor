@@ -8,22 +8,7 @@
 
 <MudText Typo="Typo.h6" Color="Color.Primary">@mPageHeader</MudText>
 <MudGrid>
-    @*<MudGrid Class="d-flex flex-row">
-            <MudItem Class="d-flex flex-row">
-                <MudDatePicker Label="From Date" @bind-Date="fromDate" DateFormat="dd/MM/yyyy" />
-            </MudItem>
-            <MudItem Class="d-flex flex-row">
-                <MudTimePicker Label="From Time" @bind-Time="fromTime" />
-            </MudItem>
-        </MudGrid>
-        <MudGrid Class="">
-            <MudItem Class="d-flex flex-row">
-                <MudDatePicker Label="To Date" @bind-Date="fromDate" DateFormat="dd/MM/yyyy" />
-            </MudItem>
-            <MudItem Class="d-flex flex-row">
-                <MudTimePicker Label="To Time" @bind-Time="fromTime" />
-            </MudItem>
-        </MudGrid>*@
+
     <MudItem Class="d-flex flex-row">
         <MudItem>
             <MudDatePicker Class="" Label="From Date" @bind-Date="fromDate" DateFormat="@VarGlobals.FormatD" />

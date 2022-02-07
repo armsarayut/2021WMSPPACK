@@ -7,6 +7,7 @@
 @using System.Globalization
 @using System.Reflection
 @using System.Text.Json
+@using GoWMS.Server.Models.Hagv
 
 @inject ErpApiService ObjApiService
 @inject ISnackbar Snackbar
@@ -32,13 +33,27 @@ else
         </MudItem>
 
         <MudItem xs="12" sm="6" md="4">
+            @if (myGatesArray != null)
+            {
+            <MudSelect T="string"
+                       Label="Delivery Station"
+                       @bind-Value="destvalue">
+                @foreach (var state in myGatesArray)
+                    {
+                <MudSelectItem T="string" Value="@state">@state</MudSelectItem>
+                    }
+            </MudSelect>
+            }
+        </MudItem>
+
+        <MudItem xs="12" sm="6" md="4">
             <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Save" Style="background-color: limegreen; color: white; width: 200px; height: 30px;">
                 Set Picking
             </MudButton>
         </MudItem>
     </MudGrid>
 
-    <br/>
+    <br />
 
     <MudHidden Breakpoint="Breakpoint.Xs">
         <MudTable Items="@Elements.Where(a => a.Dotype == @_doType1 && @_matfilter.Any(prefix => a.Material_Code.ToString().StartsWith(prefix)))" MultiSelection="true" @bind-SelectedItems="selectLON" Hover="@hover"
@@ -207,6 +222,11 @@ else
     private HashSet<Api_Deliveryorder_Go> selectLON = new HashSet<Api_Deliveryorder_Go>();
     private HashSet<Api_Deliveryorder_Go> selectRES = new HashSet<Api_Deliveryorder_Go>();
     private IEnumerable<Api_Deliveryorder_Go> Elements = new List<Api_Deliveryorder_Go>();
+
+    private IEnumerable<Set_Agv_Gate> MasterGate = new List<Set_Agv_Gate>();
+    private string destvalue { get; set; }
+    public string[] myGatesArray;
+
     public int elevation = 0;
 
     protected override async Task OnInitializedAsync()
@@ -214,6 +234,11 @@ else
         ErpApiService objCS = new ErpApiService();
         //Elements = await Task.Run(() => objCS.GetReceivingOrdersbypallet(mPalletcode));
         Elements = await Task.Run(() => objCS.GetAllApiDeliveryorderByMo(Mocode));
+
+        AgvService objAgv = new AgvService();
+        MasterGate = await Task.Run(() => objAgv.GetAllGateAgv());
+
+        myGatesArray = MasterGate.Select(x => x.Gate_Name).ToArray();
 
     }
 
@@ -315,6 +340,7 @@ else
         var dat = date.Value;
 
         DeliveryDate = dat.Add(tim);
+        string agvdestination = destvalue;
 
 
         var strLON = selectLON.OrderBy(x => x.Efidx).Select(x => new { efidx = x.Efidx, quantity = x.Quantity, packageid = x.Package_Id, materialcode = x.Material_Code }).ToList();
@@ -328,7 +354,7 @@ else
         var sReturn = "Call";
         Int64 iStation = 1;
 
-        ObjApiService.SetPick(jsonLON, jsonRES, DeliveryDate, iStation, ref iReturn, ref sReturn);
+        ObjApiService.SetPickStation(jsonLON, jsonRES, DeliveryDate, agvdestination, ref iReturn, ref sReturn);
         if (iReturn == 0)
         {
             Snackbar.Add("SET PICKING >> " + sReturn, Severity.Error);

@@ -485,5 +485,472 @@ namespace GoWMS.Server.Data
             return lstobj;
         }
 
+
+        public IEnumerable<AsrsPerformance> GetAsrsPerformance(DateTime Fmtime , DateTime Totime)
+        {
+            List<AsrsPerformance> lstobj = new List<AsrsPerformance>();
+            using (NpgsqlConnection con = new NpgsqlConnection(connectionString))
+            {
+                try
+                {
+                    StringBuilder sql = new StringBuilder();
+                    sql.AppendLine("SELECT * ");
+                    sql.AppendLine("FROM wcs.fuc_view_rptperformanceTime(@p_stime, @p_etime)");
+                    sql.AppendLine(";");
+
+                    NpgsqlCommand cmd = new NpgsqlCommand(sql.ToString(), con)
+                    {
+                        CommandType = CommandType.Text
+                    };
+
+                    cmd.Parameters.AddWithValue("@p_stime", NpgsqlDbType.Timestamp, Fmtime);
+                    cmd.Parameters.AddWithValue("@p_etime", NpgsqlDbType.Timestamp, Totime);
+
+                    con.Open();
+
+
+                    NpgsqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+
+                        AsrsPerformance objrd = new AsrsPerformance
+                        {
+                            Mccode = rdr["_mccode"].ToString(),
+                            Inbound = rdr["_inbound"] == DBNull.Value ? null : (Int32?)rdr["_inbound"],
+                            Outbound = rdr["_outbound"] == DBNull.Value ? null : (Int32?)rdr["_outbound"],
+                            Total = rdr["_total"] == DBNull.Value ? null : (Int32?)rdr["_total"]
+
+                        };
+                        lstobj.Add(objrd);
+                    }
+                }
+                catch (NpgsqlException ex)
+                {
+                    Log.Error(ex.ToString());
+                }
+                finally
+                {
+                    con.Close();
+                }
+            }
+            return lstobj;
+        }
+
+
+        public IEnumerable<SetConstance> GetConstance()
+        {
+            List<SetConstance> lstobj = new List<SetConstance>();
+            using (NpgsqlConnection con = new NpgsqlConnection(connectionString))
+            {
+                try
+                {
+                    StringBuilder sql = new StringBuilder();
+                    sql.AppendLine("SELECT set_code, set_desc, val_int");
+                    sql.AppendLine("FROM wcs.set_constant");
+                    sql.AppendLine("order by set_code");
+
+                    NpgsqlCommand cmd = new NpgsqlCommand(sql.ToString(), con)
+                    {
+                        CommandType = CommandType.Text
+                    };
+                    con.Open();
+
+
+                    NpgsqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+
+                        SetConstance objrd = new SetConstance
+                        {
+                            Set_code = rdr["set_code"].ToString(),
+                            Set_desc = rdr["set_desc"].ToString(),
+                            Val_int = rdr["val_int"] == DBNull.Value ? null : (Int32?)rdr["val_int"]
+                        };
+                        lstobj.Add(objrd);
+                    }
+                }
+                catch (NpgsqlException ex)
+                {
+                    Log.Error(ex.ToString());
+                }
+                finally
+                {
+                    con.Close();
+                }
+            }
+            return lstobj;
+        }
+
+        public bool SetConstance(string setcode, Int32 setval)
+        {
+            bool bRet = false;
+
+            using NpgsqlConnection con = new NpgsqlConnection(connectionString);
+            try
+            {
+
+                StringBuilder sql = new StringBuilder();
+
+                using var cmd = new NpgsqlCommand(connection: con, cmdText: null);
+                    sql.AppendLine("UPDATE wcs.set_constant");
+                    sql.AppendLine("SET val_int = @val_int");
+                    sql.AppendLine("WHERE set_code = @set_code");
+                    sql.AppendLine(";");
+
+                cmd.Parameters.AddWithValue("@val_int", setval);
+                cmd.Parameters.AddWithValue("@set_code", setcode);
+                    
+                
+                con.Open();
+                cmd.CommandText = sql.ToString();
+                cmd.ExecuteNonQuery();
+
+                bRet = true;
+
+            }
+            catch (NpgsqlException ex)
+            {
+                Log.Error(ex.ToString());
+                bRet = false;
+            }
+            finally
+            {
+                con.Close();
+            }
+
+
+            return bRet;
+        }
+
+        public IEnumerable<Set_Operate> GetOperate()
+        {
+            List<Set_Operate> lstobj = new List<Set_Operate>();
+            using (NpgsqlConnection con = new NpgsqlConnection(connectionString))
+            {
+                try
+                {
+                    StringBuilder sql = new StringBuilder();
+                    sql.AppendLine("SELECT idx, created, entity_lock, modified, client_id, client_ip, mc_type, mc_name, mc_no");
+                    sql.AppendLine("FROM wcs.set_operate");
+                    sql.AppendLine("order by mc_no");
+
+                    NpgsqlCommand cmd = new NpgsqlCommand(sql.ToString(), con)
+                    {
+                        CommandType = CommandType.Text
+                    };
+                    con.Open();
+
+
+                    NpgsqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+
+                        Set_Operate objrd = new Set_Operate
+                        {
+                            Idx = rdr["idx"] == DBNull.Value ? null : (Int64?)rdr["idx"],
+                            Created = rdr["created"] == DBNull.Value ? null : (DateTime?)rdr["created"],
+                            Entity_Lock = rdr["entity_lock"] == DBNull.Value ? null : (Int32?)rdr["entity_lock"],
+                            Modified = rdr["modified"] == DBNull.Value ? null : (DateTime?)rdr["modified"],
+                            Client_Id = rdr["client_id"] == DBNull.Value ? null : (Int64?)rdr["client_id"],
+                            Client_Ip = rdr["client_ip"].ToString(),
+                            Mc_Type = rdr["mc_type"].ToString(),
+                            Mc_Name = rdr["mc_name"].ToString(),
+                            Mc_No = rdr["mc_no"] == DBNull.Value ? null : (Int32?)rdr["mc_no"]
+                        };
+                        lstobj.Add(objrd);
+                    }
+                }
+                catch (NpgsqlException ex)
+                {
+                    Log.Error(ex.ToString());
+                }
+                finally
+                {
+                    con.Close();
+                }
+            }
+            return lstobj;
+        }
+
+        public bool SetOperate(Int64 setcode, bool setval)
+        {
+            bool bRet = false;
+            Int32 setvalue =0;
+
+            using NpgsqlConnection con = new NpgsqlConnection(connectionString);
+            try
+            {
+                if (setval)
+                {
+                    setvalue = 1;
+                }
+
+
+                StringBuilder sql = new StringBuilder();
+
+                using var cmd = new NpgsqlCommand(connection: con, cmdText: null);
+                sql.AppendLine("UPDATE wcs.set_operate");
+                sql.AppendLine("SET entity_lock = @entity_lock");
+                sql.AppendLine("WHERE idx = @idx");
+                sql.AppendLine(";");
+                
+
+                cmd.Parameters.AddWithValue("@entity_lock", setvalue);
+                cmd.Parameters.AddWithValue("@idx", setcode);
+
+
+                con.Open();
+                cmd.CommandText = sql.ToString();
+                cmd.ExecuteNonQuery();
+
+                bRet = true;
+
+            }
+            catch (NpgsqlException ex)
+            {
+                Log.Error(ex.ToString());
+                bRet = false;
+            }
+            finally
+            {
+                con.Close();
+            }
+
+
+            return bRet;
+        }
+
+
+        public IEnumerable<Set_Srm_Operate> GetSRMOperate()
+        {
+            List<Set_Srm_Operate> lstobj = new List<Set_Srm_Operate>();
+            using (NpgsqlConnection con = new NpgsqlConnection(connectionString))
+            {
+                try
+                {
+                    StringBuilder sql = new StringBuilder();
+                    sql.AppendLine("SELECT idx, created, entity_lock, modified, client_id, client_ip, mc_name, mc_no, inbound, outbound");
+                    sql.AppendLine("FROM wcs.set_srm_operate");
+                    sql.AppendLine("order by mc_no");
+
+                    NpgsqlCommand cmd = new NpgsqlCommand(sql.ToString(), con)
+                    {
+                        CommandType = CommandType.Text
+                    };
+                    con.Open();
+
+
+                    NpgsqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+
+                        Set_Srm_Operate objrd = new Set_Srm_Operate
+                        {
+                            Idx = rdr["idx"] == DBNull.Value ? null : (Int64?)rdr["idx"],
+                            Created = rdr["created"] == DBNull.Value ? null : (DateTime?)rdr["created"],
+                            Entity_Lock = rdr["entity_lock"] == DBNull.Value ? null : (Int32?)rdr["entity_lock"],
+                            Modified = rdr["modified"] == DBNull.Value ? null : (DateTime?)rdr["modified"],
+                            Client_Id = rdr["client_id"] == DBNull.Value ? null : (Int64?)rdr["client_id"],
+                            Client_Ip = rdr["client_ip"].ToString(),
+                            Mc_Name = rdr["mc_name"].ToString(),
+                            Mc_No = rdr["mc_no"] == DBNull.Value ? null : (Int32?)rdr["mc_no"],
+                            Inbound = rdr["inbound"] == DBNull.Value ? null : (bool?)rdr["inbound"],
+                            Outbound = rdr["outbound"] == DBNull.Value ? null : (bool?)rdr["outbound"]
+                        };
+                        lstobj.Add(objrd);
+                    }
+                }
+                catch (NpgsqlException ex)
+                {
+                    Log.Error(ex.ToString());
+                }
+                finally
+                {
+                    con.Close();
+                }
+            }
+            return lstobj;
+        }
+
+        public bool SetSRMOperate(Int64 setcode, bool setvalin, bool setvalout)
+        {
+            bool bRet = false;
+          
+
+            using NpgsqlConnection con = new NpgsqlConnection(connectionString);
+            try
+            {
+               
+
+
+                StringBuilder sql = new StringBuilder();
+
+                using var cmd = new NpgsqlCommand(connection: con, cmdText: null);
+                sql.AppendLine("UPDATE wcs.set_srm_operate");
+                sql.AppendLine("SET inbound = @inbound");
+                sql.AppendLine(", outbound = @outbound");
+                sql.AppendLine("WHERE idx =  @idx");
+                sql.AppendLine(";");
+
+
+                cmd.Parameters.AddWithValue("@inbound", setvalin);
+                cmd.Parameters.AddWithValue("@outbound", setvalout);
+
+                cmd.Parameters.AddWithValue("@idx", setcode);
+
+
+                con.Open();
+                cmd.CommandText = sql.ToString();
+                cmd.ExecuteNonQuery();
+
+                bRet = true;
+
+            }
+            catch (NpgsqlException ex)
+            {
+                Log.Error(ex.ToString());
+                bRet = false;
+            }
+            finally
+            {
+                con.Close();
+            }
+
+
+            return bRet;
+        }
+
+
+        public IEnumerable<AsrsLoadtime> GetAsrsloadtime(DateTime stime, DateTime etime)
+        {
+            List<AsrsLoadtime> lstobj = new List<AsrsLoadtime>();
+            using (NpgsqlConnection con = new NpgsqlConnection(connectionString))
+            {
+                try
+                {
+                    StringBuilder sql = new StringBuilder();
+                    sql.AppendLine("SELECT a.lpncode, a.work_code");
+                    sql.AppendLine(", c.work_text_th");
+                    sql.AppendLine(", a.srm_no, a.srm_from, a.srm_to ");
+                    sql.AppendLine(", a.stime, a.etime, a.loadtime ");
+                    sql.AppendLine("FROM wcs.vrptqueueloadtimesrm a ");
+                    sql.AppendLine("LEFT JOIN  wcs.set_worktype c on a.work_code=c.work_code");
+                    sql.AppendLine("WHERE a.stime >= @stimefm");
+                    sql.AppendLine("AND a.stime <= @stimeto");
+                    sql.AppendLine("ORDER BY a.stime");
+                    sql.AppendLine(";");
+
+                    NpgsqlCommand cmd = new NpgsqlCommand(sql.ToString(), con)
+                    {
+                        CommandType = CommandType.Text
+                    };
+
+                    cmd.Parameters.AddWithValue("@stimefm", stime);
+                    cmd.Parameters.AddWithValue("@stimeto", etime);
+
+                    con.Open();
+
+
+                    NpgsqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+
+                        AsrsLoadtime objrd = new AsrsLoadtime
+                        {
+                            Lpncode = rdr["lpncode"].ToString(),
+                            Work_code = rdr["work_code"].ToString(),
+                            Work_text_th = rdr["work_text_th"].ToString(),
+                            Srm_no = rdr["srm_no"] == DBNull.Value ? null : (Int32?)rdr["srm_no"],
+                            Srm_from = rdr["srm_from"] == DBNull.Value ? null : (Int32?)rdr["srm_from"],
+                            Srm_to = rdr["srm_to"] == DBNull.Value ? null : (Int32?)rdr["srm_to"],
+                            Stime = rdr["stime"] == DBNull.Value ? null : (DateTime?)rdr["stime"],
+                            Etime = rdr["etime"] == DBNull.Value ? null : (DateTime?)rdr["etime"],
+                            Loadtime = rdr["loadtime"].ToString()
+                        };
+                        lstobj.Add(objrd);
+                    }
+                }
+                catch (NpgsqlException ex)
+                {
+                    Log.Error(ex.ToString());
+                }
+                finally
+                {
+                    con.Close();
+                }
+            }
+            return lstobj;
+        }
+
+
+        public IEnumerable<Rpt_Ejectgate> GetReportEject(DateTime stime, DateTime etime)
+        {
+            List<Rpt_Ejectgate> lstobj = new List<Rpt_Ejectgate>();
+            using (NpgsqlConnection con = new NpgsqlConnection(connectionString))
+            {
+                try
+                {
+                    StringBuilder sql = new StringBuilder();
+                    sql.AppendLine("SELECT idx, created, entity_lock, modified, client_id, client_ip");
+                    sql.AppendLine(", su_no, lpncode, work_code, work_gate, actual_weight, actual_size, msg");
+                    sql.AppendLine("FROM wcs.rpt_ejectgate");
+                    sql.AppendLine("WHERE created >= @stimefm");
+                    sql.AppendLine("AND created <= @stimeto");
+                    sql.AppendLine("ORDER BY created");
+                    sql.AppendLine(";");
+
+                    NpgsqlCommand cmd = new NpgsqlCommand(sql.ToString(), con)
+                    {
+                        CommandType = CommandType.Text
+                    };
+
+                    cmd.Parameters.AddWithValue("@stimefm", stime);
+                    cmd.Parameters.AddWithValue("@stimeto", etime);
+
+                    con.Open();
+
+
+                    NpgsqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+
+                        Rpt_Ejectgate objrd = new Rpt_Ejectgate
+                        {
+                            Idx = rdr["idx"] == DBNull.Value ? null : (Int64?)rdr["idx"],
+                            Created = rdr["created"] == DBNull.Value ? null : (DateTime?)rdr["created"],
+                            Entity_Lock = rdr["entity_lock"] == DBNull.Value ? null : (Int32?)rdr["entity_lock"],
+                            Modified = rdr["modified"] == DBNull.Value ? null : (DateTime?)rdr["modified"],
+                            Client_Id = rdr["client_id"] == DBNull.Value ? null : (Int64?)rdr["client_id"],
+                            Client_Ip = rdr["client_ip"].ToString(),
+                            Su_No = rdr["su_no"].ToString(),
+                            Lpncode = rdr["lpncode"].ToString(),
+                            Work_Code = rdr["work_code"].ToString(),
+                            Work_Gate = rdr["work_gate"].ToString(),
+                            Actual_Weight = rdr["actual_weight"] == DBNull.Value ? null : (decimal?)rdr["actual_weight"],
+                            Actual_Size = rdr["actual_size"] == DBNull.Value ? null : (Int32?)rdr["actual_size"],
+                            Msg = rdr["msg"].ToString()
+                        };
+                        lstobj.Add(objrd);
+                    }
+                }
+                catch (NpgsqlException ex)
+                {
+                    Log.Error(ex.ToString());
+                }
+                finally
+                {
+                    con.Close();
+                }
+            }
+            return lstobj;
+        }
+
+
+
+
+
+
+
+
     }
 }

@@ -74,6 +74,39 @@ namespace GoWMS.Server.Controllers
             return retlist;
         }
 
+        public List<Oub_Delivery_Go> GetDeliveryAll()
+        {
+            List<Oub_Delivery_Go> retlist = objDAL.GetDeliveryAll().ToList();
+            return retlist;
+        }
+
+        public List<Oub_Delivery_Go> GetDeliveryList(string sPallet)
+        {
+            List<Oub_Delivery_Go> retlist = objDAL.GetDeliveryList(sPallet).ToList();
+            return retlist;
+        }
+
+        public List<Sap_StoreoutInfo> GetPickingID(string SPackID)
+        {
+            List<Sap_StoreoutInfo> retlist = objDAL.GetPickingID(SPackID).ToList();
+            return retlist;
+        }
+        public void SetConsolMappallet(string pallet, string packid)
+        {
+            objDAL.SetConsolMappallet(pallet, packid);
+        }
+
+        public void CancelConsolBypack(string pack)
+        {
+            objDAL.CancelConsolBypack(pack);
+        }
+
+        public void CancelConsolByID(Int64 pack)
+        {
+            objDAL.CancelConsolByID(pack);
+        }
+
+
 
 
     }

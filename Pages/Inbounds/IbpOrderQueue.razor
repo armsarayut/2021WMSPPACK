@@ -28,7 +28,7 @@ else
         <ToolBarContent>
             <MudTooltip Text="Export" Color="Color.Secondary" Placement="Placement.Top">
                 <MudMenu Icon="@Icons.Filled.Download" Color="Color.Primary">
-                    <MudMenuItem>EXCEL</MudMenuItem>
+                    <MudMenuItem @onclick="@DownloadExcelDocument">EXCEL</MudMenuItem>
                     <MudMenuItem>PDF</MudMenuItem>
                 </MudMenu>
             </MudTooltip>
@@ -162,8 +162,6 @@ else
     {
         try
         {
-
-
             IbpOrderQueueRptPdf pdfReport = new IbpOrderQueueRptPdf();
             List<Inb_Goodreceive_Go> listPdfReport = new List<Inb_Goodreceive_Go>();
             listPdfReport = Elements.ToList();

@@ -40,7 +40,6 @@
     <Folder Include="Pages\PaService\" />
     <Folder Include="Pages\PaAdmin\" />
     <Folder Include="Pages\PaSetup\" />
-    <Folder Include="Pages\PaReport\" />
     <Folder Include="Pages\PaOutbound\" />
     <Folder Include="Pages\PaInventory\" />
     <Folder Include="Pages\PaInbound\" />

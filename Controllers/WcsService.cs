@@ -61,5 +61,60 @@ namespace GoWMS.Server.Controllers
             return retlist;
         }
 
+        public List<AsrsPerformance> GetAsrsPerformance(DateTime Fmtime, DateTime Totime)
+        {
+            List<AsrsPerformance> retlist = objDAL.GetAsrsPerformance(Fmtime, Totime).ToList();
+            return retlist;
+        }
+
+        public List<SetConstance> GetConstance()
+        {
+            List<SetConstance> retlist = objDAL.GetConstance().ToList();
+            return retlist;
+        }
+
+        public bool  SetConstance(string setcode, Int32 setval)
+        {
+            bool bret = objDAL.SetConstance(setcode, setval);
+
+            return bret;
+        }
+    
+        public List<Set_Operate> GetOperate()
+        {
+            List<Set_Operate> retlist = objDAL.GetOperate().ToList();
+            return retlist;
+        }
+
+        public bool SetOperate(Int64 setcode, bool setval)
+        {
+            bool bret = objDAL.SetOperate(setcode, setval);
+            return bret;
+        }
+
+        public List<Set_Srm_Operate> GetSRMOperate()
+        {
+            List<Set_Srm_Operate> retlist = objDAL.GetSRMOperate().ToList();
+            return retlist;
+        }
+
+        public bool SetSRMOperate(Int64 setcode, bool setvalint, bool setvalout)
+        {
+            bool bret = objDAL.SetSRMOperate(setcode, setvalint, setvalout);
+            return bret;
+        }
+
+        public List<AsrsLoadtime> GetAsrsloadtime(DateTime stime, DateTime etime)
+        {
+            List<AsrsLoadtime> retlist = objDAL.GetAsrsloadtime(stime, etime).ToList();
+            return retlist;
+        }
+
+        public List<Rpt_Ejectgate> GetReportEject(DateTime stime, DateTime etime)
+        {
+            List<Rpt_Ejectgate> retlist = objDAL.GetReportEject(stime, etime).ToList();
+            return retlist;
+        }
+
     }
 }

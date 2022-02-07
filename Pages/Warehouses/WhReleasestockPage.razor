@@ -33,7 +33,7 @@ else
     <MudGrid>
         <MudItem xs="12" sm="6" md="4">
             <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Save" Style="background-color: limegreen; color: white; width: 300px; height: 30px;" OnClick=@OnButtonOrderSelected>
-                Set Holdstock
+                Set Releasestock
             </MudButton>
         </MudItem>
     </MudGrid>
@@ -94,7 +94,7 @@ else
 
 @code {
 
-    private string pageheader = "Holdstock";
+    private string pageheader = "ReleaseStock";
     private string msgAction = "Enter Palletcode";
     private string mPalletcode { get; set; } = "";
     private string mPackid { get; set; } = "";

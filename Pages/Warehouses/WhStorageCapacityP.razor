@@ -28,18 +28,20 @@ else
         <HeaderContent>
             <MudTh><MudTableSortLabel InitialDirection="SortDirection.Ascending" SortBy="new Func<WhStorageCapacity, object>(x=>x.Srmname)">LANE</MudTableSortLabel></MudTh>
             <MudTh Style="text-align:right"><MudTableSortLabel SortBy="new Func<WhStorageCapacity, object>(x=>x.Locavlt1)">OCCUPIED</MudTableSortLabel></MudTh>
-            <MudTh Style="text-align:right" ><MudTableSortLabel SortBy="new Func<WhStorageCapacity, object>(x=>x.Locemp)">EMPTY</MudTableSortLabel></MudTh>
+            <MudTh Style="text-align:right" ><MudTableSortLabel SortBy="new Func<WhStorageCapacity, object>(x=>x.Locemp)">FREE</MudTableSortLabel></MudTh>
             <MudTh Style="text-align:right"><MudTableSortLabel SortBy="new Func<WhStorageCapacity, object>(x=>x.Perr)">BLOCK/ERROR</MudTableSortLabel></MudTh>
+            <MudTh Style="text-align:right"><MudTableSortLabel SortBy="new Func<WhStorageCapacity, object>(x=>x.Plemp)">STACK</MudTableSortLabel></MudTh>
             <MudTh Style="text-align:right"><MudTableSortLabel SortBy="new Func<WhStorageCapacity, object>(x=>x.Total)">TOTAL</MudTableSortLabel></MudTh>
             <MudTh Style="text-align:right"><MudTableSortLabel SortBy="new Func<WhStorageCapacity, object>(x=>x.OccRate)">RATE</MudTableSortLabel></MudTh>
         </HeaderContent>
         <RowTemplate>
             <MudTd Class="clm-row-small" DataLabel="Lane">@context.Srmname</MudTd>
             <MudTd Class="clm-row-small" DataLabel="OCCUPIED" Style="text-align:right">@string.Format(VarGlobals.FormatN0, context.Locavlt1)</MudTd>
-            <MudTd Class="clm-row-small" DataLabel="Empty" Style="text-align:right" >@string.Format(VarGlobals.FormatN0, context.Locemp)</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="FREE" Style="text-align:right">@string.Format(VarGlobals.FormatN0, context.Locemp)</MudTd>
             <MudTd Class="clm-row-small" DataLabel="BLOCK/ERROR" Style="text-align:right">@string.Format(VarGlobals.FormatN0, context.Perr)</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="STACK" Style="text-align:right">@string.Format(VarGlobals.FormatN0, context.Plemp)</MudTd>
             <MudTd Class="clm-row-small" DataLabel="TOTAL" Style="text-align:right">@string.Format(VarGlobals.FormatN0, context.Total)</MudTd>
-            <MudTd Class="clm-row-small" DataLabel="RATE" Style="text-align:right" >@context.OccRate %</MudTd> 
+            <MudTd Class="clm-row-small" DataLabel="RATE" Style="text-align:right">@context.OccRate %</MudTd>
         </RowTemplate>
         <PagerContent>
             <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />
