@@ -15,6 +15,7 @@
 
 @inject IJSRuntime JSRuntime
 @inject StoreoutService ObjService
+@inject UserServices OpjUserService
 
 @if (Elements == null)
 {
@@ -55,7 +56,7 @@ else
             <MudTd Class="clm-row-small" DataLabel="DOCUMENT">@context.Order_No</MudTd>
             <MudTd Class="clm-row-small" DataLabel="PACKID">@context.Su_No</MudTd>
             <MudTd Class="clm-row-small" DataLabel="MATERIAL">@context.Item_Code</MudTd>
-            <MudTd Class="clm-row-small" DataLabel="DESCRIPTION" >@context.Item_Name</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="DESCRIPTION">@context.Item_Name</MudTd>
             <MudTd Class="clm-row-small" DataLabel="QTY" Style="text-align:right">@string.Format(VarGlobals.FormatN2, context.Request_Qty)</MudTd>
             <MudTd Class="clm-row-small" DataLabel="UNIT">@context.Unit</MudTd>
         </RowTemplate>
@@ -66,7 +67,10 @@ else
 }
 
 @code {
-    private string mPagecaption { get; set; } = "Good Receive";
+    private string mPagecaption { get; set; } = "Pickinglist";
+    public string mPagedesc { get; set; } = "Pickinglist";
+    private string mPagename { get; set; } = "/oub/picklist";
+
     private bool _processing = false;
 
     private string msgAction = "Enter Palletcode";

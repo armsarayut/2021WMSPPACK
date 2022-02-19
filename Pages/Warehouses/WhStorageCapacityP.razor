@@ -3,7 +3,9 @@
 @using GoWMS.Server.Controllers
 @using GoWMS.Server.Models
 @using Microsoft.EntityFrameworkCore
+
 @inject WhService ObjService
+@inject UserServices OpjUserService
 
 @if (Elements == null)
 {
@@ -28,7 +30,7 @@ else
         <HeaderContent>
             <MudTh><MudTableSortLabel InitialDirection="SortDirection.Ascending" SortBy="new Func<WhStorageCapacity, object>(x=>x.Srmname)">LANE</MudTableSortLabel></MudTh>
             <MudTh Style="text-align:right"><MudTableSortLabel SortBy="new Func<WhStorageCapacity, object>(x=>x.Locavlt1)">OCCUPIED</MudTableSortLabel></MudTh>
-            <MudTh Style="text-align:right" ><MudTableSortLabel SortBy="new Func<WhStorageCapacity, object>(x=>x.Locemp)">FREE</MudTableSortLabel></MudTh>
+            <MudTh Style="text-align:right"><MudTableSortLabel SortBy="new Func<WhStorageCapacity, object>(x=>x.Locemp)">FREE</MudTableSortLabel></MudTh>
             <MudTh Style="text-align:right"><MudTableSortLabel SortBy="new Func<WhStorageCapacity, object>(x=>x.Perr)">BLOCK/ERROR</MudTableSortLabel></MudTh>
             <MudTh Style="text-align:right"><MudTableSortLabel SortBy="new Func<WhStorageCapacity, object>(x=>x.Plemp)">STACK</MudTableSortLabel></MudTh>
             <MudTh Style="text-align:right"><MudTableSortLabel SortBy="new Func<WhStorageCapacity, object>(x=>x.Total)">TOTAL</MudTableSortLabel></MudTh>
@@ -51,7 +53,7 @@ else
 
 @code {
 
-   
+
 
     IEnumerable<int> pageSizeOptions = new int[] { 10, 20, 30, 50, 100 };
 

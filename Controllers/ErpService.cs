@@ -62,6 +62,18 @@ namespace GoWMS.Server.Controllers
             return ListRet;
         }
 
+ 
+        public List<V_CylinderInfo> GetAllErpCylindersbyMat(string matcode)
+        {
+            List<V_CylinderInfo> ListRet = objDAL.GetAllErpCylindersbyMat(matcode).ToList();
+            return ListRet;
+        }
+
+        public List<Cylinder> GetAllErpCylindersbytag(string Tag)
+        {
+            List<Cylinder> ListRet = objDAL.GetAllErpCylindersbytag(Tag).ToList();
+            return ListRet;
+        }
 
     }
 }

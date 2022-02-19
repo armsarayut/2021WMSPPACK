@@ -4,6 +4,7 @@
 @using GoWMS.Server.Models
 @using GoWMS.Server.Models.Api
 @using GoWMS.Server.Models.Mas
+@using GoWMS.Server.Models.Erp
 @using System.Threading
 
 
@@ -47,53 +48,55 @@
 
 <br />
 
-@*<MudText Typo="Typo.h6" Color="Color.Secondary" Class="mb-4">Master Pallet : [ @mPalletcode ]</MudText>
-    <MudSkeleton Animation="Animation.False" />*@
-@*<MudText Typo="Typo.h6" Color="Color.Info" Class="mb-4">PackID : [ @mPackid ]</MudText>*@
 
 @if (Elements == null)
 {
-    // <p><em>Loading...</em></p>
     <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
 }
 else
 {
 
-    <MudTable Items="@Elements" 
-              Dense="@dense" 
-              Hover="@hover" 
-              Bordered="@bordered" 
-              Striped="@striped" 
-              Filter="new Func<Api_Receivingorders_Go,bool>(FilterFunc)" 
+    <MudTable Items="@Elements"
+              Dense="@dense"
+              Hover="@hover"
+              Bordered="@bordered"
+              Striped="@striped"
+              Filter="new Func<Cylinder,bool>(FilterFunc)"
               @bind-SelectedItem="selectedItem">
         <ToolBarContent>
             <MudText Typo="Typo.h6">PALLET:[@mPalletcode]</MudText>
             <MudSpacer />
-            <MudTextField @bind-Value="searchString" 
-                          Placeholder="Search" 
-                          Adornment="Adornment.Start" 
-                          AdornmentIcon="@Icons.Material.Filled.Search" 
+            <MudTextField @bind-Value="searchString"
+                          Placeholder="Search"
+                          Adornment="Adornment.Start"
+                          AdornmentIcon="@Icons.Material.Filled.Search"
                           IconSize="Size.Medium" Class="mt-0">
             </MudTextField>
         </ToolBarContent>
         <HeaderContent>
-            <MudTh Style="width: 120px;"><MudTableSortLabel SortBy="new Func<Api_Receivingorders_Go, object>(x=>x.Lpncode)">PALLET</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Api_Receivingorders_Go, object>(x=>x.Package_Id)">PACKID</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Api_Receivingorders_Go, object>(x=>x.Material_Code)">MATERIAL</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Api_Receivingorders_Go, object>(x=>x.Material_Description)">DESCRIPTION</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Api_Receivingorders_Go, object>(x=>x.Gr_Quantity)">QTY</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Api_Receivingorders_Go, object>(x=>x.Unit)">UNIT</MudTableSortLabel></MudTh>
+            <MudTh Style="width: 120px;"><MudTableSortLabel SortBy="new Func<Cylinder, object>(x=>x.Material)">MAT</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Cylinder, object>(x=>x.Material_Description)">MATERIAL</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Cylinder, object>(x=>x.Previos_Ref)">PREVIOS</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Cylinder, object>(x=>x.Customer_Code)">CUSTOMER</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Cylinder, object>(x=>x.Customer_Description)">CYLINDERREF</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Cylinder, object>(x=>x.Customer_Reference)">CUSTOMERREF</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Cylinder, object>(x=>x.Cylindercode)">CYLINDER</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Cylinder, object>(x=>x.Cylinderbar)">BARCODE</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Cylinder, object>(x=>x.Colorcode)">COLOR</MudTableSortLabel></MudTh>
             <MudTh>ACTION</MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd Class="clm-row-small" DataLabel="PALLET">@context.Lpncode</MudTd>
-            <MudTd Class="clm-row-small" DataLabel="PACKID">@context.Package_Id</MudTd>
-            <MudTd Class="clm-row-small" DataLabel="MATERIAL">@context.Material_Code</MudTd>
-            <MudTd Class="clm-row-small" DataLabel="DESCRIPTION">@context.Material_Description</MudTd>
-            <MudTd Class="clm-row-small" Style="text-align:right" DataLabel="QTY">@string.Format(VarGlobals.FormatN2, context.Gr_Quantity)</MudTd>
-            <MudTd Class="clm-row-small" DataLabel="UNIT">@context.Unit</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="MAT">@context.Material</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="MATERIAL">@context.Material_Description</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="PREVIOS">@context.Previos_Ref</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="CUSTOMER">@context.Customer_Code</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="CYLINDERREF">@context.Customer_Description</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="CUSTOMERREF">@context.Customer_Reference</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="CYLINDER">@context.Cylindercode</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="BARCODE">@context.Cylinderbar</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="COLOR">@context.Colorcode</MudTd>
             <MudTd DataLabel="ACTION">
-                <MudFab @onclick="@(()=>DeleteMap(@context.Package_Id))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small" />
+                <MudFab @onclick="@(()=>DeleteMap(@context.Cylindercode, "A"))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small" />
             </MudTd>
         </RowTemplate>
         <PagerContent>
@@ -114,13 +117,16 @@ else
     private bool striped = true;
     private bool bordered = false;
     private string searchString = "";
-    private Api_Receivingorders_Go selectedItem = null;
-    private HashSet<Api_Receivingorders_Go> selectedItems = new HashSet<Api_Receivingorders_Go>();
-    private IEnumerable<Api_Receivingorders_Go> Elements = new List<Api_Receivingorders_Go>();
+    private Cylinder selectedItem = null;
+    private HashSet<Cylinder> selectedItems = new HashSet<Cylinder>();
+    private IEnumerable<Cylinder> Elements = new List<Cylinder>();
 
-    private IEnumerable<Api_Receivingorders_Go> MapPalletItem = new List<Api_Receivingorders_Go>();
+    private IEnumerable<Cylinder> MapPalletItem = new List<Cylinder>();
 
     private IEnumerable<Mas_Pallet_Go> MasterPallets = new List<Mas_Pallet_Go>();
+
+    private List<Cylinder> lstobj = new List<Cylinder>();
+
 
     public int elevation = 0;
 
@@ -144,10 +150,12 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        ErpApiService objCS = new ErpApiService();
-        cOld = Elements.Count();
-        Elements = await Task.Run(() => objCS.GetAllApiRecevingorderGosypallet(mPalletcode));
-        cNew = Elements.Count();
+        //ErpService objCS = new ErpService();
+        //cOld = Elements.Count();
+        //Elements = await Task.Run(() => objCS.GetAllErpCylindersbytag(mPalletcode));
+        //cNew = Elements.Count();
+        //lstobj.Clear();
+
     }
 
     async Task setstr(string str)
@@ -160,9 +168,11 @@ else
             if (bValidate)
             {
                 mPalletcode = str.ToUpper();
-                msgAction = "Enter PackID";
+                msgAction = "Enter Cylinder";
                 elevation = 1;
-                Snackbar.Add("Enter PackID", Severity.Normal);
+                Snackbar.Add("Enter Cylinder", Severity.Normal);
+
+                lstobj.Clear();
             }
             else
             {
@@ -170,7 +180,6 @@ else
                 elevation = 4;
                 msgAction = "Masterpallet find not found";
                 Snackbar.Add("Masterpallet find not found", Severity.Warning);
-
             }
         }
         else
@@ -182,42 +191,69 @@ else
                     elevation = 2;
                     msgAction = "Mapping successfully";
 
-                    ObjErpApiService.SetMappedPalletCylinder(mPalletcode);
+                    string msgret = await Task.Run(() => ObjMasService.InsertCylinderListMaster(lstobj.ToList(), mPalletcode));
+
                     mPalletcode = "";
-                    Snackbar.Add("Mapping successfully", Severity.Success);
+                    lstobj.Clear();
+                    Elements = lstobj.ToList();
+                    Snackbar.Add(msgret, Severity.Info);
                 }
                 else
                 {
                     elevation = 3;
-                    msgAction = "Please enter PackID";
-                    Snackbar.Add("Please enter PackID", Severity.Info);
+                    msgAction = "Please enter Cylinder";
+                    Snackbar.Add("Please enter Cylinder", Severity.Info);
                 }
             }
             else
             {
                 mPackid = str;
-                MapPalletItem = null;
-                MapPalletItem = ObjErpService.GetErpMatReceivingOrdersByTag(mPackid);
 
-                if (MapPalletItem.ToList().Count > 0)
+                bool exists = lstobj.Where(w => w.Cylinderbar.Contains(mPackid)).Any();
+                if (exists==false)
                 {
-                    ObjErpApiService.ClaerReceivingOrderbypack(mPackid);
+                    MapPalletItem = null;
+                    MapPalletItem = ObjErpService.GetAllErpCylindersbytag(mPackid);
+
+                    if (MapPalletItem.ToList().Count > 0)
+                    {
+                        foreach (var s in MapPalletItem)
+                        {
+                            Cylinder objrd = new Cylinder
+                            {
+                                Material = s.Material,
+                                Material_Description = s.Material_Description,
+                                Customer_Code = s.Customer_Code,
+                                Customer_Description = s.Customer_Description,
+                                Customer_Reference = s.Customer_Reference,
+                                Previos_Ref = s.Previos_Ref,
+                                Colorcode = s.Colorcode,
+                                Cylindercode = s.Cylindercode,
+                                Cylinderbar = s.Cylinderbar,
+                                Cylindeno = s.Cylindeno,
+                                IState = 0,
+                                Palletcode = mPalletcode
+                            };
+                            lstobj.Add(objrd);
+
+                        }
+                        msgAction = "Enter Cylinder or Pallet code for complete";
+                        elevation = 1;
+                        Snackbar.Add("Enter Cylinder or Pallet code for complete", Severity.Info);
+                    }
+                    else
+                    {
+                        elevation = 3;
+                        msgAction = "Find not found Cylinder please enter again";
+                        Snackbar.Add("Find not found Cylinder please enter again", Severity.Error);
+                    }
                 }
 
-                if (MapPalletItem.ToList().Count > 0)
-                {
-                    Task<string> retString;
-                    retString = ObjErpApiService.InsertReceivingOrderbypackAsync(MapPalletItem.ToList(), mPalletcode);
-                    msgAction = "Enter PackID or Pallet code for complete";
-                    elevation = 1;
-                    Snackbar.Add("Enter PackID or Pallet code for complete", Severity.Info);
-                }
-                else
-                {
-                    elevation = 3;
-                    msgAction = "Find not found PackID please enter again";
-                    Snackbar.Add("Find not found PackID please enter again", Severity.Error);
-                }
+
+
+
+
+                Elements = lstobj.ToList();
             }
         }
 
@@ -238,19 +274,19 @@ else
             this.mPackid = null;
             cOld = Elements.Count();
 
-            Elements = await Task.Run(() => ObjErpApiService.GetAllApiRecevingorderGosypallet(mPalletcode));
+            //Elements = await Task.Run(() => ObjErpApiService.GetAllApiRecevingorderGosypallet(mPalletcode));
 
             cNew = Elements.Count();
 
             if (cOld == cNew)
             {
-                Elements = await Task.Run(() => ObjErpApiService.GetAllApiRecevingorderGosypallet(mPalletcode));
+                // Elements = await Task.Run(() => ObjErpApiService.GetAllApiRecevingorderGosypallet(mPalletcode));
             }
             else
             {
                 if (mPalletcode.Length > 0)
                 {
-                    Elements = await Task.Run(() => ObjErpApiService.GetAllApiRecevingorderGosypallet(mPalletcode));
+                    //Elements = await Task.Run(() => ObjErpApiService.GetAllApiRecevingorderGosypallet(mPalletcode));
                 }
             }
             this.StateHasChanged();
@@ -258,28 +294,37 @@ else
 
     }
 
-    private bool FilterFunc(Api_Receivingorders_Go element)
+    private bool FilterFunc(Cylinder element)
     {
         if (string.IsNullOrWhiteSpace(searchString))
             return true;
-        if (element.Package_Id.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        if (element.Material.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-        if (element.Material_Code.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        if (element.Cylindercode.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-        if ($"{element.Material_Description} {element.Job_Code} {element.Document_Number}".Contains(searchString))
+        if (element.Cylinderbar.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Previos_Ref.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if ($"{element.Material_Description} {element.Customer_Code} {element.Customer_Description}".Contains(searchString))
             return true;
         return false;
     }
 
-    private void DeleteMap(string pack)
+    private void DeleteMap(string pack, string pallet)
     {
         msgAction = "Cancle successfully";
 
-        ObjErpApiService.CancelReceivingOrderbypack(mPalletcode, pack);
+        var itemToRemove = lstobj.Single(r => r.Cylindercode == pack);
+        lstobj.Remove(itemToRemove);
+
+        //ObjErpApiService.CancelReceivingOrderbypack(mPalletcode, pack);
 
         cOld = Elements.Count();
-        Elements = ObjErpApiService.GetAllApiRecevingorderGosypallet(mPalletcode);
+        // Elements = ObjErpApiService.GetAllApiRecevingorderGosypallet(mPalletcode);
         cNew = Elements.Count();
+
+        Elements = lstobj.ToList();
 
     }
 
@@ -290,7 +335,7 @@ else
 
         cOld = Elements.Count();
 
-        Elements = ObjErpApiService.GetAllApiRecevingorderGosypallet(mPalletcode);
+        //  Elements = ObjErpApiService.GetAllApiRecevingorderGosypallet(mPalletcode);
 
         cNew = Elements.Count();
 

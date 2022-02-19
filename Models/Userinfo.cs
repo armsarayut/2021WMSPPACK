@@ -8,8 +8,8 @@ namespace GoWMS.Server.Models
     public class Userinfo
     {
         public long? Usid { get; set; }
+        public string UserId { get; set; }
         public string Usname { get; set; }
-
         public string Uspass { get; set; }
         public long? Usgid { get; set; }
         public string Usgrp { get; set; }

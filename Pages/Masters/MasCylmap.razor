@@ -1,0 +1,466 @@
+﻿@page "/mas/cylindermap"
+@using GoWMS.Server.Data
+@using GoWMS.Server.Controllers
+@using GoWMS.Server.Models
+@using GoWMS.Server.Models.Api
+@using GoWMS.Server.Models.Mas
+@using GoWMS.Server.Models.Erp
+@using System.Threading
+
+
+@inject ErpService ObjErpService
+@inject ErpApiService ObjErpApiService
+@inject MasService ObjMasService
+@inject UserServices OpjUserService
+@inject ISnackbar Snackbar
+
+<MudText Typo="Typo.h6" Color="Color.Primary">@mPageHeader</MudText>
+
+<MudGrid>
+    <MudItem xs="12">
+        @if (@elevation == 0) //Defult
+        {
+            <MudAlert Severity="Severity.Normal" Variant="Variant.Outlined">@msgAction</MudAlert>
+        }
+        else if (@elevation == 1) //Info
+        {
+            <MudAlert Severity="Severity.Info" Variant="Variant.Outlined">@msgAction</MudAlert>
+        }
+        else if (@elevation == 2) //Success
+        {
+            <MudAlert Severity="Severity.Success" Variant="Variant.Outlined">@msgAction</MudAlert>
+        }
+        else if (@elevation == 3) // Warning
+        {
+            <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">@msgAction</MudAlert>
+        }
+        else if (@elevation == 4) // Error
+        {
+            <MudAlert Severity="Severity.Error" Variant="Variant.Outlined">@msgAction</MudAlert>
+        }
+    </MudItem>
+
+    <MudItem xs=12 sm=6>
+        <div class="form-group">
+            <input style="width: 100%; height: 40px" type="text" class="form-control" @bind-value="stringputkey" @onkeyup="@DoTheThingProd" placeholder="Enter Productcode" />
+        </div>
+    </MudItem>
+    <MudItem xs=12 sm=6>
+        <div class="form-group">
+            <input style="width: 100%; height: 40px" type="text" class="form-control" @bind-value="stringpalletkey" @onkeyup="@DoTheThing" placeholder="Enter Pallet" />
+        </div>
+    </MudItem>
+    <MudItem xs=12 sm=6>
+        <MudButton Variant="Variant.Filled" Size="Size.Medium" Color="Color.Tertiary" OnClick="@InsertCylinder">Setmap</MudButton>
+    </MudItem>
+
+</MudGrid>
+
+<br />
+
+
+@if (Elements == null)
+{
+    <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
+}
+else
+{
+
+    <MudTable Items="@Elements"
+              Dense="@dense"
+              Hover="@hover"
+              Bordered="@bordered"
+              Striped="@striped"
+              Filter="new Func<Mas_Cylinderlist_Go,bool>(FilterFunc)"
+              @bind-SelectedItem="selectedItem">
+        <ToolBarContent>
+            <MudText Typo="Typo.h6">PRODUCT:[@mProductcode]  PALLET:[@mPalletcode]</MudText>
+            <MudSpacer />
+            <MudTextField @bind-Value="searchString"
+                          Placeholder="Search"
+                          Adornment="Adornment.Start"
+                          AdornmentIcon="@Icons.Material.Filled.Search"
+                          IconSize="Size.Medium" Class="mt-0">
+            </MudTextField>
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh Style="width: 120px;"><MudTableSortLabel SortBy="new Func<Mas_Cylinderlist_Go, object>(x=>x.Material_Code)">MATERIAL</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Mas_Cylinderlist_Go, object>(x=>x.Material_Description)">DESCRIPTION</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Mas_Cylinderlist_Go, object>(x=>x.Cylinderbar)">BARCODE</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Mas_Cylinderlist_Go, object>(x=>x.Previos_ref)">PREVIOUS</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Mas_Cylinderlist_Go, object>(x=>x.Cylindercode)">CYLINDER</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Mas_Cylinderlist_Go, object>(x=>x.Colorcode)">COLOR</MudTableSortLabel></MudTh>
+            <MudTh>ACTION</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd Class="clm-row-small" DataLabel="MATERIAL">@context.Material_Code</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="DESCRIPTION">@context.Material_Description</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="BARCODE">@context.Cylinderbar</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="PREVIOUS">@context.Previos_ref</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="CYLINDER">@context.Cylindercode</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="COLOR">@context.Colorcode</MudTd>
+            <MudTd DataLabel="ACTION">
+                <MudFab @onclick="@(()=>DeleteMap(@context.Itemtag))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small" />
+            </MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />
+        </PagerContent>
+    </MudTable>
+}
+
+@code {
+
+    private string mPageHeader = "Cylinder Mapping";
+    private string msgAction = "Enter MasterPallet";
+    public string mPagedesc { get; set; } = "Cylinder Mapping";
+    private string mPagename { get; set; } = "/mas/cylindermap";
+    private string mPalletcode { get; set; } = "";
+    private string mProductcode { get; set; } = "";
+    private string mPackid { get; set; } = null;
+    public string stringput { get; set; } = "";
+    public string stringputkey { get; set; } = null;
+    public string stringpalletkey { get; set; } = null;
+    private bool dense = true;
+    private bool hover = true;
+    private bool striped = true;
+    private bool bordered = false;
+    private string searchString = "";
+    private Mas_Cylinderlist_Go selectedItem = null;
+    private HashSet<Mas_Cylinderlist_Go> selectedItems = new HashSet<Mas_Cylinderlist_Go>();
+    private IEnumerable<Mas_Cylinderlist_Go> Elements = new List<Mas_Cylinderlist_Go>();
+
+    private IEnumerable<Api_Receivingorders_Go> MapPalletItem = new List<Api_Receivingorders_Go>();
+
+    private IEnumerable<Mas_Pallet_Go> MasterPallets = new List<Mas_Pallet_Go>();
+
+    private IEnumerable<V_CylinderInfo> Cylinders = new List<V_CylinderInfo>();
+
+    private List<Mas_Cylinderlist_Go> lstobj = new List<Mas_Cylinderlist_Go>();
+
+    public int elevation = 0;
+
+    public int cOld = 0;
+    public int cNew = 0;
+
+    public string StringKeyPressed = "AAA";
+
+    string KeyPressed = "";
+    string EventInfo = "";
+
+    private void KeyboardEventHandler(KeyboardEventArgs args)
+    {
+        if (args.Key == "Enter")
+        {
+            StringKeyPressed = "";
+            KeyPressed = "Key Pressed is " + args.Key;
+            EventInfo = "Event Type " + args.Type;
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        //ErpApiService objCS = new ErpApiService();
+        //cOld = Elements.Count();
+        //Elements = await Task.Run(() => objCS.GetAllApiRecevingorderGosypallet(mPalletcode));
+        //cNew = Elements.Count();
+    }
+
+    async Task setstr(string str)
+    {
+        if (mProductcode.Length <= 0)
+        {
+            //Boolean bValidate = false;
+            //bValidate = ObjMasService.ValidateMasterpallet(str.ToUpper());
+
+            Cylinders = ObjErpService.GetAllErpCylindersbyMat(str.ToUpper());
+
+            if (Cylinders.ToList().Count > 0)
+            {
+                lstobj.Clear();
+
+                foreach (var s in Cylinders)
+                {
+
+                    if (s.Cylinder1 != null && s.Cylinder1.Length > 0)
+                    {
+                        Mas_Cylinderlist_Go objrd = new Mas_Cylinderlist_Go
+                        {
+                            Material_Code = s.Material,
+                            Material_Description = s.Material_Description,
+                            Customer_Code = s.Customer_Code,
+                            Customer_Description = s.Customer_Description,
+                            Customer_Reference = s.Customer_Reference,
+                            Previos_ref= s.PREVIOUS_REF,
+                            Colorcode = s.Color_1,
+                            Cylindercode = s.Cylinder1,
+                            Cylinderbar = s.Barcode_1,
+                            Cylinderno = 1,
+                            Itemtag =  s.Cylinder1
+
+                        };
+                        lstobj.Add(objrd);
+
+                    }
+                    if (s.Cylinder2 != null && s.Cylinder2.Length > 0)
+                    {
+                        Mas_Cylinderlist_Go objrd = new Mas_Cylinderlist_Go
+                        {
+                            Material_Code = s.Material,
+                            Material_Description = s.Material_Description,
+                            Customer_Code = s.Customer_Code,
+                            Customer_Description = s.Customer_Description,
+                            Customer_Reference = s.Customer_Reference,
+                            Previos_ref = s.PREVIOUS_REF,
+                            Colorcode = s.Color_2,
+                            Cylindercode = s.Cylinder2,
+                            Cylinderbar = s.Barcode_2,
+                            Cylinderno = 2,
+                            Itemtag =  s.Cylinder2
+
+                        };
+
+                        lstobj.Add(objrd);
+
+                    }
+                    if (s.Cylinder3 != null && s.Cylinder3.Length > 0)
+                    {
+                        Mas_Cylinderlist_Go objrd = new Mas_Cylinderlist_Go
+                        {
+                            Material_Code = s.Material,
+                            Material_Description = s.Material_Description,
+                            Customer_Code = s.Customer_Code,
+                            Customer_Description = s.Customer_Description,
+                            Customer_Reference = s.Customer_Reference,
+                            Previos_ref = s.PREVIOUS_REF,
+                            Colorcode = s.Color_3,
+                            Cylindercode = s.Cylinder3,
+                            Cylinderbar = s.Barcode_3,
+                            Cylinderno = 3,
+                            Itemtag =  s.Cylinder3
+
+                        };
+                        lstobj.Add(objrd);
+
+                    }
+                    if (s.Cylinder4 != null && s.Cylinder4.Length > 0)
+                    {
+                        Mas_Cylinderlist_Go objrd = new Mas_Cylinderlist_Go
+                        {
+                            Material_Code = s.Material,
+                            Material_Description = s.Material_Description,
+                            Customer_Code = s.Customer_Code,
+                            Customer_Description = s.Customer_Description,
+                            Customer_Reference = s.Customer_Reference,
+                            Previos_ref = s.PREVIOUS_REF,
+                            Colorcode = s.Color_4,
+                            Cylindercode = s.Cylinder4,
+                            Cylinderbar = s.Barcode_4,
+                            Cylinderno = 4,
+                            Itemtag =  s.Cylinder4
+
+                        };
+                        lstobj.Add(objrd);
+
+                    }
+                    if (s.Cylinder5 != null && s.Cylinder5.Length > 0)
+                    {
+                        Mas_Cylinderlist_Go objrd = new Mas_Cylinderlist_Go
+                        {
+                            Material_Code = s.Material,
+                            Material_Description = s.Material_Description,
+                            Customer_Code = s.Customer_Code,
+                            Customer_Description = s.Customer_Description,
+                            Customer_Reference = s.Customer_Reference,
+                            Previos_ref = s.PREVIOUS_REF,
+                            Colorcode = s.Color_5,
+                            Cylindercode = s.Cylinder5,
+                            Cylinderbar = s.Barcode_5,
+                            Cylinderno = 5,
+                            Itemtag =  s.Cylinder5
+
+                        };
+                        lstobj.Add(objrd);
+
+                    }
+                    if (s.Cylinder6 != null && s.Cylinder6.Length > 0)
+                    {
+                        Mas_Cylinderlist_Go objrd = new Mas_Cylinderlist_Go
+                        {
+                            Material_Code = s.Material,
+                            Material_Description = s.Material_Description,
+                            Customer_Code = s.Customer_Code,
+                            Customer_Description = s.Customer_Description,
+                            Customer_Reference = s.Customer_Reference,
+                            Previos_ref = s.PREVIOUS_REF,
+                            Colorcode = s.Color_6,
+                            Cylindercode = s.Cylinder6,
+                            Cylinderbar = s.Barcode_6,
+                            Cylinderno = 6,
+                            Itemtag =  s.Cylinder6
+
+                        };
+                        lstobj.Add(objrd);
+
+                    }
+                    if (s.Cylinder7 != null && s.Cylinder7.Length > 0)
+                    {
+                        Mas_Cylinderlist_Go objrd = new Mas_Cylinderlist_Go
+                        {
+                            Material_Code = s.Material,
+                            Material_Description = s.Material_Description,
+                            Customer_Code = s.Customer_Code,
+                            Customer_Description = s.Customer_Description,
+                            Customer_Reference = s.Customer_Reference,
+                            Previos_ref = s.PREVIOUS_REF,
+                            Colorcode = s.Color_7,
+                            Cylindercode = s.Cylinder7,
+                            Cylinderbar = s.Barcode_7,
+                            Cylinderno = 7,
+                            Itemtag =  s.Cylinder7
+
+                        };
+                        lstobj.Add(objrd);
+
+                    }
+                    if (s.Cylinder8 != null && s.Cylinder8.Length > 0)
+                    {
+                        Mas_Cylinderlist_Go objrd = new Mas_Cylinderlist_Go
+                        {
+                            Material_Code = s.Material,
+                            Material_Description = s.Material_Description,
+                            Customer_Code = s.Customer_Code,
+                            Customer_Description = s.Customer_Description,
+                            Customer_Reference = s.Customer_Reference,
+                            Previos_ref = s.PREVIOUS_REF,
+                            Colorcode = s.Color_8,
+                            Cylindercode = s.Cylinder8,
+                            Cylinderbar = s.Barcode_8,
+                            Cylinderno = 8,
+                            Itemtag =  s.Cylinder8
+
+                        };
+                        lstobj.Add(objrd);
+
+                    }
+                    if (s.Cylinder9 != null && s.Cylinder9.Length > 0)
+                    {
+                        Mas_Cylinderlist_Go objrd = new Mas_Cylinderlist_Go
+                        {
+                            Material_Code = s.Material,
+                            Material_Description = s.Material_Description,
+                            Customer_Code = s.Customer_Code,
+                            Customer_Description = s.Customer_Description,
+                            Customer_Reference = s.Customer_Reference,
+                            Previos_ref = s.PREVIOUS_REF,
+                            Colorcode = s.Color_9,
+                            Cylindercode = s.Cylinder9,
+                            Cylinderbar = s.Barcode_9,
+                            Cylinderno = 9,
+                            Itemtag =  s.Cylinder9
+
+                        };
+                        lstobj.Add(objrd);
+
+                    }
+                    if (s.Cylinder10 != null && s.Cylinder10.Length > 0)
+                    {
+                        Mas_Cylinderlist_Go objrd = new Mas_Cylinderlist_Go
+                        {
+                            Material_Code = s.Material,
+                            Material_Description = s.Material_Description,
+                            Customer_Code = s.Customer_Code,
+                            Customer_Description = s.Customer_Description,
+                            Customer_Reference = s.Customer_Reference,
+                            Previos_ref = s.PREVIOUS_REF,
+                            Colorcode = s.Color_10,
+                            Cylindercode = s.Cylinder10,
+                            Cylinderbar = s.Barcode_10,
+                            Cylinderno = 10,
+                            Itemtag  = s.Cylinder10
+                        };
+                        lstobj.Add(objrd);
+                    }
+                }
+
+                Elements = lstobj.ToList();
+                mProductcode = str;
+            }
+        }
+        else
+        {
+
+        }
+
+    }
+
+
+
+    private string stxtInput { get; set; }
+
+    async Task DoTheThing(KeyboardEventArgs eventArgs)
+    {
+        if (eventArgs.Key == "Enter")        // fire on enter
+        {
+            mPalletcode = stringpalletkey;
+
+        }
+        stringpalletkey = null;
+        this.StateHasChanged();
+
+
+    }
+
+    async Task InsertCylinder()
+    {
+        if (lstobj.ToList().Count > 0 && mPalletcode.Length > 0)
+        {
+            string msgret = await Task.Run(() => ObjMasService.InsertCylinderList(lstobj.ToList(), mPalletcode));
+
+            Snackbar.Add(msgret, Severity.Info);
+        }
+    }
+
+
+    async Task DoTheThingProd(KeyboardEventArgs eventArgs)
+    {
+        if (eventArgs.Key == "Enter")        // fire on enter
+        {
+            string pallettemp = stringputkey;
+            await Task.Run(() => setstr(pallettemp));
+
+        }
+        stringputkey  = null;
+        this.StateHasChanged();
+    }
+
+    private bool FilterFunc(Mas_Cylinderlist_Go element)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.Customer_Code.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Cylindercode.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Cylinderbar.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Material_Code.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Itemtag.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if ($"{element.Material_Description} ".Contains(searchString))
+            return true;
+        return false;
+    }
+
+    private void DeleteMap(string pack)
+    {
+
+
+    }
+
+    async Task Reset()
+    {
+
+    }
+}

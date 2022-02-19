@@ -5,6 +5,7 @@
 @using GoWMS.Server.Models.Oub
 
 @inject StoreoutService ObjService
+@inject UserServices OpjUserService
 @inject ISnackbar Snackbar
 
 <style>
@@ -39,7 +40,7 @@ else
         </MudItem>
     </MudGrid>
 
-    <MudTable Hover="true" Breakpoint="Breakpoint.Sm" Height="500px" FixedHeader="true"
+    <MudTable Hover="true" Breakpoint="Breakpoint.Sm" Height=@VarGlobals.TableHeight FixedHeader="true"
               Items="@Elements"
               GroupBy="@_groupDefinition"
               GroupHeaderStyle="background-color:var(--mud-palette-background-grey)"
@@ -64,7 +65,8 @@ else
             <col />
         </ColGroup>
         <HeaderContent>
-            <MudTh><MudTableSortLabel SortBy="new Func<Sap_Storeout, object>(x=>x.Delivery_Date)">DATETIME</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Sap_Storeout, object>(x=>x.Delivery_Date)">DELIVERYTIME</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Sap_Storeout, object>(x=>x.Stock_Consign)">ISBREAK</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel SortBy="new Func<Sap_Storeout, object>(x=>x.Su_No)">PACKID</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel SortBy="new Func<Sap_Storeout, object>(x=>x.Item_Code)">MATERIALCODE</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel SortBy="new Func<Sap_Storeout, object>(x=>x.Item_Name)">MATERIALNAME</MudTableSortLabel></MudTh>
@@ -74,10 +76,22 @@ else
         </HeaderContent>
         <GroupHeaderTemplate>
             @*<MudTd><MudButton Variant="Variant.Outlined" Size="Size.Small" OnClick="@(() => ShowBtnPress())">Set Wave</MudButton></MudTd>*@
-            <MudTh Class="mud-table-cell-custom-group" colspan="7">@($"{context.GroupName} : {context.Key}")</MudTh>
+            <MudTh Class="mud-table-cell-custom-group" colspan="8">@($"{context.GroupName} : {context.Key}")</MudTh>
         </GroupHeaderTemplate>
         <RowTemplate>
-            <MudTd  Style="width: 190px;" DataLabel="DATETIME">@Convert.ToDateTime(context.Delivery_Date).ToString(VarGlobals.FormatDTHM)</MudTd>
+            <MudTd Style="width: 190px;" DataLabel="DELIVERYTIME">@Convert.ToDateTime(context.Delivery_Date).ToString(VarGlobals.FormatDTHM)</MudTd>
+
+
+            <MudTd DataLabel="ISBREAK">
+                @if (@context.Stock_Consign == "Y")
+                    {
+                    <MudChip Variant="Variant.Filled" Color="Color.Primary">Break</MudChip>
+                    }
+                    else
+                    {
+                    <MudChip Variant="Variant.Filled" Color="Color.Success">Full</MudChip>
+                    }
+            </MudTd>
             <MudTd DataLabel="PACKID">@context.Su_No</MudTd>
             <MudTd DataLabel="MATERIALCODE">@context.Item_Code</MudTd>
             <MudTd DataLabel="MATERIALNAME">@context.Item_Name</MudTd>
@@ -100,6 +114,8 @@ else
     IEnumerable<int> pageSizeOptions = new int[] { 10, 20, 30, 50, 100 };
 
     private readonly string pageheader = "Create Wave";
+    public string mPagedesc { get; set; } = "Create Wave";
+    private string mPagename { get; set; } = "/oub/pickbatch";
     private string msgAction = "Enter Palletcode";
     private string mPalletcode { get; set; } = "";
     private string mPackid { get; set; } = "";

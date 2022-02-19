@@ -143,18 +143,18 @@ namespace GoWMS.Server.Data
                 try
                 {
                     SqlCommand cmd = new SqlCommand("SELECT Material,Material_Description " +
-                    ",Customer_Code,Customer_Description,Customer_Reference" +
-                    ",Color_1,Cylinder1" +
-                    ",Color_2,Cylinder2" +
-                    ",Color_3,Cylinder3" +
-                    ",Color_4,Cylinder4" +
-                    ",Color_5,Cylinder5" +
-                    ",Color_6,Cylinder6" +
-                    ",Color_7,Cylinder7" +
-                    ",Color_8,Cylinder8" +
-                    ",Color_9,Cylinder9" +
-                    ",Color_10,Cylinder10 " +
-                    "FROM dbo.V_Cylinder", con)
+                    ",Customer_Code,Customer_Description,Customer_Reference, PREVIOUS_REF" +
+                    ",Color_1,Cylinder_1, BARCODE_1" +
+                    ",Color_2,Cylinder_2, BARCODE_2" +
+                    ",Color_3,Cylinder_3, BARCODE_3" +
+                    ",Color_4,Cylinder_4, BARCODE_4" +
+                    ",Color_5,Cylinder_5, BARCODE_5" +
+                    ",Color_6,Cylinder_6, BARCODE_6" +
+                    ",Color_7,Cylinder_7, BARCODE_7" +
+                    ",Color_8,Cylinder_8, BARCODE_8" +
+                    ",Color_9,Cylinder_9, BARCODE_9" +
+                    ",Color_10,Cylinder_10, BARCODE_10 " +
+                    "FROM dbo.Cylinder", con)
                     {
                         CommandType = CommandType.Text
                     };
@@ -171,25 +171,36 @@ namespace GoWMS.Server.Data
                             Customer_Description = rdr["Customer_Description"].ToString(),
                             Customer_Reference = rdr["Customer_Reference"].ToString(),
                             Color_1 = rdr["Color_1"].ToString(),
-                            Cylinder1 = rdr["Cylinder1"].ToString(),
+                            Cylinder1 = rdr["Cylinder_1"].ToString(),
+                            Barcode_1 = rdr["BARCODE_1"].ToString(),
                             Color_2 = rdr["Color_2"].ToString(),
-                            Cylinder2 = rdr["Cylinder2"].ToString(),
+                            Cylinder2 = rdr["Cylinder_2"].ToString(),
+                            Barcode_2 = rdr["BARCODE_2"].ToString(),
                             Color_3 = rdr["Color_3"].ToString(),
-                            Cylinder3 = rdr["Cylinder3"].ToString(),
+                            Cylinder3 = rdr["Cylinder_3"].ToString(),
+                            Barcode_3 = rdr["BARCODE_3"].ToString(),
                             Color_4 = rdr["Color_4"].ToString(),
-                            Cylinder4 = rdr["Cylinder4"].ToString(),
+                            Cylinder4 = rdr["Cylinder_4"].ToString(),
+                            Barcode_4 = rdr["BARCODE_4"].ToString(),
                             Color_5 = rdr["Color_5"].ToString(),
-                            Cylinder5 = rdr["Cylinder5"].ToString(),
+                            Cylinder5 = rdr["Cylinder_5"].ToString(),
+                            Barcode_5 = rdr["BARCODE_5"].ToString(),
                             Color_6 = rdr["Color_6"].ToString(),
-                            Cylinder6 = rdr["Cylinder6"].ToString(),
+                            Cylinder6 = rdr["Cylinder_6"].ToString(),
+                            Barcode_6 = rdr["BARCODE_6"].ToString(),
                             Color_7 = rdr["Color_7"].ToString(),
-                            Cylinder7 = rdr["Cylinder7"].ToString(),
+                            Cylinder7 = rdr["Cylinder_7"].ToString(),
+                            Barcode_7 = rdr["BARCODE_7"].ToString(),
                             Color_8 = rdr["Color_8"].ToString(),
-                            Cylinder8 = rdr["Cylinder8"].ToString(),
+                            Cylinder8 = rdr["Cylinder_8"].ToString(),
+                            Barcode_8 = rdr["BARCODE_8"].ToString(),
                             Color_9 = rdr["Color_9"].ToString(),
-                            Cylinder9 = rdr["Cylinder9"].ToString(),
+                            Cylinder9 = rdr["Cylinder_9"].ToString(),
+                            Barcode_9 = rdr["BARCODE_9"].ToString(),
                             Color_10 = rdr["Color_10"].ToString(),
-                            Cylinder10 = rdr["Cylinder10"].ToString()
+                            Cylinder10 = rdr["Cylinder_10"].ToString(),
+                            Barcode_10 = rdr["BARCODE_10"].ToString(),
+                            PREVIOUS_REF = rdr["PREVIOUS_REF"].ToString()
                         };
                         lstobj.Add(objrd);
                     }
@@ -482,7 +493,139 @@ namespace GoWMS.Server.Data
         }
 
 
-        public IEnumerable<V_CylinderInfo> GetAllErpCylindersbytag()
+        public IEnumerable<Cylinder> GetAllErpCylindersbytag(string Tag)
+        {
+            List<Cylinder> lstobj = new List<Cylinder>();
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    StringBuilder Sql = new StringBuilder();
+
+                    Sql.AppendLine("SELECT [Material],[Material_Description],[Customer_Code] ,[Customer_Description]");
+                    Sql.AppendLine(",[Customer_Reference],[PREVIOUS_REF],[Color_1] as Colorcode,[Cylinder_1] as Cylindercode,[BARCODE_1] as Cylinderbar");
+                    Sql.AppendLine(",1 as Cylindeno, [IState]");
+                    Sql.AppendLine("FROM [dbo].[Cylinder]");
+                    Sql.AppendLine("WHERE ([Cylinder_1] is not null and [BARCODE_1] is not null)");
+                    Sql.AppendLine("AND [BARCODE_1] = @BARCODE_1");
+                    Sql.AppendLine("UNION ALL");
+                    Sql.AppendLine("SELECT [Material],[Material_Description],[Customer_Code] ,[Customer_Description]");
+                    Sql.AppendLine(",[Customer_Reference],[PREVIOUS_REF],[Color_2] as Colorcode,[Cylinder_2] as Cylindercode,[BARCODE_2] as Cylinderbar");
+                    Sql.AppendLine(",3 as Cylindeno, [IState]");
+                    Sql.AppendLine("FROM [dbo].[Cylinder]");
+                    Sql.AppendLine("WHERE ([Cylinder_2] is not null and [BARCODE_2] is not null)");
+                    Sql.AppendLine("AND [BARCODE_2] = @BARCODE_2");
+                    Sql.AppendLine("UNION ALL");
+                    Sql.AppendLine("SELECT [Material],[Material_Description],[Customer_Code] ,[Customer_Description]");
+                    Sql.AppendLine(",[Customer_Reference],[PREVIOUS_REF],[Color_3] as Colorcode,[Cylinder_3] as Cylindercode,[BARCODE_3] as Cylinderbar");
+                    Sql.AppendLine(",3 as Cylindeno, [IState]");
+                    Sql.AppendLine("FROM [dbo].[Cylinder]");
+                    Sql.AppendLine("WHERE ([Cylinder_3] is not null and [BARCODE_3] is not null)");
+                    Sql.AppendLine("AND [BARCODE_3] = @BARCODE_3");
+                    Sql.AppendLine("UNION ALL");
+                    Sql.AppendLine("SELECT [Material],[Material_Description],[Customer_Code] ,[Customer_Description]");
+                    Sql.AppendLine(",[Customer_Reference],[PREVIOUS_REF],[Color_4] as Colorcode,[Cylinder_4] as Cylindercode,[BARCODE_4] as Cylinderbar");
+                    Sql.AppendLine(",4 as Cylindeno, [IState]");
+                    Sql.AppendLine("FROM [dbo].[Cylinder]");
+                    Sql.AppendLine("WHERE ([Cylinder_4] is not null and [BARCODE_4] is not null)");
+                    Sql.AppendLine("AND [BARCODE_4] = @BARCODE_4");
+                    Sql.AppendLine("UNION ALL");
+                    Sql.AppendLine("SELECT [Material],[Material_Description],[Customer_Code] ,[Customer_Description]");
+                    Sql.AppendLine(",[Customer_Reference],[PREVIOUS_REF],[Color_5] as Colorcode,[Cylinder_5] as Cylindercode,[BARCODE_5] as Cylinderbar");
+                    Sql.AppendLine(",5 as Cylindeno, [IState]");
+                    Sql.AppendLine("FROM [dbo].[Cylinder]");
+                    Sql.AppendLine("WHERE ([Cylinder_5] is not null and [BARCODE_5] is not null)");
+                    Sql.AppendLine("AND [BARCODE_5] = @BARCODE_5");
+                    Sql.AppendLine("UNION ALL");
+                    Sql.AppendLine("SELECT [Material],[Material_Description],[Customer_Code] ,[Customer_Description]");
+                    Sql.AppendLine(",[Customer_Reference],[PREVIOUS_REF],[Color_6] as Colorcode,[Cylinder_6] as Cylindercode,[BARCODE_6] as Cylinderbar");
+                    Sql.AppendLine(",6 as Cylindeno, [IState]");
+                    Sql.AppendLine("FROM [dbo].[Cylinder]");
+                    Sql.AppendLine("WHERE ([Cylinder_6] is not null and [BARCODE_6] is not null)");
+                    Sql.AppendLine("AND [BARCODE_6] = @BARCODE_6");
+                    Sql.AppendLine("UNION ALL");
+                    Sql.AppendLine("SELECT [Material],[Material_Description],[Customer_Code] ,[Customer_Description]");
+                    Sql.AppendLine(",[Customer_Reference],[PREVIOUS_REF],[Color_7] as Colorcode,[Cylinder_7] as Cylindercode,[BARCODE_7] as Cylinderbar");
+                    Sql.AppendLine(",7 as Cylindeno, [IState]");
+                    Sql.AppendLine("FROM [dbo].[Cylinder]");
+                    Sql.AppendLine("WHERE ([Cylinder_7] is not null and [BARCODE_7] is not null)");
+                    Sql.AppendLine("AND [BARCODE_7] = @BARCODE_7");
+                    Sql.AppendLine("UNION ALL");
+                    Sql.AppendLine("SELECT [Material],[Material_Description],[Customer_Code] ,[Customer_Description]");
+                    Sql.AppendLine(",[Customer_Reference],[PREVIOUS_REF],[Color_8] as Colorcode,[Cylinder_8] as Cylindercode,[BARCODE_8] as Cylinderbar");
+                    Sql.AppendLine(",8 as Cylindeno, [IState]");
+                    Sql.AppendLine("FROM [dbo].[Cylinder]");
+                    Sql.AppendLine("WHERE ([Cylinder_8] is not null and [BARCODE_8] is not null)");
+                    Sql.AppendLine("AND [BARCODE_8] = @BARCODE_8");
+                    Sql.AppendLine("UNION ALL");
+                    Sql.AppendLine("SELECT [Material],[Material_Description],[Customer_Code] ,[Customer_Description]");
+                    Sql.AppendLine(",[Customer_Reference],[PREVIOUS_REF],[Color_9] as Colorcode,[Cylinder_9] as Cylindercode,[BARCODE_9] as Cylinderbar");
+                    Sql.AppendLine(",9 as Cylindeno, [IState]");
+                    Sql.AppendLine("FROM [dbo].[Cylinder]");
+                    Sql.AppendLine("WHERE ([Cylinder_9] is not null and [BARCODE_9] is not null)");
+                    Sql.AppendLine("AND [BARCODE_9] = @BARCODE_9");
+                    Sql.AppendLine("UNION ALL");
+                    Sql.AppendLine("SELECT [Material],[Material_Description],[Customer_Code] ,[Customer_Description]");
+                    Sql.AppendLine(",[Customer_Reference],[PREVIOUS_REF],[Color_10] as Colorcode,[Cylinder_10] as Cylindercode,[BARCODE_10] as Cylinderbar");
+                    Sql.AppendLine(",10 as Cylindeno, [IState]");
+                    Sql.AppendLine("FROM [dbo].[Cylinder]");
+                    Sql.AppendLine("WHERE ([Cylinder_10] is not null and [BARCODE_10] is not null)");
+                    Sql.AppendLine("AND [BARCODE_10] = @BARCODE_10");
+
+                    SqlCommand cmd = new SqlCommand(Sql.ToString(), con)
+                    {
+                        CommandType = CommandType.Text
+                    };
+
+                    con.Open();
+
+                    cmd.Parameters.AddWithValue("@BARCODE_1", Tag);
+                    cmd.Parameters.AddWithValue("@BARCODE_2", Tag);
+                    cmd.Parameters.AddWithValue("@BARCODE_3", Tag);
+                    cmd.Parameters.AddWithValue("@BARCODE_4", Tag);
+                    cmd.Parameters.AddWithValue("@BARCODE_5", Tag);
+                    cmd.Parameters.AddWithValue("@BARCODE_6", Tag);
+                    cmd.Parameters.AddWithValue("@BARCODE_7", Tag);
+                    cmd.Parameters.AddWithValue("@BARCODE_8", Tag);
+                    cmd.Parameters.AddWithValue("@BARCODE_9", Tag);
+                    cmd.Parameters.AddWithValue("@BARCODE_10", Tag);
+
+                    SqlDataReader rdr = cmd.ExecuteReader();
+
+                    while (rdr.Read())
+                    {
+                        Cylinder objrd = new Cylinder
+                        {
+                            Material = rdr["Material"].ToString(),
+                            Material_Description = rdr["Material_Description"].ToString(),
+                            Customer_Code = rdr["Customer_Code"].ToString(),
+                            Customer_Description = rdr["Customer_Description"].ToString(),
+                            Customer_Reference = rdr["Customer_Reference"].ToString(),
+                            Previos_Ref = rdr["PREVIOUS_REF"].ToString(),
+                            Colorcode = rdr["Colorcode"].ToString(),
+                            Cylindercode = rdr["Cylindercode"].ToString(),
+                            Cylinderbar = rdr["Cylinderbar"].ToString(),
+                            Cylindeno = rdr["Cylindeno"] == DBNull.Value ? 0 : (int?)rdr["Cylindeno"],
+                            IState = rdr["IState"] == DBNull.Value ? 0 : (int?)rdr["Cylindeno"],
+                        };
+
+                        lstobj.Add(objrd);
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    Log.Error(ex.ToString());
+                }
+                finally
+                {
+                    con.Close();
+                }
+            }
+            return lstobj;
+        }
+
+
+        public IEnumerable<V_CylinderInfo> GetAllErpCylindersbyMat(string matcode)
         {
             List<V_CylinderInfo> lstobj = new List<V_CylinderInfo>();
             using (SqlConnection con = new SqlConnection(connectionString))
@@ -491,19 +634,19 @@ namespace GoWMS.Server.Data
                 {
                     StringBuilder Sql = new StringBuilder();
                     Sql.AppendLine("SELECT Material,Material_Description");
-                    Sql.AppendLine(",Customer_Code,Customer_Description,Customer_Reference");
-                    Sql.AppendLine(",Color_1,Cylinder1");
-                    Sql.AppendLine(",Color_2,Cylinder2");
-                    Sql.AppendLine(",Color_3,Cylinder3");
-                    Sql.AppendLine(",Color_4,Cylinder4");
-                    Sql.AppendLine(",Color_5,Cylinder5");
-                    Sql.AppendLine(",Color_6,Cylinder6");
-                    Sql.AppendLine(",Color_7,Cylinder7");
-                    Sql.AppendLine(",Color_8,Cylinder8");
-                    Sql.AppendLine(",Color_9,Cylinder9");
-                    Sql.AppendLine(",Color_10,Cylinder10");
-                    Sql.AppendLine("FROM dbo.V_Cylinder");
-                
+                    Sql.AppendLine(",Customer_Code,Customer_Description,Customer_Reference, PREVIOUS_REF");
+                    Sql.AppendLine(",Color_1,Cylinder_1, BARCODE_1");
+                    Sql.AppendLine(",Color_2,Cylinder_2, BARCODE_2");
+                    Sql.AppendLine(",Color_3,Cylinder_3, BARCODE_3");
+                    Sql.AppendLine(",Color_4,Cylinder_4, BARCODE_4");
+                    Sql.AppendLine(",Color_5,Cylinder_5, BARCODE_5");
+                    Sql.AppendLine(",Color_6,Cylinder_6, BARCODE_6");
+                    Sql.AppendLine(",Color_7,Cylinder_7, BARCODE_7");
+                    Sql.AppendLine(",Color_8,Cylinder_8, BARCODE_8");
+                    Sql.AppendLine(",Color_9,Cylinder_9, BARCODE_9");
+                    Sql.AppendLine(",Color_10,Cylinder_10, BARCODE_10");
+                    Sql.AppendLine("FROM dbo.Cylinder");
+                    Sql.AppendLine("WHERE Material=@Material");
 
 
                     SqlCommand cmd = new SqlCommand(Sql.ToString(), con)
@@ -513,6 +656,8 @@ namespace GoWMS.Server.Data
 
 
                     con.Open();
+                    cmd.Parameters.AddWithValue("@Material", matcode);
+
                     SqlDataReader rdr = cmd.ExecuteReader();
                     while (rdr.Read())
                     {
@@ -524,25 +669,36 @@ namespace GoWMS.Server.Data
                             Customer_Description = rdr["Customer_Description"].ToString(),
                             Customer_Reference = rdr["Customer_Reference"].ToString(),
                             Color_1 = rdr["Color_1"].ToString(),
-                            Cylinder1 = rdr["Cylinder1"].ToString(),
+                            Cylinder1 = rdr["Cylinder_1"].ToString(),
+                            Barcode_1 = rdr["BARCODE_1"].ToString(),
                             Color_2 = rdr["Color_2"].ToString(),
-                            Cylinder2 = rdr["Cylinder2"].ToString(),
+                            Cylinder2 = rdr["Cylinder_2"].ToString(),
+                            Barcode_2 = rdr["BARCODE_2"].ToString(),
                             Color_3 = rdr["Color_3"].ToString(),
-                            Cylinder3 = rdr["Cylinder3"].ToString(),
+                            Cylinder3 = rdr["Cylinder_3"].ToString(),
+                            Barcode_3 = rdr["BARCODE_3"].ToString(),
                             Color_4 = rdr["Color_4"].ToString(),
-                            Cylinder4 = rdr["Cylinder4"].ToString(),
+                            Cylinder4 = rdr["Cylinder_4"].ToString(),
+                            Barcode_4 = rdr["BARCODE_4"].ToString(),
                             Color_5 = rdr["Color_5"].ToString(),
-                            Cylinder5 = rdr["Cylinder5"].ToString(),
+                            Cylinder5 = rdr["Cylinder_5"].ToString(),
+                            Barcode_5 = rdr["BARCODE_5"].ToString(),
                             Color_6 = rdr["Color_6"].ToString(),
-                            Cylinder6 = rdr["Cylinder6"].ToString(),
+                            Cylinder6 = rdr["Cylinder_6"].ToString(),
+                            Barcode_6 = rdr["BARCODE_6"].ToString(),
                             Color_7 = rdr["Color_7"].ToString(),
-                            Cylinder7 = rdr["Cylinder7"].ToString(),
+                            Cylinder7 = rdr["Cylinder_7"].ToString(),
+                            Barcode_7 = rdr["BARCODE_7"].ToString(),
                             Color_8 = rdr["Color_8"].ToString(),
-                            Cylinder8 = rdr["Cylinder8"].ToString(),
+                            Cylinder8 = rdr["Cylinder_8"].ToString(),
+                            Barcode_8 = rdr["BARCODE_8"].ToString(),
                             Color_9 = rdr["Color_9"].ToString(),
-                            Cylinder9 = rdr["Cylinder9"].ToString(),
+                            Cylinder9 = rdr["Cylinder_9"].ToString(),
+                            Barcode_9 = rdr["BARCODE_9"].ToString(),
                             Color_10 = rdr["Color_10"].ToString(),
-                            Cylinder10 = rdr["Cylinder10"].ToString()
+                            Cylinder10 = rdr["Cylinder_10"].ToString(),
+                            Barcode_10 = rdr["BARCODE_10"].ToString(),
+                            PREVIOUS_REF = rdr["PREVIOUS_REF"].ToString()
                         };
                         lstobj.Add(objrd);
                     }

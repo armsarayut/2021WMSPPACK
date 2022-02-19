@@ -5,6 +5,7 @@
 @using GoWMS.Server.Models.Wcs
 
 @inject WcsService ObjService
+@inject UserServices OpjUserService
 
 @if (Elements == null)
 {
@@ -62,6 +63,8 @@ else
     IEnumerable<int> pageSizeOptions = new int[] { 10, 20, 30, 50, 100 };
 
     private readonly string pageheader = "CONSTANCE";
+    public string mPagedesc { get; set; } = "CONSTANCE";
+    private string mPagename { get; set; } = "/mas/instance";
     private string msgAction = "Enter Palletcode";
     private string mPalletcode { get; set; } = "";
     private string mPackid { get; set; } = "";

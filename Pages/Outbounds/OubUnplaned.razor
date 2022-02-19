@@ -15,6 +15,7 @@
 @inject StoreoutService ObjStoreoutService
 @inject ISnackbar Snackbar
 @inject ErpApiService ObjApiService
+@inject UserServices OpjUserService
 @inject IStringLocalizer<OubUnplaned> L
 
 
@@ -111,6 +112,8 @@ else
     private bool _multiSelect = true;
 
     private string mPageHeader = "Cyclecount";
+    private string mPagedesc { get; set; } = "Cyclecount";
+    private string mPagename { get; set; } = "/wh/Unplaned";
     private string msgAction = "Enter Palletcode";
     private string mPalletcode { get; set; } = "";
     private string mPackid { get; set; } = "";

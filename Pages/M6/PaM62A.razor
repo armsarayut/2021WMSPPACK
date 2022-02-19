@@ -7,6 +7,7 @@
 
 @inject PublicService ObjPublicService
 @inject ReportService UserlogService
+@inject UserServices OpjUserService
 
 @if (Elements == null)
 {
@@ -54,6 +55,8 @@ else
 @code {
     private string msgAction = "Enter Palletcode";
     private string mMenudesc = "Order Receive";
+    public string mPagedesc { get; set; } = "Order Receive";
+    private string mPagename { get; set; } = "/pa/m6_2a";
     private string mPalletcode { get; set; } = "";
     private string mPackid { get; set; } = "";
     private string palletcode { get; set; }

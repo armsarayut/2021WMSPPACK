@@ -7,6 +7,7 @@
 
 @inject PublicService ObjPublicService
 @inject ReportService UserlogService
+@inject UserServices OpjUserService
 
 @if (Elements == null)
 {
@@ -45,9 +46,9 @@ else
             <MudTd DataLabel="DATETIME">@Convert.ToDateTime(context.W_Hour).ToString(VarGlobals.FormatDTHM)</MudTd>
             <MudTd DataLabel="TASKCOUNT">@context.W_Count</MudTd>
             @*
-        <MudTd DataLabel="">@context.Desc_Th</MudTd>
-        <MudTd DataLabel="">@context.Desc_En</MudTd>
-        <MudTd DataLabel="">@Convert.ToDateTime(context.Created).ToShortDateString()</MudTd>
+                <MudTd DataLabel="">@context.Desc_Th</MudTd>
+                <MudTd DataLabel="">@context.Desc_En</MudTd>
+                <MudTd DataLabel="">@Convert.ToDateTime(context.Created).ToShortDateString()</MudTd>
             *@
         </RowTemplate>
         <PagerContent>
@@ -59,6 +60,8 @@ else
 @code {
     private string msgAction = "Enter Palletcode";
     private string mMenudesc = "Inbound Counter";
+    public string mPagedesc { get; set; } = "Inbound Counter";
+    private string mPagename { get; set; } = "/pa/m6_7a";
     private string mPalletcode { get; set; } = "";
     private string mPackid { get; set; } = "";
     private string palletcode { get; set; }
@@ -128,10 +131,10 @@ else
             return true;
         //if (element.Su_No.Contains(searchString, StringComparison.OrdinalIgnoreCase))
         //    return true;
-       // if (element.W_Count.Contains(searchString, StringComparison.OrdinalIgnoreCase))
-       //     return true;
-       // if (element.Desc_Th.Contains(searchString, StringComparison.OrdinalIgnoreCase))
-       //     return true;
+        // if (element.W_Count.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        //     return true;
+        // if (element.Desc_Th.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        //     return true;
         //if ($"{element.Create_By}".Contains(searchString))
         //    return true;
         return false;

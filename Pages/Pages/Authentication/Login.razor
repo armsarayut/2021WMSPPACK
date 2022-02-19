@@ -4,6 +4,7 @@
 @using GoWMS.Server.Data;
 @using GoWMS.Server.Controllers
 @using NETCore.Encrypt;
+
 @inject IJSRuntime JSRunTime
 @using System.Security.Claims
 @using Microsoft.Extensions.Configuration
@@ -22,20 +23,23 @@
 
 <MudTextField @bind-Value="@Password" Label="Password" Variant="Variant.Outlined" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="TogglePasswordVisibility" />
 @*
-<div Class="d-flex justify-space-between align-center">
-    <MudCheckBox T="bool" Label="Remember me?" Color="Color.Primary" Class="ml-n1 my-3"></MudCheckBox>
-    <MudLink Href="/pages/authentication/forgot-password">Forgot pwd?</MudLink>
-</div>
+    <div Class="d-flex justify-space-between align-center">
+        <MudCheckBox T="bool" Label="Remember me?" Color="Color.Primary" Class="ml-n1 my-3"></MudCheckBox>
+        <MudLink Href="/pages/authentication/forgot-password">Forgot pwd?</MudLink>
+    </div>
 *@
-<br/>
+<br />
+
 
 <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" FullWidth="true" OnClick="@btnLogin_Click">Sign In</MudButton>
 
-
+@*
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" Link="/dashboard" Size="Size.Large" FullWidth="true">Sign In</MudButton>
+*@
 
 @code {
-    string Password { get; set; } = "@dm1nistr@t0r";
-    string Userword { get; set; } = "admin@gowms.com";
+    string Password { get; set; } = "@ei0u2020";
+    string Userword { get; set; } = "guest@gowms.com";
     private IEnumerable<Userinfo> UserElements = new List<Userinfo>();
 
     bool PasswordVisibility;
@@ -62,44 +66,53 @@
     private async Task btnLogin_Click()
     {
 
-        var key=Configuration.GetSection("Appkey")["Pass"].ToString();
-        var encrypted = EncryptProvider.DESEncrypt(Password, key);
-
-        UserElements = await Task.Run(() => ObjUserService.GetUser(Userword, encrypted));
-
-        if (UserElements.Count() > 0)
+        if (Password.Length > 0 && Userword.Length > 0)
         {
-            var grouid = UserElements.Select(x => x.Usgid).FirstOrDefault();
+            var key = Configuration.GetSection("Appkey")["Pass"].ToString();
+            //var encrypted = Security.EncryptString(Password, key);
+            var encrypted = EncryptProvider.DESEncrypt(Password, key);
 
-     
+            UserElements = await Task.Run(() => ObjUserService.GetUser(Userword, encrypted));
 
-             VarGlobals.User.GroupID = grouid.Value;
+            if (UserElements.Count() > 0)
+            {
+                var grouid = UserElements.Select(x => x.Usgid).FirstOrDefault();
 
-            var authModule = await JSRunTime.InvokeAsync<IJSObjectReference>("import", "./js/auth.js");
-            await authModule.InvokeVoidAsync("SignIn", Userword, encrypted, grouid.ToString() , "/dashboard");
-            var authModules = authModule;
+                VarGlobals.User.GroupID = grouid.Value;
+
+                var authModule = await JSRunTime.InvokeAsync<IJSObjectReference>("import", "./js/auth.js");
+                await authModule.InvokeVoidAsync("SignIn", Userword, encrypted, grouid.ToString(), "/dashboard");
+                var authModules = authModule;
+            }
+            else
+            {
+                Snackbar.Add("The " + Userword + " user was not found in the system.", Severity.Error);
+            }
         }
         else
         {
-             Snackbar.Add("The " + Userword +" user was not found in the system.", Severity.Error);
+            Snackbar.Add("Please Enter User and Password", Severity.Error);
         }
 
-        
 
-      //navigationManager.NavigateTo("/dashboard" );
 
-      //SetUser();
+
+
+
+        //navigationManager.NavigateTo("/dashboard" );
+
+        //SetUser();
 
 
     }
 
-     private async void btnLogout_Click()
+    private async void btnLogout_Click()
     {
         var authModule = await JSRunTime.InvokeAsync<IJSObjectReference>("import", "./js/auth.js");
         await authModule.InvokeVoidAsync("SignOut", "/");
     }
 
-    void  SetUser()
+    void SetUser()
     {
         //GoWMS.Server.Data.CurrentUserName = Userword;
         //GoWMS.Server.Data.VarGlobals.
@@ -114,7 +127,7 @@
         */
         var srcString = Password;
         var key = "czsqO+DxnA1EcyurkKdllA==";
-   
+
         var encrypted = EncryptProvider.DESEncrypt(srcString, key);
         var decrypted = EncryptProvider.DESDecrypt(encrypted, key);
 
@@ -123,9 +136,9 @@
         VarGlobals.User.DeepID = 1;
         VarGlobals.User.GroupID = 1;
 
-       navigationManager.NavigateTo("/dashboard");
+        navigationManager.NavigateTo("/dashboard");
 
-       // navigationManager.NavigateTo("/");
+        // navigationManager.NavigateTo("/");
 
         //navigationManager.NavigateTo("");
 

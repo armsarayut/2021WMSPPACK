@@ -1,0 +1,171 @@
+﻿@page "/mas/setprivilege"
+@using GoWMS.Server.Data
+@using GoWMS.Server.Controllers
+@using GoWMS.Server.Models
+@using GoWMS.Server.Models.Mas
+
+@inject UserServices ObjService
+@inject UserServices OpjUserService
+
+@if (Elements == null)
+{
+    //<p><em>Loading...</em></p>
+    <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
+}
+else
+{
+    <MudText Typo="Typo.h6" Color="Color.Primary"> @pageheader </MudText>
+    <MudTable Items="@Elements"
+              FixedHeader="@fixed_header"
+              FixedFooter="@fixed_footer"
+              Height="@(fixed_header || fixed_footer ?"600px":"")"
+              Dense="@dense"
+              Hover="@hover"
+              Bordered="@bordered"
+              Striped="@striped"
+              ReadOnly="@ronly"
+              CanCancelEdit="@canCancelEdit"
+              Filter="new Func<UserPrivilege,bool>(FilterFunc)" @bind-SelectedItem="selectedItem" SortLabel="Sort By">
+        <ToolBarContent>
+            <MudTooltip Text="Export" Color="Color.Secondary" Placement="Placement.Top">
+                <MudMenu Icon="@Icons.Filled.Download" Color="Color.Primary">
+                    <MudMenuItem>Excel</MudMenuItem>
+                    <MudMenuItem>Pdf</MudMenuItem>
+                </MudMenu>
+            </MudTooltip>
+            <MudSpacer />
+            <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+        </ToolBarContent>
+
+        <HeaderContent>
+            <MudTh><MudTableSortLabel SortBy="new Func<UserPrivilege, object>(x=>x.Ugdesc)">GROUP</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<UserPrivilege, object>(x=>x.Menu_desc)">MENU</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<UserPrivilege, object>(x=>x.Role_acc)">ACCESS</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<UserPrivilege, object>(x=>x.Role_add)">ADD</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<UserPrivilege, object>(x=>x.Role_edit)">EDIT</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<UserPrivilege, object>(x=>x.Role_del)">DELETE</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<UserPrivilege, object>(x=>x.Role_rpt)">REPORT</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<UserPrivilege, object>(x=>x.Role_apv)">APPROVE</MudTableSortLabel></MudTh>
+            <MudTh>ACTION</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="GROUP">@context.Ugdesc</MudTd>
+            <MudTd DataLabel="MENU">@context.Menu_desc</MudTd>
+            <MudTd DataLabel="ACCESS"><MudCheckBox @bind-Checked="@context.Role_acc" /></MudTd>
+            <MudTd DataLabel="ADD"><MudCheckBox @bind-Checked="@context.Role_add" /></MudTd>
+            <MudTd DataLabel="EDIT"><MudCheckBox @bind-Checked="@context.Role_edit" /></MudTd>
+            <MudTd DataLabel="DELETE"><MudCheckBox @bind-Checked="@context.Role_del" /></MudTd>
+            <MudTd DataLabel="REPORT"><MudCheckBox @bind-Checked="@context.Role_rpt" /></MudTd>
+            <MudTd DataLabel="APPROVE"><MudCheckBox @bind-Checked="@context.Role_apv" /></MudTd>
+
+
+            <MudTd Class="clm-row-small" DataLabel="ACTION">
+                <MudFab @onclick="@(()=>Commitconstance(@context.Idx.Value, @context.Role_acc.Value , @context.Role_add.Value, @context.Role_edit.Value, @context.Role_del.Value , @context.Role_rpt.Value, @context.Role_apv.Value))" Color="Color.Primary" Icon="@Icons.Material.Filled.Save" Size="Size.Small" IconSize="Size.Small" />
+                <MudFab @onclick="@(()=>Refreshconstance())" Color="Color.Secondary" Icon="@Icons.Material.Filled.Refresh" Size="Size.Small" IconSize="Size.Small" />
+            </MudTd>
+        </RowTemplate>
+
+        <PagerContent>
+            <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />
+        </PagerContent>
+    </MudTable>
+}
+
+@code {
+
+    IEnumerable<int> pageSizeOptions = new int[] { 10, 20, 30, 50, 100 };
+
+    private readonly string pageheader = "Privilege";
+    public string mPagedesc { get; set; } = "Privilege";
+    private string mPagename { get; set; } = "/mas/setprivilege";
+    private string msgAction = "Enter Palletcode";
+    private string mPalletcode { get; set; } = "";
+    private string mPackid { get; set; } = "";
+    private string palletcode { get; set; }
+    private bool dense = true;
+    private bool hover = true;
+    private bool striped = true;
+    private bool bordered = false;
+    private bool fixed_header = true;
+    private bool fixed_footer = true;
+    private string searchString = "";
+    private bool ronly = false;
+    private bool canCancelEdit = true;
+
+    private UserPrivilege selectedItem = null;
+    private HashSet<UserPrivilege> selectedItems = new HashSet<UserPrivilege>();
+    private IEnumerable<UserPrivilege> Elements = new List<UserPrivilege>();
+    public int elevation = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        UserServices objCS = new UserServices();
+        //Elements = await Task.Run(() => objCS.GetReceivingOrdersbypallet(mPalletcode));
+        Elements = await Task.Run(() => objCS.GetPrivilegeAll());
+    }
+
+    private void setstr(string str)
+    {
+        //if (mPalletcode.Length <= 0)
+        //{
+        //    mPalletcode = str;
+        //    msgAction = "Enter Pack ID";
+        //    elevation = 3;
+        //}
+        //else
+        //{
+        //    if (str == mPalletcode)
+        //    {
+        //        elevation = 2;
+        //        msgAction = "Mapping successfully";
+        //        ObjCustomService.UpdateReceivingOrderbypallet(mPalletcode);
+        //        mPalletcode = "";
+        //    }
+        //    else
+        //    {
+        //        mPackid = str;
+        //        ObjCustomService.UpdateReceivingOrderbypack(mPalletcode, mPackid);
+        //    }
+        //}
+        //CustomerService objGR = new CustomerService();
+        //Elements = objGR.GetReceivingOrdersbypallet(mPalletcode);
+    }
+
+    private string stxtInput { get; set; }
+
+    private void DoTheThing(KeyboardEventArgs eventArgs)
+    {
+        if (eventArgs.Key == "Enter")        // fire on enter
+        {
+            setstr(palletcode);
+            palletcode = "";
+        }
+    }
+
+    private bool FilterFunc(UserPrivilege element)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.Ugdesc.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Menu_desc.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        return false;
+    }
+
+    private void Commitconstance(long idx, bool acc, bool add, bool edi, bool del, bool rpt, bool apv)
+    {
+
+        bool bcheck = ObjService.SetPrivilege(idx, acc, add, edi, del, rpt, apv);
+
+
+        Refreshconstance();
+
+    }
+
+    private void Refreshconstance()
+    {
+        Elements = ObjService.GetPrivilegeAll();
+    }
+
+}

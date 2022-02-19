@@ -1,0 +1,156 @@
+﻿@page "/mas/user"
+@using GoWMS.Server.Data
+@using GoWMS.Server.Controllers
+@using GoWMS.Server.Models
+@using GoWMS.Server.Models.Mas
+
+@inject UserServices ObjUserServices
+@inject IDialogService DialogService
+
+@if (Elements == null)
+{
+    //<p><em>Loading...</em></p>
+    <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
+}
+else
+{
+    <MudText Typo="Typo.h6" Color="Color.Primary"> @pageheader </MudText>
+    <MudTable Items="@Elements"
+              FixedHeader="@fixed_header"
+              FixedFooter="@fixed_footer"
+              Height="@(fixed_header || fixed_footer ?"600px":"")"
+              Dense="@dense"
+              Hover="@hover"
+              Bordered="@bordered"
+              Striped="@striped"
+              Filter="new Func<Userinfo,bool>(FilterFunc)" @bind-SelectedItem="selectedItem" SortLabel="Sort By">
+        <ToolBarContent>
+            <MudTooltip Text="Export" Color="Color.Secondary" Placement="Placement.Top">
+                <MudMenu Icon="@Icons.Filled.Download" Color="Color.Primary">
+                    <MudMenuItem>Excel</MudMenuItem>
+                    <MudMenuItem>Pdf</MudMenuItem>
+                </MudMenu>
+            </MudTooltip>
+            <MudSpacer />
+            <MudTextField @bind-Value="searchString"
+                          Placeholder="Search"
+                          Adornment="Adornment.Start"
+                          AdornmentIcon="@Icons.Material.Filled.Search"
+                          IconSize="Size.Medium" Class="mt-0"></MudTextField>
+        </ToolBarContent>
+
+        <HeaderContent>
+            <MudTh><MudTableSortLabel SortBy="new Func<Userinfo, object>(x=>x.Usgrp)">GROUP</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Userinfo, object>(x=>x.UserId)">USERID</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Userinfo, object>(x=>x.Usname)">USERNAME</MudTableSortLabel></MudTh>
+            <MudTh>EDIT</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="GROUP">@context.Usgrp</MudTd>
+            <MudTd DataLabel="USERID">@context.UserId</MudTd>
+            <MudTd DataLabel="USERNAME">@context.Usname</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="EDIT">
+                <MudFab @onclick="@(()=>OpenDialog(@context.Uspass,@context.Usname,@context.UserId ))" Color="Color.Secondary" Icon="@Icons.Material.Filled.ModeEdit" Size="Size.Small" IconSize="Size.Small" />
+            </MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />
+        </PagerContent>
+    </MudTable>
+}
+
+@code {
+
+    IEnumerable<int> pageSizeOptions = new int[] { 10, 20, 30, 50, 100 };
+
+    private readonly string pageheader = "USER";
+    public string mPagedesc { get; set; } = "USERs";
+    private string mPagename { get; set; } = "/mas/user";
+    private string msgAction = "Enter Palletcode";
+    private string mPalletcode { get; set; } = "";
+    private string mPackid { get; set; } = "";
+    private string palletcode { get; set; }
+    private bool dense = true;
+    private bool hover = true;
+    private bool striped = true;
+    private bool bordered = false;
+    private bool fixed_header = true;
+    private bool fixed_footer = true;
+    private string searchString = "";
+    private Userinfo selectedItem = null;
+    private HashSet<Userinfo> selectedItems = new HashSet<Userinfo>();
+    private IEnumerable<Userinfo> Elements = new List<Userinfo>();
+    public int elevation = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        UserServices objCS = new UserServices();
+        //Elements = await Task.Run(() => objCS.GetReceivingOrdersbypallet(mPalletcode));
+        Elements = await Task.Run(() => objCS.GetUserAll());
+    }
+
+    private void setstr(string str)
+    {
+        //if (mPalletcode.Length <= 0)
+        //{
+        //    mPalletcode = str;
+        //    msgAction = "Enter Pack ID";
+        //    elevation = 3;
+        //}
+        //else
+        //{
+        //    if (str == mPalletcode)
+        //    {
+        //        elevation = 2;
+        //        msgAction = "Mapping successfully";
+        //        ObjCustomService.UpdateReceivingOrderbypallet(mPalletcode);
+        //        mPalletcode = "";
+        //    }
+        //    else
+        //    {
+        //        mPackid = str;
+        //        ObjCustomService.UpdateReceivingOrderbypack(mPalletcode, mPackid);
+        //    }
+        //}
+        //CustomerService objGR = new CustomerService();
+        //Elements = objGR.GetReceivingOrdersbypallet(mPalletcode);
+    }
+
+    private string stxtInput { get; set; }
+
+    private void DoTheThing(KeyboardEventArgs eventArgs)
+    {
+        if (eventArgs.Key == "Enter")        // fire on enter
+        {
+            setstr(palletcode);
+            palletcode = "";
+        }
+    }
+
+    private bool FilterFunc(Userinfo element)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.UserId.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Usname.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Usgrp.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        return false;
+    }
+
+    private void OpenDialog(string mpass, string musername, string memail)
+    {
+        DialogOptions closeOnEscapeKey = new DialogOptions() { CloseButton = true };
+        var parameters = new DialogParameters();
+        parameters.Add("MPassword", mpass);
+        parameters.Add("MUsername", musername);
+        parameters.Add("MEmail", memail);
+
+        var dialog = DialogService.Show<DialogResetUser>("USER EDIT", parameters);
+
+
+
+    }
+}

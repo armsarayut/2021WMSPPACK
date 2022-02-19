@@ -5,6 +5,7 @@
 @using GoWMS.Server.Models.Inv
 
 @inject InvService ObjService
+@inject UserServices OpjUserService
 
 <style>
     .mud-table-cell-custom-group {
@@ -95,6 +96,9 @@ else
 @code {
 
     private string pageheader = "ReleaseStock";
+    private string mPagedesc { get; set; } = "ReleaseStock";
+    private string mPagename { get; set; } = "/wh/relesstock";
+
     private string msgAction = "Enter Palletcode";
     private string mPalletcode { get; set; } = "";
     private string mPackid { get; set; } = "";

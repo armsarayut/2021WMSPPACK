@@ -5,6 +5,7 @@
 @using GoWMS.Server.Models.Mas
 
 @inject MasService ObjService
+@inject UserServices OpjUserService
 
 @if (Elements == null)
 {
@@ -47,6 +48,9 @@ else
     IEnumerable<int> pageSizeOptions = new int[] { 10, 20, 30, 50, 100 };
 
     private readonly string pageheader = "Pallet";
+    public string mPagedesc { get; set; } = "Pallet";
+    private string mPagename { get; set; } = "/mas/pallet";
+
     private string msgAction = "Enter Palletcode";
     private string mPalletcode { get; set; } = "";
     private string mPackid { get; set; } = "";
@@ -68,7 +72,7 @@ else
     {
         MasService objCS = new MasService();
         //Elements = await Task.Run(() => objCS.GetReceivingOrdersbypallet(mPalletcode));
-        
+
         Elements = await Task.Run(() => objCS.GetAllMasterPallets());
 
         //Elements = objCS.GetAllMasterPallets();

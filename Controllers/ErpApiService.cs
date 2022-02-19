@@ -76,6 +76,14 @@ namespace GoWMS.Server.Controllers
             await objDAL.InsertReceivingOrdersBypack(listOrder,pallet);
             return "Update Successfully";
         }
+        public bool ClaerDeliveryOrder(string orderno)
+        {
+            bool bret;
+
+            bret= objDAL.ClaerDeliveryOrder(orderno);
+
+            return bret;
+        }
 
         public async Task<string> InsertDeliveryOrderAsync(List<Api_Deliveryorder_Go> listOrder)
         {

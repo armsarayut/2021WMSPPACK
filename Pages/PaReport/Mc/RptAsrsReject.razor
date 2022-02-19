@@ -6,9 +6,10 @@
 @using GoWMS.Server.Pdf
 @using GoWMS.Server.Reports
 
-@inject WcsService ObjWcsService;
+@inject WcsService ObjWcsService
 @inject NavigationManager navigationManager
 @inject IJSRuntime JSRuntime
+@inject UserServices OpjUserService
 
 @if (Elements != null)
 {
@@ -81,6 +82,8 @@
 
 @code {
     private string mPagecaption { get; set; } = "ASRS:REJECT";
+    private string mPagedesc { get; set; } = "ASRS:REJECT";
+    private string mPagename { get; set; } = "/rpt/asrsreject";
 
     private IEnumerable<Rpt_Ejectgate> Elements = new List<Rpt_Ejectgate>();
 

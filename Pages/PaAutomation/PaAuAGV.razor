@@ -15,6 +15,7 @@
 
 @inject IJSRuntime JSRuntime
 @inject AgvService AgvObjService
+@inject UserServices OpjUserService
 
 
 @if (Elements == null)
@@ -104,6 +105,8 @@ else
     IEnumerable<int> pageSizeOptions = new int[] { 10, 20, 30, 50, 100 };
 
     private readonly string mPagecaption = "AGV-QUEUE";
+    private string mPagedesc { get; set; } = "AGV-QUEUE";
+    private string mPagename { get; set; } = "/paau/agvqueue";
     private string msgAction = "Enter Palletcode";
     private string mPalletcode { get; set; } = "";
     private string mPackid { get; set; } = "";

@@ -521,6 +521,40 @@ namespace GoWMS.Server.Data
             }
         }
 
+        public bool ClaerDeliveryOrder(string orderno)
+        {
+            bool bret=false;
+
+            using NpgsqlConnection con = new NpgsqlConnection(connectionString);
+            try
+            {
+                StringBuilder sql = new StringBuilder();
+                sql.AppendLine("Delete From wms.api_deliveryorder_go");
+                sql.AppendLine("Where mo_barcode = @mo_barcode ");
+                NpgsqlCommand cmd = new NpgsqlCommand(sql.ToString(), con)
+                {
+                    CommandType = CommandType.Text
+                };
+
+                cmd.Parameters.AddWithValue("@mo_barcode", orderno);
+                con.Open();
+                cmd.ExecuteNonQuery();
+                bret = true;
+            }
+            catch (NpgsqlException ex)
+            {
+                Log.Error(ex.ToString());
+                bret = false;
+            }
+            finally
+            {
+                con.Close();
+            }
+
+
+            return bret;
+        }
+
         public async Task InsertDeliveryOrder(List<Api_Deliveryorder_Go> listOrder)
         {
             using NpgsqlConnection con = new NpgsqlConnection(connectionString);

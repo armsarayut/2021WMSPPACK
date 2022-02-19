@@ -4,7 +4,8 @@
 @using GoWMS.Server.Models.Wcs;
 @using GoWMS.Server.Data;
 
-@inject WcsService ObjWcsService;
+@inject WcsService ObjWcsService
+@inject UserServices OpjUserService
 @inject NavigationManager navigationManager
 
 
@@ -50,14 +51,14 @@
                 <MudTh>IN</MudTh>
                 <MudTh>OUT</MudTh>
                 <MudTh>TOTAL</MudTh>
-    
+
             </HeaderContent>
             <RowTemplate>
-  
-                <MudTd DataLabel="MACHINE" >@context.Mccode</MudTd>
-                <MudTd DataLabel="IN" >@context.Inbound</MudTd>
-                <MudTd DataLabel="OUT" >@context.Outbound</MudTd>
-                <MudTd DataLabel="TOTAL" >@context.Total</MudTd>
+
+                <MudTd DataLabel="MACHINE">@context.Mccode</MudTd>
+                <MudTd DataLabel="IN">@context.Inbound</MudTd>
+                <MudTd DataLabel="OUT">@context.Outbound</MudTd>
+                <MudTd DataLabel="TOTAL">@context.Total</MudTd>
             </RowTemplate>
             <PagerContent>
                 <MudTablePager PageSizeOptions="new int[] { 10, 20, 50, 100 }" />
@@ -70,6 +71,8 @@
 
 @code {
     private string mPagecaption { get; set; } = "ASRS Throughput";
+    private string mPagedesc { get; set; } = "ASRS Throughput";
+    private string mPagename { get; set; } = "/wcs/asrsthroughput";
 
     private IEnumerable<AsrsPerformance> Elements = new List<AsrsPerformance>();
 
@@ -99,7 +102,7 @@
         //Elements = await Task.Run(() => objCS.GetReceivingOrdersbypallet(mPalletcode));
 
         fromDateTime = fromDate.Value.Date + fromTime.Value;
-        toDateTime= toDate.Value.Date + toTime.Value;
+        toDateTime = toDate.Value.Date + toTime.Value;
 
 
         Elements = await Task.Run(() => objCS.GetAsrsPerformance(fromDateTime.Value, toDateTime.Value));
@@ -124,7 +127,7 @@
     {
         //timePortionDateTimePicker.Value
 
-        DateTime newDateTimeFM= fromDate.Value.Date + fromTime.Value;
+        DateTime newDateTimeFM = fromDate.Value.Date + fromTime.Value;
         DateTime newDateTimeTO = toDate.Value.Date + toTime.Value;
 
 

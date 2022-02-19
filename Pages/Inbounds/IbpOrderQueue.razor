@@ -9,12 +9,14 @@
 
 @using GoWMS.Server.Pdf
 @using GoWMS.Server.Data
+@using GoWMS.Server.Models
 @using GoWMS.Server.Reports
 @using GoWMS.Server.Models.Inb
 @using GoWMS.Server.Controllers
 
 @inject IJSRuntime JSRuntime
 @inject InboundService ObjInboundService
+@inject UserServices OpjUserService
 
 @if (Elements == null)
 {
@@ -23,7 +25,7 @@
 }
 else
 {
-    <MudText Typo="Typo.h6" Color="Color.Primary">@mPagecaption</MudText>
+    <MudText Typo="Typo.h6" Color="Color.Primary">@mPagedesc</MudText>
     <MudTable Items="@Elements" FixedHeader="@fixed_header" FixedFooter="@fixed_footer" Height="@(fixed_header || fixed_footer ?"600px":"")" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<Inb_Goodreceive_Go,bool>(FilterFunc)" @bind-SelectedItem="selectedItem">
         <ToolBarContent>
             <MudTooltip Text="Export" Color="Color.Secondary" Placement="Placement.Top">
@@ -63,7 +65,8 @@ else
 }
 
 @code {
-    private string mPagecaption { get; set; } = "Good Receive";
+    private string mPagedesc { get; set; } = "Good Receive";
+    private string mPagename { get; set; } = "/Pag/1/1_3";
     private bool _processing = false;
 
     private string msgAction = "Enter Palletcode";
@@ -81,6 +84,8 @@ else
     private HashSet<Inb_Goodreceive_Go> selectedItems = new HashSet<Inb_Goodreceive_Go>();
     private IEnumerable<Inb_Goodreceive_Go> Elements = new List<Inb_Goodreceive_Go>();
 
+    private ResultReturn resultReturn = null;
+
     public int elevation = 0;
 
     protected override async Task OnInitializedAsync()
@@ -88,6 +93,10 @@ else
         InboundService objCS = new InboundService();
         //Elements = await Task.Run(() => objCS.GetReceivingOrdersbypallet(mPalletcode));
         Elements = await Task.Run(() => objCS.GetAllInbGoodreceiveGos());
+
+        resultReturn = await Task.Run(() => OpjUserService.InsertMenu(mPagename, mPagedesc));
+
+        resultReturn = await Task.Run(() => OpjUserService.InsertPrivilege(mPagename));
     }
 
     private void setstr(string str)
@@ -149,7 +158,7 @@ else
             IbpOrderQueueRptExcel excelReport = new IbpOrderQueueRptExcel();
             List<Inb_Goodreceive_Go> listExcelReport = new List<Inb_Goodreceive_Go>();
             listExcelReport = Elements.ToList();
-            var fileName = $"{mPagecaption.ToString()}-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+            var fileName = $"{mPagedesc.ToString()}-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
             await JSRuntime.InvokeAsync<object>("jsSaveAsFile", fileName, Convert.ToBase64String(excelReport.Report(listExcelReport)));
         }
         catch (Exception e)
@@ -165,7 +174,7 @@ else
             IbpOrderQueueRptPdf pdfReport = new IbpOrderQueueRptPdf();
             List<Inb_Goodreceive_Go> listPdfReport = new List<Inb_Goodreceive_Go>();
             listPdfReport = Elements.ToList();
-            var fileName = $"{mPagecaption.ToString()}-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.pdf";
+            var fileName = $"{mPagedesc.ToString()}-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.pdf";
             //await JSRuntime.InvokeAsync<object>("jsSaveAsFile", fileName, Convert.ToBase64String(pdfReport.Report(listPdfReport)));
             await JSRuntime.InvokeAsync<object>("jsSaveAsFile", fileName, Convert.ToBase64String(pdfReport.ExportPDF(listPdfReport)));
 

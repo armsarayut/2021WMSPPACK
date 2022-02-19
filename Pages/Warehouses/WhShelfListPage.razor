@@ -15,6 +15,7 @@
 
 @inject IJSRuntime JSRuntime
 @inject InvService ObjService
+@inject UserServices OpjUserService
 
 @if (Elements == null)
 {
@@ -24,14 +25,14 @@
 else
 {
     <MudText Typo="Typo.h6" Color="Color.Primary"> @mPagecaption </MudText>
-    <MudTable Items="@Elements" 
-              FixedHeader="@fixed_header" 
-              FixedFooter="@fixed_footer" 
-              Height="@(fixed_header || fixed_footer ?"600px":"")" 
-              Dense="@dense" 
-              Hover="@hover" 
-              Bordered="@bordered" 
-              Striped="@striped" 
+    <MudTable Items="@Elements"
+              FixedHeader="@fixed_header"
+              FixedFooter="@fixed_footer"
+              Height="@(fixed_header || fixed_footer ?"600px":"")"
+              Dense="@dense"
+              Hover="@hover"
+              Bordered="@bordered"
+              Striped="@striped"
               Filter="new Func<Vrpt_shelf_listInfo,bool>(FilterFunc)" @bind-SelectedItem="selectedItem" SortLabel="Sort By">
         <ToolBarContent>
             <MudTooltip Text="Export" Color="Color.Secondary" Placement="Placement.Top">
@@ -63,16 +64,16 @@ else
             <MudTd Class="clm-row-small" DataLabel="PALLET">@context.Lpncode</MudTd>
             <MudTd Class="clm-row-small" DataLabel="UPDATED">
                 @if (context.Modified != null)
-                {
+                    {
                     @Convert.ToDateTime(context.Modified).ToString(VarGlobals.FormatDT)
-                }
+                    }
             </MudTd>
             <MudTd Class="clm-row-small" DataLabel="STATUS">
                 <MudChip Variant="Variant.Filled" Color="@context.St_Color">@context.St_desc</MudChip>
             </MudTd>
         </RowTemplate>
         <PagerContent>
-            <MudTablePager PageSizeOptions="new int[]{10,20,50,100}"/>
+            <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />
         </PagerContent>
     </MudTable>
 }

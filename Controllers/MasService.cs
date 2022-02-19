@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using GoWMS.Server.Data;
 using GoWMS.Server.Models;
 using GoWMS.Server.Models.Mas;
+using GoWMS.Server.Models.Erp;
 
 namespace GoWMS.Server.Controllers
 {
@@ -79,6 +80,43 @@ namespace GoWMS.Server.Controllers
             List<Mas_Cylinder_Go> retlist = objDAL.GetAllCylinderGobytag(itemtag).ToList();
             return retlist;
         }
+
+         public async Task<string> InsertCylinderList(List<Mas_Cylinderlist_Go> listOrder, string mpallet)
+        {
+            bool bret;
+
+            bret = await objDAL.InsertCylinderList(listOrder, mpallet);
+
+            if (bret)
+            {
+                return "Insert Successfully";
+            }
+            else
+            {
+                return "Insert Fail";
+            }
+            
+        }
+
+        public async Task<string> InsertCylinderListMaster(List<Cylinder> listOrder, string mpallet)
+        {
+            bool bret;
+
+            bret = await objDAL.InsertCylinderListMaster(listOrder, mpallet);
+
+            if (bret)
+            {
+                return "Insert Successfully";
+            }
+            else
+            {
+                return "Insert Fail";
+            }
+
+        }
+
+
+
 
     }
 }

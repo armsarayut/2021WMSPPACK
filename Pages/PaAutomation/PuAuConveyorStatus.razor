@@ -11,6 +11,7 @@
 @inject IJSRuntime jsRuntime
 @inject UtilityServices ObjUtitityservice
 @inject IDialogService DialogService
+@inject UserServices OpjUserService
 
 
 @if (Elements == null)
@@ -85,6 +86,9 @@ else
 
 @code {
     private string mPagecaption = "ASRS-STATUS";
+    private string mPagedesc { get; set; } = "ASRS-STATUS";
+    private string mPagename { get; set; } = "/paau/asrsstatus";
+
     private bool dense = true;
     private bool hover = true;
     private bool striped = true;
@@ -182,10 +186,10 @@ else
 
     private void OpenDialog(string mccode)
     {
-        DialogOptions closeOnEscapeKey = new DialogOptions() {CloseButton = true };
+        DialogOptions closeOnEscapeKey = new DialogOptions() { CloseButton = true };
         var parameters = new DialogParameters { ["Mccode"] = mccode };
 
- 
+
         var dialog = DialogService.Show<DialogKeyboardNavigationExample_Dialog>(mccode, parameters);
 
 

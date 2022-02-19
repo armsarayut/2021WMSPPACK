@@ -9,6 +9,7 @@ using System.Text;
 using GoWMS.Server.Controllers;
 using GoWMS.Server.Models;
 using GoWMS.Server.Models.Mas;
+using GoWMS.Server.Models.Erp;
 using NpgsqlTypes;
 using Serilog;
 
@@ -619,6 +620,178 @@ namespace GoWMS.Server.Data
                 }
             }
             return lstobj;
+        }
+
+        public async Task<bool> InsertCylinderList(List<Mas_Cylinderlist_Go> listOrder , string mpallet)
+        {
+            bool bret = false;
+            using NpgsqlConnection con = new NpgsqlConnection(connectionString);
+            try
+            {
+                StringBuilder sql = new StringBuilder();
+                sql.AppendLine("INSERT INTO wms.mas_cylinderlist_go(");
+                sql.AppendLine("material_code, material_description");
+                sql.AppendLine(", customer_code, customer_description, customer_reference, previos_ref");
+                sql.AppendLine(", cylinderno, colorcode, cylindercode, cylinderbar, palletno, itemtag)");
+                sql.AppendLine("Values");
+
+                using var cmd = new NpgsqlCommand(connection: con, cmdText: null);
+
+                var i = 0;
+                foreach (var s in listOrder)
+                {
+                    if (i != 0) sql.AppendLine(",");
+                    var material_code = "material_code" + i.ToString();
+                    var material_description = "material_description" + i.ToString();
+                    var customer_code = "customer_code" + i.ToString();
+                    var customer_description = "customer_description" + i.ToString();
+                    var customer_reference = "customer_reference" + i.ToString();
+                    var previos_ref = "previos_ref" + i.ToString();
+                    var cylinderno = "cylinderno" + i.ToString();
+                    var colorcode = "colorcode" + i.ToString();
+                    var cylindercode = "cylindercode" + i.ToString();
+                    var cylinderbar = "cylinderbar" + i.ToString();
+                    var palletno = "palletno" + i.ToString();
+                    var itemtag = "itemtag" + i.ToString();
+                   
+
+                    sql.Append("(@").Append(material_code)
+                        .Append(", @").Append(material_description)
+                        .Append(", @").Append(customer_code)
+                        .Append(", @").Append(customer_description)
+                        .Append(", @").Append(customer_reference)
+                         .Append(", @").Append(previos_ref)
+                        .Append(", @").Append(cylinderno)
+                         .Append(", @").Append(colorcode)
+                        .Append(", @").Append(cylindercode)
+                        .Append(", @").Append(cylinderbar)
+                        .Append(", @").Append(palletno)
+                        .Append(", @").Append(itemtag)
+                        .Append(')');
+
+                    cmd.Parameters.Add(new NpgsqlParameter<string>(material_code, s.Material_Code));
+                    cmd.Parameters.Add(new NpgsqlParameter<string>(material_description, s.Material_Description));
+                    cmd.Parameters.Add(new NpgsqlParameter<string>(customer_code, s.Customer_Code));
+                    cmd.Parameters.Add(new NpgsqlParameter<string>(customer_description, s.Customer_Description));
+                    cmd.Parameters.Add(new NpgsqlParameter<string>(customer_reference, s.Customer_Reference));
+                    cmd.Parameters.Add(new NpgsqlParameter<string>(previos_ref, s.Previos_ref));
+                    cmd.Parameters.Add(new NpgsqlParameter<int>(cylinderno, (int)s.Cylinderno));
+                    cmd.Parameters.Add(new NpgsqlParameter<string>(colorcode, s.Colorcode));
+                    cmd.Parameters.Add(new NpgsqlParameter<string>(cylindercode, s.Cylindercode));
+                    cmd.Parameters.Add(new NpgsqlParameter<string>(cylinderbar, s.Cylinderbar));
+                    cmd.Parameters.Add(new NpgsqlParameter<string>(palletno, mpallet));
+                    cmd.Parameters.Add(new NpgsqlParameter<string>(itemtag, s.Itemtag));
+
+                    i++;
+
+                }
+                con.Open();
+
+                cmd.CommandText = sql.ToString();
+                await cmd.ExecuteNonQueryAsync();
+                bret = true;
+
+            }
+            catch (NpgsqlException ex)
+            {
+                bret = false;
+                Log.Error(ex.ToString());
+            }
+            finally
+            {
+                con.Close();
+            }
+
+            return bret;
+        }
+
+        public async Task<bool> InsertCylinderListMaster(List<Cylinder> listOrder, string mpallet)
+        {
+            bool bret = false;
+            using NpgsqlConnection con = new NpgsqlConnection(connectionString);
+            try
+            {
+                StringBuilder sql = new StringBuilder();
+                sql.AppendLine("DELETE FROM wms.mas_cylinderlist_go");
+                sql.AppendLine("WHERE palletno=@palletno");
+                sql.AppendLine(";");
+
+                sql.AppendLine("INSERT INTO wms.mas_cylinderlist_go(");
+                sql.AppendLine("material_code, material_description");
+                sql.AppendLine(", customer_code, customer_description, customer_reference, previos_ref");
+                sql.AppendLine(", cylinderno, colorcode, cylindercode, cylinderbar, palletno, itemtag)");
+                sql.AppendLine("Values");
+
+                using var cmd = new NpgsqlCommand(connection: con, cmdText: null);
+
+                var i = 0;
+                foreach (var s in listOrder)
+                {
+                    if (i != 0) sql.AppendLine(",");
+                    var material_code = "material_code" + i.ToString();
+                    var material_description = "material_description" + i.ToString();
+                    var customer_code = "customer_code" + i.ToString();
+                    var customer_description = "customer_description" + i.ToString();
+                    var customer_reference = "customer_reference" + i.ToString();
+                    var previos_ref = "previos_ref" + i.ToString();
+                    var cylinderno = "cylinderno" + i.ToString();
+                    var colorcode = "colorcode" + i.ToString();
+                    var cylindercode = "cylindercode" + i.ToString();
+                    var cylinderbar = "cylinderbar" + i.ToString();
+                    var palletno = "palletno" + i.ToString();
+                    var itemtag = "itemtag" + i.ToString();
+
+
+                    sql.Append("(@").Append(material_code)
+                        .Append(", @").Append(material_description)
+                        .Append(", @").Append(customer_code)
+                        .Append(", @").Append(customer_description)
+                        .Append(", @").Append(customer_reference)
+                         .Append(", @").Append(previos_ref)
+                        .Append(", @").Append(cylinderno)
+                         .Append(", @").Append(colorcode)
+                        .Append(", @").Append(cylindercode)
+                        .Append(", @").Append(cylinderbar)
+                        .Append(", @").Append(palletno)
+                        .Append(", @").Append(itemtag)
+                        .Append(')');
+
+                    cmd.Parameters.Add(new NpgsqlParameter<string>(material_code, s.Material));
+                    cmd.Parameters.Add(new NpgsqlParameter<string>(material_description, s.Material_Description));
+                    cmd.Parameters.Add(new NpgsqlParameter<string>(customer_code, s.Customer_Code));
+                    cmd.Parameters.Add(new NpgsqlParameter<string>(customer_description, s.Customer_Description));
+                    cmd.Parameters.Add(new NpgsqlParameter<string>(customer_reference, s.Customer_Reference));
+                    cmd.Parameters.Add(new NpgsqlParameter<string>(previos_ref, s.Previos_Ref));
+                    cmd.Parameters.Add(new NpgsqlParameter<int>(cylinderno, (int)s.Cylindeno));
+                    cmd.Parameters.Add(new NpgsqlParameter<string>(colorcode, s.Colorcode));
+                    cmd.Parameters.Add(new NpgsqlParameter<string>(cylindercode, s.Cylindercode));
+                    cmd.Parameters.Add(new NpgsqlParameter<string>(cylinderbar, s.Cylinderbar));
+                    cmd.Parameters.Add(new NpgsqlParameter<string>(palletno, mpallet));
+                    cmd.Parameters.Add(new NpgsqlParameter<string>(itemtag, s.Cylinderbar));
+
+                    i++;
+
+                }
+                cmd.Parameters.Add(new NpgsqlParameter<string>("@palletno", mpallet));
+
+                con.Open();
+
+                cmd.CommandText = sql.ToString();
+                await cmd.ExecuteNonQueryAsync();
+                bret = true;
+
+            }
+            catch (NpgsqlException ex)
+            {
+                bret = false;
+                Log.Error(ex.ToString());
+            }
+            finally
+            {
+                con.Close();
+            }
+
+            return bret;
         }
 
     }

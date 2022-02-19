@@ -7,8 +7,9 @@
 
 @inject MasService ObjMasService
 @inject InboundService ObjInboundService
+@inject UserServices OpjUserService
 
-<MudText Typo="Typo.h6" Color="Color.Primary">@mPageHeader</MudText>
+<MudText Typo="Typo.h6" Color="Color.Primary">@mPagedesc</MudText>
 
 <MudGrid>
     <MudItem xs="12">
@@ -17,21 +18,21 @@
             <MudAlert Severity="Severity.Normal" Variant="Variant.Outlined">@msgAction</MudAlert>
         }
         else @if (elevation == 1) //Info
-        {
-            <MudAlert Severity="Severity.Info" Variant="Variant.Outlined">@msgAction</MudAlert>
-        }
-        else if (elevation == 2) //Success
-        {
-            <MudAlert Severity="Severity.Success" Variant="Variant.Outlined">@msgAction</MudAlert>
-        }
-        else if (elevation == 3) // Warning
-        {
-            <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">@msgAction</MudAlert>
-        }
-        else if (elevation == 4) // Error
-        {
-            <MudAlert Severity="Severity.Error" Variant="Variant.Outlined">@msgAction</MudAlert>
-        }
+   {
+    <MudAlert Severity="Severity.Info" Variant="Variant.Outlined">@msgAction</MudAlert>
+}
+else if (elevation == 2) //Success
+{
+    <MudAlert Severity="Severity.Success" Variant="Variant.Outlined">@msgAction</MudAlert>
+}
+else if (elevation == 3) // Warning
+{
+    <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">@msgAction</MudAlert>
+}
+else if (elevation == 4) // Error
+{
+    <MudAlert Severity="Severity.Error" Variant="Variant.Outlined">@msgAction</MudAlert>
+}
     </MudItem>
     <MudItem xs="12">
         <div class="form-group">
@@ -70,7 +71,9 @@ else
 }
 
 @code {
-    private string mPageHeader = "Storage";
+    private string mPagedesc = "Storage";
+    private string mPagename { get; set; } = "/Pag/1/1_5";
+
     private string msgAction = "Enter Location";
     private string mPalletcode { get; set; } = "";
     private string mPackid { get; set; } = "";
@@ -88,7 +91,9 @@ else
 
     private IEnumerable<Inb_Putaway_Go> MasterQueue = new List<Inb_Putaway_Go>();
 
-    public int elevation = 0 ;
+    public int elevation = 0;
+
+    private ResultReturn resultReturn = null;
 
     protected override async Task OnInitializedAsync()
     {
@@ -96,6 +101,9 @@ else
         Elements = await Task.Run(() => objCS.GetAllInbPutawayGos());
         MasterStotageBins = ObjMasService.GetAllMasterStorageBins();
         //MasterQueue = ObjInboundService.GetAllInbPutawayGos();
+        resultReturn = await Task.Run(() => OpjUserService.InsertMenu(mPagename, mPagedesc));
+
+        resultReturn = await Task.Run(() => OpjUserService.InsertPrivilege(mPagename));
     }
 
     private void setstr(string str)
@@ -124,14 +132,14 @@ else
             if (allCorrect.ToList().Count > 0)
             {
                 //InQueue
-                ObjInboundService.SetStorageComplete(str,mPalletcode);
+                ObjInboundService.SetStorageComplete(str, mPalletcode);
                 elevation = 2;
                 msgAction = "Storage successfully";
                 mPalletcode = "";
             }
             else
             {
-                if (mPalletcode.Length>0)
+                if (mPalletcode.Length > 0)
                 {
                     elevation = 1;
                     msgAction = "Please enter Masterpallet";

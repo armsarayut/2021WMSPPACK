@@ -1,11 +1,14 @@
 ﻿@page "/Pag/1/1_1"
 @using GoWMS.Server.Data
+@using GoWMS.Server.Models
 @using GoWMS.Server.Controllers
 @using GoWMS.Server.Models.Api
 @using GoWMS.Server.Models.Inb
 
 @inject CustomerService ObjCustomService
 @inject ReportService UserlogService
+@inject UserServices OpjUserService
+@inject NavigationManager MyNavigationManager
 
 @if (Elements == null)
 {
@@ -14,15 +17,15 @@
 }
 else
 {
-    <MudText Typo="Typo.h6" Color="Color.Primary">Receiving Order</MudText>
-    <MudTable Items="@Elements" 
-              FixedHeader="@fixed_header" 
-              FixedFooter="@fixed_footer" 
-              Height="@(fixed_header || fixed_footer ?"600px":"")" 
-              Dense="@dense" 
-              Hover="@hover" 
-              Bordered="@bordered" 
-              Striped="@striped" 
+    <MudText Typo="Typo.h6" Color="Color.Primary">@mPagedesc</MudText>
+    <MudTable Items="@Elements"
+              FixedHeader="@fixed_header"
+              FixedFooter="@fixed_footer"
+              Height="@(fixed_header || fixed_footer ?"600px":"")"
+              Dense="@dense"
+              Hover="@hover"
+              Bordered="@bordered"
+              Striped="@striped"
               HorizontalScrollbar="true"
               Breakpoint="Breakpoint.Sm"
               Filter="new Func<Inb_Goodreceipt_Go,bool>(FilterFunc)" @bind-SelectedItem="selectedItem">
@@ -51,15 +54,15 @@ else
         </HeaderContent>
         <RowTemplate>
             <MudTd Class="clm-row-small" DataLabel="RECEIVING">@Convert.ToDateTime(context.Docdate).ToString(VarGlobals.FormatDT)</MudTd>
-            <MudTd Class="clm-row-small" DataLabel="DOCUMENT" >@context.Pono</MudTd>
-            <MudTd Class="clm-row-small" DataLabel="PackID" >@context.Pallettag</MudTd>
-            <MudTd Class="clm-row-small" DataLabel="MATERIAL" >@context.Itemcode</MudTd>
-            <MudTd Class="clm-row-small" DataLabel="DESCRIPTION" >@context.Itemname</MudTd>
-            <MudTd Class="clm-row-small" Style="text-align:right" DataLabel="QTY" >@string.Format(VarGlobals.FormatN2, context.Quantity)</MudTd>
-            <MudTd Class="clm-row-small" DataLabel="UNIT" >@context.Unit</MudTd>
-            <MudTd Class="clm-row-small" Style="text-align:right" DataLabel="WEIGHT" >@string.Format(VarGlobals.FormatN2, context.Weight)</MudTd>
-            <MudTd Class="clm-row-small" DataLabel="JOB" >@context.Docno</MudTd>
-            <MudTd Class="clm-row-small" DataLabel="JOBCODE" >@context.Docnote</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="DOCUMENT">@context.Pono</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="PackID">@context.Pallettag</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="MATERIAL">@context.Itemcode</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="DESCRIPTION">@context.Itemname</MudTd>
+            <MudTd Class="clm-row-small" Style="text-align:right" DataLabel="QTY">@string.Format(VarGlobals.FormatN2, context.Quantity)</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="UNIT">@context.Unit</MudTd>
+            <MudTd Class="clm-row-small" Style="text-align:right" DataLabel="WEIGHT">@string.Format(VarGlobals.FormatN2, context.Weight)</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="JOB">@context.Docno</MudTd>
+            <MudTd Class="clm-row-small" DataLabel="JOBCODE">@context.Docnote</MudTd>
         </RowTemplate>
         <PagerContent>
             <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />
@@ -68,6 +71,10 @@ else
 }
 
 @code {
+
+    public string mPagedesc { get; set; } = "1.1-ReceivingOrder";
+    private string mPagename { get; set; } = "/Pag/1/1_1";
+    //private string mPagedesc { get; set; } = "1.1-Receiving Order";
     private string msgAction = "Enter Palletcode";
     private string mPalletcode { get; set; } = "";
     private string mPackid { get; set; } = "";
@@ -85,11 +92,23 @@ else
 
     public int elevation = 0;
 
+    private ResultReturn resultReturn = null;
+
+
+
+
     protected override async Task OnInitializedAsync()
     {
+        mPagename = "/Pag/1/1_1";
+
         InboundService objCS = new InboundService();
         //Elements = await Task.Run(() => objCS.GetReceivingOrdersbypallet(mPalletcode));
         Elements = await Task.Run(() => objCS.GetAllInbGoodreceiptGos());
+
+        resultReturn = await Task.Run(() => OpjUserService.InsertMenu(mPagename, mPagedesc));
+
+        resultReturn = await Task.Run(() => OpjUserService.InsertPrivilege(mPagename));
+
         //InsertAuditrial("1.1-Receiving Order","Admin");
     }
 

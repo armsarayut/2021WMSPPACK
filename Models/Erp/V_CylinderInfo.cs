@@ -14,24 +14,37 @@ namespace GoWMS.Server.Models.Erp
         public string Customer_Reference { get; set; }
         public string Color_1 { get; set; }
         public string Cylinder1 { get; set; }
+        public string Barcode_1 { get; set; }
+        
         public string Color_2 { get; set; }
         public string Cylinder2 { get; set; }
+        public string Barcode_2 { get; set; }
         public string Color_3 { get; set; }
         public string Cylinder3 { get; set; }
+        public string Barcode_3 { get; set; }
         public string Color_4 { get; set; }
         public string Cylinder4 { get; set; }
+        public string Barcode_4 { get; set; }
         public string Color_5 { get; set; }
         public string Cylinder5 { get; set; }
+        public string Barcode_5 { get; set; }
         public string Color_6 { get; set; }
         public string Cylinder6 { get; set; }
+        public string Barcode_6 { get; set; }
         public string Color_7 { get; set; }
         public string Cylinder7 { get; set; }
+        public string Barcode_7 { get; set; }
         public string Color_8 { get; set; }
         public string Cylinder8 { get; set; }
+        public string Barcode_8 { get; set; }
         public string Color_9 { get; set; }
         public string Cylinder9 { get; set; }
+        public string Barcode_9 { get; set; }
         public string Color_10 { get; set; }
         public string Cylinder10 { get; set; }
+        public string Barcode_10 { get; set; }
+
+        public string PREVIOUS_REF { get; set; }
     }   
 
     

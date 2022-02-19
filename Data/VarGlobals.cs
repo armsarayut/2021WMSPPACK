@@ -50,5 +50,7 @@ namespace GoWMS.Server.Data
         public static string FormatTHM { get; set; } = "HH:mm";
         public static string FormatD { get; set; } = "yyyy-MM-dd";
 
+        public static string TableHeight { get; set; } = "600px";
+
     }
 }

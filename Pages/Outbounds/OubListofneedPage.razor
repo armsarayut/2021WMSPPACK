@@ -5,6 +5,7 @@
 @using GoWMS.Server.Models.Api
 
 @inject MasService ObjService
+@inject UserServices OpjUserService
 
 @if (Elements == null)
 {
@@ -52,7 +53,7 @@ else
             <MudTd DataLabel="PRODUCTCODE">@context.Finished_Product</MudTd>
             <MudTd DataLabel="PRODUCTIONNAME">@context.Finished_Product_Description</MudTd>
         </RowTemplate>
-        
+
         <PagerContent>
             <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />
         </PagerContent>
@@ -63,7 +64,9 @@ else
 
     IEnumerable<int> pageSizeOptions = new int[] { 10, 20, 30, 50, 100 };
 
-    private readonly string pageheader = "Material";
+    private readonly string pageheader = "ListofNeed";
+    public string mPagedesc { get; set; } = "ListofNeed";
+    private string mPagename { get; set; } = "/oub/listofneed";
     private string msgAction = "Enter Palletcode";
     private string mPalletcode { get; set; } = "";
     private string mPackid { get; set; } = "";
@@ -87,7 +90,7 @@ else
         Elements = await Task.Run(() => objCS.GetAllApiListofNeedGos());
     }
 
-   
+
 
     private void setstr(string str)
     {

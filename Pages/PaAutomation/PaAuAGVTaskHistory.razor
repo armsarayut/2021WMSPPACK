@@ -1,9 +1,10 @@
 ﻿@page "/paau/agvtaskhist"
 
-@using GoWMS.Server.Controllers;
-@using GoWMS.Server.Data;
+@using GoWMS.Server.Controllers
+@using GoWMS.Server.Data
 
-@inject AgvService ObjAgvService;
+@inject UserServices OpjUserService
+@inject AgvService ObjAgvService
 
 
 <MudText Typo="Typo.h6" Color="Color.Primary">@mPageHeader</MudText>
@@ -64,14 +65,14 @@
                 }
             }
             <MudTd DataLabel="Datetime" Style="@textClass" Class="">@Convert.ToDateTime(context.created).ToString(VarGlobals.FormatDTHM)</MudTd>
-            <MudTd DataLabel="TaskCode"  Style="@textClass">@context.task_code</MudTd>
-            <MudTd DataLabel="Soruce"  Style="@textClass">@context.gate_source</MudTd>
-            <MudTd DataLabel="Destination"  Style="@textClass">@context.gate_dest</MudTd>
-            <MudTd DataLabel="HTTP Reponse"  Style="@textClass">@context.http_response_code</MudTd>
+            <MudTd DataLabel="TaskCode" Style="@textClass">@context.task_code</MudTd>
+            <MudTd DataLabel="Soruce" Style="@textClass">@context.gate_source</MudTd>
+            <MudTd DataLabel="Destination" Style="@textClass">@context.gate_dest</MudTd>
+            <MudTd DataLabel="HTTP Reponse" Style="@textClass">@context.http_response_code</MudTd>
             <MudTd DataLabel="Message" Style="@textClass">@context.message</MudTd>
             <MudTd DataLabel="State" Style="@textClass">@context.code</MudTd>
             <MudTd DataLabel="Status" Style="@textClass">@context.code_desc</MudTd>
-            <MudTd DataLabel="API"Style="@textClass">@context.api_name</MudTd>
+            <MudTd DataLabel="API" Style="@textClass">@context.api_name</MudTd>
         </RowTemplate>
         <PagerContent>
             <MudTablePager PageSizeOptions="new int[] { 10, 20, 50, 100 }" />
@@ -101,6 +102,8 @@
         public string task_typ { get; set; }
     }
     private string mPageHeader = "AGV-Task";
+    private string mPagedesc { get; set; } = "AGV-Task";
+    private string mPagename { get; set; } = "/paau/agvtaskhist";
     DateTime? fromDate = DateTime.Today;
     TimeSpan? fromTime = DateTime.Now.AddHours(-1).TimeOfDay;
     DateTime? toDate = DateTime.Today;

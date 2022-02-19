@@ -5,6 +5,7 @@
 @using GoWMS.Server.Models.Api
 
 @inject ErpApiService ObjService
+@inject UserServices OpjUserService
 
 @if (Elements == null)
 {
@@ -65,6 +66,8 @@ else
     IEnumerable<int> pageSizeOptions = new int[] { 10, 20, 30, 50, 100 };
 
     private readonly string pageheader = "Material";
+    private string mPagedesc { get; set; } = "Good Receive";
+    private string mPagename { get; set; } = "/Pag/1/1_3";
     private string msgAction = "Enter Palletcode";
     private string mPalletcode { get; set; } = "";
     private string mPackid { get; set; } = "";

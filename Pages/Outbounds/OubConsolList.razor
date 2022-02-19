@@ -5,6 +5,7 @@
 @using GoWMS.Server.Models.Oub
 
 @inject StoreoutService ObjService
+@inject UserServices OpjUserService
 @inject ISnackbar Snackbar
 
 <style>
@@ -31,7 +32,7 @@ else
             <MudText Typo="Typo.h6" Color="Color.Primary"> @pageheader</MudText>
         </MudItem>
     </MudGrid>
-    
+
     <MudTable Hover="true" Breakpoint="Breakpoint.Sm" Height="600px" FixedHeader="true"
               Items="@Elements"
               GroupBy="@_groupDefinition"
@@ -103,6 +104,8 @@ else
     IEnumerable<int> pageSizeOptions = new int[] { 10, 20, 30, 50, 100 };
 
     private readonly string pageheader = "Consolelist";
+    public string mPagedesc { get; set; } = "Consolelist";
+    private string mPagename { get; set; } = "/oub/consol";
     private string msgAction = "Enter Palletcode";
     private string mPalletcode { get; set; } = "";
     private string mPackid { get; set; } = "";
@@ -195,5 +198,5 @@ else
         return false;
     }
 
-    
+
 }

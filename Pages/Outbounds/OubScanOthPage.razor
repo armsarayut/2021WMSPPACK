@@ -10,6 +10,7 @@
 @using GoWMS.Server.Models.Hagv
 
 @inject ErpApiService ObjApiService
+@inject UserServices OpjUserService
 @inject ISnackbar Snackbar
 
 @if (Elements == null)
@@ -35,19 +36,19 @@ else
         <MudItem xs="12" sm="6" md="4">
             @if (myGatesArray != null)
             {
-            <MudSelect T="string"
-                       Label="Delivery Station"
-                       @bind-Value="destvalue">
-                @foreach (var state in myGatesArray)
+                <MudSelect T="string"
+                           Label="Delivery Station"
+                           @bind-Value="destvalue">
+                    @foreach (var state in myGatesArray)
                     {
-                <MudSelectItem T="string" Value="@state">@state</MudSelectItem>
+                        <MudSelectItem T="string" Value="@state">@state</MudSelectItem>
                     }
-            </MudSelect>
+                </MudSelect>
             }
         </MudItem>
 
         <MudItem xs="12" sm="6" md="4">
-            <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Save" Style="background-color: limegreen; color: white; width: 200px; height: 30px;">
+            <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Save" Style="background-color: limegreen; color: white; width: 200px; height: 30px;" OnClick=@SetOrderpicking>
                 Set Picking
             </MudButton>
         </MudItem>

@@ -6,7 +6,8 @@
 @using GoWMS.Server.Pdf
 @using GoWMS.Server.Reports
 
-@inject WcsService ObjWcsService;
+@inject WcsService ObjWcsService
+@inject UserServices OpjUserService
 @inject NavigationManager navigationManager
 @inject IJSRuntime JSRuntime
 
@@ -88,6 +89,8 @@
 
 @code {
     private string mPagecaption { get; set; } = "ASRS Loadtime";
+    private string mPagedesc { get; set; } = "ASRS Loadtime";
+    private string mPagename { get; set; } = "/wcs/asrsloadtime";
 
     private IEnumerable<AsrsLoadtime> Elements = new List<AsrsLoadtime>();
 

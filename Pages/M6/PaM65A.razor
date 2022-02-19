@@ -7,6 +7,7 @@
 
 @inject PublicService ObjPublicService
 @inject ReportService UserlogService
+@inject UserServices OpjUserService
 
 @if (Elements == null)
 {
@@ -43,7 +44,7 @@ else
             <MudTh><MudTableSortLabel SortBy="new Func<Class6_5_A, object>(x=>x.Status)">STATUS</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel SortBy="new Func<Class6_5_A, object>(x=>x.Desc_Th)">DESCRIPTION(TH)</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel SortBy="new Func<Class6_5_A, object>(x=>x.Desc_En)">DESCRIPTION(EN)</MudTableSortLabel></MudTh>
-         
+
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="CREATED">@Convert.ToDateTime(context.Created).ToString(VarGlobals.FormatDT)</MudTd>
@@ -61,6 +62,8 @@ else
 @code {
     private string msgAction = "Enter Palletcode";
     private string mMenudesc = "Machine: Audit trial";
+    public string mPagedesc { get; set; } = "Machine: Audit trial";
+    private string mPagename { get; set; } = "/pa/m6_5a";
     private string mPalletcode { get; set; } = "";
     private string mPackid { get; set; } = "";
     private string palletcode { get; set; }

@@ -10,6 +10,7 @@
 @using GoWMS.Server.Models.Hagv
 
 @inject ErpApiService ObjApiService
+@inject UserServices OpjUserService
 @inject ISnackbar Snackbar
 
 @if (Elements == null)
@@ -33,7 +34,7 @@ else
             <MudTimePicker Label="Delivery Time " @bind-Time="time" TimeEditMode="TimeEditMode.Normal" />
         </MudItem>
 
-         <MudItem xs="12" sm="6" md="4">
+        <MudItem xs="12" sm="6" md="4">
             @if (myGatesArray != null)
             {
                 <MudSelect T="string"
@@ -48,7 +49,7 @@ else
         </MudItem>
 
         <MudItem xs="12" sm="6" md="4">
-            <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Save" Style="background-color: limegreen; color: white; width: 200px; height: 30px;">
+            <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Save" Style="background-color: limegreen; color: white; width: 200px; height: 30px; " OnClick=@SetOrderpicking>
                 Set Picking
             </MudButton>
         </MudItem>
@@ -343,7 +344,7 @@ else
         var dat = date.Value;
 
         DeliveryDate = dat.Add(tim);
-
+        string agvdestination = destvalue;
 
         var strLON = selectLON.OrderBy(x => x.Efidx).Select(x => new { efidx = x.Efidx, quantity = x.Quantity, packageid = x.Package_Id, materialcode = x.Material_Code }).ToList();
         var strRES = selectRES.OrderBy(x => x.Efidx).Select(x => new { efidx = x.Efidx, quantity = x.Quantity, packageid = x.Package_Id, materialcode = x.Material_Code }).ToList();
@@ -356,7 +357,9 @@ else
         var sReturn = "Call";
         Int64 iStation = 1;
 
-        ObjApiService.SetPick(jsonLON, jsonRES, DeliveryDate, iStation, ref iReturn, ref sReturn);
+        //ObjApiService.set(jsonLON, jsonRES, DeliveryDate, iStation, ref iReturn, ref sReturn);
+        ObjApiService.SetPickStation(jsonLON, jsonRES, DeliveryDate, agvdestination, ref iReturn, ref sReturn);
+
         if (iReturn == 0)
         {
             Snackbar.Add("SET PICKING >> " + sReturn, Severity.Error);

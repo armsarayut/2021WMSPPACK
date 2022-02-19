@@ -3,6 +3,9 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <UserSecretsId>7cbacb4f-fc4b-4b20-98a2-90e3cf3d2c45</UserSecretsId>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Company>AEI Solution Co.,Ltd</Company>
+    <Product>GoWMS</Product>
   </PropertyGroup>
 
   <ItemGroup>

@@ -11,6 +11,7 @@
 @inject IJSRuntime jsRuntime
 @inject UtilityServices ObjUtitityservice
 @inject IDialogService DialogService
+@inject UserServices OpjUserService
 
 
 @if (Elements == null)
@@ -87,6 +88,9 @@ else
 
 @code {
     private string mPagecaption = "ASRS-ALARM";
+    private string mPagedesc { get; set; } = "ASRS-ALARM";
+    private string mPagename { get; set; } = "/paau/asrsstatuspopup";
+
     private bool dense = true;
     private bool hover = true;
     private bool striped = true;

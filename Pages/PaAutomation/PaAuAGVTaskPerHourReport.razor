@@ -16,6 +16,7 @@
 
 @inject IJSRuntime JSRuntime
 @inject AgvService AgvObjService
+@inject UserServices OpjUserService
 
 
 @if (Elements == null)
@@ -55,6 +56,8 @@ else
 
 @code {
     private string mPagecaption { get; set; } = "AGV TASK REPORT";
+    private string mPagedesc { get; set; } = "AGV TASK REPORT";
+    private string mPagename { get; set; } = "/paau/agvreporttph";
     private bool _processing = false;
 
     private string msgAction = "Enter Palletcode";

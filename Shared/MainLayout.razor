@@ -27,6 +27,7 @@
         <MudSpacer />
 
         <Notifications/>
+
         <ChooseLanguage />
 
         <MudIconButton Icon="@Icons.Material.Filled.Brightness4" Color="Color.Inherit" OnClick="@((e) => DarkMode())" />
@@ -34,8 +35,13 @@
     </MudAppBar>
     <MudDrawer @bind-Open="_drawerOpen" Elevation="25" ClipMode="_themeManager.DrawerClipMode">
         <MudDrawerHeader>
+            @*
+        <div class="d-flex justify-center mb-1">
+            <img src="Images/Logocus.jpg" width="80px" height="40px" />
+        </div>
+            *@
             <div class="d-flex justify-center mb-1">
-                <img src="Images/AEI_Logo_2.png" width="100px" />
+                <img src="Images/AEI_Logo_2.png" width="80px" height="40px" />
             </div>
         </MudDrawerHeader>
         <NavMenu />

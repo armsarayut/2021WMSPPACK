@@ -5,45 +5,47 @@
 @using GoWMS.Server.Models.Inb
 
 @inject InboundService ObjInboundService
-
+@inject UserServices OpjUserService
 
 @if (Elements == null)
 {
     // <p><em>Loading...</em></p>
-    <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
+<MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
 }
 else
 {
-    <MudText Typo="Typo.h6" Color="Color.Primary">@mPageHeader</MudText>
-    <MudTable Items="@Elements" FixedHeader="@fixed_header" FixedFooter="@fixed_footer" Height="@(fixed_header || fixed_footer ?"600px":"")" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<Inb_Putaway_Go,bool>(FilterFunc)" @bind-SelectedItem="selectedItem">
-        <ToolBarContent>
-            <MudTooltip Text="Export" Color="Color.Secondary" Placement="Placement.Top">
-                <MudMenu Icon="@Icons.Filled.Download" Color="Color.Primary">
-                    <MudMenuItem>EXCEL</MudMenuItem>
-                    <MudMenuItem>PDF</MudMenuItem>
-                </MudMenu>
-            </MudTooltip>
-            <MudSpacer />
-            <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
-        </ToolBarContent>
-        <HeaderContent>
-            <MudTh Style="width: 190px;"><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Created)">QUEUEING</MudTableSortLabel></MudTh>
-            <MudTh Style="width: 120px;"><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Palletno)">PALLET</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Puttype)">TASKTYPE</MudTableSortLabel></MudTh>
-        </HeaderContent>
-        <RowTemplate>
-            <MudTd Class="clm-row-small" DataLabel="QUEUEING">@Convert.ToDateTime(context.Created).ToString(VarGlobals.FormatDT)</MudTd>
-            <MudTd Class="clm-row-small" DataLabel="PALLET">@context.Palletno</MudTd>
-            <MudTd Class="clm-row-small" DataLabel="TASKTYPE">@context.Puttype</MudTd>
-        </RowTemplate>
-        <PagerContent>
-            <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />
-        </PagerContent>
-    </MudTable>
+<MudText Typo="Typo.h6" Color="Color.Primary">@mPagedesc</MudText>
+<MudTable Items="@Elements" FixedHeader="@fixed_header" FixedFooter="@fixed_footer" Height="@(fixed_header || fixed_footer ?"600px":"")" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<Inb_Putaway_Go,bool>(FilterFunc)" @bind-SelectedItem="selectedItem">
+    <ToolBarContent>
+        <MudTooltip Text="Export" Color="Color.Secondary" Placement="Placement.Top">
+            <MudMenu Icon="@Icons.Filled.Download" Color="Color.Primary">
+                <MudMenuItem>EXCEL</MudMenuItem>
+                <MudMenuItem>PDF</MudMenuItem>
+            </MudMenu>
+        </MudTooltip>
+        <MudSpacer />
+        <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh Style="width: 190px;"><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Created)">QUEUEING</MudTableSortLabel></MudTh>
+        <MudTh Style="width: 120px;"><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Palletno)">PALLET</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortBy="new Func<Inb_Putaway_Go, object>(x=>x.Puttype)">TASKTYPE</MudTableSortLabel></MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd Class="clm-row-small" DataLabel="QUEUEING">@Convert.ToDateTime(context.Created).ToString(VarGlobals.FormatDT)</MudTd>
+        <MudTd Class="clm-row-small" DataLabel="PALLET">@context.Palletno</MudTd>
+        <MudTd Class="clm-row-small" DataLabel="TASKTYPE">@context.Puttype</MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />
+    </PagerContent>
+</MudTable>
 }
 
 @code {
-    private string mPageHeader = "Master Queuing";
+    private string mPagedesc = "Master Queuing";
+    private string mPagename { get; set; } = "/Pag/1/1_4";
+
     private string msgAction = "Enter Palletcode";
     private string mPalletcode { get; set; } = "";
     private string mPackid { get; set; } = "";
@@ -60,12 +62,17 @@ else
     private IEnumerable<Inb_Putaway_Go> Elements = new List<Inb_Putaway_Go>();
 
     public int elevation = 0;
+private ResultReturn resultReturn = null;
 
     protected override async Task OnInitializedAsync()
     {
         InboundService objCS = new InboundService();
         //Elements = await Task.Run(() => objCS.GetReceivingOrdersbypallet(mPalletcode));
         Elements = await Task.Run(() => objCS.GetAllInbPutawayGos());
+
+        resultReturn = await Task.Run(() => OpjUserService.InsertMenu(mPagename, mPagedesc));
+
+        resultReturn = await Task.Run(() => OpjUserService.InsertPrivilege(mPagename));
     }
 
     private void setstr(string str)

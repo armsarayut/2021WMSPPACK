@@ -6,8 +6,6 @@
 
 <MudDialog>
     <DialogContent>
-
-
         <MudSelect Label="Command " HelperText="Pick the Command" @bind-SelectedValues="selectedItems">
             @foreach (var cmd in Elements)
             {
@@ -31,7 +29,6 @@
 
     private HashSet<Vmachine_command> selectedItems = new HashSet<Vmachine_command>();
     private IEnumerable<Vmachine_command> Elements = new List<Vmachine_command>();
-
 
 
     protected override async Task OnInitializedAsync()

@@ -16,6 +16,7 @@
 
 @inject IJSRuntime JSRuntime
 @inject AgvService AgvObjService
+@inject UserServices OpjUserService
 
 
 @if (Elements == null)
@@ -26,44 +27,44 @@
 else
 {
     <MudText Typo="Typo.h6" Color="Color.Primary">@mPagecaption</MudText>
-    <MudTable Items="@Elements" 
-    FixedHeader="@fixed_header" 
-    FixedFooter="@fixed_footer" 
-    Height="@(fixed_header || fixed_footer ? "600px" : "")" 
-    Dense="@dense" 
-    Hover="@hover" 
-    Bordered="@bordered" 
-    Striped="@striped" 
-    Filter="new Func<AgvRptEODStation, bool>(FilterFunc)" @bind-SelectedItem="selectedItem">
+    <MudTable Items="@Elements"
+              FixedHeader="@fixed_header"
+              FixedFooter="@fixed_footer"
+              Height="@(fixed_header || fixed_footer ? "600px" : "")"
+              Dense="@dense"
+              Hover="@hover"
+              Bordered="@bordered"
+              Striped="@striped"
+              Filter="new Func<AgvRptEODStation, bool>(FilterFunc)" @bind-SelectedItem="selectedItem">
         <ToolBarContent>
-              
-                       
-                  <MudTooltip Text="Export" Color="Color.Secondary" Placement="Placement.Top">
+
+
+            <MudTooltip Text="Export" Color="Color.Secondary" Placement="Placement.Top">
                 <MudMenu Icon="@Icons.Filled.Download" Color="Color.Primary">
                     <MudMenuItem>EXCEL</MudMenuItem>
                     <MudMenuItem>PDF</MudMenuItem>
                 </MudMenu>
             </MudTooltip>
-                     <MudGrid>
-                           <MudSpacer />   
-                          <MudItem xs=6 >
-                             <MudDateRangePicker @ref="_picker" Label="Search Date" @bind-DateRange="_dateRange" DateFormat="@VarGlobals.FormatD">
-                                <PickerActions>
-                                    <MudButton Class="mr-auto align-self-start" OnClick="@(() => _picker.Clear())">Clear</MudButton>
-                                    <MudButton OnClick="@(() => setFindDate(false))">Cancel</MudButton>
-                                    <MudButton Color="Color.Primary" OnClick="@(() => setFindDate(true))">Ok</MudButton>
-                                </PickerActions>
-                            </MudDateRangePicker>
-                         </MudItem>
-                            <MudItem xs=6 >
-                                <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
-                            </MudItem>
-                         </MudGrid>
-            </ToolBarContent>
+            <MudGrid>
+                <MudSpacer />
+                <MudItem xs=6>
+                    <MudDateRangePicker @ref="_picker" Label="Search Date" @bind-DateRange="_dateRange" DateFormat="@VarGlobals.FormatD">
+                        <PickerActions>
+                            <MudButton Class="mr-auto align-self-start" OnClick="@(() => _picker.Clear())">Clear</MudButton>
+                            <MudButton OnClick="@(() => setFindDate(false))">Cancel</MudButton>
+                            <MudButton Color="Color.Primary" OnClick="@(() => setFindDate(true))">Ok</MudButton>
+                        </PickerActions>
+                    </MudDateRangePicker>
+                </MudItem>
+                <MudItem xs=6>
+                    <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+                </MudItem>
+            </MudGrid>
+        </ToolBarContent>
         <HeaderContent>
             <MudTh><MudTableSortLabel SortBy="new Func<AgvRptEODStation, object>(x=>x.W_date)">DATE</MudTableSortLabel></MudTh>
-             <MudTh><MudTableSortLabel SortBy="new Func<AgvRptEODStation, object>(x=>x.Gate_source)">SOURCE</MudTableSortLabel></MudTh>
-              <MudTh><MudTableSortLabel SortBy="new Func<AgvRptEODStation, object>(x=>x.Gate_dest)">DESTINATION</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<AgvRptEODStation, object>(x=>x.Gate_source)">SOURCE</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<AgvRptEODStation, object>(x=>x.Gate_dest)">DESTINATION</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel SortBy="new Func<AgvRptEODStation, object>(x=>x.W_count)">COUNT</MudTableSortLabel></MudTh>
         </HeaderContent>
         <RowTemplate>
@@ -80,6 +81,9 @@ else
 
 @code {
     private string mPagecaption { get; set; } = "AGV ENDOFDAY REPORT";
+    private string mPagedesc { get; set; } = "AGV ENDOFDAY REPORT";
+    private string mPagename { get; set; } = "/paau/agvreporteodstation";
+
     private bool _processing = false;
 
     private string msgAction = "Enter Palletcode";
@@ -103,7 +107,7 @@ else
 
 
     public int elevation = 0;
-    DateTime? date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day); 
+    DateTime? date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
 
     MudDateRangePicker _picker;
     DateRange _dateRange = new DateRange(DateTime.Now.Date, DateTime.Now.AddDays(5).Date);
@@ -223,5 +227,5 @@ else
     }
 
 
-    
+
 }

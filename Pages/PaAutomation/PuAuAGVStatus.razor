@@ -3,13 +3,14 @@
 @using Newtonsoft.Json;
 @using GoWMS.Server.Controllers;
 @using GoWMS.Server.Models.Hagv;
-@using System.Net.NetworkInformation;    
+@using System.Net.NetworkInformation;
 
 
 @inject AgvService ObjAgvService;
 @inject IHttpClientFactory _clientFactory;
 @implements IDisposable;
 @inject UtilityServices ObjUtitityservice
+@inject UserServices OpjUserService
 
 @if (Elements == null)
 {
@@ -19,7 +20,7 @@
 else
 {
     <MudText Typo="Typo.h6" Color="Color.Primary"> @mPagecaption </MudText>
-    <MudTable Items="@Elements" FixedHeader="@fixed_header" FixedFooter="@fixed_footer" Height="@(fixed_header || fixed_footer ?"600px":"")" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<dataModel,bool>(FilterFunc)"  SortLabel="Sort By">
+    <MudTable Items="@Elements" FixedHeader="@fixed_header" FixedFooter="@fixed_footer" Height="@(fixed_header || fixed_footer ?"600px":"")" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<dataModel,bool>(FilterFunc)" SortLabel="Sort By">
         <ToolBarContent>
             <MudSpacer />
             <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
@@ -41,10 +42,10 @@ else
 
             <MudTd DataLabel="STATUS">
                 @{
-                    int ind = @ElementsStatus.FindIndex(x => x.Status.ToString() == context.status);
-                    if (ind > -1)
-                    {
-                        string strmsg = @ElementsStatus[ind].Description;
+                        int ind = @ElementsStatus.FindIndex(x => x.Status.ToString() == context.status);
+                        if (ind > -1)
+                        {
+                            string strmsg = @ElementsStatus[ind].Description;
 
                         <MudText>@context.status - @strmsg</MudText>
                         }
@@ -76,6 +77,9 @@ else
 
 @code {
     private string mPagecaption = "AGV STATUS";
+    private string mPagedesc { get; set; } = "AGV STATUS";
+    private string mPagename { get; set; } = "/paau/agvstatus";
+
     [DataContract]
     class Request
     {
@@ -216,7 +220,7 @@ else
                     vTemp.speed = vResponse.data[i].speed;
                     vTemp.status = vResponse.data[i].status;
                     vTemp.robotIp = vResponse.data[i].robotIp;
-                    switch(vResponse.data[i].robotIp)
+                    switch (vResponse.data[i].robotIp)
                     {
                         case "192.168.200.32":
                             vTemp.Online = AGV192_168_200_32;

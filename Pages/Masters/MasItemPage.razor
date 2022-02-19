@@ -5,11 +5,12 @@
 @using GoWMS.Server.Models.Mas
 
 @inject MasService ObjService
+@inject UserServices OpjUserService
 
 @if (Elements == null)
 {
     //<p><em>Loading...</em></p>
-    <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7"/>
+    <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
 }
 else
 {
@@ -53,6 +54,8 @@ else
     IEnumerable<int> pageSizeOptions = new int[] { 10, 20, 30, 50, 100 };
 
     private readonly string pageheader = "Material";
+    public string mPagedesc { get; set; } = "Material";
+    private string mPagename { get; set; } = "/mas/item";
     private string msgAction = "Enter Palletcode";
     private string mPalletcode { get; set; } = "";
     private string mPackid { get; set; } = "";

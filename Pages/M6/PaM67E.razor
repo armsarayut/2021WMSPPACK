@@ -7,6 +7,7 @@
 
 @inject PublicService ObjPublicService
 @inject ReportService UserlogService
+@inject UserServices OpjUserService
 
 @if (Elements == null)
 {
@@ -35,12 +36,11 @@ else
             </MudTooltip>
             <MudSpacer />
             <MudGrid>
-                <MudSpacer />   
-                <MudItem xs=6 >
-                    <MudDateRangePicker 
-                                        @ref="_picker" 
-                                        Label="Search Date" 
-                                        @bind-DateRange="_dateRange" 
+                <MudSpacer />
+                <MudItem xs=6>
+                    <MudDateRangePicker @ref="_picker"
+                                        Label="Search Date"
+                                        @bind-DateRange="_dateRange"
                                         DateFormat="@VarGlobals.FormatD">
                         <PickerActions>
                             <MudButton Class="mr-auto align-self-start" OnClick="@(() => _picker.Clear())">Clear</MudButton>
@@ -48,14 +48,13 @@ else
                             <MudButton Color="Color.Primary" OnClick="@(() => setFindDate(true))">Ok</MudButton>
                         </PickerActions>
                     </MudDateRangePicker>
-                </MudItem>  
-                <MudItem xs=6 >
-                    <MudTextField 
-                                  @bind-Value="searchString" 
-                                  Placeholder="Search" 
-                                  Adornment="Adornment.Start" 
-                                  AdornmentIcon="@Icons.Material.Filled.Search" 
-                                  IconSize="Size.Medium" 
+                </MudItem>
+                <MudItem xs=6>
+                    <MudTextField @bind-Value="searchString"
+                                  Placeholder="Search"
+                                  Adornment="Adornment.Start"
+                                  AdornmentIcon="@Icons.Material.Filled.Search"
+                                  IconSize="Size.Medium"
                                   Class="mt-0">
                     </MudTextField>
                 </MudItem>
@@ -88,6 +87,8 @@ else
 @code {
     private string msgAction = "Enter Palletcode";
     private string mMenudesc = "TASK SUMMARY";
+    public string mPagedesc { get; set; } = "TASK SUMMARY";
+    private string mPagename { get; set; } = "/pa/m6_7f";
     private string mPalletcode { get; set; } = "";
     private string mPackid { get; set; } = "";
     private string palletcode { get; set; }
@@ -183,7 +184,7 @@ else
         bool bRet = UserlogService.InsertAudittrial(actdesc, munname);
     }
 
-     void setFindDate(bool bOk)
+    void setFindDate(bool bOk)
     {
         _picker.Close();
 

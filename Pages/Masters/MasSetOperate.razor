@@ -5,6 +5,7 @@
 @using GoWMS.Server.Models.Wcs
 
 @inject WcsService ObjService
+@inject UserServices OpjUserService
 
 @if (Elements == null)
 {
@@ -39,7 +40,7 @@ else
         <HeaderContent>
             <MudTh><MudTableSortLabel SortBy="new Func<Set_Operate, object>(x=>x.Mc_Name)">MCNAME</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel SortBy="new Func<Set_Operate, object>(x=>x.Entity_Lock)">VALUE</MudTableSortLabel></MudTh>
-  
+
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="MCNAME">@context.Mc_Name</MudTd>
@@ -61,6 +62,8 @@ else
     IEnumerable<int> pageSizeOptions = new int[] { 10, 20, 30, 50, 100 };
 
     private readonly string pageheader = "SRM-ACTIVE";
+    public string mPagedesc { get; set; } = "SRM-ACTIVE";
+    private string mPagename { get; set; } = "/mas/setoperate";
     private string msgAction = "Enter Palletcode";
     private string mPalletcode { get; set; } = "";
     private string mPackid { get; set; } = "";
@@ -136,9 +139,9 @@ else
 
     private void Commitconstance(Int64 setcoed, Int32 setval)
     {
-        bool bSet =false;
+        bool bSet = false;
 
-        if (setval>0)
+        if (setval > 0)
         {
             bSet = true;
         }
