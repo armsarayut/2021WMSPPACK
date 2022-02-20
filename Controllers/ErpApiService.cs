@@ -85,6 +85,17 @@ namespace GoWMS.Server.Controllers
             return bret;
         }
 
+        public bool ClaerDeliveryOrderKey(string Matcode)
+        {
+            bool bret;
+
+            bret = objDAL.ClaerDeliveryOrderKey(Matcode);
+
+            return bret;
+        }
+
+      
+
         public async Task<string> InsertDeliveryOrderAsync(List<Api_Deliveryorder_Go> listOrder)
         {
             await objDAL.InsertDeliveryOrder(listOrder);
@@ -96,6 +107,8 @@ namespace GoWMS.Server.Controllers
             objDAL.SetMappPallet(pallet);
             return "Map Successfully";
         }
+
+     
 
         public string SetMappedPalletCylinder(string pallet)
         {
@@ -121,6 +134,16 @@ namespace GoWMS.Server.Controllers
             return retlist;
         }
 
+        public List<Api_Deliveryorder_Go> GetAllDeliveryorderGoByMat(string mocode)
+        {
+            List<Api_Deliveryorder_Go> retlist = objDAL.GetAllDeliveryorderGoByMat(mocode).ToList();
+            return retlist;
+        }
+        
+
+
+
+
         public string SetPick(string jsonLon, string jsonRes , DateTime DeliverDate, Int64 idistination, ref  Int32 iret , ref string sret )
         {
             objDAL.SetPicking(jsonLon, jsonRes, DeliverDate , idistination, ref iret , ref sret);
@@ -132,6 +155,14 @@ namespace GoWMS.Server.Controllers
             objDAL.SetPickingByStation(jsonLon, jsonRes, DeliverDate, sdestination, ref iret, ref sret);
             return sret;
         }
+
+        public string SetPickingByStationCylinder(string jsonLon, string jsonRes, DateTime DeliverDate, string sdestination, ref Int32 iret, ref string sret)
+        {
+            objDAL.SetPickingByStationCylinder(jsonLon, jsonRes, DeliverDate, sdestination, ref iret, ref sret);
+            return sret;
+        }
+
+        
 
 
         public string SetPickUnplaned(string jsonRes, ref Int32 iret, ref string sret)

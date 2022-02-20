@@ -11,7 +11,7 @@
 @inject ErpApiService ObjApiService
 @inject UserServices OpjUserService
 
-<MudText Typo="Typo.h6" Color="Color.Primary">@mPageHeader @mPalletcode</MudText>
+
 
 <MudGrid>
     <MudItem xs="12">
@@ -37,8 +37,16 @@ else if (elevation == 4) // Error
 }
     </MudItem>
     <MudItem xs="12">
+        <MudText Typo="Typo.h6" Color="Color.Primary">@mPageHeader @mPalletcode</MudText>
         <div class="form-group">
             <input style="width: 100%; height: 40px" type="text" class="form-control" @bind-value="palletcode" @onkeyup="@DoTheThing" placeholder="Input scan" />
+        </div>
+        @*<MudTextField @bind-Value="palletcode" @onkeyup="DoTheThing" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.QrCodeScanner" AdornmentColor="Color.Secondary" />*@
+    </MudItem>
+    <MudItem xs="12">
+        <MudText Typo="Typo.h6" Color="Color.Primary">@mPageHeaderkey @mMatcode</MudText>
+        <div class="form-group">
+            <input style="width: 100%; height: 40px" type="text" class="form-control" @bind-value="matcode" @onkeyup="@DoTheThingKey" placeholder="Input Key Material for Cylider" />
         </div>
         @*<MudTextField @bind-Value="palletcode" @onkeyup="DoTheThing" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.QrCodeScanner" AdornmentColor="Color.Secondary" />*@
     </MudItem>
@@ -64,43 +72,21 @@ else if (elevation == 4) // Error
             <MudButton Variant="Variant.Filled" Color="Color.Info" @onclick=@NavigateAll>All</MudButton>
         </MudItem>
     </MudGrid>
-
-    @*
-           <MudGrid Spacing="@spacing" Justify="Justify.Center">
-            <MudItem>
-                <MudLink Href="@Filmlinkmo" Color="Color.Primary">Film</MudLink>
-            </MudItem>
-            <MudItem>
-                <MudLink Href="@Inklinkmo" Color="Color.Secondary">Ink</MudLink>
-            </MudItem>
-            <MudItem>
-                <MudLink Href="@Cyllinkmo" Color="Color.Success">Cylinder</MudLink>
-            </MudItem>
-            <MudItem>
-                <MudLink Href="@Othlinkmo" Color="Color.Warning">Other</MudLink>
-            </MudItem>
-            <MudItem>
-                <MudLink Href="@Alllinkmo" Color="Color.Info">All</MudLink>
-            </MudItem>
-        </MudGrid>
-    *@
 </MudItem>
-
-@*<MudText Typo="Typo.h6" Color="Color.Secondary" Class="mb-4">Master Pallet : [ @mPalletcode ]</MudText>
-    <MudSkeleton Animation="Animation.False" />*@
-@*<MudText Typo="Typo.h6" Color="Color.Info" Class="mb-4">PackID : [ @mPackid ]</MudText>*@
-
 
 @code {
     bool disabled = false;
     private int mCounter = 5;
     private string mPageHeader = "Scan MO";
+    private string mPageHeaderkey = "Key Material";
     private string msgAction = "Enter MO Barcode";
     private string mPagedesc { get; set; } = "Scan MO";
     private string mPagename { get; set; } = "/oub/scanmo";
     private string mPalletcode { get; set; } = "";
+    private string mMatcode { get; set; } = "";
     private string mPackid { get; set; } = "";
     private string palletcode { get; set; }
+    private string matcode { get; set; }
     private bool dense = true;
     private bool hover = true;
     private bool striped = true;
@@ -113,6 +99,8 @@ else if (elevation == 4) // Error
     private IEnumerable<Api_Deliveryorder_Go> V_List_OF_Materials_NeedsInfos = new List<Api_Deliveryorder_Go>();
 
     private IEnumerable<Api_Deliveryorder_Go> V_Reserved_MaterialsInfos = new List<Api_Deliveryorder_Go>();
+
+    private IEnumerable<Api_Deliveryorder_Go> V_Reserved_MaterialsCylinderInfos = new List<Api_Deliveryorder_Go>();
 
     public int elevation = 0;
 
@@ -151,9 +139,10 @@ else if (elevation == 4) // Error
 
             ObjApiService.ClaerDeliveryOrder(str);
 
-            Elements = ObjApiService.GetAllApiDeliveryorder();
+            //Elements = ObjApiService.GetAllApiDeliveryorder();
 
             var allCorrect = Elements.Where(a => a.Mo_Barcode == str).ToList();
+
 
             if (allCorrect.ToList().Count > 0)
             {
@@ -162,7 +151,7 @@ else if (elevation == 4) // Error
                 elevation = 1;
                 Filmlinkmo = setFilmlinkmo + mPalletcode;
                 Inklinkmo = setInklinkmo + mPalletcode;
-                Cyllinkmo = setCyllinkmo + mPalletcode;
+                Cyllinkmo = setCyllinkmo + mPalletcode + "/MO";
                 Othlinkmo = setOthlinkmo + mPalletcode;
                 Alllinkmo = setAlllinkmo + mPalletcode;
             }
@@ -174,12 +163,19 @@ else if (elevation == 4) // Error
 
                 Filmlinkmo = setFilmlinkmo + mPalletcode;
                 Inklinkmo = setInklinkmo + mPalletcode;
-                Cyllinkmo = setCyllinkmo + mPalletcode;
+                Cyllinkmo = setCyllinkmo + mPalletcode + "/MO";
                 Othlinkmo = setOthlinkmo + mPalletcode;
                 Alllinkmo = setAlllinkmo + mPalletcode;
 
+                V_List_OF_Materials_NeedsInfos = null;
+                V_Reserved_MaterialsInfos = null;
+                V_Reserved_MaterialsCylinderInfos = null;
+
                 V_Reserved_MaterialsInfos = ObjErpService.GetAllErpReservedMaterialsbyMo(str);
                 V_List_OF_Materials_NeedsInfos = ObjErpService.GetAllErpListofNeedsbyMo(str);
+                V_Reserved_MaterialsCylinderInfos = ObjErpService.GetAllErpReservedMaterialsCylinderbyMo(str);
+
+
 
                 if (V_Reserved_MaterialsInfos.ToList().Count > 0)
                 {
@@ -187,7 +183,13 @@ else if (elevation == 4) // Error
 
                     if (V_List_OF_Materials_NeedsInfos.ToList().Count > 0)
                     {
+                        //await Task.Run(() => ObjApiService.InsertDeliveryOrderAsync(V_List_OF_Materials_NeedsInfos.ToList());
                         ObjApiService.InsertDeliveryOrderAsync(V_List_OF_Materials_NeedsInfos.ToList());
+
+                    }
+                    if (V_Reserved_MaterialsCylinderInfos.ToList().Count>0)
+                    {
+                        ObjApiService.InsertDeliveryOrderAsync(V_Reserved_MaterialsCylinderInfos.ToList());
                     }
                     // loop to api
                     ObjApiService.InsertDeliveryOrderAsync(V_Reserved_MaterialsInfos.ToList());
@@ -197,7 +199,7 @@ else if (elevation == 4) // Error
                     elevation = 1;
                     Filmlinkmo = setFilmlinkmo + mPalletcode;
                     Inklinkmo = setInklinkmo + mPalletcode;
-                    Cyllinkmo = setCyllinkmo + mPalletcode;
+                    Cyllinkmo = setCyllinkmo + mPalletcode + "/MO";
                     Othlinkmo = setOthlinkmo + mPalletcode;
                     Alllinkmo = setAlllinkmo + mPalletcode;
                 }
@@ -205,6 +207,10 @@ else if (elevation == 4) // Error
                 {
                     if (V_List_OF_Materials_NeedsInfos.ToList().Count > 0)
                     {
+                        if (V_Reserved_MaterialsCylinderInfos.ToList().Count > 0)
+                        {
+                            ObjApiService.InsertDeliveryOrderAsync(V_Reserved_MaterialsCylinderInfos.ToList());
+                        }
                         // loop to api
                         ObjApiService.InsertDeliveryOrderAsync(V_List_OF_Materials_NeedsInfos.ToList());
                         //----------------------
@@ -213,9 +219,25 @@ else if (elevation == 4) // Error
                         elevation = 1;
                         Filmlinkmo = setFilmlinkmo + mPalletcode;
                         Inklinkmo = setInklinkmo + mPalletcode;
-                        Cyllinkmo = setCyllinkmo + mPalletcode;
+                        Cyllinkmo = setCyllinkmo + mPalletcode + "/MO";
                         Othlinkmo = setOthlinkmo + mPalletcode;
                         Alllinkmo = setAlllinkmo + mPalletcode;
+                    }
+                    else
+                    {
+                        if (V_Reserved_MaterialsCylinderInfos.ToList().Count > 0)
+                        {
+                            ObjApiService.InsertDeliveryOrderAsync(V_Reserved_MaterialsCylinderInfos.ToList());
+
+                            mPalletcode = str;
+                            msgAction = "MO is [" + mPalletcode + "] Please select category ";
+                            elevation = 1;
+                            Filmlinkmo = setFilmlinkmo + mPalletcode;
+                            Inklinkmo = setInklinkmo + mPalletcode;
+                            Cyllinkmo = setCyllinkmo + mPalletcode + "/MO";
+                            Othlinkmo = setOthlinkmo + mPalletcode;
+                            Alllinkmo = setAlllinkmo + mPalletcode;
+                        }
                     }
 
                 }
@@ -225,6 +247,111 @@ else if (elevation == 4) // Error
         {
             elevation = 1;
             msgAction = "MO is [" + mPalletcode + "] Please select category ";
+        }
+    }
+
+    private void setstrKey(string str)
+    {
+        if (mMatcode.Length <= 0)
+        {
+
+            ObjApiService.ClaerDeliveryOrderKey(str);
+
+            //Elements = ObjApiService.GetAllApiDeliveryorder();
+
+            V_Reserved_MaterialsCylinderInfos = null;
+
+            //V_Reserved_MaterialsInfos = ObjErpService.GetAllErpReservedMaterialsbyMo(str);
+            //V_List_OF_Materials_NeedsInfos = ObjErpService.GetAllErpListofNeedsbyMo(str);
+            V_Reserved_MaterialsCylinderInfos = ObjErpService.GetAllErpReservedMaterialsCylinderbyMat(str);
+
+            mPalletcode = "";
+            elevation = 4;
+            msgAction = "Material find not found";
+
+            Filmlinkmo = setFilmlinkmo + mPalletcode;
+            Inklinkmo = setInklinkmo + mPalletcode;
+            Cyllinkmo = setCyllinkmo + mPalletcode;
+            Othlinkmo = setOthlinkmo + mPalletcode;
+            Alllinkmo = setAlllinkmo + mPalletcode;
+
+            if (V_Reserved_MaterialsInfos.ToList().Count > 0)
+            {
+                //Claer
+
+                if (V_List_OF_Materials_NeedsInfos.ToList().Count > 0)
+                {
+                    //await Task.Run(() => ObjApiService.InsertDeliveryOrderAsync(V_List_OF_Materials_NeedsInfos.ToList());
+                    ObjApiService.InsertDeliveryOrderAsync(V_List_OF_Materials_NeedsInfos.ToList());
+
+                }
+                if (V_Reserved_MaterialsCylinderInfos.ToList().Count > 0)
+                {
+                    ObjApiService.InsertDeliveryOrderAsync(V_Reserved_MaterialsCylinderInfos.ToList());
+
+                    mMatcode = str;
+                    msgAction = "Material is [" + mPalletcode + "] Please select category ";
+                    elevation = 1;
+                    Filmlinkmo = setFilmlinkmo + mPalletcode;
+                    Inklinkmo = setInklinkmo + mPalletcode;
+                    Cyllinkmo = setCyllinkmo + mPalletcode;
+                    Othlinkmo = setOthlinkmo + mPalletcode;
+                    Alllinkmo = setAlllinkmo + mPalletcode;
+                }
+                // loop to api
+                //ObjApiService.InsertDeliveryOrderAsync(V_Reserved_MaterialsInfos.ToList());
+                //----------------------
+
+
+            }
+            else
+            {
+                if (V_List_OF_Materials_NeedsInfos.ToList().Count > 0)
+                {
+                    if (V_Reserved_MaterialsCylinderInfos.ToList().Count > 0)
+                    {
+                        ObjApiService.InsertDeliveryOrderAsync(V_Reserved_MaterialsCylinderInfos.ToList());
+                        //ObjApiService.InsertDeliveryOrderAsync(V_List_OF_Materials_NeedsInfos.ToList());
+                        //----------------------
+                        mMatcode = str;
+                        msgAction = "Material is [" + mPalletcode + "] Please select category ";
+                        elevation = 1;
+                        Filmlinkmo = setFilmlinkmo + mPalletcode;
+                        Inklinkmo = setInklinkmo + mPalletcode;
+                        Cyllinkmo = setCyllinkmo + mPalletcode;
+                        Othlinkmo = setOthlinkmo + mPalletcode;
+                        Alllinkmo = setAlllinkmo + mPalletcode;
+
+                    }
+                    // loop to api
+
+                }
+                else
+                {
+                    if (V_Reserved_MaterialsCylinderInfos.ToList().Count > 0)
+                    {
+                        ObjApiService.InsertDeliveryOrderAsync(V_Reserved_MaterialsCylinderInfos.ToList());
+
+                        //var wordLens = V_Reserved_MaterialsCylinderInfos.Select(e => e.Mo_Barcode).FirstOrDefault();
+
+
+                        mMatcode = str;
+                        msgAction = "Material is [" + mPalletcode + "] Please select category ";
+                        elevation = 1;
+                        Filmlinkmo = setFilmlinkmo + mPalletcode;
+                        Inklinkmo = setInklinkmo + mPalletcode;
+                        Cyllinkmo = setCyllinkmo + mMatcode +"/MAT";
+                        Othlinkmo = setOthlinkmo + mPalletcode;
+                        Alllinkmo = setAlllinkmo + mPalletcode;
+                    }
+                }
+
+            }
+        }
+        else
+        {
+            elevation = 1;
+            msgAction = "Material is [" + mPalletcode + "] Please select category ";
         }
     }
 
@@ -238,6 +365,18 @@ else if (elevation == 4) // Error
             setstr(palletcode);
 
             palletcode = "";
+        }
+    }
+
+    private void DoTheThingKey(KeyboardEventArgs eventArgs)
+    {
+        if (eventArgs.Key == "Enter")        // fire on enter
+        {
+            //Console.WriteLine("Done the thing: " + MyValue);
+            //stxtInput = MyValue;
+            setstrKey(matcode);
+
+            matcode = "";
         }
     }
 
@@ -282,6 +421,10 @@ else if (elevation == 4) // Error
     void NavigateCylinder()
     {
         if (mPalletcode.Length > 0)
+        {
+            UriHelper.NavigateTo(Cyllinkmo);
+        }
+        else if(mMatcode.Length>0)
         {
             UriHelper.NavigateTo(Cyllinkmo);
         }

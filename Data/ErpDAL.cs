@@ -450,6 +450,673 @@ namespace GoWMS.Server.Data
             return lstobj;
         }
 
+
+        public IEnumerable<Api_Deliveryorder_Go> GetAllErpReservedMaterialsCylinderbyMo(string mocode)
+        {
+            List<Api_Deliveryorder_Go> lstobj = new List<Api_Deliveryorder_Go>();
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                try
+                {
+
+                    StringBuilder Sql = new StringBuilder();
+                    Sql.AppendLine("SELECT Finished_Product, Finished_Product_Description, Job, Job_Code, MO_Barcode, PREVIOUS_REF");
+                    Sql.AppendLine(",Color_1,Cylinder_1, BARCODE_1");
+                    Sql.AppendLine(",Color_2,Cylinder_2, BARCODE_2");
+                    Sql.AppendLine(",Color_3,Cylinder_3, BARCODE_3");
+                    Sql.AppendLine(",Color_4,Cylinder_4, BARCODE_4");
+                    Sql.AppendLine(",Color_5,Cylinder_5, BARCODE_5");
+                    Sql.AppendLine(",Color_6,Cylinder_6, BARCODE_6");
+                    Sql.AppendLine(",Color_7,Cylinder_7, BARCODE_7");
+                    Sql.AppendLine(",Color_8,Cylinder_8, BARCODE_8");
+                    Sql.AppendLine(",Color_9,Cylinder_9, BARCODE_9");
+                    Sql.AppendLine(",Color_10,Cylinder_10, BARCODE_10");
+                    Sql.AppendLine("FROM dbo.V_List_OF_Materials_Need_Cylinder");
+                    Sql.AppendLine("WHERE MO_Barcode=@MO_Barcode");
+
+                    SqlCommand cmd = new SqlCommand(Sql.ToString(), con)
+                    {
+                        CommandType = CommandType.Text
+                    };
+
+                    con.Open();
+                    cmd.Parameters.AddWithValue("@MO_Barcode", mocode);
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        
+
+                            if (rdr["Cylinder_1"].ToString() != null && rdr["Cylinder_1"].ToString().Length > 0)
+                            {
+                                Api_Deliveryorder_Go objrd = new Api_Deliveryorder_Go
+                                {
+                                    Package_Id = rdr["Cylinder_1"].ToString(),
+                                    Roll_Id = rdr["BARCODE_1"].ToString(),
+                                    Material_Code = rdr["Finished_Product"].ToString(),
+                                    Material_Description = rdr["Finished_Product_Description"].ToString(),
+                                    Matelement = "1",
+                                    Wh_Code = null,
+                                    Warehouse = null,
+                                    Locationno = null,
+                                    Quantity = 1,
+                                    Unit = null,
+                                    Job = rdr["Job"].ToString(),
+                                    Job_Code = rdr["Job_Code"].ToString(),
+                                    Mo_Barcode = rdr["MO_Barcode"].ToString(),
+                                    Picked = 0,
+                                    Dotype = "REC",
+                                    Customer_Code = "",
+                                    Customer_Description = rdr["PREVIOUS_REF"].ToString(),
+                                    Finished_Product = rdr["BARCODE_1"].ToString(),
+                                    Finished_Product_Description = rdr["Color_1"].ToString()
+                                };
+                                lstobj.Add(objrd);
+                           
+                            }
+                        if (rdr["Cylinder_2"].ToString() != null && rdr["Cylinder_2"].ToString().Length > 0)
+                        {
+                            Api_Deliveryorder_Go objrd = new Api_Deliveryorder_Go
+                            {
+                                Package_Id = rdr["Cylinder_2"].ToString(),
+                                Roll_Id = rdr["BARCODE_2"].ToString(),
+                                Material_Code = rdr["Finished_Product"].ToString(),
+                                Material_Description = rdr["Finished_Product_Description"].ToString(),
+                                Matelement = "2",
+                                Wh_Code = null,
+                                Warehouse = null,
+                                Locationno = null,
+                                Quantity = 1,
+                                Unit = null,
+                                Job = rdr["Job"].ToString(),
+                                Job_Code = rdr["Job_Code"].ToString(),
+                                Mo_Barcode = rdr["MO_Barcode"].ToString(),
+                                Picked = 0,
+                                Dotype = "REC",
+                                Customer_Code = "",
+                                Customer_Description = rdr["PREVIOUS_REF"].ToString(),
+                                Finished_Product = rdr["BARCODE_2"].ToString(),
+                                Finished_Product_Description = rdr["Color_2"].ToString()
+                            };
+                            lstobj.Add(objrd);
+
+                        }
+
+                        if (rdr["Cylinder_3"].ToString() != null && rdr["Cylinder_3"].ToString().Length > 0)
+                        {
+                            Api_Deliveryorder_Go objrd = new Api_Deliveryorder_Go
+                            {
+                                Package_Id = rdr["Cylinder_3"].ToString(),
+                                Roll_Id = rdr["BARCODE_3"].ToString(),
+                                Material_Code = rdr["Finished_Product"].ToString(),
+                                Material_Description = rdr["Finished_Product_Description"].ToString(),
+                                Matelement = "3",
+                                Wh_Code = null,
+                                Warehouse = null,
+                                Locationno = null,
+                                Quantity = 1,
+                                Unit = null,
+                                Job = rdr["Job"].ToString(),
+                                Job_Code = rdr["Job_Code"].ToString(),
+                                Mo_Barcode = rdr["MO_Barcode"].ToString(),
+                                Picked = 0,
+                                Dotype = "REC",
+                                Customer_Code = "",
+                                Customer_Description = rdr["PREVIOUS_REF"].ToString(),
+                                Finished_Product = rdr["BARCODE_3"].ToString(),
+                                Finished_Product_Description = rdr["Color_3"].ToString()
+                            };
+                            lstobj.Add(objrd);
+
+                        }
+
+                        if (rdr["Cylinder_4"].ToString() != null && rdr["Cylinder_4"].ToString().Length > 0)
+                        {
+                            Api_Deliveryorder_Go objrd = new Api_Deliveryorder_Go
+                            {
+                                Package_Id = rdr["Cylinder_4"].ToString(),
+                                Roll_Id = rdr["BARCODE_4"].ToString(),
+                                Material_Code = rdr["Finished_Product"].ToString(),
+                                Material_Description = rdr["Finished_Product_Description"].ToString(),
+                                Matelement ="4",
+                                Wh_Code = null,
+                                Warehouse = null,
+                                Locationno = null,
+                                Quantity = 1,
+                                Unit = null,
+                                Job = rdr["Job"].ToString(),
+                                Job_Code = rdr["Job_Code"].ToString(),
+                                Mo_Barcode = rdr["MO_Barcode"].ToString(),
+                                Picked = 0,
+                                Dotype = "REC",
+                                Customer_Code = "",
+                                Customer_Description = rdr["PREVIOUS_REF"].ToString(),
+                                Finished_Product = rdr["BARCODE_4"].ToString(),
+                                Finished_Product_Description = rdr["Color_4"].ToString()
+                            };
+                            lstobj.Add(objrd);
+
+                        }
+
+                        if (rdr["Cylinder_5"].ToString() != null && rdr["Cylinder_5"].ToString().Length > 0)
+                        {
+                            Api_Deliveryorder_Go objrd = new Api_Deliveryorder_Go
+                            {
+                                Package_Id = rdr["Cylinder_5"].ToString(),
+                                Roll_Id = rdr["BARCODE_5"].ToString(),
+                                Material_Code = rdr["Finished_Product"].ToString(),
+                                Material_Description = rdr["Finished_Product_Description"].ToString(),
+                                Matelement = "5",
+                                Wh_Code = null,
+                                Warehouse = null,
+                                Locationno = null,
+                                Quantity = 1,
+                                Unit = null,
+                                Job = rdr["Job"].ToString(),
+                                Job_Code = rdr["Job_Code"].ToString(),
+                                Mo_Barcode = rdr["MO_Barcode"].ToString(),
+                                Picked = 0,
+                                Dotype = "REC",
+                                Customer_Code = "",
+                                Customer_Description = rdr["PREVIOUS_REF"].ToString(),
+                                Finished_Product = rdr["BARCODE_5"].ToString(),
+                                Finished_Product_Description = rdr["Color_5"].ToString()
+                            };
+                            lstobj.Add(objrd);
+
+                        }
+
+                        if (rdr["Cylinder_6"].ToString() != null && rdr["Cylinder_6"].ToString().Length > 0)
+                        {
+                            Api_Deliveryorder_Go objrd = new Api_Deliveryorder_Go
+                            {
+                                Package_Id = rdr["Cylinder_1"].ToString(),
+                                Roll_Id = rdr["BARCODE_1"].ToString(),
+                                Material_Code = rdr["Finished_Product"].ToString(),
+                                Material_Description = rdr["Finished_Product_Description"].ToString(),
+                                Matelement = "6",
+                                Wh_Code = null,
+                                Warehouse = null,
+                                Locationno = null,
+                                Quantity = 1,
+                                Unit = null,
+                                Job = rdr["Job"].ToString(),
+                                Job_Code = rdr["Job_Code"].ToString(),
+                                Mo_Barcode = rdr["MO_Barcode"].ToString(),
+                                Picked = 0,
+                                Dotype = "REC",
+                                Customer_Code = "",
+                                Customer_Description = rdr["PREVIOUS_REF"].ToString(),
+                                Finished_Product = rdr["BARCODE_6"].ToString(),
+                                Finished_Product_Description = rdr["Color_6"].ToString()
+                            };
+                            lstobj.Add(objrd);
+
+                        }
+
+                        if (rdr["Cylinder_7"].ToString() != null && rdr["Cylinder_7"].ToString().Length > 0)
+                        {
+                            Api_Deliveryorder_Go objrd = new Api_Deliveryorder_Go
+                            {
+                                Package_Id = rdr["Cylinder_7"].ToString(),
+                                Roll_Id = rdr["BARCODE_7"].ToString(),
+                                Material_Code = rdr["Finished_Product"].ToString(),
+                                Material_Description = rdr["Finished_Product_Description"].ToString(),
+                                Matelement = "7",
+                                Wh_Code = null,
+                                Warehouse = null,
+                                Locationno = null,
+                                Quantity = 1,
+                                Unit = null,
+                                Job = rdr["Job"].ToString(),
+                                Job_Code = rdr["Job_Code"].ToString(),
+                                Mo_Barcode = rdr["MO_Barcode"].ToString(),
+                                Picked = 0,
+                                Dotype = "REC",
+                                Customer_Code = "",
+                                Customer_Description = rdr["PREVIOUS_REF"].ToString(),
+                                Finished_Product = rdr["BARCODE_7"].ToString(),
+                                Finished_Product_Description = rdr["Color_7"].ToString()
+                            };
+                            lstobj.Add(objrd);
+
+                        }
+
+                        if (rdr["Cylinder_8"].ToString() != null && rdr["Cylinder_8"].ToString().Length > 0)
+                        {
+                            Api_Deliveryorder_Go objrd = new Api_Deliveryorder_Go
+                            {
+                                Package_Id = rdr["Cylinder_8"].ToString(),
+                                Roll_Id = rdr["BARCODE_8"].ToString(),
+                                Material_Code = rdr["Finished_Product"].ToString(),
+                                Material_Description = rdr["Finished_Product_Description"].ToString(),
+                                Matelement = "8",
+                                Wh_Code = null,
+                                Warehouse = null,
+                                Locationno = null,
+                                Quantity = 1,
+                                Unit = null,
+                                Job = rdr["Job"].ToString(),
+                                Job_Code = rdr["Job_Code"].ToString(),
+                                Mo_Barcode = rdr["MO_Barcode"].ToString(),
+                                Picked = 0,
+                                Dotype = "REC",
+                                Customer_Code = "",
+                                Customer_Description = rdr["PREVIOUS_REF"].ToString(),
+                                Finished_Product = rdr["BARCODE_8"].ToString(),
+                                Finished_Product_Description = rdr["Color_8"].ToString()
+                            };
+                            lstobj.Add(objrd);
+
+                        }
+
+
+                        if (rdr["Cylinder_9"].ToString() != null && rdr["Cylinder_9"].ToString().Length > 0)
+                        {
+                            Api_Deliveryorder_Go objrd = new Api_Deliveryorder_Go
+                            {
+                                Package_Id = rdr["Cylinder_9"].ToString(),
+                                Roll_Id = rdr["BARCODE_9"].ToString(),
+                                Material_Code = rdr["Finished_Product"].ToString(),
+                                Material_Description = rdr["Finished_Product_Description"].ToString(),
+                                Matelement = "9",
+                                Wh_Code = null,
+                                Warehouse = null,
+                                Locationno = null,
+                                Quantity = 1,
+                                Unit = null,
+                                Job = rdr["Job"].ToString(),
+                                Job_Code = rdr["Job_Code"].ToString(),
+                                Mo_Barcode = rdr["MO_Barcode"].ToString(),
+                                Picked = 0,
+                                Dotype = "REC",
+                                Customer_Code = "",
+                                Customer_Description = rdr["PREVIOUS_REF"].ToString(),
+                                Finished_Product = rdr["BARCODE_9"].ToString(),
+                                Finished_Product_Description = rdr["Color_9"].ToString()
+                            };
+                            lstobj.Add(objrd);
+
+                        }
+
+                        if (rdr["Cylinder_10"].ToString() != null && rdr["Cylinder_10"].ToString().Length > 0)
+                        {
+                            Api_Deliveryorder_Go objrd = new Api_Deliveryorder_Go
+                            {
+                                Package_Id = rdr["Cylinder_10"].ToString(),
+                                Roll_Id = rdr["BARCODE_10"].ToString(),
+                                Material_Code = rdr["Finished_Product"].ToString(),
+                                Material_Description = rdr["Finished_Product_Description"].ToString(),
+                                Matelement = "10",
+                                Wh_Code = null,
+                                Warehouse = null,
+                                Locationno = null,
+                                Quantity = 1,
+                                Unit = null,
+                                Job = rdr["Job"].ToString(),
+                                Job_Code = rdr["Job_Code"].ToString(),
+                                Mo_Barcode = rdr["MO_Barcode"].ToString(),
+                                Picked = 0,
+                                Dotype = "REC",
+                                Customer_Code = "",
+                                Customer_Description = rdr["PREVIOUS_REF"].ToString(),
+                                Finished_Product = rdr["BARCODE_10"].ToString(),
+                                Finished_Product_Description = rdr["Color_10"].ToString()
+                            };
+                            lstobj.Add(objrd);
+
+                        }
+
+
+
+
+
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    Log.Error(ex.ToString());
+                }
+                finally
+                {
+                    con.Close();
+                }
+            }
+            return lstobj;
+        }
+
+        public IEnumerable<Api_Deliveryorder_Go> GetAllErpReservedMaterialsCylinderbyMat(string Matcode)
+        {
+            List<Api_Deliveryorder_Go> lstobj = new List<Api_Deliveryorder_Go>();
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                try
+                {
+
+                    StringBuilder Sql = new StringBuilder();
+                    Sql.AppendLine("SELECT TOP 1 Finished_Product, Finished_Product_Description, Job, Job_Code, MO_Barcode, PREVIOUS_REF");
+                    Sql.AppendLine(",Color_1,Cylinder_1, BARCODE_1");
+                    Sql.AppendLine(",Color_2,Cylinder_2, BARCODE_2");
+                    Sql.AppendLine(",Color_3,Cylinder_3, BARCODE_3");
+                    Sql.AppendLine(",Color_4,Cylinder_4, BARCODE_4");
+                    Sql.AppendLine(",Color_5,Cylinder_5, BARCODE_5");
+                    Sql.AppendLine(",Color_6,Cylinder_6, BARCODE_6");
+                    Sql.AppendLine(",Color_7,Cylinder_7, BARCODE_7");
+                    Sql.AppendLine(",Color_8,Cylinder_8, BARCODE_8");
+                    Sql.AppendLine(",Color_9,Cylinder_9, BARCODE_9");
+                    Sql.AppendLine(",Color_10,Cylinder_10, BARCODE_10");
+                    Sql.AppendLine("FROM dbo.V_List_OF_Materials_Need_Cylinder");
+                    Sql.AppendLine("WHERE Finished_Product=@Finished_Product");
+
+                    SqlCommand cmd = new SqlCommand(Sql.ToString(), con)
+                    {
+                        CommandType = CommandType.Text
+                    };
+
+                    con.Open();
+                    cmd.Parameters.AddWithValue("@Finished_Product", Matcode);
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+
+
+                        if (rdr["Cylinder_1"].ToString() != null && rdr["Cylinder_1"].ToString().Length > 0)
+                        {
+                            Api_Deliveryorder_Go objrd = new Api_Deliveryorder_Go
+                            {
+                                Package_Id = rdr["Cylinder_1"].ToString(),
+                                Roll_Id = rdr["BARCODE_1"].ToString(),
+                                Material_Code = rdr["Finished_Product"].ToString(),
+                                Material_Description = rdr["Finished_Product_Description"].ToString(),
+                                Matelement = "1",
+                                Wh_Code = null,
+                                Warehouse = null,
+                                Locationno = null,
+                                Quantity = 1,
+                                Unit = null,
+                                Job = rdr["Job"].ToString(),
+                                Job_Code = rdr["Job_Code"].ToString(),
+                                Mo_Barcode = rdr["MO_Barcode"].ToString(),
+                                Picked = 0,
+                                Dotype = "REC",
+                                Customer_Code = "",
+                                Customer_Description = rdr["PREVIOUS_REF"].ToString(),
+                                Finished_Product = rdr["BARCODE_1"].ToString(),
+                                Finished_Product_Description = rdr["Color_1"].ToString()
+                            };
+                            lstobj.Add(objrd);
+
+                        }
+                        if (rdr["Cylinder_2"].ToString() != null && rdr["Cylinder_2"].ToString().Length > 0)
+                        {
+                            Api_Deliveryorder_Go objrd = new Api_Deliveryorder_Go
+                            {
+                                Package_Id = rdr["Cylinder_2"].ToString(),
+                                Roll_Id = rdr["BARCODE_2"].ToString(),
+                                Material_Code = rdr["Finished_Product"].ToString(),
+                                Material_Description = rdr["Finished_Product_Description"].ToString(),
+                                Matelement = "2",
+                                Wh_Code = null,
+                                Warehouse = null,
+                                Locationno = null,
+                                Quantity = 1,
+                                Unit = null,
+                                Job = rdr["Job"].ToString(),
+                                Job_Code = rdr["Job_Code"].ToString(),
+                                Mo_Barcode = rdr["MO_Barcode"].ToString(),
+                                Picked = 0,
+                                Dotype = "REC",
+                                Customer_Code = "",
+                                Customer_Description = rdr["PREVIOUS_REF"].ToString(),
+                                Finished_Product = rdr["BARCODE_2"].ToString(),
+                                Finished_Product_Description = rdr["Color_2"].ToString()
+                            };
+                            lstobj.Add(objrd);
+
+                        }
+
+                        if (rdr["Cylinder_3"].ToString() != null && rdr["Cylinder_3"].ToString().Length > 0)
+                        {
+                            Api_Deliveryorder_Go objrd = new Api_Deliveryorder_Go
+                            {
+                                Package_Id = rdr["Cylinder_3"].ToString(),
+                                Roll_Id = rdr["BARCODE_3"].ToString(),
+                                Material_Code = rdr["Finished_Product"].ToString(),
+                                Material_Description = rdr["Finished_Product_Description"].ToString(),
+                                Matelement = "3",
+                                Wh_Code = null,
+                                Warehouse = null,
+                                Locationno = null,
+                                Quantity = 1,
+                                Unit = null,
+                                Job = rdr["Job"].ToString(),
+                                Job_Code = rdr["Job_Code"].ToString(),
+                                Mo_Barcode = rdr["MO_Barcode"].ToString(),
+                                Picked = 0,
+                                Dotype = "REC",
+                                Customer_Code = "",
+                                Customer_Description = rdr["PREVIOUS_REF"].ToString(),
+                                Finished_Product = rdr["BARCODE_3"].ToString(),
+                                Finished_Product_Description = rdr["Color_3"].ToString()
+                            };
+                            lstobj.Add(objrd);
+
+                        }
+
+                        if (rdr["Cylinder_4"].ToString() != null && rdr["Cylinder_4"].ToString().Length > 0)
+                        {
+                            Api_Deliveryorder_Go objrd = new Api_Deliveryorder_Go
+                            {
+                                Package_Id = rdr["Cylinder_4"].ToString(),
+                                Roll_Id = rdr["BARCODE_4"].ToString(),
+                                Material_Code = rdr["Finished_Product"].ToString(),
+                                Material_Description = rdr["Finished_Product_Description"].ToString(),
+                                Matelement = "4",
+                                Wh_Code = null,
+                                Warehouse = null,
+                                Locationno = null,
+                                Quantity = 1,
+                                Unit = null,
+                                Job = rdr["Job"].ToString(),
+                                Job_Code = rdr["Job_Code"].ToString(),
+                                Mo_Barcode = rdr["MO_Barcode"].ToString(),
+                                Picked = 0,
+                                Dotype = "REC",
+                                Customer_Code = "",
+                                Customer_Description = rdr["PREVIOUS_REF"].ToString(),
+                                Finished_Product = rdr["BARCODE_4"].ToString(),
+                                Finished_Product_Description = rdr["Color_4"].ToString()
+                            };
+                            lstobj.Add(objrd);
+
+                        }
+
+                        if (rdr["Cylinder_5"].ToString() != null && rdr["Cylinder_5"].ToString().Length > 0)
+                        {
+                            Api_Deliveryorder_Go objrd = new Api_Deliveryorder_Go
+                            {
+                                Package_Id = rdr["Cylinder_5"].ToString(),
+                                Roll_Id = rdr["BARCODE_5"].ToString(),
+                                Material_Code = rdr["Finished_Product"].ToString(),
+                                Material_Description = rdr["Finished_Product_Description"].ToString(),
+                                Matelement = "5",
+                                Wh_Code = null,
+                                Warehouse = null,
+                                Locationno = null,
+                                Quantity = 1,
+                                Unit = null,
+                                Job = rdr["Job"].ToString(),
+                                Job_Code = rdr["Job_Code"].ToString(),
+                                Mo_Barcode = rdr["MO_Barcode"].ToString(),
+                                Picked = 0,
+                                Dotype = "REC",
+                                Customer_Code = "",
+                                Customer_Description = rdr["PREVIOUS_REF"].ToString(),
+                                Finished_Product = rdr["BARCODE_5"].ToString(),
+                                Finished_Product_Description = rdr["Color_5"].ToString()
+                            };
+                            lstobj.Add(objrd);
+
+                        }
+
+                        if (rdr["Cylinder_6"].ToString() != null && rdr["Cylinder_6"].ToString().Length > 0)
+                        {
+                            Api_Deliveryorder_Go objrd = new Api_Deliveryorder_Go
+                            {
+                                Package_Id = rdr["Cylinder_6"].ToString(),
+                                Roll_Id = rdr["BARCODE_6"].ToString(),
+                                Material_Code = rdr["Finished_Product"].ToString(),
+                                Material_Description = rdr["Finished_Product_Description"].ToString(),
+                                Matelement = "6",
+                                Wh_Code = null,
+                                Warehouse = null,
+                                Locationno = null,
+                                Quantity = 1,
+                                Unit = null,
+                                Job = rdr["Job"].ToString(),
+                                Job_Code = rdr["Job_Code"].ToString(),
+                                Mo_Barcode = rdr["MO_Barcode"].ToString(),
+                                Picked = 0,
+                                Dotype = "REC",
+                                Customer_Code = "",
+                                Customer_Description = rdr["PREVIOUS_REF"].ToString(),
+                                Finished_Product = rdr["BARCODE_6"].ToString(),
+                                Finished_Product_Description = rdr["Color_6"].ToString()
+                            };
+                            lstobj.Add(objrd);
+
+                        }
+
+                        if (rdr["Cylinder_7"].ToString() != null && rdr["Cylinder_7"].ToString().Length > 0)
+                        {
+                            Api_Deliveryorder_Go objrd = new Api_Deliveryorder_Go
+                            {
+                                Package_Id = rdr["Cylinder_7"].ToString(),
+                                Roll_Id = rdr["BARCODE_7"].ToString(),
+                                Material_Code = rdr["Finished_Product"].ToString(),
+                                Material_Description = rdr["Finished_Product_Description"].ToString(),
+                                Matelement = "7",
+                                Wh_Code = null,
+                                Warehouse = null,
+                                Locationno = null,
+                                Quantity = 1,
+                                Unit = null,
+                                Job = rdr["Job"].ToString(),
+                                Job_Code = rdr["Job_Code"].ToString(),
+                                Mo_Barcode = rdr["MO_Barcode"].ToString(),
+                                Picked = 0,
+                                Dotype = "REC",
+                                Customer_Code = "",
+                                Customer_Description = rdr["PREVIOUS_REF"].ToString(),
+                                Finished_Product = rdr["BARCODE_7"].ToString(),
+                                Finished_Product_Description = rdr["Color_7"].ToString()
+                            };
+                            lstobj.Add(objrd);
+
+                        }
+
+                        if (rdr["Cylinder_8"].ToString() != null && rdr["Cylinder_8"].ToString().Length > 0)
+                        {
+                            Api_Deliveryorder_Go objrd = new Api_Deliveryorder_Go
+                            {
+                                Package_Id = rdr["Cylinder_8"].ToString(),
+                                Roll_Id = rdr["BARCODE_8"].ToString(),
+                                Material_Code = rdr["Finished_Product"].ToString(),
+                                Material_Description = rdr["Finished_Product_Description"].ToString(),
+                                Matelement = "8",
+                                Wh_Code = null,
+                                Warehouse = null,
+                                Locationno = null,
+                                Quantity = 1,
+                                Unit = null,
+                                Job = rdr["Job"].ToString(),
+                                Job_Code = rdr["Job_Code"].ToString(),
+                                Mo_Barcode = rdr["MO_Barcode"].ToString(),
+                                Picked = 0,
+                                Dotype = "REC",
+                                Customer_Code = "",
+                                Customer_Description = rdr["PREVIOUS_REF"].ToString(),
+                                Finished_Product = rdr["BARCODE_8"].ToString(),
+                                Finished_Product_Description = rdr["Color_8"].ToString()
+                            };
+                            lstobj.Add(objrd);
+
+                        }
+
+
+                        if (rdr["Cylinder_9"].ToString() != null && rdr["Cylinder_9"].ToString().Length > 0)
+                        {
+                            Api_Deliveryorder_Go objrd = new Api_Deliveryorder_Go
+                            {
+                                Package_Id = rdr["Cylinder_9"].ToString(),
+                                Roll_Id = rdr["BARCODE_9"].ToString(),
+                                Material_Code = rdr["Finished_Product"].ToString(),
+                                Material_Description = rdr["Finished_Product_Description"].ToString(),
+                                Matelement = "9",
+                                Wh_Code = null,
+                                Warehouse = null,
+                                Locationno = null,
+                                Quantity = 1,
+                                Unit = null,
+                                Job = rdr["Job"].ToString(),
+                                Job_Code = rdr["Job_Code"].ToString(),
+                                Mo_Barcode = rdr["MO_Barcode"].ToString(),
+                                Picked = 0,
+                                Dotype = "REC",
+                                Customer_Code = "",
+                                Customer_Description = rdr["PREVIOUS_REF"].ToString(),
+                                Finished_Product = rdr["BARCODE_9"].ToString(),
+                                Finished_Product_Description = rdr["Color_9"].ToString()
+                            };
+                            lstobj.Add(objrd);
+
+                        }
+
+                        if (rdr["Cylinder_10"].ToString() != null && rdr["Cylinder_10"].ToString().Length > 0)
+                        {
+                            Api_Deliveryorder_Go objrd = new Api_Deliveryorder_Go
+                            {
+                                Package_Id = rdr["Cylinder_10"].ToString(),
+                                Roll_Id = rdr["BARCODE_10"].ToString(),
+                                Material_Code = rdr["Finished_Product"].ToString(),
+                                Material_Description = rdr["Finished_Product_Description"].ToString(),
+                                Matelement = "10",
+                                Wh_Code = null,
+                                Warehouse = null,
+                                Locationno = null,
+                                Quantity = 1,
+                                Unit = null,
+                                Job = rdr["Job"].ToString(),
+                                Job_Code = rdr["Job_Code"].ToString(),
+                                Mo_Barcode = rdr["MO_Barcode"].ToString(),
+                                Picked = 0,
+                                Dotype = "REC",
+                                Customer_Code = "",
+                                Customer_Description = rdr["PREVIOUS_REF"].ToString(),
+                                Finished_Product = rdr["BARCODE_10"].ToString(),
+                                Finished_Product_Description = rdr["Color_10"].ToString()
+                            };
+                            lstobj.Add(objrd);
+
+                        }
+
+
+
+
+
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    Log.Error(ex.ToString());
+                }
+                finally
+                {
+                    con.Close();
+                }
+            }
+            return lstobj;
+        }
+
         public IEnumerable<MaterialInfo> GetAllErpMatReceivingOrders()
         {
             List<MaterialInfo> lstobj = new List<MaterialInfo>();

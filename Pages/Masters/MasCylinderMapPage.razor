@@ -193,6 +193,9 @@ else
 
                     string msgret = await Task.Run(() => ObjMasService.InsertCylinderListMaster(lstobj.ToList(), mPalletcode));
 
+
+                    ObjErpApiService.SetMappedPalletCylinder(mPalletcode);
+
                     mPalletcode = "";
                     lstobj.Clear();
                     Elements = lstobj.ToList();

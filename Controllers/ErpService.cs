@@ -50,6 +50,18 @@ namespace GoWMS.Server.Controllers
             return ListRet;
         }
 
+        public List<Api_Deliveryorder_Go> GetAllErpReservedMaterialsCylinderbyMo(string mocode)
+        {
+            List<Api_Deliveryorder_Go> ListRet = objDAL.GetAllErpReservedMaterialsCylinderbyMo(mocode).ToList();
+            return ListRet;
+        }
+        
+        public List<Api_Deliveryorder_Go> GetAllErpReservedMaterialsCylinderbyMat(string mocode)
+        {
+            List<Api_Deliveryorder_Go> ListRet = objDAL.GetAllErpReservedMaterialsCylinderbyMat(mocode).ToList();
+            return ListRet;
+        }
+
         public List<MaterialInfo> GetAllErpMatReceivingOrders()
         {
             List<MaterialInfo> ListRet = objDAL.GetAllErpMatReceivingOrders().ToList();

@@ -64,7 +64,7 @@ else
                 @*<MudIconButton Color="@Color.Default" Icon="@Icons.Filled.PhotoCamera" @onclick="@(()=> OnclickImgPopup(context.CameraIp, context.GateName, context.ObjectName))">
                 </MudIconButton>*@
 
-                <MudIconButton Color="@Color.Default" Icon="@Icons.Filled.PhotoCamera" @onclick="@(()=> OnclickImgPopupAPI( context.GateName))">
+                <MudIconButton Color="@Color.Default" Icon="@Icons.Filled.PhotoCamera" @onclick="@(()=> OnclickImgPopupAPI( context.CameraName))">
                 </MudIconButton>
 
             </MudTd>
@@ -82,6 +82,7 @@ else
         public string GateName { get; set; }
         public string ObjectName { get; set; }
         public string CameraIp { get; set; }
+        public string CameraName { get; set; }
     }
     private string mPageHeader = "Detection";
     List<Userroleinfo> Roles = new List<Userroleinfo>();
@@ -162,6 +163,7 @@ else
             vTemp.CameraIp = vDt.Rows[i]["camera_ip"].ToString();
             vTemp.GateName = vDt.Rows[i]["gate_name"].ToString();
             vTemp.Modified = Convert.ToDateTime(vDt.Rows[i]["modified"].ToString());
+            vTemp.CameraName = vDt.Rows[i]["camera_name"].ToString();
             vTemp.ObjectName = vDt.Rows[i]["gate_status_desc"].ToString();
             Elements.Add(vTemp);
         }
@@ -256,9 +258,9 @@ else
 
         detectionUrl = vDt.Rows[0]["base_url"].ToString();
     }
-    async void OnclickImgPopupAPI(string pGateName)
+    async void OnclickImgPopupAPI(string pCamName)
     {
-        string vUrl = detectionUrl.Replace("$val01", pGateName);
+        string vUrl = detectionUrl.Replace("$val01", pCamName);
         var httpRequestMessage = new HttpRequestMessage(
         HttpMethod.Get, vUrl);
         var client = _clientFactory.CreateClient();

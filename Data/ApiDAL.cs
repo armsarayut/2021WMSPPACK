@@ -555,6 +555,43 @@ namespace GoWMS.Server.Data
             return bret;
         }
 
+
+        public bool ClaerDeliveryOrderKey(string Matcode)
+        {
+            bool bret = false;
+
+            using NpgsqlConnection con = new NpgsqlConnection(connectionString);
+            try
+            {
+                StringBuilder sql = new StringBuilder();
+                sql.AppendLine("Delete From wms.api_deliveryorder_go");
+                sql.AppendLine("Where material_code = @material_code ");
+                sql.AppendLine("And dotype = @dotype ");
+                NpgsqlCommand cmd = new NpgsqlCommand(sql.ToString(), con)
+                {
+                    CommandType = CommandType.Text
+                };
+
+                cmd.Parameters.AddWithValue("@material_code", Matcode);
+                cmd.Parameters.AddWithValue("@dotype", "REC");
+                con.Open();
+                cmd.ExecuteNonQuery();
+                bret = true;
+            }
+            catch (NpgsqlException ex)
+            {
+                Log.Error(ex.ToString());
+                bret = false;
+            }
+            finally
+            {
+                con.Close();
+            }
+
+
+            return bret;
+        }
+
         public async Task InsertDeliveryOrder(List<Api_Deliveryorder_Go> listOrder)
         {
             using NpgsqlConnection con = new NpgsqlConnection(connectionString);
@@ -782,6 +819,8 @@ namespace GoWMS.Server.Data
             }
         }
 
+       
+
         public void SetMappPalletAgv(string pallet,string source, string destination)
         {
             Int32? iRet = 0;
@@ -951,6 +990,74 @@ namespace GoWMS.Server.Data
             return lstobj;
         }
 
+        public IEnumerable<Api_Deliveryorder_Go> GetAllDeliveryorderGoByMat(string mocode)
+        {
+            List<Api_Deliveryorder_Go> lstobj = new List<Api_Deliveryorder_Go>();
+            using (NpgsqlConnection con = new NpgsqlConnection(connectionString))
+            {
+                try
+                {
+                    StringBuilder sql = new StringBuilder();
+                    sql.AppendLine("select * ");
+                    sql.AppendLine("from wms.api_deliveryorder_go");
+                    sql.AppendLine("where material_code = @material_code");
+                    sql.AppendLine("and dotype = @dotype");
+                    sql.AppendLine("and picked < quantity");
+                    sql.AppendLine("order by efidx");
+                    NpgsqlCommand cmd = new NpgsqlCommand(sql.ToString(), con)
+                    {
+                        CommandType = CommandType.Text
+                    };
+
+                    cmd.Parameters.AddWithValue("@material_code", mocode);
+                    cmd.Parameters.AddWithValue("@dotype", "REC");
+                    con.Open();
+                    NpgsqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        Api_Deliveryorder_Go objrd = new Api_Deliveryorder_Go
+                        {
+                            Efidx = rdr["efidx"] == DBNull.Value ? null : (Int64?)rdr["efidx"],
+                            Efstatus = rdr["efstatus"] == DBNull.Value ? null : (Int32?)rdr["efstatus"],
+                            Created = rdr["created"] == DBNull.Value ? null : (DateTime?)rdr["created"],
+                            Modified = rdr["modified"] == DBNull.Value ? null : (DateTime?)rdr["modified"],
+                            Innovator = rdr["innovator"] == DBNull.Value ? null : (Int64?)rdr["innovator"],
+                            Device = rdr["device"].ToString(),
+                            Package_Id = rdr["package_id"].ToString(),
+                            Roll_Id = rdr["roll_id"].ToString(),
+                            Material_Code = rdr["material_code"].ToString(),
+                            Material_Description = rdr["material_description"].ToString(),
+                            Quantity = rdr["quantity"] == DBNull.Value ? null : (decimal?)rdr["quantity"],
+                            Picked = rdr["picked"] == DBNull.Value ? null : (decimal?)rdr["picked"],
+                            Unit = rdr["unit"].ToString(),
+                            Wh_Code = rdr["wh_code"].ToString(),
+                            Warehouse = rdr["warehouse"].ToString(),
+                            Locationno = rdr["locationno"].ToString(),
+                            Job = rdr["job"].ToString(),
+                            Job_Code = rdr["job_code"].ToString(),
+                            Mo_Barcode = rdr["mo_barcode"].ToString(),
+                            Customer_Code = rdr["customer_code"].ToString(),
+                            Customer_Description = rdr["customer_description"].ToString(),
+                            Finished_Product = rdr["finished_product"].ToString(),
+                            Finished_Product_Description = rdr["finished_product_description"].ToString(),
+                            Matelement = rdr["matelement"].ToString(),
+                            Dotype = rdr["dotype"].ToString(),
+                        };
+                        lstobj.Add(objrd);
+                    }
+                }
+                catch (NpgsqlException ex)
+                {
+                    Log.Error(ex.ToString());
+                }
+                finally
+                {
+                    con.Close();
+                }
+            }
+            return lstobj;
+        }
+
         public void SetPicking(string jsonLON , string jsonRES, DateTime DeliverDate, Int64 idistination, ref Int32 Refiret, ref string Refsret)
         {
             Int32? iRet = 0;
@@ -1039,6 +1146,52 @@ namespace GoWMS.Server.Data
                 con.Close();
             }
         }
+
+
+        public void SetPickingByStationCylinder(string jsonLON, string jsonRES, DateTime DeliverDate, string sdestination, ref Int32 Refiret, ref string Refsret)
+        {
+            Int32? iRet = 0;
+            string sRet = "Calling";
+            NpgsqlConnection con = new NpgsqlConnection(connectionString);
+            try
+            {
+                con.Open();
+                StringBuilder sql = new StringBuilder();
+
+                sql.AppendLine("CALL wms.poc_oub_deliveryorderselectstationcylinder(");
+                sql.AppendLine(":jsonlon, :jsonres, :deliverdate, :sdestination, :retchk, :retmsg)");
+                NpgsqlCommand cmd = new NpgsqlCommand(sql.ToString(), con)
+                {
+                    CommandType = CommandType.Text
+                };
+
+                cmd.Parameters.AddWithValue("jsonlon", NpgsqlDbType.Json, jsonLON);
+                cmd.Parameters.AddWithValue("jsonres", NpgsqlDbType.Json, jsonRES);
+                cmd.Parameters.AddWithValue("deliverdate", NpgsqlDbType.Timestamp, DeliverDate);
+                cmd.Parameters.AddWithValue("sdestination", NpgsqlDbType.Varchar, sdestination);
+                cmd.Parameters.AddWithValue("retchk", NpgsqlDbType.Integer, iRet);
+                cmd.Parameters.AddWithValue("retmsg", NpgsqlDbType.Varchar, sRet);
+                NpgsqlDataReader rdr = cmd.ExecuteReader();
+                while (rdr.Read())
+                {
+                    iRet = rdr["retchk"] == DBNull.Value ? null : (Int32?)rdr["retchk"];
+                    sRet = rdr["retmsg"].ToString();
+
+                }
+                Refiret = (int)iRet;
+                Refsret = sRet;
+
+            }
+            catch (NpgsqlException ex)
+            {
+                Log.Error(ex.ToString());
+            }
+            finally
+            {
+                con.Close();
+            }
+        }
+
 
         public void SetPickingUnplaned(string jsonRES, ref Int32 Refiret, ref string Refsret)
         {
