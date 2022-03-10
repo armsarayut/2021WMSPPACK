@@ -1,4 +1,4 @@
-﻿@page "/wh/relesstock"
+﻿@page "/2/2_7"
 @using GoWMS.Server.Data
 @using GoWMS.Server.Controllers
 @using GoWMS.Server.Models
@@ -43,7 +43,7 @@ else
               Breakpoint="Breakpoint.Sm"
               FixedHeader="@fixed_header"
               FixedFooter="@fixed_footer"
-              Height="@(fixed_header || fixed_footer ?"600px":"")"
+              Height="@(fixed_header || fixed_footer ?VarGlobals.TableHeight:"")"
               Items="@Elements"
               GroupBy="@_groupDefinition"
               GroupHeaderStyle="background-color:var(--mud-palette-background-grey)"
@@ -95,9 +95,9 @@ else
 
 @code {
 
-    private string pageheader = "ReleaseStock";
-    private string mPagedesc { get; set; } = "ReleaseStock";
-    private string mPagename { get; set; } = "/wh/relesstock";
+    private string pageheader = "2.7-Release Stock";
+    private string mPagedesc { get; set; } = "2.7-Release Stock";
+    private string mPagename { get; set; } = "/2/2_7";
 
     private string msgAction = "Enter Palletcode";
     private string mPalletcode { get; set; } = "";

@@ -1,8 +1,9 @@
-﻿@page "/paau/agvstatus"
+﻿@page "/4/4_3"
 @using System.Runtime.Serialization;
 @using Newtonsoft.Json;
 @using GoWMS.Server.Controllers;
 @using GoWMS.Server.Models.Hagv;
+@using GoWMS.Server.Data;
 @using System.Net.NetworkInformation;
 
 
@@ -20,7 +21,7 @@
 else
 {
     <MudText Typo="Typo.h6" Color="Color.Primary"> @mPagecaption </MudText>
-    <MudTable Items="@Elements" FixedHeader="@fixed_header" FixedFooter="@fixed_footer" Height="@(fixed_header || fixed_footer ?"600px":"")" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<dataModel,bool>(FilterFunc)" SortLabel="Sort By">
+    <MudTable Items="@Elements" FixedHeader="@fixed_header" FixedFooter="@fixed_footer" Height="@(fixed_header || fixed_footer ?VarGlobals.TableHeight:"")" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<dataModel,bool>(FilterFunc)" SortLabel="Sort By">
         <ToolBarContent>
             <MudSpacer />
             <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
@@ -76,9 +77,9 @@ else
 
 
 @code {
-    private string mPagecaption = "AGV STATUS";
-    private string mPagedesc { get; set; } = "AGV STATUS";
-    private string mPagename { get; set; } = "/paau/agvstatus";
+    private string mPagecaption = "4.3-AGV-STATUS";
+    private string mPagedesc { get; set; } = "4.3-AGV-STATUS";
+    private string mPagename { get; set; } = "/4/4_3";
 
     [DataContract]
     class Request
@@ -203,56 +204,63 @@ else
 
         string vBody = Newtonsoft.Json.JsonConvert.SerializeObject(vRequest);
         var vContent = new StringContent(vBody, System.Text.Encoding.UTF8, "application/json");
-        var vResponseMsg = client.PostAsync(vFullApiName, vContent).Result;
-        Response vResponse = null;
-        var vResult = vResponseMsg.Content.ReadAsStringAsync().Result;
-        if (vResponseMsg.StatusCode == System.Net.HttpStatusCode.OK)
+        try
         {
-            Elements = new List<dataModel>();
-            vResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<Response>(vResult.ToString());
-            if (vResponse.code == "0" && vResponse.data != null)
+            var vResponseMsg = client.PostAsync(vFullApiName, vContent).Result;
+            Response vResponse = null;
+            var vResult = vResponseMsg.Content.ReadAsStringAsync().Result;
+            if (vResponseMsg.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                for (int i = 0; i < vResponse.data.Length; i++)
+                Elements = new List<dataModel>();
+                vResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<Response>(vResult.ToString());
+                if (vResponse.code == "0" && vResponse.data != null)
                 {
-                    dataModel vTemp = new dataModel();
-                    vTemp.battery = vResponse.data[i].battery;
-                    vTemp.robotCode = vResponse.data[i].robotCode;
-                    vTemp.speed = vResponse.data[i].speed;
-                    vTemp.status = vResponse.data[i].status;
-                    vTemp.robotIp = vResponse.data[i].robotIp;
-                    switch (vResponse.data[i].robotIp)
+                    for (int i = 0; i < vResponse.data.Length; i++)
                     {
-                        case "192.168.200.32":
-                            vTemp.Online = AGV192_168_200_32;
-                            break;
-                        case "192.168.200.33":
-                            vTemp.Online = AGV192_168_200_33;
-                            break;
-                        case "192.168.200.34":
-                            vTemp.Online = AGV192_168_200_34;
-                            break;
-                        case "192.168.200.35":
-                            vTemp.Online = AGV192_168_200_35;
-                            break;
-                        case "192.168.200.36":
-                            vTemp.Online = AGV192_168_200_36;
-                            break;
-                        case "192.168.200.37":
-                            vTemp.Online = AGV192_168_200_37;
-                            break;
-                        case "192.168.200.38":
-                            vTemp.Online = AGV192_168_200_38;
-                            break;
-                        default:
-                            vTemp.Online = false;
-                            break;
-                    }
+                        dataModel vTemp = new dataModel();
+                        vTemp.battery = vResponse.data[i].battery;
+                        vTemp.robotCode = vResponse.data[i].robotCode;
+                        vTemp.speed = vResponse.data[i].speed;
+                        vTemp.status = vResponse.data[i].status;
+                        vTemp.robotIp = vResponse.data[i].robotIp;
+                        switch (vResponse.data[i].robotIp)
+                        {
+                            case "192.168.200.32":
+                                vTemp.Online = AGV192_168_200_32;
+                                break;
+                            case "192.168.200.33":
+                                vTemp.Online = AGV192_168_200_33;
+                                break;
+                            case "192.168.200.34":
+                                vTemp.Online = AGV192_168_200_34;
+                                break;
+                            case "192.168.200.35":
+                                vTemp.Online = AGV192_168_200_35;
+                                break;
+                            case "192.168.200.36":
+                                vTemp.Online = AGV192_168_200_36;
+                                break;
+                            case "192.168.200.37":
+                                vTemp.Online = AGV192_168_200_37;
+                                break;
+                            case "192.168.200.38":
+                                vTemp.Online = AGV192_168_200_38;
+                                break;
+                            default:
+                                vTemp.Online = false;
+                                break;
+                        }
 
-                    //vTemp.Online = await ObjUtitityservice.PingAsync(vResponse.data[i].robotIp);
-                    Elements.Add(vTemp);
+                        //vTemp.Online = await ObjUtitityservice.PingAsync(vResponse.data[i].robotIp);
+                        Elements.Add(vTemp);
+                    }
+                    Elements = Elements.OrderBy(x => x.robotCode).ToList();
                 }
-                Elements = Elements.OrderBy(x => x.robotCode).ToList();
             }
+        }
+        catch (Exception ex)
+        {
+            string exmsg = ex.Message.ToString();
         }
     }
     #region timer
@@ -260,14 +268,14 @@ else
     void InitialTimer()
     {
         timer = new System.Timers.Timer();
-        timer.Interval = 1000;
+        timer.Interval = 5000;
         timer.Elapsed += TimerElapsed;
         timer.Enabled = true;
     }
     void TimerElapsed(Object source, System.Timers.ElapsedEventArgs e)
     {
 
-        if (timer.Interval <= 1000)
+        if (timer.Interval <= 5000)
             timer.Interval = 10000;
 
         PingAGV();

@@ -1,4 +1,4 @@
-﻿@page "/wh/capacity"
+﻿@page "/2/2_2"
 @using GoWMS.Server.Data
 @using GoWMS.Server.Controllers
 @using GoWMS.Server.Models
@@ -15,14 +15,15 @@
 else
 {
     <MudText Typo="Typo.h6" Color="Color.Primary"> @pageheader </MudText>
-    <MudTable Items="@Elements" FixedHeader="@fixed_header" FixedFooter="@fixed_footer" Height="@(fixed_header || fixed_footer ?"600px":"")" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<WhStorageCapacity,bool>(FilterFunc)" @bind-SelectedItem="selectedItem" SortLabel="Sort By">
+    <MudAppBar Color="Color.Transparent" Fixed="false" Dense="true">
+        <MudSpacer />
+        <MudTooltip Text=Export Color="Color.Inherit" Placement="Placement.Top">
+            <MudIconButton Icon="@Icons.Custom.FileFormats.FileExcel" Color="Color.Success"></MudIconButton>
+            <MudIconButton Icon="@Icons.Custom.FileFormats.FilePdf" Color="Color.Error"></MudIconButton>
+        </MudTooltip>
+    </MudAppBar>
+    <MudTable Items="@Elements" FixedHeader="@fixed_header" FixedFooter="@fixed_footer" Height="@(fixed_header || fixed_footer ?VarGlobals.TableHeight:"")" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<WhStorageCapacity,bool>(FilterFunc)" @bind-SelectedItem="selectedItem" SortLabel="Sort By">
         <ToolBarContent>
-            <MudTooltip Text="Export" Color="Color.Secondary" Placement="Placement.Top">
-                <MudMenu Icon="@Icons.Filled.Download" Color="Color.Primary">
-                    <MudMenuItem>EXCEL</MudMenuItem>
-                    <MudMenuItem>PDF</MudMenuItem>
-                </MudMenu>
-            </MudTooltip>
             <MudSpacer />
             <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
         </ToolBarContent>
@@ -57,7 +58,8 @@ else
 
     IEnumerable<int> pageSizeOptions = new int[] { 10, 20, 30, 50, 100 };
 
-    private readonly string pageheader = "Capacity";
+    private readonly string pageheader = "2.2-Capacity";
+    private string mPagename { get; set; } = "/2/2_2";
     private string msgAction = "Enter Palletcode";
     private string mPalletcode { get; set; } = "";
     private string mPackid { get; set; } = "";

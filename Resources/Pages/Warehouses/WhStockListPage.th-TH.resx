@@ -118,51 +118,51 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Area" xml:space="preserve">
-    <value />
+    <value>พื้นที่</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value />
+    <value>ชื่อสินค้า</value>
   </data>
   <data name="EnterPalletcode" xml:space="preserve">
-    <value />
+    <value>กรอกเลขพาเลท</value>
   </data>
   <data name="Excel" xml:space="preserve">
-    <value />
+    <value>Excel</value>
   </data>
   <data name="Location" xml:space="preserve">
-    <value />
+    <value>ตำแหน่ง</value>
   </data>
   <data name="MasterPallet" xml:space="preserve">
-    <value />
+    <value>พาเลท</value>
   </data>
   <data name="Material" xml:space="preserve">
-    <value />
+    <value>รหัสสินค้า</value>
   </data>
   <data name="PackID" xml:space="preserve">
-    <value />
+    <value>บาร์โค้ดสินค้า</value>
   </data>
   <data name="PageHeader" xml:space="preserve">
-    <value />
+    <value>หัวเอกสาร</value>
   </data>
   <data name="Pdf" xml:space="preserve">
-    <value />
+    <value>Pdf</value>
   </data>
   <data name="Search" xml:space="preserve">
-    <value />
+    <value>ค้นหา</value>
   </data>
   <data name="Stock" xml:space="preserve">
-    <value />
+    <value>คงคลัง</value>
   </data>
   <data name="StockGroup" xml:space="preserve">
-    <value />
+    <value>กลุ่มคงคลัง</value>
   </data>
   <data name="StockList" xml:space="preserve">
-    <value />
+    <value>รายการคงคลัง</value>
   </data>
   <data name="TotalMasterPallet" xml:space="preserve">
-    <value />
+    <value>จำนวนพาเลท</value>
   </data>
   <data name="TotalStock" xml:space="preserve">
-    <value />
+    <value>จำนวนคงคลัง</value>
   </data>
 </root>

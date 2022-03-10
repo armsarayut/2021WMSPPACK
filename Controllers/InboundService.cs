@@ -63,5 +63,28 @@ namespace GoWMS.Server.Controllers
             return bret;
         }
 
+
+        public Task<Int64> GetSumOrderAllInbGoodreceiptGo()
+        {
+            return objDAL.GetSumOrderAllInbGoodreceiptGo();
+        }
+
+        public Task<Int64> GetSumPalletAllInbGoodreceiptGo()
+        {
+            return objDAL.GetSumPalletAllInbGoodreceiptGo();
+        }
+
+
+        public Task<Int64> GetSumPalletAllOubGoodPickingGo()
+        {
+            return objDAL.GetSumPalletAllOubGoodPickingGo();
+        }
+
+        public Task<Int64> GetSumOrderAllOubGoodPickingGo()
+        {
+            return objDAL.GetSumOrderAllOubGoodPickingGo();
+        }
+
+
     }
 }

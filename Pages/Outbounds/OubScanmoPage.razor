@@ -1,4 +1,4 @@
-﻿@page "/oub/scanmo"
+﻿@page "/3/3_1"
 @using GoWMS.Server.Data
 @using GoWMS.Server.Controllers
 @using GoWMS.Server.Models
@@ -77,11 +77,11 @@ else if (elevation == 4) // Error
 @code {
     bool disabled = false;
     private int mCounter = 5;
-    private string mPageHeader = "Scan MO";
+    private string mPageHeader = "3.1-Scan MO";
     private string mPageHeaderkey = "Key Material";
     private string msgAction = "Enter MO Barcode";
-    private string mPagedesc { get; set; } = "Scan MO";
-    private string mPagename { get; set; } = "/oub/scanmo";
+    private string mPagedesc { get; set; } = "3.1-Scan MO";
+    private string mPagename { get; set; } = "/3/3_1";
     private string mPalletcode { get; set; } = "";
     private string mMatcode { get; set; } = "";
     private string mPackid { get; set; } = "";
@@ -139,7 +139,7 @@ else if (elevation == 4) // Error
 
             ObjApiService.ClaerDeliveryOrder(str);
 
-            //Elements = ObjApiService.GetAllApiDeliveryorder();
+            Elements = ObjApiService.GetAllApiDeliveryorder();
 
             var allCorrect = Elements.Where(a => a.Mo_Barcode == str).ToList();
 
@@ -184,15 +184,15 @@ else if (elevation == 4) // Error
                     if (V_List_OF_Materials_NeedsInfos.ToList().Count > 0)
                     {
                         //await Task.Run(() => ObjApiService.InsertDeliveryOrderAsync(V_List_OF_Materials_NeedsInfos.ToList());
-                        ObjApiService.InsertDeliveryOrderAsync(V_List_OF_Materials_NeedsInfos.ToList());
+                        //ObjApiService.InsertDeliveryOrderAsync(V_List_OF_Materials_NeedsInfos.ToList());
 
                     }
                     if (V_Reserved_MaterialsCylinderInfos.ToList().Count>0)
                     {
-                        ObjApiService.InsertDeliveryOrderAsync(V_Reserved_MaterialsCylinderInfos.ToList());
+                        //ObjApiService.InsertDeliveryOrderAsync(V_Reserved_MaterialsCylinderInfos.ToList());
                     }
                     // loop to api
-                    ObjApiService.InsertDeliveryOrderAsync(V_Reserved_MaterialsInfos.ToList());
+                    //ObjApiService.InsertDeliveryOrderAsync(V_Reserved_MaterialsInfos.ToList());
                     //----------------------
                     mPalletcode = str;
                     msgAction = "MO is [" + mPalletcode + "] Please select category ";
@@ -209,10 +209,10 @@ else if (elevation == 4) // Error
                     {
                         if (V_Reserved_MaterialsCylinderInfos.ToList().Count > 0)
                         {
-                            ObjApiService.InsertDeliveryOrderAsync(V_Reserved_MaterialsCylinderInfos.ToList());
+                            // ObjApiService.InsertDeliveryOrderAsync(V_Reserved_MaterialsCylinderInfos.ToList());
                         }
                         // loop to api
-                        ObjApiService.InsertDeliveryOrderAsync(V_List_OF_Materials_NeedsInfos.ToList());
+                        //ObjApiService.InsertDeliveryOrderAsync(V_List_OF_Materials_NeedsInfos.ToList());
                         //----------------------
                         mPalletcode = str;
                         msgAction = "MO is [" + mPalletcode + "] Please select category ";
@@ -227,7 +227,7 @@ else if (elevation == 4) // Error
                     {
                         if (V_Reserved_MaterialsCylinderInfos.ToList().Count > 0)
                         {
-                            ObjApiService.InsertDeliveryOrderAsync(V_Reserved_MaterialsCylinderInfos.ToList());
+                            //ObjApiService.InsertDeliveryOrderAsync(V_Reserved_MaterialsCylinderInfos.ToList());
 
                             mPalletcode = str;
                             msgAction = "MO is [" + mPalletcode + "] Please select category ";
@@ -282,12 +282,12 @@ else if (elevation == 4) // Error
                 if (V_List_OF_Materials_NeedsInfos.ToList().Count > 0)
                 {
                     //await Task.Run(() => ObjApiService.InsertDeliveryOrderAsync(V_List_OF_Materials_NeedsInfos.ToList());
-                    ObjApiService.InsertDeliveryOrderAsync(V_List_OF_Materials_NeedsInfos.ToList());
+                    // ObjApiService.InsertDeliveryOrderAsync(V_List_OF_Materials_NeedsInfos.ToList());
 
                 }
                 if (V_Reserved_MaterialsCylinderInfos.ToList().Count > 0)
                 {
-                    ObjApiService.InsertDeliveryOrderAsync(V_Reserved_MaterialsCylinderInfos.ToList());
+                    //ObjApiService.InsertDeliveryOrderAsync(V_Reserved_MaterialsCylinderInfos.ToList());
 
                     mMatcode = str;
                     msgAction = "Material is [" + mPalletcode + "] Please select category ";
@@ -310,7 +310,7 @@ else if (elevation == 4) // Error
                 {
                     if (V_Reserved_MaterialsCylinderInfos.ToList().Count > 0)
                     {
-                        ObjApiService.InsertDeliveryOrderAsync(V_Reserved_MaterialsCylinderInfos.ToList());
+                        //ObjApiService.InsertDeliveryOrderAsync(V_Reserved_MaterialsCylinderInfos.ToList());
                         //ObjApiService.InsertDeliveryOrderAsync(V_List_OF_Materials_NeedsInfos.ToList());
                         //----------------------
                         mMatcode = str;
@@ -330,7 +330,7 @@ else if (elevation == 4) // Error
                 {
                     if (V_Reserved_MaterialsCylinderInfos.ToList().Count > 0)
                     {
-                        ObjApiService.InsertDeliveryOrderAsync(V_Reserved_MaterialsCylinderInfos.ToList());
+                        //ObjApiService.InsertDeliveryOrderAsync(V_Reserved_MaterialsCylinderInfos.ToList());
 
                         //var wordLens = V_Reserved_MaterialsCylinderInfos.Select(e => e.Mo_Barcode).FirstOrDefault();
 
@@ -408,6 +408,63 @@ else if (elevation == 4) // Error
     {
         if (mPalletcode.Length > 0)
         {
+            if (V_Reserved_MaterialsInfos.ToList().Count > 0)
+            {
+                //Claer
+
+                if (V_List_OF_Materials_NeedsInfos.ToList().Count > 0)
+                {
+                    //await Task.Run(() => ObjApiService.InsertDeliveryOrderAsync(V_List_OF_Materials_NeedsInfos.ToList());
+                    ObjApiService.InsertDeliveryOrderAsync(V_List_OF_Materials_NeedsInfos.ToList());
+
+                }
+                if (V_Reserved_MaterialsCylinderInfos.ToList().Count > 0)
+                {
+                    //ObjApiService.InsertDeliveryOrderAsync(V_Reserved_MaterialsCylinderInfos.ToList());
+                }
+                // loop to api
+                ObjApiService.InsertDeliveryOrderAsync(V_Reserved_MaterialsInfos.ToList());
+                //----------------------
+
+                Filmlinkmo = setFilmlinkmo + mPalletcode;
+                Inklinkmo = setInklinkmo + mPalletcode;
+                Cyllinkmo = setCyllinkmo + mPalletcode + "/MO";
+                Othlinkmo = setOthlinkmo + mPalletcode;
+                Alllinkmo = setAlllinkmo + mPalletcode;
+            }
+            else
+            {
+                if (V_List_OF_Materials_NeedsInfos.ToList().Count > 0)
+                {
+                    if (V_Reserved_MaterialsCylinderInfos.ToList().Count > 0)
+                    {
+                        //ObjApiService.InsertDeliveryOrderAsync(V_Reserved_MaterialsCylinderInfos.ToList());
+                    }
+                    // loop to api
+                    ObjApiService.InsertDeliveryOrderAsync(V_List_OF_Materials_NeedsInfos.ToList());
+                    //----------------------
+
+                    Filmlinkmo = setFilmlinkmo + mPalletcode;
+                    Inklinkmo = setInklinkmo + mPalletcode;
+                    Cyllinkmo = setCyllinkmo + mPalletcode + "/MO";
+                    Othlinkmo = setOthlinkmo + mPalletcode;
+                    Alllinkmo = setAlllinkmo + mPalletcode;
+                }
+                else
+                {
+                    if (V_Reserved_MaterialsCylinderInfos.ToList().Count > 0)
+                    {
+                        //ObjApiService.InsertDeliveryOrderAsync(V_Reserved_MaterialsCylinderInfos.ToList());
+
+                        Filmlinkmo = setFilmlinkmo + mPalletcode;
+                        Inklinkmo = setInklinkmo + mPalletcode;
+                        Cyllinkmo = setCyllinkmo + mPalletcode + "/MO";
+                        Othlinkmo = setOthlinkmo + mPalletcode;
+                        Alllinkmo = setAlllinkmo + mPalletcode;
+                    }
+                }
+
+            }
             UriHelper.NavigateTo(Filmlinkmo);
         }
     }
@@ -415,6 +472,63 @@ else if (elevation == 4) // Error
     {
         if (mPalletcode.Length > 0)
         {
+            if (V_Reserved_MaterialsInfos.ToList().Count > 0)
+            {
+                //Claer
+
+                if (V_List_OF_Materials_NeedsInfos.ToList().Count > 0)
+                {
+                    //await Task.Run(() => ObjApiService.InsertDeliveryOrderAsync(V_List_OF_Materials_NeedsInfos.ToList());
+                    ObjApiService.InsertDeliveryOrderAsync(V_List_OF_Materials_NeedsInfos.ToList());
+
+                }
+                if (V_Reserved_MaterialsCylinderInfos.ToList().Count > 0)
+                {
+                    //ObjApiService.InsertDeliveryOrderAsync(V_Reserved_MaterialsCylinderInfos.ToList());
+                }
+                // loop to api
+                ObjApiService.InsertDeliveryOrderAsync(V_Reserved_MaterialsInfos.ToList());
+                //----------------------
+
+                Filmlinkmo = setFilmlinkmo + mPalletcode;
+                Inklinkmo = setInklinkmo + mPalletcode;
+                Cyllinkmo = setCyllinkmo + mPalletcode + "/MO";
+                Othlinkmo = setOthlinkmo + mPalletcode;
+                Alllinkmo = setAlllinkmo + mPalletcode;
+            }
+            else
+            {
+                if (V_List_OF_Materials_NeedsInfos.ToList().Count > 0)
+                {
+                    if (V_Reserved_MaterialsCylinderInfos.ToList().Count > 0)
+                    {
+                        //ObjApiService.InsertDeliveryOrderAsync(V_Reserved_MaterialsCylinderInfos.ToList());
+                    }
+                    // loop to api
+                    ObjApiService.InsertDeliveryOrderAsync(V_List_OF_Materials_NeedsInfos.ToList());
+                    //----------------------
+
+                    Filmlinkmo = setFilmlinkmo + mPalletcode;
+                    Inklinkmo = setInklinkmo + mPalletcode;
+                    Cyllinkmo = setCyllinkmo + mPalletcode + "/MO";
+                    Othlinkmo = setOthlinkmo + mPalletcode;
+                    Alllinkmo = setAlllinkmo + mPalletcode;
+                }
+                else
+                {
+                    if (V_Reserved_MaterialsCylinderInfos.ToList().Count > 0)
+                    {
+                        //ObjApiService.InsertDeliveryOrderAsync(V_Reserved_MaterialsCylinderInfos.ToList());
+
+                        Filmlinkmo = setFilmlinkmo + mPalletcode;
+                        Inklinkmo = setInklinkmo + mPalletcode;
+                        Cyllinkmo = setCyllinkmo + mPalletcode + "/MO";
+                        Othlinkmo = setOthlinkmo + mPalletcode;
+                        Alllinkmo = setAlllinkmo + mPalletcode;
+                    }
+                }
+
+            }
             UriHelper.NavigateTo(Inklinkmo);
         }
     }
@@ -422,10 +536,134 @@ else if (elevation == 4) // Error
     {
         if (mPalletcode.Length > 0)
         {
+            if (V_Reserved_MaterialsInfos.ToList().Count > 0)
+            {
+                //Claer
+
+                if (V_List_OF_Materials_NeedsInfos.ToList().Count > 0)
+                {
+                    //await Task.Run(() => ObjApiService.InsertDeliveryOrderAsync(V_List_OF_Materials_NeedsInfos.ToList());
+                    //ObjApiService.InsertDeliveryOrderAsync(V_List_OF_Materials_NeedsInfos.ToList());
+
+                }
+                if (V_Reserved_MaterialsCylinderInfos.ToList().Count > 0)
+                {
+                    ObjApiService.InsertDeliveryOrderAsync(V_Reserved_MaterialsCylinderInfos.ToList());
+                }
+                // loop to api
+                //ObjApiService.InsertDeliveryOrderAsync(V_Reserved_MaterialsInfos.ToList());
+                //----------------------
+
+                Filmlinkmo = setFilmlinkmo + mPalletcode;
+                Inklinkmo = setInklinkmo + mPalletcode;
+                Cyllinkmo = setCyllinkmo + mPalletcode + "/MO";
+                Othlinkmo = setOthlinkmo + mPalletcode;
+                Alllinkmo = setAlllinkmo + mPalletcode;
+            }
+            else
+            {
+                if (V_List_OF_Materials_NeedsInfos.ToList().Count > 0)
+                {
+                    if (V_Reserved_MaterialsCylinderInfos.ToList().Count > 0)
+                    {
+                        ObjApiService.InsertDeliveryOrderAsync(V_Reserved_MaterialsCylinderInfos.ToList());
+                    }
+                    // loop to api
+                    //ObjApiService.InsertDeliveryOrderAsync(V_List_OF_Materials_NeedsInfos.ToList());
+                    //----------------------
+
+                    Filmlinkmo = setFilmlinkmo + mPalletcode;
+                    Inklinkmo = setInklinkmo + mPalletcode;
+                    Cyllinkmo = setCyllinkmo + mPalletcode + "/MO";
+                    Othlinkmo = setOthlinkmo + mPalletcode;
+                    Alllinkmo = setAlllinkmo + mPalletcode;
+                }
+                else
+                {
+                    if (V_Reserved_MaterialsCylinderInfos.ToList().Count > 0)
+                    {
+                        ObjApiService.InsertDeliveryOrderAsync(V_Reserved_MaterialsCylinderInfos.ToList());
+
+                        Filmlinkmo = setFilmlinkmo + mPalletcode;
+                        Inklinkmo = setInklinkmo + mPalletcode;
+                        Cyllinkmo = setCyllinkmo + mPalletcode + "/MO";
+                        Othlinkmo = setOthlinkmo + mPalletcode;
+                        Alllinkmo = setAlllinkmo + mPalletcode;
+                    }
+                }
+
+            }
             UriHelper.NavigateTo(Cyllinkmo);
         }
         else if(mMatcode.Length>0)
         {
+            if (V_Reserved_MaterialsInfos.ToList().Count > 0)
+            {
+                //Claer
+
+                if (V_List_OF_Materials_NeedsInfos.ToList().Count > 0)
+                {
+                    //await Task.Run(() => ObjApiService.InsertDeliveryOrderAsync(V_List_OF_Materials_NeedsInfos.ToList());
+                    //ObjApiService.InsertDeliveryOrderAsync(V_List_OF_Materials_NeedsInfos.ToList());
+
+                }
+                if (V_Reserved_MaterialsCylinderInfos.ToList().Count > 0)
+                {
+                    //ObjApiService.InsertDeliveryOrderAsync(V_Reserved_MaterialsCylinderInfos.ToList());
+
+
+                    Filmlinkmo = setFilmlinkmo + mPalletcode;
+                    Inklinkmo = setInklinkmo + mPalletcode;
+                    Cyllinkmo = setCyllinkmo + mPalletcode;
+                    Othlinkmo = setOthlinkmo + mPalletcode;
+                    Alllinkmo = setAlllinkmo + mPalletcode;
+                }
+                // loop to api
+                //ObjApiService.InsertDeliveryOrderAsync(V_Reserved_MaterialsInfos.ToList());
+                //----------------------
+
+
+            }
+            else
+            {
+                if (V_List_OF_Materials_NeedsInfos.ToList().Count > 0)
+                {
+                    if (V_Reserved_MaterialsCylinderInfos.ToList().Count > 0)
+                    {
+                        ObjApiService.InsertDeliveryOrderAsync(V_Reserved_MaterialsCylinderInfos.ToList());
+                        //ObjApiService.InsertDeliveryOrderAsync(V_List_OF_Materials_NeedsInfos.ToList());
+                        //----------------------
+
+                        Filmlinkmo = setFilmlinkmo + mPalletcode;
+                        Inklinkmo = setInklinkmo + mPalletcode;
+                        Cyllinkmo = setCyllinkmo + mPalletcode;
+                        Othlinkmo = setOthlinkmo + mPalletcode;
+                        Alllinkmo = setAlllinkmo + mPalletcode;
+
+                    }
+                    // loop to api
+
+                }
+                else
+                {
+                    if (V_Reserved_MaterialsCylinderInfos.ToList().Count > 0)
+                    {
+                        ObjApiService.InsertDeliveryOrderAsync(V_Reserved_MaterialsCylinderInfos.ToList());
+
+                        //var wordLens = V_Reserved_MaterialsCylinderInfos.Select(e => e.Mo_Barcode).FirstOrDefault();
+
+
+
+                        Filmlinkmo = setFilmlinkmo + mPalletcode;
+                        Inklinkmo = setInklinkmo + mPalletcode;
+                        Cyllinkmo = setCyllinkmo + mMatcode + "/MAT";
+                        Othlinkmo = setOthlinkmo + mPalletcode;
+                        Alllinkmo = setAlllinkmo + mPalletcode;
+                    }
+                }
+
+            }
+
             UriHelper.NavigateTo(Cyllinkmo);
         }
     }
@@ -433,6 +671,63 @@ else if (elevation == 4) // Error
     {
         if (mPalletcode.Length > 0)
         {
+            if (V_Reserved_MaterialsInfos.ToList().Count > 0)
+            {
+                //Claer
+
+                if (V_List_OF_Materials_NeedsInfos.ToList().Count > 0)
+                {
+                    //await Task.Run(() => ObjApiService.InsertDeliveryOrderAsync(V_List_OF_Materials_NeedsInfos.ToList());
+                    ObjApiService.InsertDeliveryOrderAsync(V_List_OF_Materials_NeedsInfos.ToList());
+
+                }
+                if (V_Reserved_MaterialsCylinderInfos.ToList().Count > 0)
+                {
+                    //ObjApiService.InsertDeliveryOrderAsync(V_Reserved_MaterialsCylinderInfos.ToList());
+                }
+                // loop to api
+                ObjApiService.InsertDeliveryOrderAsync(V_Reserved_MaterialsInfos.ToList());
+                //----------------------
+
+                Filmlinkmo = setFilmlinkmo + mPalletcode;
+                Inklinkmo = setInklinkmo + mPalletcode;
+                Cyllinkmo = setCyllinkmo + mPalletcode + "/MO";
+                Othlinkmo = setOthlinkmo + mPalletcode;
+                Alllinkmo = setAlllinkmo + mPalletcode;
+            }
+            else
+            {
+                if (V_List_OF_Materials_NeedsInfos.ToList().Count > 0)
+                {
+                    if (V_Reserved_MaterialsCylinderInfos.ToList().Count > 0)
+                    {
+                        //ObjApiService.InsertDeliveryOrderAsync(V_Reserved_MaterialsCylinderInfos.ToList());
+                    }
+                    // loop to api
+                    ObjApiService.InsertDeliveryOrderAsync(V_List_OF_Materials_NeedsInfos.ToList());
+                    //----------------------
+
+                    Filmlinkmo = setFilmlinkmo + mPalletcode;
+                    Inklinkmo = setInklinkmo + mPalletcode;
+                    Cyllinkmo = setCyllinkmo + mPalletcode + "/MO";
+                    Othlinkmo = setOthlinkmo + mPalletcode;
+                    Alllinkmo = setAlllinkmo + mPalletcode;
+                }
+                else
+                {
+                    if (V_Reserved_MaterialsCylinderInfos.ToList().Count > 0)
+                    {
+                        //ObjApiService.InsertDeliveryOrderAsync(V_Reserved_MaterialsCylinderInfos.ToList());
+
+                        Filmlinkmo = setFilmlinkmo + mPalletcode;
+                        Inklinkmo = setInklinkmo + mPalletcode;
+                        Cyllinkmo = setCyllinkmo + mPalletcode + "/MO";
+                        Othlinkmo = setOthlinkmo + mPalletcode;
+                        Alllinkmo = setAlllinkmo + mPalletcode;
+                    }
+                }
+
+            }
             UriHelper.NavigateTo(Othlinkmo);
         }
     }
@@ -440,6 +735,63 @@ else if (elevation == 4) // Error
     {
         if (mPalletcode.Length > 0)
         {
+            if (V_Reserved_MaterialsInfos.ToList().Count > 0)
+            {
+                //Claer
+
+                if (V_List_OF_Materials_NeedsInfos.ToList().Count > 0)
+                {
+                    //await Task.Run(() => ObjApiService.InsertDeliveryOrderAsync(V_List_OF_Materials_NeedsInfos.ToList());
+                    ObjApiService.InsertDeliveryOrderAsync(V_List_OF_Materials_NeedsInfos.ToList());
+
+                }
+                if (V_Reserved_MaterialsCylinderInfos.ToList().Count > 0)
+                {
+                    //ObjApiService.InsertDeliveryOrderAsync(V_Reserved_MaterialsCylinderInfos.ToList());
+                }
+                // loop to api
+                ObjApiService.InsertDeliveryOrderAsync(V_Reserved_MaterialsInfos.ToList());
+                //----------------------
+
+                Filmlinkmo = setFilmlinkmo + mPalletcode;
+                Inklinkmo = setInklinkmo + mPalletcode;
+                Cyllinkmo = setCyllinkmo + mPalletcode + "/MO";
+                Othlinkmo = setOthlinkmo + mPalletcode;
+                Alllinkmo = setAlllinkmo + mPalletcode;
+            }
+            else
+            {
+                if (V_List_OF_Materials_NeedsInfos.ToList().Count > 0)
+                {
+                    if (V_Reserved_MaterialsCylinderInfos.ToList().Count > 0)
+                    {
+                        //ObjApiService.InsertDeliveryOrderAsync(V_Reserved_MaterialsCylinderInfos.ToList());
+                    }
+                    // loop to api
+                    ObjApiService.InsertDeliveryOrderAsync(V_List_OF_Materials_NeedsInfos.ToList());
+                    //----------------------
+
+                    Filmlinkmo = setFilmlinkmo + mPalletcode;
+                    Inklinkmo = setInklinkmo + mPalletcode;
+                    Cyllinkmo = setCyllinkmo + mPalletcode + "/MO";
+                    Othlinkmo = setOthlinkmo + mPalletcode;
+                    Alllinkmo = setAlllinkmo + mPalletcode;
+                }
+                else
+                {
+                    if (V_Reserved_MaterialsCylinderInfos.ToList().Count > 0)
+                    {
+                        //ObjApiService.InsertDeliveryOrderAsync(V_Reserved_MaterialsCylinderInfos.ToList());
+
+                        Filmlinkmo = setFilmlinkmo + mPalletcode;
+                        Inklinkmo = setInklinkmo + mPalletcode;
+                        Cyllinkmo = setCyllinkmo + mPalletcode + "/MO";
+                        Othlinkmo = setOthlinkmo + mPalletcode;
+                        Alllinkmo = setAlllinkmo + mPalletcode;
+                    }
+                }
+
+            }
             UriHelper.NavigateTo(Alllinkmo);
         }
     }

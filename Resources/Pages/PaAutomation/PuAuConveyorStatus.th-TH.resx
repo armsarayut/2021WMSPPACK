@@ -117,16 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="MC CODE" xml:space="preserve">
-    <value />
+  <data name="ACTION" xml:space="preserve">
+    <value>การกระทำ</value>
   </data>
-  <data name="Pagecaption" xml:space="preserve">
-    <value />
+  <data name="INFO" xml:space="preserve">
+    <value>ข้อมูล</value>
+  </data>
+  <data name="MCCODE" xml:space="preserve">
+    <value>รหัสสถานี</value>
   </data>
   <data name="Search" xml:space="preserve">
-    <value />
+    <value>ค้นหา</value>
+  </data>
+  <data name="SortBy" xml:space="preserve">
+    <value>เรียงจาก</value>
   </data>
   <data name="STATUS" xml:space="preserve">
-    <value />
+    <value>สถานะ</value>
   </data>
 </root>

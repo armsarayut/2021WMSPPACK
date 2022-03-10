@@ -529,6 +529,46 @@ namespace GoWMS.Server.Data
             return lstModels;
         }
 
+        public Boolean ValidateDeliveryList(string spack)
+        {
+            Boolean bret = false;
+
+            using (NpgsqlConnection con = new NpgsqlConnection(connectionString))
+            {
+                try
+                {
+                    StringBuilder Sql = new StringBuilder();
+                    Sql.AppendLine("select *");
+                    Sql.AppendLine("from wms.oub_delivery_go");
+                    Sql.AppendLine("where package_id = @package_id");
+
+                    NpgsqlCommand cmd = new NpgsqlCommand(Sql.ToString(), con)
+                    {
+                        CommandType = CommandType.Text
+                    };
+
+                    con.Open();
+
+                    cmd.Parameters.AddWithValue("@package_id", NpgsqlDbType.Varchar, spack);
+
+                    NpgsqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        bret = true;
+                    }
+                }
+                catch (NpgsqlException ex)
+                {
+                    Log.Error(ex.ToString());
+                }
+                finally
+                {
+                    con.Close();
+                }
+            }
+            return bret;
+        }
+
         public IEnumerable<Oub_Delivery_Go> GetDeliveryAll()
         {
             List<Oub_Delivery_Go> lstModels = new List<Oub_Delivery_Go>();

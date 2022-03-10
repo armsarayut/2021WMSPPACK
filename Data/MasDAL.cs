@@ -464,6 +464,8 @@ namespace GoWMS.Server.Data
             return lstobj;
         }
 
+
+
         public IEnumerable<Mas_Cylinder_Go> GetAllCylinderGobypallet(string pallet)
         {
             List<Mas_Cylinder_Go> lstobj = new List<Mas_Cylinder_Go>();
@@ -621,6 +623,130 @@ namespace GoWMS.Server.Data
             }
             return lstobj;
         }
+
+        public IEnumerable<Mas_Cylinderlist_Go> GetAllCylinderList()
+        {
+            List<Mas_Cylinderlist_Go> lstobj = new List<Mas_Cylinderlist_Go>();
+            using (NpgsqlConnection con = new NpgsqlConnection(connectionString))
+            {
+                try
+                {
+                    StringBuilder Sql = new StringBuilder();
+
+
+                    Sql.AppendLine("SELECT efidx, efstatus, created, modified, innovator, device");
+                    Sql.AppendLine(", material_code, material_description");
+                    Sql.AppendLine(", customer_code, customer_description, customer_reference, previos_ref");
+                    Sql.AppendLine(", cylinderno, colorcode, cylindercode, cylinderbar, palletno, itemtag");
+                    Sql.AppendLine("FROM wms.mas_cylinderlist_go ");
+                    Sql.AppendLine("ORDER by material_code ASC, cylinderno ASC ");
+
+                    NpgsqlCommand cmd = new NpgsqlCommand(Sql.ToString(), con)
+                    {
+                        CommandType = CommandType.Text
+                    };
+                    con.Open();
+                    NpgsqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        Mas_Cylinderlist_Go objrd = new Mas_Cylinderlist_Go
+                        {
+                            Efidx = rdr["efidx"] == DBNull.Value ? null : (Int64?)rdr["efidx"],
+                            Efstatus = rdr["efstatus"] == DBNull.Value ? null : (Int32?)rdr["efstatus"],
+                            Created = rdr["created"] == DBNull.Value ? null : (DateTime?)rdr["created"],
+                            Modified = rdr["modified"] == DBNull.Value ? null : (DateTime?)rdr["modified"],
+                            Innovator = rdr["innovator"] == DBNull.Value ? null : (Int64?)rdr["innovator"],
+                            Device = rdr["device"].ToString(),
+                            Material_Code = rdr["material_code"].ToString(),
+                            Material_Description = rdr["material_description"].ToString(),
+                            Customer_Code = rdr["customer_code"].ToString(),
+                            Customer_Description = rdr["customer_description"].ToString(),
+                            Customer_Reference = rdr["customer_reference"].ToString(),
+                            Previos_ref = rdr["previos_ref"].ToString(),
+                            Cylinderno = rdr["cylinderno"] == DBNull.Value ? null : (Int32?)rdr["cylinderno"],
+                            Cylindercode = rdr["cylindercode"].ToString(),
+                            Colorcode = rdr["colorcode"].ToString(),
+                            Cylinderbar = rdr["cylinderbar"].ToString(),
+                            Palletno = rdr["palletno"].ToString(),
+                            Itemtag = rdr["itemtag"].ToString()
+                        };
+                        lstobj.Add(objrd);
+                    }
+                }
+                catch (NpgsqlException ex)
+                {
+                    Log.Error(ex.ToString());
+                }
+                finally
+                {
+                    con.Close();
+                }
+            }
+            return lstobj;
+        }
+
+        public IEnumerable<Mas_Cylinderlist_Go> GetAllCylinderListByPallet(string maplet)
+        {
+            List<Mas_Cylinderlist_Go> lstobj = new List<Mas_Cylinderlist_Go>();
+            using (NpgsqlConnection con = new NpgsqlConnection(connectionString))
+            {
+                try
+                {
+                    StringBuilder Sql = new StringBuilder();
+
+                    Sql.AppendLine("SELECT efidx, efstatus, created, modified, innovator, device");
+                    Sql.AppendLine(", material_code, material_description");
+                    Sql.AppendLine(", customer_code, customer_description, customer_reference, previos_ref");
+                    Sql.AppendLine(", cylinderno, colorcode, cylindercode, cylinderbar, palletno, itemtag");
+                    Sql.AppendLine("FROM wms.mas_cylinderlist_go ");
+                    Sql.AppendLine("WHERE palletno = @palletno ");
+                    Sql.AppendLine("ORDER by cylinderno ASC ");
+
+                    NpgsqlCommand cmd = new NpgsqlCommand(Sql.ToString(), con)
+                    {
+                        CommandType = CommandType.Text
+                    };
+                    con.Open();
+                    cmd.Parameters.AddWithValue("@palletno", NpgsqlDbType.Varchar, maplet);
+                    NpgsqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        Mas_Cylinderlist_Go objrd = new Mas_Cylinderlist_Go
+                        {
+                            Efidx = rdr["efidx"] == DBNull.Value ? null : (Int64?)rdr["efidx"],
+                            Efstatus = rdr["efstatus"] == DBNull.Value ? null : (Int32?)rdr["efstatus"],
+                            Created = rdr["created"] == DBNull.Value ? null : (DateTime?)rdr["created"],
+                            Modified = rdr["modified"] == DBNull.Value ? null : (DateTime?)rdr["modified"],
+                            Innovator = rdr["innovator"] == DBNull.Value ? null : (Int64?)rdr["innovator"],
+                            Device = rdr["device"].ToString(),
+                            Material_Code = rdr["material_code"].ToString(),
+                            Material_Description = rdr["material_description"].ToString(),
+                            Customer_Code = rdr["customer_code"].ToString(),
+                            Customer_Description = rdr["customer_description"].ToString(),
+                            Customer_Reference = rdr["customer_reference"].ToString(),
+                            Previos_ref = rdr["previos_ref"].ToString(),
+                            Cylinderno =  rdr["cylinderno"] == DBNull.Value ? null : (Int32?)rdr["cylinderno"],
+                            Cylindercode = rdr["cylindercode"].ToString(),
+                            Colorcode = rdr["colorcode"].ToString(),
+                            Cylinderbar = rdr["cylinderbar"].ToString(),
+                            Palletno = rdr["palletno"].ToString(),
+                            Itemtag = rdr["itemtag"].ToString()
+                        };
+                        lstobj.Add(objrd);
+                    }
+                }
+                catch (NpgsqlException ex)
+                {
+                    Log.Error(ex.ToString());
+                }
+                finally
+                {
+                    con.Close();
+                }
+            }
+            return lstobj;
+        }
+
 
         public async Task<bool> InsertCylinderList(List<Mas_Cylinderlist_Go> listOrder , string mpallet)
         {

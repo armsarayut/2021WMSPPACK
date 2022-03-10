@@ -1,4 +1,4 @@
-﻿@page "/oub/break"
+﻿@page "/3/3_6"
 @using GoWMS.Server.Data
 @using GoWMS.Server.Controllers
 @using GoWMS.Server.Models
@@ -59,7 +59,9 @@
 }
 else
 {
-
+    <MudAppBar Color="Color.Transparent" Fixed="false" Dense="true">
+        <MudSpacer />
+    </MudAppBar>
     <MudTable Items="@Elements"
               Dense="@dense"
               Hover="@hover"
@@ -100,9 +102,9 @@ else
 }
 
 @code {
-    private string mPageHeader = "BreakPallet";
-    public string mPagedesc { get; set; } = "BreakPallet";
-    private string mPagename { get; set; } = "/oub/break";
+    private string mPageHeader = "3.6-BreakPallet";
+    public string mPagedesc { get; set; } = "3.6-BreakPallet";
+    private string mPagename { get; set; } = "/3/3_6";
     private string msgAction = "Enter MasterPallet";
     private string mPalletcode { get; set; } = "";
     private string mPackid { get; set; } = null;
@@ -179,17 +181,38 @@ else
                 elevation = 2;
                 msgAction = "Consolidate successfully";
 
+                // Create Queue
+
                 mPalletcode = "";
                 Snackbar.Add("Consolidate successfully", Severity.Success);
             }
             else
             {
                 mPackid = str;
-                ObjOubService.SetConsolMappallet(mPalletcode, mPackid);
 
-                msgAction = "Enter PackID or Pallet code for complete";
-                elevation = 1;
-                Snackbar.Add("Enter PackID or Pallet code for complete", Severity.Info);
+                bool bValidate = false;
+                bValidate = ObjOubService.ValidateDeliveryList(mPackid);
+                if (bValidate == true)
+                {
+
+                    ObjOubService.SetConsolMappallet(mPalletcode, mPackid);
+
+                    msgAction = "Enter PackID or Pallet code for complete";
+                    elevation = 1;
+                    Snackbar.Add("Enter PackID or Pallet code for complete", Severity.Info);
+                }
+                else
+                {
+                    elevation = 4;
+                    msgAction = "PackID find not found";
+                    Snackbar.Add("PackID find not found", Severity.Warning);
+                }
+
+
+
+                // Validate Pack
+
+
             }
         }
 

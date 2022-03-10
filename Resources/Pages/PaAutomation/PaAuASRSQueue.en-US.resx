@@ -117,40 +117,40 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Endtime" xml:space="preserve">
-    <value />
+  <data name="DESTINATION" xml:space="preserve">
+    <value>DESTINATION</value>
   </data>
-  <data name="EnterPalletcode" xml:space="preserve">
-    <value />
+  <data name="EXCEL" xml:space="preserve">
+    <value>Excel</value>
   </data>
-  <data name="Excel" xml:space="preserve">
-    <value />
+  <data name="Export" xml:space="preserve">
+    <value>Export</value>
   </data>
-  <data name="Location" xml:space="preserve">
-    <value />
+  <data name="PALLET" xml:space="preserve">
+    <value>PALLET</value>
   </data>
-  <data name="Masterpallet" xml:space="preserve">
-    <value />
+  <data name="PDF" xml:space="preserve">
+    <value>Pdf</value>
   </data>
-  <data name="PageHeader" xml:space="preserve">
-    <value />
+  <data name="PRIORITY" xml:space="preserve">
+    <value>PRIORITY</value>
   </data>
-  <data name="Pdf" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Queuetime" xml:space="preserve">
-    <value />
+  <data name="QUEUING" xml:space="preserve">
+    <value>QUEUING</value>
   </data>
   <data name="Search" xml:space="preserve">
-    <value />
+    <value>Search</value>
+  </data>
+  <data name="SOURCE" xml:space="preserve">
+    <value>SOURCE</value>
   </data>
   <data name="SRM" xml:space="preserve">
-    <value />
+    <value>SRM</value>
   </data>
-  <data name="Starttime" xml:space="preserve">
-    <value />
+  <data name="STARTED" xml:space="preserve">
+    <value>STARTED</value>
   </data>
-  <data name="Worktype" xml:space="preserve">
-    <value />
+  <data name="TASKTYPE" xml:space="preserve">
+    <value>TASKTYPE</value>
   </data>
 </root>

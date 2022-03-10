@@ -1,4 +1,4 @@
-﻿@page "/cam/detection"
+﻿@page "/4/4_7"
 
 @using Newtonsoft.Json;
 @using GoWMS.Server.Controllers;
@@ -41,16 +41,13 @@ else
             <MudTd >
                 @switch (@context.ObjectName)
                     {
-                        case "NotAvaliableLocation":
+                        case "Unavaliable":
                         <MudAlert Severity="Severity.Warning" Variant="Variant.Filled" Dense="true">@context.ObjectName</MudAlert>
                             break;
-                        case "AvaliableLocation":
-                        <MudAlert Severity="Severity.Info" Variant="Variant.Filled" Dense="true">@context.ObjectName</MudAlert>
-                            break;
-                        case "FullPalletOnLocation":
+                        case "Avaliable":
                         <MudAlert Severity="Severity.Success" Variant="Variant.Filled" Dense="true">@context.ObjectName</MudAlert>
                             break;
-                        case "EmptyPalletOnLocation":
+                        case "Emptypallet":
                         <MudAlert Severity="Severity.Info" Variant="Variant.Filled" Dense="true">@context.ObjectName</MudAlert>
                             break;
                         default:
@@ -84,7 +81,9 @@ else
         public string CameraIp { get; set; }
         public string CameraName { get; set; }
     }
-    private string mPageHeader = "Detection";
+    private string mPageHeader = "4.7-DETECTION";
+    private string mPagedesc { get; set; } = "4.7-DETECTION";
+    private string mPagename { get; set; } = "/4/4_7";
     List<Userroleinfo> Roles = new List<Userroleinfo>();
     List<dataModel> Elements = new List<dataModel>();
     private bool dense = true;
@@ -101,7 +100,7 @@ else
     {
         //InitialTimer();
         //ExecuteApi();
-        Roles =  await Task.Run(() => ObjUser.GetUserRole("6.2.B Order Receive Summary Report", VarGlobals.User.GroupID ));
+        Roles =  await Task.Run(() => ObjUser.GetUserRole(mPagename, VarGlobals.User.GroupID ));
         await Task.Run(() => DbGetDetectionAPI());
         await Task.Run(() => DbGetDeepDetect());
 
@@ -264,18 +263,27 @@ else
         var httpRequestMessage = new HttpRequestMessage(
         HttpMethod.Get, vUrl);
         var client = _clientFactory.CreateClient();
-        var vResponseMsg = client.SendAsync(httpRequestMessage).Result;
-        string vBase64 = "";
-        if (vResponseMsg.IsSuccessStatusCode == true)
+        try
         {
-            //var vResult = vResponseMsg.Content.ReadAsStringAsync().Result;
-            vBase64 = vResponseMsg.Content.ReadAsStringAsync().Result;
+            var vResponseMsg = client.SendAsync(httpRequestMessage).Result;
+            string vBase64 = "";
+            if (vResponseMsg.IsSuccessStatusCode == true)
+            {
+                //var vResult = vResponseMsg.Content.ReadAsStringAsync().Result;
+                vBase64 = vResponseMsg.Content.ReadAsStringAsync().Result;
+            }
+            //https://github.com/Blazored/Modal
+            //https://learnwithsundar.com/2021/02/18/modal-popup-window-in-blazor-webassembly/
+            var parameters = new ModalParameters();
+            parameters.Add(nameof(Detections.DeepDetectImgPopup.ImgBase64), vBase64);
+            modal.Show<Detections.DeepDetectImgPopup>("Detection Capture Image", parameters);
         }
-        //https://github.com/Blazored/Modal
-        //https://learnwithsundar.com/2021/02/18/modal-popup-window-in-blazor-webassembly/
-        var parameters = new ModalParameters();
-        parameters.Add(nameof(Detections.DeepDetectImgPopup.ImgBase64), vBase64);
-        modal.Show<Detections.DeepDetectImgPopup>("Detection Capture Image", parameters);
+        catch (Exception ex)
+        {
+            string exmsg = ex.Message.ToString();
+        }
+
+
     }
 
 

@@ -1,4 +1,4 @@
-﻿@page "/oub/pickbatch"
+﻿@page "/3/3_2"
 @using GoWMS.Server.Data
 @using GoWMS.Server.Controllers
 @using GoWMS.Server.Models
@@ -113,9 +113,9 @@ else
 
     IEnumerable<int> pageSizeOptions = new int[] { 10, 20, 30, 50, 100 };
 
-    private readonly string pageheader = "Create Wave";
-    public string mPagedesc { get; set; } = "Create Wave";
-    private string mPagename { get; set; } = "/oub/pickbatch";
+    private readonly string pageheader = "3.2-Create Wave";
+    public string mPagedesc { get; set; } = "3.2-Create Wave";
+    private string mPagename { get; set; } = "/3/3_2";
     private string msgAction = "Enter Palletcode";
     private string mPalletcode { get; set; } = "";
     private string mPackid { get; set; } = "";
@@ -244,9 +244,7 @@ else
             {
                 break;
             }
-
         }
-
 
         // Create Batch Setting
         if (iCount == iTotal)

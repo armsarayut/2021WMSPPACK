@@ -8,7 +8,6 @@ namespace GoWMS.Server.Models.Public
     public class Class6_2_A
     {
 
-		
 		public DateTime? Created { get; set; }
 		public string Work_Type { get; set; }
 		public string Create_By { get; set; }

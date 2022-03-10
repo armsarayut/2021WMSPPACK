@@ -27,7 +27,7 @@ namespace GoWMS.Server.Data
                     StringBuilder Sql = new StringBuilder();
                     
                     Sql.AppendLine("SELECT row_number() over(order by  itemcode asc) AS rn, efstatus, ");
-                    Sql.AppendLine("itemcode, itemname, quantity, pallettag, pallteno, storagearea, storagebin");
+                    Sql.AppendLine("itemcode, itemname, quantity, pallettag, pallteno, storagearea, storagebin, itemtag");
                     Sql.AppendLine("FROM wms.inv_stock_go ");
                     Sql.AppendLine("WHERE allocatequantity < quantity");
                     Sql.AppendLine("ORDER BY itemcode");
@@ -51,7 +51,8 @@ namespace GoWMS.Server.Data
                             Palletcode = rdr["pallteno"].ToString(),
                             Shelfname = rdr["storagebin"].ToString(),
                             StorageArae = rdr["storagearea"].ToString(),
-                            Efstatus = rdr["efstatus"] == DBNull.Value ? null : (Int32?)rdr["efstatus"]
+                            Efstatus = rdr["efstatus"] == DBNull.Value ? null : (Int32?)rdr["efstatus"],
+                            Tag_no = rdr["itemtag"].ToString()
                         };
                         lstobj.Add(objrd);
                     }

@@ -118,21 +118,24 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Description" xml:space="preserve">
-    <value />
+    <value>คำอธิบาย</value>
   </data>
-  <data name="EnterPalletcode" xml:space="preserve">
-    <value />
+  <data name="EXCEL" xml:space="preserve">
+    <value>Excel</value>
   </data>
-  <data name="Excel" xml:space="preserve">
-    <value />
+  <data name="Export" xml:space="preserve">
+    <value>นำออก</value>
   </data>
-  <data name="header" xml:space="preserve">
-    <value />
+  <data name="PDF" xml:space="preserve">
+    <value>Pdf</value>
   </data>
-  <data name="Pdf" xml:space="preserve">
-    <value />
+  <data name="Search" xml:space="preserve">
+    <value>ค้นหา</value>
+  </data>
+  <data name="SortBy" xml:space="preserve">
+    <value>เรียงจาก</value>
   </data>
   <data name="Statusno" xml:space="preserve">
-    <value />
+    <value>สถานะ</value>
   </data>
 </root>

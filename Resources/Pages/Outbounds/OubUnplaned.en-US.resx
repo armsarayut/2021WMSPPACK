@@ -118,21 +118,33 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ItemCode" xml:space="preserve">
-    <value>MaterialCode</value>
+    <value>MATERIAL</value>
   </data>
   <data name="ItemName" xml:space="preserve">
-    <value>MaterialName</value>
+    <value>DESCRITION</value>
+  </data>
+  <data name="Itemtag" xml:space="preserve">
+    <value>ROLLID</value>
   </data>
   <data name="pageHeader" xml:space="preserve">
-    <value>Unplaned</value>
+    <value>Unplanned</value>
+  </data>
+  <data name="PALLETERP" xml:space="preserve">
+    <value>PalletNo</value>
   </data>
   <data name="PalletGo" xml:space="preserve">
-    <value>MasterPallet</value>
+    <value>PALLET</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
   </data>
   <data name="SEQ" xml:space="preserve">
-    <value>PackID</value>
+    <value>PACKID</value>
+  </data>
+  <data name="START" xml:space="preserve">
+    <value>START</value>
   </data>
   <data name="Stock" xml:space="preserve">
-    <value>Stock</value>
+    <value>STOCK</value>
   </data>
 </root>

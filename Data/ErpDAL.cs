@@ -629,8 +629,8 @@ namespace GoWMS.Server.Data
                         {
                             Api_Deliveryorder_Go objrd = new Api_Deliveryorder_Go
                             {
-                                Package_Id = rdr["Cylinder_1"].ToString(),
-                                Roll_Id = rdr["BARCODE_1"].ToString(),
+                                Package_Id = rdr["Cylinder_6"].ToString(),
+                                Roll_Id = rdr["BARCODE_6"].ToString(),
                                 Material_Code = rdr["Finished_Product"].ToString(),
                                 Material_Description = rdr["Finished_Product_Description"].ToString(),
                                 Matelement = "6",

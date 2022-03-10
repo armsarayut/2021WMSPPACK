@@ -258,7 +258,7 @@ namespace GoWMS.Server.Data
                     StringBuilder sql = new StringBuilder();
                     sql.AppendLine("select * ");
                     sql.AppendLine("from wms.api_receivingorders_go");
-                    sql.AppendLine("Where Lpncode = @pallet");
+                    sql.AppendLine("Where lpncode = @pallet");
                     sql.AppendLine("order by efidx");
                     NpgsqlCommand cmd = new NpgsqlCommand(sql.ToString(), con)
                     {
@@ -344,23 +344,69 @@ namespace GoWMS.Server.Data
             }
         }
 
-
-        public void ClaerReceivingOrdersBypack( string pack)
+        public void ClaerReceivingOrdersBypallet(string pallet)
         {
-            using NpgsqlConnection con = new NpgsqlConnection(connectionString);
+
+            Int32? iRet = 0;
+            string sRet = "Calling";
+            NpgsqlConnection con = new NpgsqlConnection(connectionString);
             try
             {
+                con.Open();
                 StringBuilder sql = new StringBuilder();
-                sql.AppendLine("Delete From wms.api_receivingorders_go");
-                sql.AppendLine("Where package_id = @Pack ");
+                sql.AppendLine("Call wms.poc_inb_claermappallet(");
+                sql.AppendLine("@spalletno,@retchk,@retmsg)");
                 NpgsqlCommand cmd = new NpgsqlCommand(sql.ToString(), con)
                 {
                     CommandType = CommandType.Text
                 };
 
-                cmd.Parameters.AddWithValue("@Pack", pack);
+                cmd.Parameters.AddWithValue("@spalletno", pallet);
+                cmd.Parameters.AddWithValue("@retchk", iRet);
+                cmd.Parameters.AddWithValue("@retmsg", sRet);
+                NpgsqlDataReader rdr = cmd.ExecuteReader();
+                while (rdr.Read())
+                {
+                    iRet = rdr["retchk"] == DBNull.Value ? null : (Int32?)rdr["retchk"];
+                    sRet = rdr["retmsg"].ToString();
+                }
+            }
+            catch (NpgsqlException ex)
+            {
+                Log.Error(ex.ToString());
+            }
+            finally
+            {
+                con.Close();
+            }
+        }
+
+        public void ClaerReceivingOrdersBypack( string pack)
+        {
+
+            Int32? iRet = 0;
+            string sRet = "Calling";
+            NpgsqlConnection con = new NpgsqlConnection(connectionString);
+            try
+            {
                 con.Open();
-                cmd.ExecuteNonQuery();
+                StringBuilder sql = new StringBuilder();
+                sql.AppendLine("Call wms.poc_inb_clearmappalletpack(");
+                sql.AppendLine("@spackid,@retchk,@retmsg)");
+                NpgsqlCommand cmd = new NpgsqlCommand(sql.ToString(), con)
+                {
+                    CommandType = CommandType.Text
+                };
+
+                cmd.Parameters.AddWithValue("@spackid", pack);
+                cmd.Parameters.AddWithValue("@retchk", iRet);
+                cmd.Parameters.AddWithValue("@retmsg", sRet);
+                NpgsqlDataReader rdr = cmd.ExecuteReader();
+                while (rdr.Read())
+                {
+                    iRet = rdr["retchk"] == DBNull.Value ? null : (Int32?)rdr["retchk"];
+                    sRet = rdr["retmsg"].ToString();
+                }
             }
             catch (NpgsqlException ex)
             {
@@ -432,7 +478,7 @@ namespace GoWMS.Server.Data
             }
         }
 
-        public async Task InsertReceivingOrdersBypack(List<Api_Receivingorders_Go> listOrder, string pallet)
+        public void InsertReceivingOrdersBypack(List<Api_Receivingorders_Go> listOrder, string pallet)
         {
             using NpgsqlConnection con = new NpgsqlConnection(connectionString);
             try
@@ -446,6 +492,7 @@ namespace GoWMS.Server.Data
                 sql.AppendLine("Values");
 
                 using var cmd = new NpgsqlCommand(connection: con, cmdText: null);
+
                // cmd.Parameters.AddWithValue("@package_id", pallet);
 
                 var i = 0;
@@ -508,7 +555,8 @@ namespace GoWMS.Server.Data
                 }
                 con.Open();
                 cmd.CommandText = sql.ToString();
-                await cmd.ExecuteNonQueryAsync();
+                int iexute = cmd.ExecuteNonQuery();
+
 
             }
             catch (NpgsqlException ex)

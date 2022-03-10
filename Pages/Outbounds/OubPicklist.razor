@@ -1,4 +1,4 @@
-﻿@page "/oub/picklist"
+﻿@page "/3/3_3"
 @using System
 @using System.IO
 @using System.Linq
@@ -10,12 +10,18 @@
 @using GoWMS.Server.Pdf
 @using GoWMS.Server.Data
 @using GoWMS.Server.Reports
+@using GoWMS.Server.Models
 @using GoWMS.Server.Models.Oub
 @using GoWMS.Server.Controllers
+@using System.Security.Claims
 
+@inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IJSRuntime JSRuntime
 @inject StoreoutService ObjService
 @inject UserServices OpjUserService
+@inject ReportService UserlogService
+@inject IStringLocalizer<OubPicklist> L
+@attribute [Authorize]
 
 @if (Elements == null)
 {
@@ -24,41 +30,47 @@
 }
 else
 {
-    <MudText Typo="Typo.h6" Color="Color.Primary">@mPagecaption</MudText>
-    <MudTable Items="@Elements" FixedHeader="@fixed_header" FixedFooter="@fixed_footer" Height="@(fixed_header || fixed_footer ?"600px":"")" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<Sap_Storeout,bool>(FilterFunc)" @bind-SelectedItem="selectedItem">
+    <MudText Typo="Typo.h6" Color="Color.Primary">@pageheader</MudText>
+
+    <MudAppBar Color="Color.Transparent" Fixed="false" Dense="true">
+        <MudSpacer />
+        <MudTooltip Text=@L["Export"] Color="Color.Inherit" Placement="Placement.Top">
+            <MudIconButton Icon="@Icons.Custom.FileFormats.FileExcel" Color="Color.Success" OnClick="DownloadExcelDocument"></MudIconButton>
+            <MudIconButton Icon="@Icons.Custom.FileFormats.FilePdf" Color="Color.Error" OnClick="DownloadPdfDocument"></MudIconButton>
+        </MudTooltip>
+    </MudAppBar>
+
+    <MudTable Items="@Elements" FixedHeader="@fixed_header" FixedFooter="@fixed_footer" Height="@(fixed_header || fixed_footer ?"500px":"")" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<Sap_Storeout,bool>(FilterFunc)" @bind-SelectedItem="selectedItem">
         <ToolBarContent>
-
-            <MudTooltip Text="Export" Color="Color.Secondary" Placement="Placement.Top">
-                <MudMenu Icon="@Icons.Filled.Download" Color="Color.Primary">
-                    <MudMenuItem>EXCEL</MudMenuItem>
-                    <MudMenuItem>PDF</MudMenuItem>
-                </MudMenu>
-            </MudTooltip>
-            <MudSpacer />
-            <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+            <MudToolBarSpacer />
+            <MudTextField @bind-Value="searchString"
+                          Placeholder=@L["Search"]
+                          Adornment="Adornment.Start"
+                          AdornmentIcon="@Icons.Material.Filled.Search"
+                          IconSize="Size.Medium" Class="mt-0"></MudTextField>
         </ToolBarContent>
-
         <HeaderContent>
-            <MudTh Style="width: 190px;"><MudTableSortLabel SortBy="new Func<Sap_Storeout, object>(x=>x.Delivery_Date)">DELIVERYDATE</MudTableSortLabel></MudTh>
-            <MudTh Style="width: 190px;"><MudTableSortLabel SortBy="new Func<Sap_Storeout, object>(x=>x.Created)">QUEUEDATE</MudTableSortLabel></MudTh>
-            <MudTh Style="width: 120px;"><MudTableSortLabel SortBy="new Func<Sap_Storeout, object>(x=>x.Pallet_No)">PALLET</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Sap_Storeout, object>(x=>x.Order_No)">DOCUMENT</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Sap_Storeout, object>(x=>x.Su_No)">PACKID</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Sap_Storeout, object>(x=>x.Item_Code)">MATERIAL</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Sap_Storeout, object>(x=>x.Item_Name)">DESCRIPTION</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Sap_Storeout, object>(x=>x.Request_Qty)">QTY</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Sap_Storeout, object>(x=>x.Unit)">UNIT</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Sap_Storeout, object>(x=>x.Created)">@L["QUEUEDATE"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Sap_Storeout, object>(x=>x.Order_No)">@L["SONO"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Sap_Storeout, object>(x=>x.Delivery_Date)">@L["REQUESTDATE"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Sap_Storeout, object>(x=>x.Item_Code)">@L["ITEMCODE"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Sap_Storeout, object>(x=>x.Item_Name)">@L["ITEMNAME"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Sap_Storeout, object>(x=>x.Pallet_No)">@L["PALLETGO"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Sap_Storeout, object>(x=>x.Su_No)">@L["DNSEQ"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Sap_Storeout, object>(x=>x.Request_Qty)">@L["QTY"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Sap_Storeout, object>(x=>x.Unit)">@L["UNIT"]</MudTableSortLabel></MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd Class="clm-row-small" DataLabel="DELIVERYDATE">@Convert.ToDateTime(context.Delivery_Date).ToString(VarGlobals.FormatDTHM)</MudTd>
-            <MudTd Class="clm-row-small" DataLabel="QUEUEDATE">@Convert.ToDateTime(context.Created).ToString(VarGlobals.FormatDT)</MudTd>
-            <MudTd Class="clm-row-small" DataLabel="PALLET">@context.Pallet_No</MudTd>
-            <MudTd Class="clm-row-small" DataLabel="DOCUMENT">@context.Order_No</MudTd>
-            <MudTd Class="clm-row-small" DataLabel="PACKID">@context.Su_No</MudTd>
-            <MudTd Class="clm-row-small" DataLabel="MATERIAL">@context.Item_Code</MudTd>
-            <MudTd Class="clm-row-small" DataLabel="DESCRIPTION">@context.Item_Name</MudTd>
-            <MudTd Class="clm-row-small" DataLabel="QTY" Style="text-align:right">@string.Format(VarGlobals.FormatN2, context.Request_Qty)</MudTd>
-            <MudTd Class="clm-row-small" DataLabel="UNIT">@context.Unit</MudTd>
+
+            <MudTd DataLabel=@L["QUEUEDATE"]>@Convert.ToDateTime(context.Created).ToString(VarGlobals.FormatDT)</MudTd>
+            <MudTd DataLabel=@L["SONO"]>@context.Order_No</MudTd>
+            <MudTd DataLabel=@L["REQUESTDATE"]>@Convert.ToDateTime(context.Delivery_Date).ToString(VarGlobals.FormatD)</MudTd>
+            <MudTd DataLabel=@L["ITEMCODE"]>@context.Item_Code</MudTd>
+            <MudTd DataLabel=@L["ITEMNAME"]>@context.Item_Name</MudTd>
+            <MudTd DataLabel=@L["PALLETGO"]>@context.Pallet_No</MudTd>
+            <MudTd DataLabel=@L["DNSEQ"]>@context.Su_No</MudTd>
+            <MudTd DataLabel=@L["QTY"]>@string.Format(VarGlobals.FormatN0, context.Request_Qty)</MudTd>
+            <MudTd DataLabel=@L["UNIT"]>@context.Unit</MudTd>
         </RowTemplate>
         <PagerContent>
             <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />
@@ -67,11 +79,10 @@ else
 }
 
 @code {
-    private string mPagecaption { get; set; } = "Pickinglist";
-    public string mPagedesc { get; set; } = "Pickinglist";
-    private string mPagename { get; set; } = "/oub/picklist";
-
+    private string pageheader { get; set; } = "3.3.Queue Picking";
     private bool _processing = false;
+    public string mPagedesc { get; set; } = "3.3.Queue Picking";
+    private string mPagename { get; set; } = "/3/3_3";
 
     private string msgAction = "Enter Palletcode";
     private string mPalletcode { get; set; } = "";
@@ -90,11 +101,46 @@ else
 
     public int elevation = 0;
 
+    private ResultReturn resultReturn = null;
+
+    string sUsername { get; set; } = "";
+    string sRole { get; set; } = "";
+    string sGroupID { get; set; } = "";
+    string sUserID { get; set; } = "";
+    List<Userroleinfo> Roles = new List<Userroleinfo>();
+    [Inject] private IDialogService DialogService { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         StoreoutService objCS = new StoreoutService();
-        //Elements = await Task.Run(() => objCS.GetReceivingOrdersbypallet(mPalletcode));
+
+        //////// Intial Menu and Privilege//////
+        resultReturn = await Task.Run(() => OpjUserService.InsertMenu(mPagename, mPagedesc));
+        resultReturn = await Task.Run(() => OpjUserService.InsertPrivilege(mPagename));
+        ////////////////////////////////////////
+        ///
+        await GetUserAthu();
+        this.InsertAuditrial("View", pageheader);
+        Roles = await Task.Run(() => OpjUserService.GetUserRole(mPagename, long.Parse(sGroupID)));
+
         Elements = await Task.Run(() => objCS.GetAllSapStoreout());
+    }
+
+    async Task GetUserAthu()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        sGroupID = user.Claims.FirstOrDefault(
+        c => c.Type == ClaimTypes.Role)?.Value;
+
+        sUserID = user.Claims.FirstOrDefault(
+            c => c.Type == ClaimTypes.Actor)?.Value;
+    }
+
+    private void InsertAuditrial(String actdesc, String munname)
+    {
+        bool bRet = UserlogService.InsertAudittrial(actdesc, munname, long.Parse(sUserID));
     }
 
     private void setstr(string str)
@@ -153,11 +199,17 @@ else
     {
         try
         {
-            IbpOrderQueueRptExcel excelReport = new IbpOrderQueueRptExcel();
-            List<Sap_Storeout> listExcelReport = new List<Sap_Storeout>();
-            listExcelReport = Elements.ToList();
-            var fileName = $"{mPagecaption.ToString()}-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
-            //await JSRuntime.InvokeAsync<object>("jsSaveAsFile", fileName, Convert.ToBase64String(excelReport.Report(listExcelReport)));
+            bool? result = await CheckRoleReport();
+            if (result == true)
+            {
+                OubPicklistRptExcel excelReport = new OubPicklistRptExcel();
+                List<Sap_Storeout> listExcelReport = new List<Sap_Storeout>();
+                listExcelReport = Elements.ToList();
+                var fileName = $"{pageheader.ToString()}-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+                await JSRuntime.InvokeAsync<object>("jsSaveAsFile", fileName, Convert.ToBase64String(excelReport.Report(listExcelReport)));
+                this.InsertAuditrial("Export excel file :" + fileName.ToString(), pageheader);
+            }
+
         }
         catch (Exception e)
         {
@@ -169,13 +221,20 @@ else
     {
         try
         {
+            bool? result = await CheckRoleReport();
+            if (result == true)
+            {
+
+                OubPicklistRptPdf pdfReport = new OubPicklistRptPdf();
+                List<Sap_Storeout> listPdfReport = new List<Sap_Storeout>();
+                listPdfReport = Elements.ToList();
+                var fileName = $"{pageheader.ToString()}-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.pdf";
+                ////await JSRuntime.InvokeAsync<object>("jsSaveAsFile", fileName, Convert.ToBase64String(pdfReport.Report(listPdfReport)));
+                await JSRuntime.InvokeAsync<object>("jsSaveAsFile", fileName, Convert.ToBase64String(pdfReport.ExportPDF(listPdfReport)));
+                this.InsertAuditrial("Export pdf file :" + fileName.ToString(), pageheader);
+            }
 
 
-            IbpOrderQueueRptPdf pdfReport = new IbpOrderQueueRptPdf();
-            List<Sap_Storeout> listPdfReport = new List<Sap_Storeout>();
-            listPdfReport = Elements.ToList();
-            var fileName = $"{mPagecaption.ToString()}-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.pdf";
-            //await JSRuntime.InvokeAsync<object>("jsSaveAsFile", fileName, Convert.ToBase64String(pdfReport.ExportPDF(listPdfReport)));
 
         }
         catch (Exception e)
@@ -183,5 +242,168 @@ else
             var exmsg = e.Message.ToString();
         }
     }
+
+    #region "Role"
+    private async Task<bool> CheckRoleAdd()
+    {
+        bool bRet = false;
+
+        if (Roles.ToList().Count > 0)
+        {
+            var iCorrect = Roles.ToList().FindIndex(a => a.Role_add == true);
+
+            if (iCorrect >= 0)
+            {
+                bRet = true;
+            }
+            else
+            {
+                bRet = false;
+            }
+
+            if (bRet == false)
+            {
+                bool? result = await DialogService.ShowMessageBox(
+                        "Warning", VarGlobals.MessageRoleAddPermit, yesText: "OK");
+            }
+
+        }
+        else
+        {
+            bool? result = await DialogService.ShowMessageBox(
+                                "Warning", VarGlobals.MessageRoleAuthrizedPermit, yesText: "OK");
+        }
+
+        return bRet;
+    }
+
+    private async Task<bool> CheckRoleEdit()
+    {
+        bool bRet = false;
+
+        if (Roles.ToList().Count > 0)
+        {
+            var iCorrect = Roles.ToList().FindIndex(a => a.Role_edit == true);
+
+            if (iCorrect >= 0)
+            {
+                bRet = true;
+            }
+            else
+            {
+                bRet = false;
+            }
+
+            if (bRet == false)
+            {
+                bool? result = await DialogService.ShowMessageBox(
+                        "Warning", VarGlobals.MessageRoleEditPermit, yesText: "OK");
+            }
+        }
+        else
+        {
+            bool? result = await DialogService.ShowMessageBox(
+                                "Warning", VarGlobals.MessageRoleAuthrizedPermit, yesText: "OK");
+        }
+
+        return bRet;
+    }
+
+    private async Task<bool> CheckRoleDelete()
+    {
+        bool bRet = false;
+
+        if (Roles.ToList().Count > 0)
+        {
+            var iCorrect = Roles.ToList().FindIndex(a => a.Role_del == true);
+
+            if (iCorrect >= 0)
+            {
+                bRet = true;
+            }
+            else
+            {
+                bRet = false;
+            }
+
+            if (bRet == false)
+            {
+                bool? result = await DialogService.ShowMessageBox(
+                        "Warning", VarGlobals.MessageRoleDelPermit, yesText: "OK");
+            }
+        }
+        else
+        {
+            bool? result = await DialogService.ShowMessageBox(
+                                "Warning", VarGlobals.MessageRoleAuthrizedPermit, yesText: "OK");
+        }
+
+
+        return bRet;
+    }
+
+    private async Task<bool> CheckRoleApprove()
+    {
+        bool bRet = false;
+
+        if (Roles.ToList().Count > 0)
+        {
+            var iCorrect = Roles.ToList().FindIndex(a => a.Role_apv == true);
+
+            if (iCorrect >= 0)
+            {
+                bRet = true;
+            }
+            else
+            {
+                bRet = false;
+            }
+
+            if (bRet == false)
+            {
+                bool? result = await DialogService.ShowMessageBox(
+                        "Warning", VarGlobals.MessageRoleApprovePermit, yesText: "OK");
+            }
+        }
+        else
+        {
+            bool? result = await DialogService.ShowMessageBox(
+                                "Warning", VarGlobals.MessageRoleAuthrizedPermit, yesText: "OK");
+        }
+        return bRet;
+    }
+
+    private async Task<bool> CheckRoleReport()
+    {
+        bool bRet = false;
+
+        if (Roles.ToList().Count > 0)
+        {
+            var iCorrect = Roles.ToList().FindIndex(a => a.Role_rpt == true);
+
+            if (iCorrect >= 0)
+            {
+                bRet = true;
+            }
+            else
+            {
+                bRet = false;
+            }
+
+            if (bRet == false)
+            {
+                bool? result = await DialogService.ShowMessageBox(
+                        "Warning", VarGlobals.MessageRoleReportPermit, yesText: "OK");
+            }
+        }
+        else
+        {
+            bool? result = await DialogService.ShowMessageBox(
+                                "Warning", VarGlobals.MessageRoleAuthrizedPermit, yesText: "OK");
+        }
+
+        return bRet;
+    }
+    #endregion
 
 }

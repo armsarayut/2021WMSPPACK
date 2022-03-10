@@ -81,7 +81,19 @@ namespace GoWMS.Server.Controllers
             return retlist;
         }
 
-         public async Task<string> InsertCylinderList(List<Mas_Cylinderlist_Go> listOrder, string mpallet)
+        public List<Mas_Cylinderlist_Go> GetCylinderListGoByPallet(string pallet)
+        {
+            List<Mas_Cylinderlist_Go> retlist = objDAL.GetAllCylinderList().ToList();
+            return retlist;
+        }
+
+        public List<Mas_Cylinderlist_Go> GetAllCylinderListGoByPallet(string pallet)
+        {
+            List<Mas_Cylinderlist_Go> retlist = objDAL.GetAllCylinderListByPallet(pallet).ToList();
+            return retlist;
+        }
+
+        public async Task<string> InsertCylinderList(List<Mas_Cylinderlist_Go> listOrder, string mpallet)
         {
             bool bret;
 

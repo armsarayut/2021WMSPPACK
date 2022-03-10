@@ -1,4 +1,4 @@
-﻿@page "/Pag/1/1_2"
+﻿@page "/1/1_2"
 @using GoWMS.Server.Data
 @using GoWMS.Server.Controllers
 @using GoWMS.Server.Models
@@ -39,10 +39,13 @@
         }
     </MudItem>
 
-    <MudItem xs="12">
+    <MudItem xs="6">
         <div class="form-group">
             <input style="width: 100%; height: 40px;" type="text" class="form-control" @bind-value="stringputkey" @onkeyup="@DoTheThing" placeholder="Input scan" />
         </div>
+    </MudItem>
+    <MudItem xs="6">
+        <MudText Typo="Typo.h4" Color="Color.Error">Total:@Elements.Count()</MudText>
     </MudItem>
 </MudGrid>
 
@@ -60,11 +63,22 @@
 else
 {
 
-    <MudTable Items="@Elements" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<Api_Receivingorders_Go,bool>(FilterFunc)" @bind-SelectedItem="selectedItem">
+    <MudTable Items="@Elements"
+              FixedHeader="@fixed_header"
+              FixedFooter="@fixed_footer"
+              Height="@(fixed_header || fixed_footer ?VarGlobals.TableHeight:"")"
+              Dense="@dense" Hover="@hover"
+              Bordered="@bordered" Striped="@striped"
+              Filter="new Func<Api_Receivingorders_Go,bool>(FilterFunc)" @bind-SelectedItem="selectedItem">
         <ToolBarContent>
             <MudText Typo="Typo.h6">PALLET:[@mPalletcode]</MudText>
             <MudSpacer />
-            <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+            <MudTextField @bind-Value="searchString"
+                          Placeholder="Search"
+                          Adornment="Adornment.Start"
+                          AdornmentIcon="@Icons.Material.Filled.Search"
+                          IconSize="Size.Medium"
+                          Class="mt-0"></MudTextField>
         </ToolBarContent>
         <HeaderContent>
             <MudTh Style="width: 120px;"><MudTableSortLabel SortBy="new Func<Api_Receivingorders_Go, object>(x=>x.Lpncode)">PALLET</MudTableSortLabel></MudTh>
@@ -93,8 +107,8 @@ else
 }
 
 @code {
-    private string mPagedesc = "Master Mapping";
-    private string mPagename { get; set; } = "/Pag/1/1_2";
+    private string mPagedesc = "1.2-Master Mapping";
+    private string mPagename { get; set; } = "/1/1_2";
 
     private string msgAction = "Enter MasterPallet";
     private string mPalletcode { get; set; } = "";
@@ -105,7 +119,10 @@ else
     private bool hover = true;
     private bool striped = true;
     private bool bordered = false;
+    private bool fixed_header = true;
+    private bool fixed_footer = true;
     private string searchString = "";
+    private bool ronly = false;
     private Api_Receivingorders_Go selectedItem = null;
     private HashSet<Api_Receivingorders_Go> selectedItems = new HashSet<Api_Receivingorders_Go>();
     private IEnumerable<Api_Receivingorders_Go> Elements = new List<Api_Receivingorders_Go>();
@@ -216,9 +233,12 @@ else
 
                 if (MapPalletItem.ToList().Count > 0)
                 {
-                    Task<string> retString;
+                    string retString;
 
                     retString = ObjErpApiService.InsertReceivingOrderbypackAsync(MapPalletItem.ToList(), mPalletcode);
+
+
+                    //retString =  await Task.Run(() => ObjErpApiService.InsertReceivingOrderbypackAsync(MapPalletItem.ToList(), mPalletcode));
 
                     //ObjErpApiService.UpdateReceivingOrderbypack(mPalletcode, mPackid);
                     msgAction = "Enter PackID or Pallet code for complete";
@@ -295,7 +315,9 @@ else
     {
         msgAction = "Cancle successfully";
 
-        ObjErpApiService.CancelReceivingOrderbypack(mPalletcode, pack);
+        // ObjErpApiService.CancelReceivingOrderbypack(mPalletcode, pack);
+
+        ObjErpApiService.ClaerReceivingOrderbypack(pack);
 
         //ErpApiService objGR = new ErpApiService();
         // Elements = objGR.GetAllApiRecevingorderGosypallet(mPalletcode);
@@ -305,6 +327,11 @@ else
         cOld = Elements.Count();
         Elements = ObjErpApiService.GetAllApiRecevingorderGosypallet(mPalletcode);
         cNew = Elements.Count();
+
+        if (cNew <= 0)
+        {
+            ObjErpApiService.ClaerReceivingOrdersBypallet(mPalletcode);
+        }
 
     }
 

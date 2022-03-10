@@ -123,14 +123,26 @@
   <data name="ItemName" xml:space="preserve">
     <value>ชื่อสินค้า</value>
   </data>
+  <data name="Itemtag" xml:space="preserve">
+    <value>หมายเลข</value>
+  </data>
   <data name="pageHeader" xml:space="preserve">
     <value>เบิกแมนนวล</value>
+  </data>
+  <data name="PALLETERP" xml:space="preserve">
+    <value>พาเลทอ้างอิง</value>
   </data>
   <data name="PalletGo" xml:space="preserve">
     <value>พาเลทหลัก</value>
   </data>
+  <data name="Search" xml:space="preserve">
+    <value>ค้นหา</value>
+  </data>
   <data name="SEQ" xml:space="preserve">
     <value>ลำดับที่</value>
+  </data>
+  <data name="START" xml:space="preserve">
+    <value>สั่งเบิก</value>
   </data>
   <data name="Stock" xml:space="preserve">
     <value>คงคลัง</value>

@@ -61,7 +61,8 @@ namespace GoWMS.Server.Data
                             Ctime = rdr["ctime"] == DBNull.Value ? null : (DateTime?)rdr["ctime"],
                             Stime = rdr["stime"] == DBNull.Value ? null : (DateTime?)rdr["stime"],
                             Etime = rdr["etime"] == DBNull.Value ? null : (DateTime?)rdr["etime"],
-                            Work_Priority = rdr["work_priority"] == DBNull.Value ? null : (Int32?)rdr["work_priority"]
+                            Work_Priority = rdr["work_priority"] == DBNull.Value ? null : (Int32?)rdr["work_priority"],
+                            Task_code = rdr["task_code"].ToString()
                         };
                         lstobj.Add(objrd);
                     }
@@ -168,14 +169,19 @@ namespace GoWMS.Server.Data
                 }
                 catch (NpgsqlException ex)
                 {
+                    Functionreturn objrd = new Functionreturn
+                    {
+                        Retchk = 0,
+                        Retmsg = ex.Message.ToString()
+                    };
+                    lstobj.Add(objrd);
+
                     Log.Error(ex.ToString());
                 }
                 finally
                 {
                     con.Close();
                 }
-                
-                
             }
             return lstobj;
         }

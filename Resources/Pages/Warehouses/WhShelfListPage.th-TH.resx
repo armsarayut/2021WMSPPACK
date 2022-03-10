@@ -118,42 +118,42 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BANK" xml:space="preserve">
-    <value />
+    <value>แถว</value>
   </data>
   <data name="BAY" xml:space="preserve">
-    <value />
+    <value>ช่อง</value>
   </data>
   <data name="EnterPalletcode" xml:space="preserve">
-    <value />
+    <value>กรอกเลขพาเลท</value>
   </data>
   <data name="Excel" xml:space="preserve">
-    <value />
+    <value>Excel</value>
   </data>
   <data name="LANE" xml:space="preserve">
-    <value />
+    <value>เครน</value>
   </data>
   <data name="LEVEL" xml:space="preserve">
-    <value />
+    <value>ชั้น</value>
   </data>
   <data name="LOCATION" xml:space="preserve">
-    <value />
+    <value>ตำแหน่ง</value>
   </data>
   <data name="Pagecaption" xml:space="preserve">
-    <value />
+    <value>Pagecaption</value>
   </data>
   <data name="PALLET" xml:space="preserve">
-    <value />
+    <value>พาเลท</value>
   </data>
   <data name="Pdf" xml:space="preserve">
-    <value />
+    <value>Pdf</value>
   </data>
   <data name="Search" xml:space="preserve">
-    <value />
+    <value>ค้นหา</value>
   </data>
   <data name="STATUS" xml:space="preserve">
-    <value />
+    <value>สถานะ</value>
   </data>
   <data name="UPDATED" xml:space="preserve">
-    <value />
+    <value>ปรับปรุงล่าสุด</value>
   </data>
 </root>

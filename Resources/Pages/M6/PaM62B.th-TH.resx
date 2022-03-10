@@ -117,40 +117,31 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Datetime" xml:space="preserve">
-    <value />
+  <data name="DATE" xml:space="preserve">
+    <value>วันที่</value>
   </data>
-  <data name="EnterPackID" xml:space="preserve">
-    <value />
+  <data name="EXCEL" xml:space="preserve">
+    <value>Excel</value>
   </data>
-  <data name="EnterPalletcode" xml:space="preserve">
-    <value />
+  <data name="Export" xml:space="preserve">
+    <value>นำออก</value>
   </data>
-  <data name="Excel" xml:space="preserve">
-    <value />
+  <data name="ITEMCODE" xml:space="preserve">
+    <value>รหัสสินค้า</value>
   </data>
-  <data name="MappingSuccessfully" xml:space="preserve">
-    <value />
+  <data name="ITEMNAME" xml:space="preserve">
+    <value>ชื่อสินค้า</value>
   </data>
-  <data name="MaterialCode" xml:space="preserve">
-    <value />
+  <data name="ORDERNO" xml:space="preserve">
+    <value>คำสั่งซื้อ</value>
   </data>
-  <data name="MaterialName" xml:space="preserve">
-    <value />
+  <data name="PDF" xml:space="preserve">
+    <value>Pdf</value>
   </data>
-  <data name="Menudesc" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Pdf" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Qty" xml:space="preserve">
-    <value />
+  <data name="QTY" xml:space="preserve">
+    <value>จำนวน</value>
   </data>
   <data name="Search" xml:space="preserve">
-    <value />
-  </data>
-  <data name="View" xml:space="preserve">
-    <value />
+    <value>ค้นหา</value>
   </data>
 </root>

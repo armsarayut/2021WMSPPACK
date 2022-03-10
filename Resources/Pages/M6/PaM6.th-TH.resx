@@ -117,43 +117,31 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Action" xml:space="preserve">
-    <value />
+  <data name="ACTION" xml:space="preserve">
+    <value>การใช้งาน</value>
   </data>
-  <data name="Actor" xml:space="preserve">
-    <value />
+  <data name="ACTOR" xml:space="preserve">
+    <value>ผู้ใช้</value>
   </data>
-  <data name="ClientIP" xml:space="preserve">
-    <value />
+  <data name="DATETIME" xml:space="preserve">
+    <value>วันเวลา</value>
   </data>
-  <data name="Datetime" xml:space="preserve">
-    <value />
+  <data name="EXCEL" xml:space="preserve">
+    <value>Excel</value>
   </data>
-  <data name="EnterPackID" xml:space="preserve">
-    <value />
+  <data name="Export" xml:space="preserve">
+    <value>นำออก</value>
   </data>
-  <data name="EnterPalletcode" xml:space="preserve">
-    <value />
+  <data name="IPADDRESS" xml:space="preserve">
+    <value>หมายเลขเครื่อง</value>
   </data>
-  <data name="Excel" xml:space="preserve">
-    <value />
+  <data name="MENU" xml:space="preserve">
+    <value>เมนู</value>
   </data>
-  <data name="MappingSuccessfully" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Menu" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Menudesc" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Pdf" xml:space="preserve">
-    <value />
+  <data name="PDF" xml:space="preserve">
+    <value>Pdf</value>
   </data>
   <data name="Search" xml:space="preserve">
-    <value />
-  </data>
-  <data name="View" xml:space="preserve">
-    <value />
+    <value>ค้นหา</value>
   </data>
 </root>

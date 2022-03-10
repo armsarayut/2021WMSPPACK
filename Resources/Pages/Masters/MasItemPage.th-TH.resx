@@ -117,37 +117,37 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Description" xml:space="preserve">
-    <value />
+  <data name="EXCEL" xml:space="preserve">
+    <value>Excel</value>
   </data>
-  <data name="EnterPalletcode" xml:space="preserve">
-    <value />
+  <data name="Export" xml:space="preserve">
+    <value>นำออก</value>
   </data>
-  <data name="Excel" xml:space="preserve">
-    <value />
+  <data name="GROSSWEIGHT" xml:space="preserve">
+    <value>นน.รวม</value>
   </data>
-  <data name="Grossweight" xml:space="preserve">
-    <value />
+  <data name="ITEMCODE" xml:space="preserve">
+    <value>รหัสสินค้า</value>
   </data>
-  <data name="header" xml:space="preserve">
-    <value />
+  <data name="ITEMNAME" xml:space="preserve">
+    <value>ชื่อสินค้า</value>
   </data>
-  <data name="Material" xml:space="preserve">
-    <value />
+  <data name="NETWEIGHT" xml:space="preserve">
+    <value>นน.สุทธิ</value>
   </data>
-  <data name="Netweight" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Pdf" xml:space="preserve">
-    <value />
+  <data name="PDF" xml:space="preserve">
+    <value>Pdf</value>
   </data>
   <data name="Search" xml:space="preserve">
-    <value />
+    <value>ค้นหา</value>
   </data>
-  <data name="Unit" xml:space="preserve">
-    <value />
+  <data name="SortBy" xml:space="preserve">
+    <value>เรียงจาก</value>
   </data>
-  <data name="Weightunit" xml:space="preserve">
-    <value />
+  <data name="UNIT" xml:space="preserve">
+    <value>หน่วยนับ</value>
+  </data>
+  <data name="WEIGHTUNIT" xml:space="preserve">
+    <value>นน.หน่วย</value>
   </data>
 </root>

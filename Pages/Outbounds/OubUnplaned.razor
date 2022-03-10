@@ -1,4 +1,4 @@
-﻿@page "/wh/Unplaned"
+﻿@page "/3/3_5"
 @using GoWMS.Server.Data
 @using GoWMS.Server.Controllers
 @using GoWMS.Server.Models
@@ -18,6 +18,17 @@
 @inject UserServices OpjUserService
 @inject IStringLocalizer<OubUnplaned> L
 
+<style>
+    .mud-table-cell-custom-group {
+        font-weight: 500;
+    }
+
+    .mud-table-cell-custom-group-footer {
+        padding-bottom: 50px;
+        text-align: left;
+    }
+</style>
+
 
 @if (Elements == null)
 {
@@ -29,12 +40,31 @@ else
 
     @if (StkGroup)
     {
-        <MudText Typo="Typo.h6" Color="Color.Primary"> @L["pageHeader"]</MudText>
+        <MudText Typo="Typo.h6" Color="Color.Primary"> @mPageHeader</MudText>
+
+        <MudAppBar Color="Color.Transparent" Fixed="false" Dense="true">
+            <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.SaveAlt" Style="background-color: mediumseagreen; color: white; width: 160px; height: 30px;" OnClick=@OnButtonOrderSelected>
+                START
+            </MudButton>
+            <MudSpacer />
+            <MudSelect T="string"
+                       Label="Destination Station"
+                       @bind-Value="destvalue">
+                @foreach (var state in myGatesArray)
+                {
+                    <MudSelectItem T="string" Value="@state">@state</MudSelectItem>
+                }
+            </MudSelect>
+            <MudSpacer />
+        </MudAppBar>
 
         <MudTable Items="@Elements.Where(x => x.Efstatus == iState)"
                   FixedHeader="@fixed_header"
                   FixedFooter="@fixed_footer"
-                  Height="@(fixed_header || fixed_footer ?"600px":"")"
+                  Height="@(fixed_header || fixed_footer ?VarGlobals.TableHeight:"")"
+                  GroupBy="@_groupDefinition"
+                  GroupHeaderStyle="background-color:var(--mud-palette-background-white)"
+                  GroupFooterClass="mb-4"
                   MultiSelection="true"
                   Dense="@dense"
                   Hover="@hover"
@@ -43,19 +73,6 @@ else
                   Filter="new Func<Inv_Stock_GoInfo,bool>(FilterFunc)"
                   @bind-SelectedItems="selectedItems">
             <ToolBarContent>
-                <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.SaveAlt" Style="background-color: mediumseagreen; color: white; width: 160px; height: 30px;" OnClick=@OnButtonOrderSelected>
-                    START
-                </MudButton>
-                <MudToolBarSpacer />
-                <MudSelect T="string"
-                           Label="Destination Station"
-                           @bind-Value="destvalue">
-                    @foreach (var state in myGatesArray)
-                            {
-                        <MudSelectItem T="string" Value="@state">@state</MudSelectItem>
-                            }
-                </MudSelect>
-
                 <MudToolBarSpacer />
                 <MudTextField @bind-Value="searchString"
                               Placeholder="Search"
@@ -64,25 +81,44 @@ else
                               IconSize="Size.Medium"
                               Class="mt-0">
                 </MudTextField>
-
             </ToolBarContent>
+            <ColGroup>
+                @if (_multiSelect)
+                        {
+                    <col style="width: 60px;" />
+                        }
+                @if (_groupDefinition.Expandable)
+                        {
+                    <col style="width: 60px;" />
+                        }
+                <col />
+                <col />
+                <col />
+                <col />
+                <col />
+                <col />
+            </ColGroup>
             <HeaderContent>
                 <MudTh>@L["ItemCode"]</MudTh>
                 <MudTh>@L["ItemName"]</MudTh>
                 <MudTh>@L["Stock"]</MudTh>
                 <MudTh>@L["SEQ"]</MudTh>
-                <MudTh>@L["PalletGo"]</MudTh>
+                <MudTh>@L["ROLLID"]</MudTh>
             </HeaderContent>
+            <GroupHeaderTemplate>
+                <MudTh Class="mud-table-cell-custom-group" colspan="10">@($"{context.GroupName}: {context.Key} ")  >> Count: @string.Format(VarGlobals.FormatN0, @context.Items.Count())</MudTh>
+            </GroupHeaderTemplate>
             <RowTemplate>
-                <MudTd DataLabel="MATERIAL">@context.Itemcode</MudTd>
-                <MudTd DataLabel="DESCRIPTION">@context.Itemname</MudTd>
-                <MudTd DataLabel="STOCK">@string.Format(VarGlobals.FormatN2, context.Quantity)</MudTd>
-                <MudTd DataLabel="PACKID">@context.Pallettag</MudTd>
-                <MudTd DataLabel="PALLET">@context.Pallteno</MudTd>
+                <MudTd DataLabel=@L["ItemCode"]>@context.Itemcode</MudTd>
+                <MudTd DataLabel=@L["ItemName"]>@context.Itemname</MudTd>
+                <MudTd DataLabel=@L["Stock"]>@string.Format(VarGlobals.FormatN2, context.Quantity)</MudTd>
+                <MudTd DataLabel=@L["SEQ"]>@context.Pallettag</MudTd>
+                <MudTd DataLabel=@L["ROLLID"]>@context.Itemtag</MudTd>
             </RowTemplate>
-            <PagerContent>
-                <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />
-            </PagerContent>
+            <GroupFooterTemplate>
+                <MudTh Class="mud-table-cell-custom-group mud-table-cell-custom-group-footer" colspan="10">Total Qty : @string.Format(VarGlobals.FormatN2, @context.Items.Sum((e) => e.Quantity)) </MudTh>
+            </GroupFooterTemplate>
+         
         </MudTable>
     }
     else
@@ -111,9 +147,9 @@ else
     private bool _dense = false;
     private bool _multiSelect = true;
 
-    private string mPageHeader = "Cyclecount";
-    private string mPagedesc { get; set; } = "Cyclecount";
-    private string mPagename { get; set; } = "/wh/Unplaned";
+    private string mPageHeader = "3.5-Unplaned";
+    private string mPagedesc { get; set; } = "3.5-Unplaned";
+    private string mPagename { get; set; } = "/3/3_5";
     private string msgAction = "Enter Palletcode";
     private string mPalletcode { get; set; } = "";
     private string mPackid { get; set; } = "";
@@ -146,19 +182,29 @@ else
     private string destvalue { get; set; }
     private IEnumerable<string> destoptions { get; set; } = new List<string>() { "00" };
     private Int32 iState { get; set; } = 0;
+
+    private TableGroupDefinition<Inv_Stock_GoInfo> _groupDefinition = new()
+    {
+        GroupName = "PALLET",
+        Indentation = false,
+        Expandable = true,
+        IsInitiallyExpanded = false,
+        Selector = (e) => e.Pallteno
+    };
+
+
     protected override async Task OnInitializedAsync()
     {
         InvService objCS = new InvService();
         //Elements = await Task.Run(() => objCS.GetReceivingOrdersbypallet(mPalletcode));
         AgvService objAgv = new AgvService();
-        MasterGate = await Task.Run(() => objAgv.GetAllGateAgv());
+        MasterGate = await Task.Run(() => objAgv.GetAllGateAgv().Where(s => s.Gate_Name != "ASRS-G02"));
+        //MasterGate = await Task.Run(() => objAgv.GetAllGateAgv());
 
         myGatesArray = MasterGate.Select(x => x.Gate_Name).ToArray();
 
 
         Elements = await Task.Run(() => objCS.GetStockListInfo());
-
-
 
         OnSelectChange();
     }
@@ -166,6 +212,7 @@ else
     protected void OnSelectChange()
     {
         StkGroup = !StkGroup;
+        /*
         if (StkGroup)
         {
             mPageHeader = "Cycle Count ";
@@ -174,6 +221,7 @@ else
         {
             mPageHeader = "Stock Group";
         }
+        */
     }
 
 
@@ -188,6 +236,8 @@ else
             return true;
         if (element.Pallettag.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
+        if (element.Itemtag.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
         if ($"{element.Itemname} {element.Storagebin}".Contains(searchString))
             return true;
         return false;
@@ -196,6 +246,8 @@ else
     private bool FilterFunc_(InvStockSum element)
     {
         if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.Item_code.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         if (element.Item_code.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
@@ -277,12 +329,12 @@ else
                 SelectOrderPick();
             }
 
-            StateHasChanged();
+            this.StateHasChanged();
         }
 
     }
 
-    private void SelectOrderPick()
+    private async void SelectOrderPick()
     {
         var serializeOptions = new JsonSerializerOptions
         {
@@ -290,44 +342,52 @@ else
             WriteIndented = true
         };
 
-        string cus = "MANUAL";
-        //string so = "U-" + DateTime.Now.ToString("yyMMddHH");
-        string so = ObjFunService.GetRunning("sq002", 4);
-        string agvdestination = destvalue;
 
-        string lot = "-";
-        string batch = "-";
-        DateTime requestdate = DateTime.Today.Date;
-
-        var strRES = selectedItems.OrderBy(x => x.Pallettag).Select(x => new { efidx = x.Efidx, quantity = x.Quantity, packageid = x.Pallettag, materialcode = x.Itemcode, palletno = x.Pallteno, sono = so, customer = cus, lotno = lot, batchno = batch, matematerialdescription = x.Itemname, unit = x.Unit, deliverydate = requestdate }).ToList();
-
-        //var strLON = selectedItems.OrderBy(x => x.SEQ_NO).Select(x => new { SEQ_NO = x.SEQ_NO, SO_NO = x.SO_NO, DN_SEQ = x.DN_SEQ, ITEM_CODE = x.ITEM_CODE, PALLET_GO = x.PALLET_GO, DN_QTY = x.DN_QTY }).ToList();
-
-        //var jsonLON = JsonSerializer.Serialize(strLON, serializeOptions);
-
-        var jsonRES = JsonSerializer.Serialize(strRES, serializeOptions);
-
-        var iReturn = 0;
-        var sReturn = "Call";
-
-        ObjApiService.SetPickUnplaned(jsonRES, ref iReturn, ref sReturn);
-
-        if (selectedItems.Count > 0)
+        if (destvalue != null)
         {
-            if (iReturn == 0)
+            string cus = "MANUAL";
+            //string so = "U-" + DateTime.Now.ToString("yyMMddHH");
+            string so = ObjFunService.GetRunning("sq002", 4);
+            string agvdestination = destvalue;
+
+            string lot = "-";
+            string batch = "-";
+            DateTime requestdate = DateTime.Today.Date;
+
+            var strRES = selectedItems.OrderBy(x => x.Pallettag).Select(x => new { efidx = x.Efidx, quantity = x.Quantity, packageid = x.Pallettag, materialcode = x.Itemcode, palletno = x.Pallteno, sono = so, customer = cus, lotno = lot, batchno = batch, matematerialdescription = x.Itemname, unit = x.Unit, deliverydate = requestdate }).ToList();
+
+            var jsonRES = JsonSerializer.Serialize(strRES, serializeOptions);
+
+            var iReturn = 0;
+            var sReturn = "Call";
+
+            if (selectedItems.Count > 0)
             {
-                Snackbar.Add(sReturn, Severity.Error);
+
+                ObjApiService.SetPickUnplaned(jsonRES, ref iReturn, ref sReturn);
+
+                if (iReturn == 0)
+                {
+                    Snackbar.Add(sReturn, Severity.Error);
+                }
+                else
+                {
+
+                    //update
+                    ObjStoreoutService.SetDestinationAGV(so, agvdestination);
+                    Snackbar.Add("Order picking created", Severity.Success);
+
+                    Elements = await ObjService.GetStockListInfo();
+                }
             }
             else
             {
-                //update
-                ObjStoreoutService.SetDestinationAGV(so, agvdestination);
-                Snackbar.Add("Order picking created", Severity.Success);
+                Snackbar.Add("Please select order picking", Severity.Warning);
             }
         }
         else
         {
-            Snackbar.Add("Please select order picking", Severity.Warning);
+            Snackbar.Add("Please select Destination Station", Severity.Warning);
         }
     }
 

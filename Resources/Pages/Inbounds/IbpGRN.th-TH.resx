@@ -117,58 +117,46 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Description" xml:space="preserve">
-    <value />
+  <data name="BatchNo" xml:space="preserve">
+    <value>Batchที่ผลิต</value>
   </data>
-  <data name="Document" xml:space="preserve">
-    <value />
+  <data name="DNDate" xml:space="preserve">
+    <value>วันที่เอกสาร</value>
   </data>
-  <data name="EnterPackID" xml:space="preserve">
-    <value />
+  <data name="DNNo" xml:space="preserve">
+    <value>เลขที่เอกสาร</value>
   </data>
-  <data name="EnterPalletcode" xml:space="preserve">
-    <value />
+  <data name="DNSeq" xml:space="preserve">
+    <value>ลำดับ</value>
   </data>
   <data name="Excel" xml:space="preserve">
-    <value />
+    <value>เอกเซล</value>
   </data>
-  <data name="GRQty" xml:space="preserve">
-    <value />
+  <data name="ItemCode" xml:space="preserve">
+    <value>รหัสสินค้า</value>
   </data>
-  <data name="GRWeight" xml:space="preserve">
-    <value />
+  <data name="ItemName" xml:space="preserve">
+    <value>ชื่อสินค้า</value>
   </data>
-  <data name="Job" xml:space="preserve">
-    <value />
+  <data name="LotNo" xml:space="preserve">
+    <value>ลอท</value>
   </data>
-  <data name="JobCode" xml:space="preserve">
-    <value />
+  <data name="PDF" xml:space="preserve">
+    <value>พีดีเอฟ</value>
   </data>
-  <data name="MappingSuccessfully" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Material" xml:space="preserve">
-    <value />
-  </data>
-  <data name="PackID" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Pagecaption" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Pdf" xml:space="preserve">
-    <value />
-  </data>
-  <data name="ReceivingDate" xml:space="preserve">
-    <value />
+  <data name="Qty" xml:space="preserve">
+    <value>จำนวน</value>
   </data>
   <data name="ReceivingOrder" xml:space="preserve">
-    <value />
+    <value>การรับ</value>
   </data>
   <data name="Search" xml:space="preserve">
-    <value />
+    <value>ค้นหา</value>
   </data>
   <data name="Unit" xml:space="preserve">
-    <value />
+    <value>หน่วย</value>
+  </data>
+  <data name="Weight" xml:space="preserve">
+    <value>นำหนัก</value>
   </data>
 </root>

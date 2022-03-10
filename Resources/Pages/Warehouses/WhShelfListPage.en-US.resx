@@ -118,42 +118,42 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BANK" xml:space="preserve">
-    <value />
+    <value>BANK</value>
   </data>
   <data name="BAY" xml:space="preserve">
-    <value />
+    <value>BAY</value>
   </data>
   <data name="EnterPalletcode" xml:space="preserve">
-    <value />
+    <value>EnterPalletcode</value>
   </data>
   <data name="Excel" xml:space="preserve">
-    <value />
+    <value>Excel</value>
   </data>
   <data name="LANE" xml:space="preserve">
-    <value />
+    <value>LANE</value>
   </data>
   <data name="LEVEL" xml:space="preserve">
-    <value />
+    <value>LEVEL</value>
   </data>
   <data name="LOCATION" xml:space="preserve">
-    <value />
+    <value>BINNO</value>
   </data>
   <data name="Pagecaption" xml:space="preserve">
-    <value />
+    <value>Pagecaption</value>
   </data>
   <data name="PALLET" xml:space="preserve">
-    <value />
+    <value>PALLET</value>
   </data>
   <data name="Pdf" xml:space="preserve">
-    <value />
+    <value>Pdf</value>
   </data>
   <data name="Search" xml:space="preserve">
-    <value />
+    <value>Search</value>
   </data>
   <data name="STATUS" xml:space="preserve">
-    <value />
+    <value>STATUS</value>
   </data>
   <data name="UPDATED" xml:space="preserve">
-    <value />
+    <value>UPDATED</value>
   </data>
 </root>

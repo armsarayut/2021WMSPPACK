@@ -1,4 +1,4 @@
-﻿@page "/paau/agvreporttph"
+﻿@page "/5/5_5_7"
 @using System
 @using System.IO
 @using System.Linq
@@ -27,16 +27,16 @@
 else
 {
     <MudText Typo="Typo.h6" Color="Color.Primary">@mPagecaption</MudText>
+    <MudAppBar Color="Color.Transparent" Fixed="false" Dense="true">
+        <MudSpacer />
+        <MudTooltip Text=Export Color="Color.Inherit" Placement="Placement.Top">
+            <MudIconButton Icon="@Icons.Custom.FileFormats.FileExcel" Color="Color.Success"></MudIconButton>
+            <MudIconButton Icon="@Icons.Custom.FileFormats.FilePdf" Color="Color.Error"></MudIconButton>
+        </MudTooltip>
+    </MudAppBar>
+
     <MudTable Items="@Elements" FixedHeader="@fixed_header" FixedFooter="@fixed_footer" Height="@(fixed_header || fixed_footer ? "600px" : "")" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<RptTaskHourCount, bool>(FilterFunc)" @bind-SelectedItem="selectedItem">
         <ToolBarContent>
-
-            <MudTooltip Text="Export" Color="Color.Secondary" Placement="Placement.Top">
-                <MudMenu Icon="@Icons.Filled.Download" Color="Color.Primary">
-                    <MudMenuItem>Excel</MudMenuItem>
-                    <MudMenuItem>Pdf</MudMenuItem>
-                </MudMenu>
-            </MudTooltip>
-
             <MudSpacer />
             <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
         </ToolBarContent>
@@ -55,9 +55,9 @@ else
 }
 
 @code {
-    private string mPagecaption { get; set; } = "AGV TASK REPORT";
-    private string mPagedesc { get; set; } = "AGV TASK REPORT";
-    private string mPagename { get; set; } = "/paau/agvreporttph";
+    private string mPagecaption { get; set; } = "5.5.7-AGV-TASKREPORT";
+    private string mPagedesc { get; set; } = "5.5.7-AGV-TASKREPORT";
+    private string mPagename { get; set; } = "/5/5_5_7";
     private bool _processing = false;
 
     private string msgAction = "Enter Palletcode";

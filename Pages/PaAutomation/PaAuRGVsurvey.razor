@@ -1,4 +1,4 @@
-﻿@page "/wcs/rgv"
+﻿@page "/4/4_5"
 
 @using GoWMS.Server.Controllers;
 @using GoWMS.Server.Models.Wcs;
@@ -10,7 +10,7 @@
 
 @if (Elements != null)
 {
-    <MudText Typo="Typo.h6" Color="Color.Primary">Machine - @mPagecaption</MudText>
+    <MudText Typo="Typo.h6" Color="Color.Primary">@mPagedesc</MudText>
 
     <MudGrid>
         <MudItem xs="12">
@@ -87,8 +87,8 @@
 
 @code {
     public string Mccode { get; set; } = "RGV01";
-    private string mPagedesc { get; set; } = "Machine - RGV01";
-    private string mPagename { get; set; } = "/wcs/rgv";
+    private string mPagedesc { get; set; } = "4.5-RGV-SURVEY";
+    private string mPagename { get; set; } = "/4/4_5";
 
     public Int32 McstatusNo { get; set; }
     public bool McstatusAlarm { get; set; }

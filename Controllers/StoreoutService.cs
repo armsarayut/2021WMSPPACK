@@ -91,6 +91,15 @@ namespace GoWMS.Server.Controllers
             List<Sap_StoreoutInfo> retlist = objDAL.GetPickingID(SPackID).ToList();
             return retlist;
         }
+
+        public Boolean ValidateDeliveryList(string spack)
+        {
+            Boolean bret = false;
+            bret = objDAL.ValidateDeliveryList(spack);
+            return bret;
+
+        }
+
         public void SetConsolMappallet(string pallet, string packid)
         {
             objDAL.SetConsolMappallet(pallet, packid);

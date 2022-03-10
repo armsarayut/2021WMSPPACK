@@ -1,4 +1,4 @@
-﻿@page "/paau/agvqueue"
+﻿@page "/4/4_4"
 @using System
 @using System.IO
 @using System.Linq
@@ -26,14 +26,15 @@
 else
 {
     <MudText Typo="Typo.h6" Color="Color.Primary"> @mPagecaption </MudText>
-    <MudTable Items="@Elements" FixedHeader="@fixed_header" FixedFooter="@fixed_footer" Height="@(fixed_header || fixed_footer ?"600px":"")" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<Tas_Agvworks,bool>(FilterFunc)" @bind-SelectedItem="selectedItem" SortLabel="Sort By">
+    <MudAppBar Color="Color.Transparent" Fixed="false" Dense="true">
+        <MudSpacer />
+        <MudTooltip Text=Export Color="Color.Inherit" Placement="Placement.Top">
+            <MudIconButton Icon="@Icons.Custom.FileFormats.FileExcel" Color="Color.Success"></MudIconButton>
+            <MudIconButton Icon="@Icons.Custom.FileFormats.FilePdf" Color="Color.Error"></MudIconButton>
+        </MudTooltip>
+    </MudAppBar>
+    <MudTable Items="@Elements" FixedHeader="@fixed_header" FixedFooter="@fixed_footer" Height="@(fixed_header || fixed_footer ?VarGlobals.TableHeight:"")" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<Tas_Agvworks,bool>(FilterFunc)" @bind-SelectedItem="selectedItem" SortLabel="Sort By">
         <ToolBarContent>
-            <MudTooltip Text="Export" Color="Color.Secondary" Placement="Placement.Top">
-                <MudMenu Icon="@Icons.Filled.Download" Color="Color.Primary">
-                    <MudMenuItem>Excel</MudMenuItem>
-                    <MudMenuItem>Pdf</MudMenuItem>
-                </MudMenu>
-            </MudTooltip>
             <MudSpacer />
             <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
         </ToolBarContent>
@@ -46,6 +47,7 @@ else
             <MudTh>TASKTYPE</MudTh>
             <MudTh>AGV</MudTh>
             <MudTh>Q-STATUS</MudTh>
+            <MudTh>TASKCODE</MudTh>
             <MudTh>CANCEL</MudTh>
         </HeaderContent>
         <RowTemplate>
@@ -55,7 +57,8 @@ else
             <MudTd DataLabel="TO">@context.Gate_Dest</MudTd>
             <MudTd DataLabel="TASKTYPE">@context.Work_Code</MudTd>
             <MudTd DataLabel="AGV">@context.Agv_Name</MudTd>
-            <MudTd DataLabel="CANCEL">
+
+            <MudTd DataLabel="Q-STATUS">
                 @if (@context.Work_Status == 0)
                     {
                     <MudChip Variant="Variant.Outlined" Color="Color.Primary">QUEUE</MudChip>
@@ -87,7 +90,8 @@ else
                         }
                     }
             </MudTd>
-            <MudTd DataLabel="">
+            <MudTd DataLabel="TASKCODE">@context.Task_code</MudTd>
+            <MudTd DataLabel="CANCEL">
                 <MudFab @onclick="@(()=>CancleTask(@context.Lpncode))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Cancel" Size="Size.Small" IconSize="Size.Small" />
             </MudTd>
 
@@ -104,9 +108,9 @@ else
 
     IEnumerable<int> pageSizeOptions = new int[] { 10, 20, 30, 50, 100 };
 
-    private readonly string mPagecaption = "AGV-QUEUE";
-    private string mPagedesc { get; set; } = "AGV-QUEUE";
-    private string mPagename { get; set; } = "/paau/agvqueue";
+    private readonly string mPagecaption = "4.4-AGV-QUEUE";
+    private string mPagedesc { get; set; } = "4.4-AGV-QUEUE";
+    private string mPagename { get; set; } = "/4/4_4";
     private string msgAction = "Enter Palletcode";
     private string mPalletcode { get; set; } = "";
     private string mPackid { get; set; } = "";

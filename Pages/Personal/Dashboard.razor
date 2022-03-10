@@ -9,264 +9,265 @@
 
 @inject AgvService ObjAgvService
 @inject DashService ObjDashService
+@inject InboundService ObjInbService
 @inject IStringLocalizer<Dashboard> L
 
 
 <MudText Typo="Typo.h6" Color="Color.Primary" Class="mb-4">@L["Dashboard"]</MudText>
-@if(bPageintial)
+@if (bPageintial)
 {
-<MudGrid>
-    <MudItem xs="12" sm="6" md="3">
-        <MudPaper Elevation="25" Class="d-flex flex-row pt-6 pb-4" Style="height:80px;">
-            <MudIcon Icon="@Icons.Material.Filled.Receipt" Color="Color.Primary" Class="mx-4" Style="width:40px; height:40px;"></MudIcon>
-            <div>
-                <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@L["PendingReceving"]</MudText>
-                <MudText Typo="Typo.subtitle1">0</MudText>
-            </div>
-        </MudPaper>
-    </MudItem>
-    <MudItem xs="12" sm="6" md="3">
-        <MudPaper Elevation="25" Class="d-flex flex-row pt-6 pb-4" Style="height:80px;">
-            <MudIcon Icon="@Icons.Material.Filled.Queue" Color="Color.Secondary" Class="mx-4" Style="width:40px; height:40px;"></MudIcon>
-            <div>
-                <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@L["PendingPutaway"]</MudText>
-                <MudText Typo="Typo.subtitle1">0</MudText>
-            </div>
-        </MudPaper>
-    </MudItem>
-    <MudItem xs="12" sm="6" md="3">
-        <MudPaper Elevation="25" Class="d-flex flex-row pt-6 pb-4" Style="height:80px;">
-            <MudIcon Icon="@Icons.Material.Filled.ShoppingCart" Color="Color.Success" Class="mx-4" Style="width:40px; height:40px;"></MudIcon>
-            <div>
-                <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@L["Pendingpicking"]</MudText>
-                <MudText Typo="Typo.subtitle1">0</MudText>
-            </div>
-        </MudPaper>
-    </MudItem>
-    <MudItem xs="12" sm="6" md="3">
-        <MudPaper Elevation="25" Class="d-flex flex-row pt-6 pb-4" Style="height:80px;">
-            <MudIcon Icon="@Icons.Material.Filled.EventAvailable" Color="Color.Warning" Class="mx-4" Style="width:40px; height:40px;"></MudIcon>
-            <div>
-                <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@L["CompleteOrder"]</MudText>
-                <MudText Typo="Typo.subtitle1">0</MudText>
-            </div>
-        </MudPaper>
-    </MudItem>
-    <MudItem xs="12" sm="6" md="3">
-        <MudPaper Elevation="25" Class="d-flex flex-row pt-6 pb-4" Style="height:80px;">
-            <MudIcon Icon="@Icons.Material.Filled.Login" Color="Color.Primary" Class="mx-4" Style="width:40px; height:40px;"></MudIcon>
-            <div>
-                <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@L["ASRSStorage"]</MudText>
-                <MudText Typo="Typo.subtitle1">@mstorage</MudText>
-            </div>
-        </MudPaper>
-    </MudItem>
-    <MudItem xs="12" sm="6" md="3">
-        <MudPaper Elevation="25" Class="d-flex flex-row pt-6 pb-4" Style="height:80px;">
-            <MudIcon Icon="@Icons.Material.Filled.Logout" Color="Color.Secondary" Class="mx-4" Style="width:40px; height:40px;"></MudIcon>
-            <div>
-                <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@L["ASRSRetrieval"]</MudText>
-                <MudText Typo="Typo.subtitle1">@mretrieval</MudText>
-            </div>
-        </MudPaper>
-    </MudItem>
-    <MudItem xs="12" sm="6" md="3">
-        <MudPaper Elevation="25" Class="d-flex flex-row pt-6 pb-4" Style="height:80px;">
-            <MudIcon Icon="@Icons.Material.Filled.SyncAlt" Color="Color.Success" Class="mx-4" Style="width:40px; height:40px;"></MudIcon>
-            <div>
-                <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@L["ASRSTotal"]</MudText>
-                <MudText Typo="Typo.subtitle1">@asrstaskcompletenow / @asrstaskcompletelast</MudText>
-            </div>
-        </MudPaper>
-    </MudItem>
-    <MudItem xs="12" sm="6" md="3">
-        <MudPaper Elevation="25" Class="d-flex flex-row pt-6 pb-4" Style="height:80px;">
-            <MudIcon Icon="@Icons.Material.Filled.Speed" Color="Color.Warning" Class="mx-4" Style="width:40px; height:40px;"></MudIcon>
-            <div>
-                <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@L["ASRSAveragetime"]</MudText>
-                <MudText Typo="Typo.subtitle1">@asrstasktimenow / @asrstasktimelast</MudText>
-            </div>
-        </MudPaper>
-    </MudItem>
+    <MudGrid>
+        <MudItem xs="12" sm="6" md="3">
+            <MudPaper Elevation="25" Class="d-flex flex-row pt-6 pb-4" Style="height:80px;">
+                <MudIcon Icon="@Icons.Material.Filled.Receipt" Color="Color.Primary" Class="mx-4" Style="width:40px; height:40px;"></MudIcon>
+                <div>
+                    <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@L["PendingReceving"]</MudText>
+                    <MudText Typo="Typo.subtitle1">0</MudText>
+                </div>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="3">
+            <MudPaper Elevation="25" Class="d-flex flex-row pt-6 pb-4" Style="height:80px;">
+                <MudIcon Icon="@Icons.Material.Filled.Queue" Color="Color.Secondary" Class="mx-4" Style="width:40px; height:40px;"></MudIcon>
+                <div>
+                    <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@L["PendingPutaway"]</MudText>
+                    <MudText Typo="Typo.subtitle1">0</MudText>
+                </div>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="3">
+            <MudPaper Elevation="25" Class="d-flex flex-row pt-6 pb-4" Style="height:80px;">
+                <MudIcon Icon="@Icons.Material.Filled.ShoppingCart" Color="Color.Success" Class="mx-4" Style="width:40px; height:40px;"></MudIcon>
+                <div>
+                    <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@L["Pendingpicking"]</MudText>
+                    <MudText Typo="Typo.subtitle1">0</MudText>
+                </div>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="3">
+            <MudPaper Elevation="25" Class="d-flex flex-row pt-6 pb-4" Style="height:80px;">
+                <MudIcon Icon="@Icons.Material.Filled.EventAvailable" Color="Color.Warning" Class="mx-4" Style="width:40px; height:40px;"></MudIcon>
+                <div>
+                    <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@L["CompleteOrder"]</MudText>
+                    <MudText Typo="Typo.subtitle1">0</MudText>
+                </div>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="3">
+            <MudPaper Elevation="25" Class="d-flex flex-row pt-6 pb-4" Style="height:80px;">
+                <MudIcon Icon="@Icons.Material.Filled.Login" Color="Color.Primary" Class="mx-4" Style="width:40px; height:40px;"></MudIcon>
+                <div>
+                    <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@L["ASRSStorage"]</MudText>
+                    <MudText Typo="Typo.subtitle1">@mstorage</MudText>
+                </div>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="3">
+            <MudPaper Elevation="25" Class="d-flex flex-row pt-6 pb-4" Style="height:80px;">
+                <MudIcon Icon="@Icons.Material.Filled.Logout" Color="Color.Secondary" Class="mx-4" Style="width:40px; height:40px;"></MudIcon>
+                <div>
+                    <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@L["ASRSRetrieval"]</MudText>
+                    <MudText Typo="Typo.subtitle1">@mretrieval</MudText>
+                </div>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="3">
+            <MudPaper Elevation="25" Class="d-flex flex-row pt-6 pb-4" Style="height:80px;">
+                <MudIcon Icon="@Icons.Material.Filled.SyncAlt" Color="Color.Success" Class="mx-4" Style="width:40px; height:40px;"></MudIcon>
+                <div>
+                    <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@L["ASRSTotal"]</MudText>
+                    <MudText Typo="Typo.subtitle1">@asrstaskcompletenow / @asrstaskcompletelast</MudText>
+                </div>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="3">
+            <MudPaper Elevation="25" Class="d-flex flex-row pt-6 pb-4" Style="height:80px;">
+                <MudIcon Icon="@Icons.Material.Filled.Speed" Color="Color.Warning" Class="mx-4" Style="width:40px; height:40px;"></MudIcon>
+                <div>
+                    <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@L["ASRSAveragetime"]</MudText>
+                    <MudText Typo="Typo.subtitle1">@asrstasktimenow / @asrstasktimelast</MudText>
+                </div>
+            </MudPaper>
+        </MudItem>
 
-    <MudItem xs="12" sm="6" md="3">
-        <MudPaper Elevation="25" Class="d-flex flex-row pt-6 pb-4" Style="height:80px;">
-            <MudIcon Icon="@Icons.Material.Filled.Queue" Color="Color.Primary" Class="mx-4" Style="width:40px; height:40px;"></MudIcon>
-            <div>
-                <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@L["AGVOnqueue"]</MudText>
-                <MudText Typo="Typo.subtitle1">@agvtaskque</MudText>
-            </div>
-        </MudPaper>
-    </MudItem>
+        <MudItem xs="12" sm="6" md="3">
+            <MudPaper Elevation="25" Class="d-flex flex-row pt-6 pb-4" Style="height:80px;">
+                <MudIcon Icon="@Icons.Material.Filled.Queue" Color="Color.Primary" Class="mx-4" Style="width:40px; height:40px;"></MudIcon>
+                <div>
+                    <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@L["AGVOnqueue"]</MudText>
+                    <MudText Typo="Typo.subtitle1">@agvtaskque</MudText>
+                </div>
+            </MudPaper>
+        </MudItem>
 
-    <MudItem xs="12" sm="6" md="3">
-        <MudPaper Elevation="25" Class="d-flex flex-row pt-6 pb-4" Style="height:80px;">
-            <MudIcon Icon="@Icons.Material.Filled.QueuePlayNext" Color="Color.Secondary" Class="mx-4" Style="width:40px; height:40px;"></MudIcon>
-            <div>
-                <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@L["AGVInprocess"]</MudText>
-                <MudText Typo="Typo.subtitle1">@agvtaskpro</MudText>
-            </div>
-</MudPaper>
-    </MudItem>
+        <MudItem xs="12" sm="6" md="3">
+            <MudPaper Elevation="25" Class="d-flex flex-row pt-6 pb-4" Style="height:80px;">
+                <MudIcon Icon="@Icons.Material.Filled.QueuePlayNext" Color="Color.Secondary" Class="mx-4" Style="width:40px; height:40px;"></MudIcon>
+                <div>
+                    <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@L["AGVInprocess"]</MudText>
+                    <MudText Typo="Typo.subtitle1">@agvtaskpro</MudText>
+                </div>
+            </MudPaper>
+        </MudItem>
 
-    <MudItem xs="12" sm="6" md="3">
-        <MudPaper Elevation="25" Class="d-flex flex-row pt-6 pb-4" Style="height:80px;">
-            <MudIcon Icon="@Icons.Material.Filled.Task" Color="Color.Success" Class="mx-4" Style="width:40px; height:40px;"></MudIcon>
-            <div>
-                <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@L["AGVComplete"]</MudText>
-                <MudText Typo="Typo.subtitle1">@agvtaskcompletenow / @agvtaskcompletelast</MudText>
-            </div>
-        </MudPaper>
-    </MudItem>
+        <MudItem xs="12" sm="6" md="3">
+            <MudPaper Elevation="25" Class="d-flex flex-row pt-6 pb-4" Style="height:80px;">
+                <MudIcon Icon="@Icons.Material.Filled.Task" Color="Color.Success" Class="mx-4" Style="width:40px; height:40px;"></MudIcon>
+                <div>
+                    <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@L["AGVComplete"]</MudText>
+                    <MudText Typo="Typo.subtitle1">@agvtaskcompletenow / @agvtaskcompletelast</MudText>
+                </div>
+            </MudPaper>
+        </MudItem>
 
-    <MudItem xs="12" sm="6" md="3">
-        <MudPaper Elevation="25" Class="d-flex flex-row pt-6 pb-4" Style="height:80px;">
-            <MudIcon Icon="@Icons.Material.Filled.Timer" Color="Color.Warning" Class="mx-4" Style="width:40px; height:40px;"></MudIcon>
-            <div>
-                <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@L["AGVAveragetime"]</MudText>
-                <MudText Typo="Typo.subtitle1">@agvtasktimenow / @agvtasktimelast  </MudText>
-            </div>
-        </MudPaper>
-    </MudItem>
+        <MudItem xs="12" sm="6" md="3">
+            <MudPaper Elevation="25" Class="d-flex flex-row pt-6 pb-4" Style="height:80px;">
+                <MudIcon Icon="@Icons.Material.Filled.Timer" Color="Color.Warning" Class="mx-4" Style="width:40px; height:40px;"></MudIcon>
+                <div>
+                    <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@L["AGVAveragetime"]</MudText>
+                    <MudText Typo="Typo.subtitle1">@agvtasktimenow / @agvtasktimelast  </MudText>
+                </div>
+            </MudPaper>
+        </MudItem>
 
-    <MudItem xs="12" sm="6" md="4">
-        <MudCard Elevation="25" Style="height: 400px;">
-            <MudHidden Breakpoint="Breakpoint.Xs">
-                <MudCardHeader>
-                    <CardHeaderContent>
-                        <MudText Typo="Typo.h6">@L["Lane"] 01</MudText>
-                    </CardHeaderContent>
-                </MudCardHeader>
-                <MudPaper Class="flex-grow-1 flex-shrink-1 pa-2 mx-2 order-1" Style="@($"color:{Colors.Shades.White}; background:rgb(255, 64, 129);")">
-                    <MudText Align="Align.Center" Typo="Typo.h6">@L["Total"]:@L1Total</MudText>
-                </MudPaper>
-                <MudPaper Class="d-flex py-2 px-1">
-                    <MudPaper Class="flex-grow-1 flex-shrink-0 pa-2 mx-2 order-1" Style="@($"color:{Colors.Shades.White}; background:rgb(41, 121, 255);")">
-                        <MudText Align="Align.Center" Typo="Typo.h6">@L["Occupied"]:@L1Use</MudText>
+        <MudItem xs="12" sm="6" md="4">
+            <MudCard Elevation="25" Style="height: 400px;">
+                <MudHidden Breakpoint="Breakpoint.Xs">
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <MudText Typo="Typo.h6">@L["Lane"] 01</MudText>
+                        </CardHeaderContent>
+                    </MudCardHeader>
+                    <MudPaper Class="flex-grow-1 flex-shrink-1 pa-2 mx-2 order-1" Style="@($"color:{Colors.Shades.White}; background:rgb(255, 64, 129);")">
+                        <MudText Align="Align.Center" Typo="Typo.h6">@L["Total"]:@L1Total</MudText>
                     </MudPaper>
-                    <MudPaper Class="flex-grow-1 flex-shrink-0 pa-2 mx-2 order-2" Style="@($"color:{Colors.Shades.White}; background:rgb(83, 199, 144);")">
-                        <MudText Align="Align.Center" Typo="Typo.h6">
-                            @L["Free"]:@L1Emp
-                        </MudText>
+                    <MudPaper Class="d-flex py-2 px-1">
+                        <MudPaper Class="flex-grow-1 flex-shrink-0 pa-2 mx-2 order-1" Style="@($"color:{Colors.Shades.White}; background:rgb(41, 121, 255);")">
+                            <MudText Align="Align.Center" Typo="Typo.h6">@L["Occupied"]:@L1Use</MudText>
+                        </MudPaper>
+                        <MudPaper Class="flex-grow-1 flex-shrink-0 pa-2 mx-2 order-2" Style="@($"color:{Colors.Shades.White}; background:rgb(83, 199, 144);")">
+                            <MudText Align="Align.Center" Typo="Typo.h6">
+                                @L["Free"]:@L1Emp
+                            </MudText>
+                        </MudPaper>
                     </MudPaper>
-                </MudPaper>
-            </MudHidden>
-            <MudHidden Breakpoint="Breakpoint.Xs" Invert="true">
-                <MudCardHeader>
-                    <CardHeaderContent>
-                        <MudText Typo="Typo.body1">@L["Lane"] 01</MudText>
-                    </CardHeaderContent>
-                </MudCardHeader>
-                <MudPaper Class="flex-grow-1 flex-shrink-1 pa-2 mx-2 order-1" Style="@($"color:{Colors.Shades.White}; background:rgb(255, 64, 129);")">
-                    <MudText Align="Align.Center" Typo="Typo.body1">@L["Total"]:@L1Total</MudText>
-                </MudPaper>
-                <MudPaper Class="d-flex py-2 px-1">
-                    <MudPaper Class="flex-grow-1 flex-shrink-0 pa-2 mx-2 order-1" Style="@($"color:{Colors.Shades.White}; background:rgb(41, 121, 255);")">
-                        <MudText Align="Align.Center" Typo="Typo.body1">@L["Occupied"]:@L1Use</MudText>
+                </MudHidden>
+                <MudHidden Breakpoint="Breakpoint.Xs" Invert="true">
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <MudText Typo="Typo.body1">@L["Lane"] 01</MudText>
+                        </CardHeaderContent>
+                    </MudCardHeader>
+                    <MudPaper Class="flex-grow-1 flex-shrink-1 pa-2 mx-2 order-1" Style="@($"color:{Colors.Shades.White}; background:rgb(255, 64, 129);")">
+                        <MudText Align="Align.Center" Typo="Typo.body1">@L["Total"]:@L1Total</MudText>
                     </MudPaper>
-                    <MudPaper Class="flex-grow-1 flex-shrink-0 pa-2 mx-2 order-2" Style="@($"color:{Colors.Shades.White}; background:rgb(83, 199, 144);")">
-                        <MudText Align="Align.Center" Typo="Typo.body1">
-                            @L["Free"]:@L1Emp
-                        </MudText>
+                    <MudPaper Class="d-flex py-2 px-1">
+                        <MudPaper Class="flex-grow-1 flex-shrink-0 pa-2 mx-2 order-1" Style="@($"color:{Colors.Shades.White}; background:rgb(41, 121, 255);")">
+                            <MudText Align="Align.Center" Typo="Typo.body1">@L["Occupied"]:@L1Use</MudText>
+                        </MudPaper>
+                        <MudPaper Class="flex-grow-1 flex-shrink-0 pa-2 mx-2 order-2" Style="@($"color:{Colors.Shades.White}; background:rgb(83, 199, 144);")">
+                            <MudText Align="Align.Center" Typo="Typo.body1">
+                                @L["Free"]:@L1Emp
+                            </MudText>
+                        </MudPaper>
                     </MudPaper>
-                </MudPaper>
-            </MudHidden>
+                </MudHidden>
 
-            <br />
-            <MudChart ChartType="ChartType.Donut" InputData="@data1" @bind-SelectedIndex="Index1" InputLabels="@labels1" Width="28%" Height="28%" />
-        </MudCard>
-    </MudItem>
-    <MudItem xs="12" sm="6" md="4">
-        <MudCard Elevation="25" Style="height: 400px;">
-            <MudHidden Breakpoint="Breakpoint.Xs">
-                <MudCardHeader>
-                    <CardHeaderContent>
-                        <MudText Typo="Typo.h6">@L["Lane"] 02</MudText>
-                    </CardHeaderContent>
-                </MudCardHeader>
-                <MudPaper Class="flex-grow-1 flex-shrink-1 pa-2 mx-2 order-1" Style="@($"color:{Colors.Shades.White}; background:rgb(255, 64, 129);")">
-                    <MudText Align="Align.Center" Typo="Typo.h6">@L["Total"]:@L2Total</MudText>
-                </MudPaper>
-                <MudPaper Class="d-flex py-2 px-1">
-                    <MudPaper Class="flex-grow-1 flex-shrink-0 pa-2 mx-2 order-1" Style="@($"color:{Colors.Shades.White}; background:rgb(41, 121, 255);")">
-                        <MudText Align="Align.Center" Typo="Typo.h6">@L["Occupied"]:@L2Use</MudText>
+                <br />
+                <MudChart ChartType="ChartType.Donut" InputData="@data1" @bind-SelectedIndex="Index1" InputLabels="@labels1" Width="28%" Height="28%" />
+            </MudCard>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="4">
+            <MudCard Elevation="25" Style="height: 400px;">
+                <MudHidden Breakpoint="Breakpoint.Xs">
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <MudText Typo="Typo.h6">@L["Lane"] 02</MudText>
+                        </CardHeaderContent>
+                    </MudCardHeader>
+                    <MudPaper Class="flex-grow-1 flex-shrink-1 pa-2 mx-2 order-1" Style="@($"color:{Colors.Shades.White}; background:rgb(255, 64, 129);")">
+                        <MudText Align="Align.Center" Typo="Typo.h6">@L["Total"]:@L2Total</MudText>
                     </MudPaper>
-                    <MudPaper Class="flex-grow-1 flex-shrink-0 pa-2 mx-2 order-2" Style="@($"color:{Colors.Shades.White}; background:rgb(83, 199, 144);")">
-                        <MudText Align="Align.Center" Typo="Typo.h6">@L["Free"]:@L2Emp</MudText>
+                    <MudPaper Class="d-flex py-2 px-1">
+                        <MudPaper Class="flex-grow-1 flex-shrink-0 pa-2 mx-2 order-1" Style="@($"color:{Colors.Shades.White}; background:rgb(41, 121, 255);")">
+                            <MudText Align="Align.Center" Typo="Typo.h6">@L["Occupied"]:@L2Use</MudText>
+                        </MudPaper>
+                        <MudPaper Class="flex-grow-1 flex-shrink-0 pa-2 mx-2 order-2" Style="@($"color:{Colors.Shades.White}; background:rgb(83, 199, 144);")">
+                            <MudText Align="Align.Center" Typo="Typo.h6">@L["Free"]:@L2Emp</MudText>
+                        </MudPaper>
                     </MudPaper>
-                </MudPaper>
-            </MudHidden>
-            <MudHidden Breakpoint="Breakpoint.Xs" Invert="true">
-                <MudCardHeader>
-                    <CardHeaderContent>
-                        <MudText Typo="Typo.body1">@L["Lane"] 02</MudText>
-                    </CardHeaderContent>
-                </MudCardHeader>
-                <MudPaper Class="flex-grow-1 flex-shrink-1 pa-2 mx-2 order-1" Style="@($"color:{Colors.Shades.White}; background:rgb(255, 64, 129);")">
-                    <MudText Align="Align.Center" Typo="Typo.body1">@L["Total"]:@L2Total</MudText>
-                </MudPaper>
-                <MudPaper Class="d-flex py-2 px-1">
-                    <MudPaper Class="flex-grow-1 flex-shrink-0 pa-2 mx-2 order-1" Style="@($"color:{Colors.Shades.White}; background:rgb(41, 121, 255);")">
-                        <MudText Align="Align.Center" Typo="Typo.body1">@L["Occupied"]:@L2Use</MudText>
+                </MudHidden>
+                <MudHidden Breakpoint="Breakpoint.Xs" Invert="true">
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <MudText Typo="Typo.body1">@L["Lane"] 02</MudText>
+                        </CardHeaderContent>
+                    </MudCardHeader>
+                    <MudPaper Class="flex-grow-1 flex-shrink-1 pa-2 mx-2 order-1" Style="@($"color:{Colors.Shades.White}; background:rgb(255, 64, 129);")">
+                        <MudText Align="Align.Center" Typo="Typo.body1">@L["Total"]:@L2Total</MudText>
                     </MudPaper>
-                    <MudPaper Class="flex-grow-1 flex-shrink-0 pa-2 mx-2 order-2" Style="@($"color:{Colors.Shades.White}; background:rgb(83, 199, 144);")">
-                        <MudText Align="Align.Center" Typo="Typo.body1">
-                            @L["Free"]:@L2Emp
-                        </MudText>
+                    <MudPaper Class="d-flex py-2 px-1">
+                        <MudPaper Class="flex-grow-1 flex-shrink-0 pa-2 mx-2 order-1" Style="@($"color:{Colors.Shades.White}; background:rgb(41, 121, 255);")">
+                            <MudText Align="Align.Center" Typo="Typo.body1">@L["Occupied"]:@L2Use</MudText>
+                        </MudPaper>
+                        <MudPaper Class="flex-grow-1 flex-shrink-0 pa-2 mx-2 order-2" Style="@($"color:{Colors.Shades.White}; background:rgb(83, 199, 144);")">
+                            <MudText Align="Align.Center" Typo="Typo.body1">
+                                @L["Free"]:@L2Emp
+                            </MudText>
+                        </MudPaper>
                     </MudPaper>
-                </MudPaper>
-            </MudHidden>
-            <br />
-            <MudChart ChartType="ChartType.Donut" InputData="@data2" @bind-SelectedIndex="Index2" InputLabels="@labels2" Width="28%" Height="28%"/>
-        </MudCard>
-    </MudItem>
-    <MudItem xs="12" sm="6" md="4">
-        <MudCard Elevation="25" Style="height: 400px;">
-            <MudHidden Breakpoint="Breakpoint.Xs">
-                <MudCardHeader>
-                    <CardHeaderContent>
-                        <MudText Typo="Typo.h6">@L["Lane"] 03</MudText>
-                    </CardHeaderContent>
-                </MudCardHeader>
-                <MudPaper Class="flex-grow-1 flex-shrink-1 pa-2 mx-2 order-1" Style="@($"color:{Colors.Shades.White}; background:rgb(255, 64, 129);")">
-                    <MudText Align="Align.Center" Typo="Typo.h6">@L["Total"]:@L3Total</MudText>
-                </MudPaper>
-                <MudPaper Class="d-flex py-2 px-1">
-                    <MudPaper Class="flex-grow-1 flex-shrink-0 pa-2 mx-2 order-1" Style="@($"color:{Colors.Shades.White}; background:rgb(41, 121, 255);")">
-                        <MudText Align="Align.Center" Typo="Typo.h6">@L["Occupied"]:@L3Use</MudText>
+                </MudHidden>
+                <br />
+                <MudChart ChartType="ChartType.Donut" InputData="@data2" @bind-SelectedIndex="Index2" InputLabels="@labels2" Width="28%" Height="28%" />
+            </MudCard>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="4">
+            <MudCard Elevation="25" Style="height: 400px;">
+                <MudHidden Breakpoint="Breakpoint.Xs">
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <MudText Typo="Typo.h6">@L["Lane"] 03</MudText>
+                        </CardHeaderContent>
+                    </MudCardHeader>
+                    <MudPaper Class="flex-grow-1 flex-shrink-1 pa-2 mx-2 order-1" Style="@($"color:{Colors.Shades.White}; background:rgb(255, 64, 129);")">
+                        <MudText Align="Align.Center" Typo="Typo.h6">@L["Total"]:@L3Total</MudText>
                     </MudPaper>
-                    <MudPaper Class="flex-grow-1 flex-shrink-0 pa-2 mx-2 order-2" Style="@($"color:{Colors.Shades.White}; background:rgb(83, 199, 144);")">
-                        <MudText Align="Align.Center" Typo="Typo.h6">@L["Free"]:@L3Emp</MudText>
+                    <MudPaper Class="d-flex py-2 px-1">
+                        <MudPaper Class="flex-grow-1 flex-shrink-0 pa-2 mx-2 order-1" Style="@($"color:{Colors.Shades.White}; background:rgb(41, 121, 255);")">
+                            <MudText Align="Align.Center" Typo="Typo.h6">@L["Occupied"]:@L3Use</MudText>
+                        </MudPaper>
+                        <MudPaper Class="flex-grow-1 flex-shrink-0 pa-2 mx-2 order-2" Style="@($"color:{Colors.Shades.White}; background:rgb(83, 199, 144);")">
+                            <MudText Align="Align.Center" Typo="Typo.h6">@L["Free"]:@L3Emp</MudText>
+                        </MudPaper>
                     </MudPaper>
-                </MudPaper>
-            </MudHidden>
-            <MudHidden Breakpoint="Breakpoint.Xs" Invert="true">
-                <MudCardHeader>
-                    <CardHeaderContent>
-                        <MudText Typo="Typo.body1">@L["Lane"] 03</MudText>
-                    </CardHeaderContent>
-                </MudCardHeader>
-                <MudPaper Class="flex-grow-1 flex-shrink-1 pa-2 mx-2 order-1" Style="@($"color:{Colors.Shades.White}; background:rgb(255, 64, 129);")">
-                    <MudText Align="Align.Center" Typo="Typo.body1">@L["Total"]:@L3Total</MudText>
-                </MudPaper>
-                <MudPaper Class="d-flex py-2 px-1">
-                    <MudPaper Class="flex-grow-1 flex-shrink-0 pa-2 mx-2 order-1" Style="@($"color:{Colors.Shades.White}; background:rgb(41, 121, 255);")">
-                        <MudText Align="Align.Center" Typo="Typo.body1">@L["Occupied"]:@L3Use</MudText>
+                </MudHidden>
+                <MudHidden Breakpoint="Breakpoint.Xs" Invert="true">
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <MudText Typo="Typo.body1">@L["Lane"] 03</MudText>
+                        </CardHeaderContent>
+                    </MudCardHeader>
+                    <MudPaper Class="flex-grow-1 flex-shrink-1 pa-2 mx-2 order-1" Style="@($"color:{Colors.Shades.White}; background:rgb(255, 64, 129);")">
+                        <MudText Align="Align.Center" Typo="Typo.body1">@L["Total"]:@L3Total</MudText>
                     </MudPaper>
-                    <MudPaper Class="flex-grow-1 flex-shrink-0 pa-2 mx-2 order-2" Style="@($"color:{Colors.Shades.White}; background:rgb(83, 199, 144);")">
-                        <MudText Align="Align.Center" Typo="Typo.body1">
-                            @L["Free"]:@L3Emp
-                        </MudText>
+                    <MudPaper Class="d-flex py-2 px-1">
+                        <MudPaper Class="flex-grow-1 flex-shrink-0 pa-2 mx-2 order-1" Style="@($"color:{Colors.Shades.White}; background:rgb(41, 121, 255);")">
+                            <MudText Align="Align.Center" Typo="Typo.body1">@L["Occupied"]:@L3Use</MudText>
+                        </MudPaper>
+                        <MudPaper Class="flex-grow-1 flex-shrink-0 pa-2 mx-2 order-2" Style="@($"color:{Colors.Shades.White}; background:rgb(83, 199, 144);")">
+                            <MudText Align="Align.Center" Typo="Typo.body1">
+                                @L["Free"]:@L3Emp
+                            </MudText>
+                        </MudPaper>
                     </MudPaper>
-                </MudPaper>
-            </MudHidden>
-            <br />
-            <MudChart ChartType="ChartType.Donut" InputData="@data3" @bind-SelectedIndex="Index3" InputLabels="@labels3" Width="28%" Height="28%"/>
-        </MudCard>
-    </MudItem>
+                </MudHidden>
+                <br />
+                <MudChart ChartType="ChartType.Donut" InputData="@data3" @bind-SelectedIndex="Index3" InputLabels="@labels3" Width="28%" Height="28%" />
+            </MudCard>
+        </MudItem>
 
 
-</MudGrid>
+    </MudGrid>
 }
 
 @code { private IEnumerable<DashAgvTime> AgvCompleteData = new List<DashAgvTime>();
@@ -275,6 +276,9 @@
     private IEnumerable<DashTaskTime> AsrsCompleteData = new List<DashTaskTime>();
 
     private IEnumerable<AsrsTaskSummary> AsrsTaskofday = new List<AsrsTaskSummary>();
+
+    private IEnumerable<Vrpt_operationresult_sum> Elementorders = new List<Vrpt_operationresult_sum>();
+
 
     EarningReport[] earningReports = new EarningReport[]
 {
@@ -312,7 +316,7 @@
     private int Index1 = -1; //default value cannot be 0 -> first selectedindex is 0.
     int dataSize1 = 2;
     double[] data1 = { 90, 10, 10, 10 };
-    string[] labels1 = { "Occupied", "Free", "Block/Error" , "Stack" };
+    string[] labels1 = { "Occupied", "Free", "Block/Error", "Stack" };
 
     private int Index2 = -1; //default value cannot be 0 -> first selectedindex is 0.
     int dataSize2 = 2;
@@ -346,6 +350,21 @@
 
     bool bPageintial { get; set; } = false;
 
+    private Int64 palletGR = 0;
+    private Int64 orderGR = 0;
+
+    private Int64 palletPut = 0;
+    private Int64 orderPut = 0;
+
+    private Int64 palletPicking = 0;
+    private Int64 orderPicking = 0;
+
+    private Int64 palletComplete = 0;
+    private Int64 orderComplete = 0;
+
+    private Int64 orderCompletePut = 0;
+    private Int64 orderCompletePick = 0;
+
 
 
     private ChartOptions _lineChartOptions = new ChartOptions
@@ -363,6 +382,14 @@
         AsrsTaskofday = await Task.Run(() => ObjDashService.GetTaskofday());
         AgvCompleteData = await Task.Run(() => ObjAgvService.GetAllDashboardComplete());
         AsrsCompleteData = await Task.Run(() => ObjDashService.GetASRSDashboardComplete());
+
+        palletPut = await ObjInbService.GetSumPalletAllInbGoodreceiptGo();
+        orderPut = await ObjInbService.GetSumOrderAllInbGoodreceiptGo();
+
+        palletPicking = await ObjInbService.GetSumPalletAllOubGoodPickingGo();
+        orderPicking = await ObjInbService.GetSumOrderAllOubGoodPickingGo();
+        Elementorders = await Task.Run(() => ObjDashService.GetAllOrderofDay());
+
 
         AgvDashboardData();
         ASRSDashboardData();
@@ -590,7 +617,7 @@
 
                 mstorage = (Int64)val.Sumin;
                 mretrieval = (Int64)val.Sumout;
-                mtotal =  (Int64)val.Wtotal;
+                mtotal = (Int64)val.Wtotal;
             }
         }
         else

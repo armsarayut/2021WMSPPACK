@@ -655,7 +655,8 @@ namespace GoWMS.Server.Data
                             Client_Ip = rdr["client_ip"].ToString(),
                             Mc_Type = rdr["mc_type"].ToString(),
                             Mc_Name = rdr["mc_name"].ToString(),
-                            Mc_No = rdr["mc_no"] == DBNull.Value ? null : (Int32?)rdr["mc_no"]
+                            Mc_No = rdr["mc_no"] == DBNull.Value ? null : (Int32?)rdr["mc_no"],
+                            Enable = rdr["entity_lock"] == DBNull.Value ? true : !Convert.ToBoolean(rdr["entity_lock"])
                         };
                         lstobj.Add(objrd);
                     }

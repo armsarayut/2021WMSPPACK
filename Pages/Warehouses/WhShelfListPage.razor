@@ -1,4 +1,4 @@
-﻿@page "/wh/shelf"
+﻿@page "/2/2_3"
 @using System
 @using System.IO
 @using System.Linq
@@ -25,22 +25,23 @@
 else
 {
     <MudText Typo="Typo.h6" Color="Color.Primary"> @mPagecaption </MudText>
+    <MudAppBar Color="Color.Transparent" Fixed="false" Dense="true">
+        <MudSpacer />
+        <MudTooltip Text=Export Color="Color.Inherit" Placement="Placement.Top">
+            <MudIconButton Icon="@Icons.Custom.FileFormats.FileExcel" Color="Color.Success"></MudIconButton>
+            <MudIconButton Icon="@Icons.Custom.FileFormats.FilePdf" Color="Color.Error"></MudIconButton>
+        </MudTooltip>
+    </MudAppBar>
     <MudTable Items="@Elements"
               FixedHeader="@fixed_header"
               FixedFooter="@fixed_footer"
-              Height="@(fixed_header || fixed_footer ?"600px":"")"
+              Height="@(fixed_header || fixed_footer ?VarGlobals.TableHeight:"")"
               Dense="@dense"
               Hover="@hover"
               Bordered="@bordered"
               Striped="@striped"
               Filter="new Func<Vrpt_shelf_listInfo,bool>(FilterFunc)" @bind-SelectedItem="selectedItem" SortLabel="Sort By">
         <ToolBarContent>
-            <MudTooltip Text="Export" Color="Color.Secondary" Placement="Placement.Top">
-                <MudMenu Icon="@Icons.Filled.Download" Color="Color.Primary">
-                    <MudMenuItem>Excel</MudMenuItem>
-                    <MudMenuItem>Pdf</MudMenuItem>
-                </MudMenu>
-            </MudTooltip>
             <MudSpacer />
             <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
         </ToolBarContent>
@@ -84,7 +85,8 @@ else
 
     IEnumerable<int> pageSizeOptions = new int[] { 10, 20, 30, 50, 100 };
 
-    private readonly string mPagecaption = "STORAGE";
+    private readonly string mPagecaption = "2.3-Storage Bin";
+    private string mPagename { get; set; } = "/2/2_3";
     private string msgAction = "Enter Palletcode";
     private string mPalletcode { get; set; } = "";
     private string mPackid { get; set; } = "";
@@ -127,6 +129,8 @@ else
     private bool FilterFunc(Vrpt_shelf_listInfo element)
     {
         if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.Lpncode.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         if (element.Shelfcode.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;

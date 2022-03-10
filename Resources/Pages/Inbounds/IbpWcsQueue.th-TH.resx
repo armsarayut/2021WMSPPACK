@@ -117,40 +117,37 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="EndTime" xml:space="preserve">
-    <value />
-  </data>
-  <data name="EnterPalletcode" xml:space="preserve">
-    <value />
+  <data name="Endtime" xml:space="preserve">
+    <value>เวลาจบ</value>
   </data>
   <data name="Excel" xml:space="preserve">
-    <value />
+    <value>เอกเซล</value>
   </data>
   <data name="Location" xml:space="preserve">
-    <value />
+    <value>ตำแหน่ง</value>
   </data>
-  <data name="Masterpallet" xml:space="preserve">
-    <value />
+  <data name="pageHeader" xml:space="preserve">
+    <value>มาสเตอร์คิว</value>
   </data>
-  <data name="PageHeader" xml:space="preserve">
-    <value />
+  <data name="PalletGo" xml:space="preserve">
+    <value>พาเลทหลัก</value>
   </data>
-  <data name="Pdf" xml:space="preserve">
-    <value />
+  <data name="PDF" xml:space="preserve">
+    <value>พีดีเอฟ</value>
   </data>
-  <data name="QueueTime" xml:space="preserve">
-    <value />
+  <data name="Queuetime" xml:space="preserve">
+    <value>เวลาคิว</value>
   </data>
   <data name="Search" xml:space="preserve">
-    <value />
+    <value>ค้นหา</value>
   </data>
   <data name="SRM" xml:space="preserve">
-    <value />
+    <value>เครน</value>
   </data>
-  <data name="StartTime" xml:space="preserve">
-    <value />
+  <data name="Starttime" xml:space="preserve">
+    <value>เวลาเริ่ม</value>
   </data>
   <data name="Worktype" xml:space="preserve">
-    <value />
+    <value>ประเภทงาน</value>
   </data>
 </root>

@@ -19,5 +19,7 @@ namespace GoWMS.Server.Models.Inv
 
         public Int32? Efstatus { get; set; }
 
+        public string Tag_no { get; set; }
+
     }
 }

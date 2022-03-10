@@ -1,108 +1,128 @@
-﻿@page "/wcs/asrsloadtime"
+﻿@page "/5/5_5_8"
 
 @using GoWMS.Server.Controllers;
 @using GoWMS.Server.Models.Wcs;
 @using GoWMS.Server.Data;
+@using GoWMS.Server.Models;
 @using GoWMS.Server.Pdf
 @using GoWMS.Server.Reports
+@using System.Security.Claims
 
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IJSRuntime JSRuntime
+@inject IStringLocalizer<PaAuASRSLoadtimelist> L
+@inject ReportService UserlogService
 @inject WcsService ObjWcsService
 @inject UserServices OpjUserService
 @inject NavigationManager navigationManager
-@inject IJSRuntime JSRuntime
+@attribute [Authorize]
 
 @if (Elements != null)
 {
-    <MudText Typo="Typo.h6" Color="Color.Primary">@mPagecaption</MudText>
+    <MudText Typo="Typo.h6" Color="Color.Primary">@pageheader</MudText>
+
+
     <MudGrid>
 
         <MudItem Class="d-flex flex-row">
             <MudItem>
-                <MudDatePicker Class="" Label="From Date" @bind-Date="fromDate" DateFormat="@VarGlobals.FormatD" />
+                <MudDatePicker Class="" Label=@L["FromDate"] @bind-Date="fromDate" DateFormat="@VarGlobals.FormatD" />
             </MudItem>
             <MudItem>
-                <MudTimePicker Class="px-2" Label="From Time" @bind-Time="fromTime" />
+                <MudTimePicker Class="px-2" Label=@L["FromTime"] @bind-Time="fromTime" />
             </MudItem>
         </MudItem>
         <MudItem Class="d-flex flex-row">
             <MudItem>
-                <MudDatePicker Class="" Label="To Date" @bind-Date="toDate" DateFormat="@VarGlobals.FormatD" />
+                <MudDatePicker Class="" Label=@L["ToDate"] @bind-Date="toDate" DateFormat="@VarGlobals.FormatD" />
             </MudItem>
             <MudItem>
-                <MudTimePicker Class="px-2" Label="To Time" @bind-Time="toTime" />
+                <MudTimePicker Class="px-2" Label=@L["ToTime"] @bind-Time="toTime" />
             </MudItem>
         </MudItem>
         <MudItem Class="d-flex flex-row align-self-end">
-            <MudButton OnClick="OnclickSearch" Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Search" Size="Size.Medium">Search</MudButton>
+            <MudButton Disabled="@_processing" StartIcon="@Icons.Material.Filled.Search" Size="Size.Medium"
+                       OnClick="OnclickSearch" Variant="Variant.Filled" Color="Color.Primary">
+                @if (_processing)
+                {
+                    <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                    <MudText Class="ms-2">Processing</MudText>
+                }
+                else
+                {
+                    <MudText>@L["Search"]</MudText>
+                }
+            </MudButton>
         </MudItem>
     </MudGrid>
-    <MudGrid Class="py-2">
-        <MudTable Items="@Elements"
-                  FixedHeader="@fixed_header"
-                  FixedFooter="@fixed_footer"
-                  Height="@(fixed_header || fixed_footer ? "500px" : "")"
-                  Dense="@dense"
-                  Hover="@hover"
-                  Bordered="@bordered" Striped="@striped" Filter="new Func<AsrsLoadtime, bool>(FilterFunc)" Style="width:100%;">
-            <ToolBarContent>
-                <MudTooltip Text="Export" Color="Color.Secondary" Placement="Placement.Top">
-                    <MudMenu Icon="@Icons.Filled.Download" Color="Color.Primary">
-                        <MudMenuItem @onclick="@DownloadExcelDocument">EXCEL</MudMenuItem>
-                        <MudMenuItem>PDF</MudMenuItem>
-                    </MudMenu>
-                </MudTooltip>
 
-                <MudToolBarSpacer />
-                <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
-            </ToolBarContent>
-            <HeaderContent>
-                <MudTh>PALLET</MudTh>
-                <MudTh>TASKCODE</MudTh>
-                <MudTh>TASKTYPE</MudTh>
-                <MudTh>SRM</MudTh>
-                <MudTh>SOURCE</MudTh>
-                <MudTh>DESTINATION</MudTh>
-                <MudTh>START</MudTh>
-                <MudTh>END</MudTh>
-                <MudTh>TIME</MudTh>
-            </HeaderContent>
-            <RowTemplate>
+    <MudAppBar Color="Color.Transparent" Fixed="false" Dense="true">
+        <MudSpacer />
+        <MudTooltip Text=@L["Export"] Color="Color.Inherit" Placement="Placement.Top">
+            <MudIconButton Icon="@Icons.Custom.FileFormats.FileExcel" Color="Color.Success" OnClick="DownloadExcelDocument"></MudIconButton>
+            <MudIconButton Icon="@Icons.Custom.FileFormats.FilePdf" Color="Color.Error" OnClick="DownloadPdfDocument"></MudIconButton>
+        </MudTooltip>
+    </MudAppBar>
 
-                <MudTd DataLabel="PALLET">@context.Lpncode</MudTd>
-                <MudTd DataLabel="TASKCODE">@context.Work_code</MudTd>
-                <MudTd DataLabel="TASKTYPE">@context.Work_text_th</MudTd>
-                <MudTd DataLabel="SRM">@string.Format(VarGlobals.FormatD2, context.Srm_no)</MudTd>
-                <MudTd DataLabel="SOURCE">@string.Format(VarGlobals.FormatD9, context.Srm_from)</MudTd>
-                <MudTd DataLabel="DESTINATION">@string.Format(VarGlobals.FormatD9, context.Srm_to)</MudTd>
-                <MudTd DataLabel="START">@Convert.ToDateTime(context.Stime).ToString(VarGlobals.FormatDT)</MudTd>
-                <MudTd DataLabel="END">@Convert.ToDateTime(context.Etime).ToString(VarGlobals.FormatDT)</MudTd>
-                <MudTd DataLabel="TIME">@context.Loadtime</MudTd>
-            </RowTemplate>
-            <PagerContent>
-                <MudTablePager PageSizeOptions="new int[] { 10, 20, 50, 100 }" />
-            </PagerContent>
-        </MudTable>
-    </MudGrid>
+    <MudTable Items="@Elements"
+              FixedHeader="@fixed_header"
+              FixedFooter="@fixed_footer"
+              Height="@(fixed_header || fixed_footer ? "500px" : "")"
+              Dense="@dense"
+              Hover="@hover"
+              Bordered="@bordered" Striped="@striped" Filter="new Func<AsrsLoadtime, bool>(FilterFunc)" Style="width:100%;">
+        <ToolBarContent>
+            <MudToolBarSpacer />
+            <MudTextField @bind-Value="searchString" Placeholder=@L["Search"] Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh>@L["PALLET"]</MudTh>
+            <MudTh>@L["TASKCODE"]</MudTh>
+            <MudTh>@L["TASKTYPE"]</MudTh>
+            <MudTh>@L["SRM"]</MudTh>
+            <MudTh>@L["SOURCE"]</MudTh>
+            <MudTh>@L["DESTINATION"]</MudTh>
+            <MudTh>@L["START"]</MudTh>
+            <MudTh>@L["END"]</MudTh>
+            <MudTh>@L["TIME"]</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+
+            <MudTd DataLabel=@L["PALLET"]>@context.Lpncode</MudTd>
+            <MudTd DataLabel=@L["TASKCODE"]>@context.Work_code</MudTd>
+            <MudTd DataLabel=@L["TASKTYPE"]>@context.Work_text_th</MudTd>
+            <MudTd DataLabel=@L["SRM"]>@string.Format(VarGlobals.FormatD2, context.Srm_no)</MudTd>
+            <MudTd DataLabel=@L["SOURCE"]>@string.Format(VarGlobals.FormatD9, context.Srm_from)</MudTd>
+            <MudTd DataLabel=@L["DESTINATION"]>@string.Format(VarGlobals.FormatD9, context.Srm_to)</MudTd>
+            <MudTd DataLabel=@L["START"]>@Convert.ToDateTime(context.Stime).ToString(VarGlobals.FormatDT)</MudTd>
+            <MudTd DataLabel=@L["END"]>@Convert.ToDateTime(context.Etime).ToString(VarGlobals.FormatDT)</MudTd>
+            <MudTd DataLabel=@L["TIME"]>@context.Loadtime</MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager PageSizeOptions="new int[] { 10, 20, 50, 100 }" />
+        </PagerContent>
+    </MudTable>
 
 }
 
 
 @code {
-    private string mPagecaption { get; set; } = "ASRS Loadtime";
-    private string mPagedesc { get; set; } = "ASRS Loadtime";
-    private string mPagename { get; set; } = "/wcs/asrsloadtime";
+    private string pageheader { get; set; } = "5.5.8.ASRS-Loadtime";
+
+    public string mPagedesc { get; set; } = "5.5.8.ASRS-Loadtime";
+    private string mPagename { get; set; } = "/5/5_5_8";
 
     private IEnumerable<AsrsLoadtime> Elements = new List<AsrsLoadtime>();
 
-    DateTime? fromDate = DateTime.Today;
-    TimeSpan? fromTime = DateTime.Now.AddHours(-1).TimeOfDay;
+    DateTime? fromDate = DateTime.Today.AddDays(-1);
+    TimeSpan? fromTime = DateTime.Now.TimeOfDay;
     DateTime? toDate = DateTime.Today;
     TimeSpan? toTime = DateTime.Now.TimeOfDay;
 
+    DateTime? fromDateTime = DateTime.Today.AddDays(-1);
+    DateTime? toDateTime = DateTime.Today;
 
-
-    DateTime? fromDateTime = DateTime.Today;
-    DateTime? toDateTime = DateTime.Today.AddDays(1);
+    private bool _processing = false;
 
     private bool dense = true;
     private bool hover = true;
@@ -112,18 +132,53 @@
     private bool fixed_footer = true;
     private string searchString = "";
 
+    private ResultReturn resultReturn = null;
 
+    string sUsername { get; set; } = "";
+    string sRole { get; set; } = "";
+    string sGroupID { get; set; } = "";
+    string sUserID { get; set; } = "";
+    List<Userroleinfo> Roles = new List<Userroleinfo>();
+    [Inject] private IDialogService DialogService { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         WcsService objCS = new WcsService();
-        //Elements = await Task.Run(() => objCS.GetReceivingOrdersbypallet(mPalletcode));
+
+
+
+        //////// Intial Menu and Privilege//////
+        resultReturn = await Task.Run(() => OpjUserService.InsertMenu(mPagename, mPagedesc));
+        resultReturn = await Task.Run(() => OpjUserService.InsertPrivilege(mPagename));
+        ////////////////////////////////////////
+
+        await GetUserAthu();
+        this.InsertAuditrial("View", pageheader);
+        Roles = await Task.Run(() => OpjUserService.GetUserRole(mPagename, long.Parse(sGroupID)));
 
         fromDateTime = fromDate.Value.Date + fromTime.Value;
         toDateTime = toDate.Value.Date + toTime.Value;
 
 
         Elements = await Task.Run(() => objCS.GetAsrsloadtime(fromDateTime.Value, toDateTime.Value));
+
+    }
+
+    async Task GetUserAthu()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        sGroupID = user.Claims.FirstOrDefault(
+        c => c.Type == ClaimTypes.Role)?.Value;
+
+        sUserID = user.Claims.FirstOrDefault(
+            c => c.Type == ClaimTypes.Actor)?.Value;
+    }
+
+    private void InsertAuditrial(String actdesc, String munname)
+    {
+        bool bRet = UserlogService.InsertAudittrial(actdesc, munname, long.Parse(sUserID));
     }
 
     bool FilterFunc(AsrsLoadtime element)
@@ -135,44 +190,234 @@
         return false;
     }
 
-    async void OnclickSearch()
+
+
+    async Task OnclickSearch()
     {
-        DbGetData();
-        StateHasChanged();
+        _processing = true;
+        await DbGetData();
+        _processing = false;
+        this.StateHasChanged();
     }
 
-    void DbGetData()
+    async Task DbGetData()
     {
-        //timePortionDateTimePicker.Value
-
         DateTime newDateTimeFM = fromDate.Value.Date + fromTime.Value;
         DateTime newDateTimeTO = toDate.Value.Date + toTime.Value;
-
-
-        // DateTime newDateTime = fromDate.Value.Date.Add(TimeSpan.Parse(fromTime.Value.ToShortTimeString()));
-
-
-
-        Elements = ObjWcsService.GetAsrsloadtime(newDateTimeFM, newDateTimeTO);
-
-
+        Elements = await Task.Run(() => ObjWcsService.GetAsrsloadtime(newDateTimeFM, newDateTimeTO));
     }
+
 
 
     public async Task DownloadExcelDocument()
     {
         try
         {
-            AsrsloadtimeRptExcel excelReport = new AsrsloadtimeRptExcel();
-            List<AsrsLoadtime> listExcelReport = new List<AsrsLoadtime>();
-            listExcelReport = Elements.ToList();
-            var fileName = $"{mPagecaption.ToString()}-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
-            await JSRuntime.InvokeAsync<object>("jsSaveAsFile", fileName, Convert.ToBase64String(excelReport.Report(listExcelReport)));
+            bool? result = await CheckRoleReport();
+            if (result == true)
+            {
+                AsrsloadtimeRptExcel excelReport = new AsrsloadtimeRptExcel();
+                List<AsrsLoadtime> listExcelReport = new List<AsrsLoadtime>();
+                listExcelReport = Elements.ToList();
+                var fileName = $"{pageheader.ToString()}-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+                await JSRuntime.InvokeAsync<object>("jsSaveAsFile", fileName, Convert.ToBase64String(excelReport.Report(listExcelReport)));
+
+                this.InsertAuditrial("Export excel file :" + fileName.ToString(), pageheader);
+            }
+
         }
         catch (Exception e)
         {
             var exmsg = e.Message.ToString();
         }
     }
+
+    public async Task DownloadPdfDocument()
+    {
+        try
+        {
+            bool? result = await CheckRoleReport();
+            if (result == true)
+            {
+                AsrsloadtimeRptPdf pdfReport = new AsrsloadtimeRptPdf();
+                List<AsrsLoadtime> listPdfReport = new List<AsrsLoadtime>();
+                listPdfReport = Elements.ToList();
+                var fileName = $"{pageheader.ToString()}-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.pdf";
+                ////await JSRuntime.InvokeAsync<object>("jsSaveAsFile", fileName, Convert.ToBase64String(pdfReport.Report(listPdfReport)));
+                await JSRuntime.InvokeAsync<object>("jsSaveAsFile", fileName, Convert.ToBase64String(pdfReport.ExportPDF(listPdfReport)));
+
+                this.InsertAuditrial("Export pdf file : " + fileName.ToString(), pageheader);
+            }
+
+
+        }
+        catch (Exception e)
+        {
+            var exmsg = e.Message.ToString();
+        }
+    }
+
+    #region "Role"
+    private async Task<bool> CheckRoleAdd()
+    {
+        bool bRet = false;
+
+        if (Roles.ToList().Count > 0)
+        {
+            var iCorrect = Roles.ToList().FindIndex(a => a.Role_add == true);
+
+            if (iCorrect >= 0)
+            {
+                bRet = true;
+            }
+            else
+            {
+                bRet = false;
+            }
+
+            if (bRet == false)
+            {
+                bool? result = await DialogService.ShowMessageBox(
+                        "Warning", VarGlobals.MessageRoleAddPermit, yesText: "OK");
+            }
+
+        }
+        else
+        {
+            bool? result = await DialogService.ShowMessageBox(
+                                "Warning", VarGlobals.MessageRoleAuthrizedPermit, yesText: "OK");
+        }
+
+        return bRet;
+    }
+
+    private async Task<bool> CheckRoleEdit()
+    {
+        bool bRet = false;
+
+        if (Roles.ToList().Count > 0)
+        {
+            var iCorrect = Roles.ToList().FindIndex(a => a.Role_edit == true);
+
+            if (iCorrect >= 0)
+            {
+                bRet = true;
+            }
+            else
+            {
+                bRet = false;
+            }
+
+            if (bRet == false)
+            {
+                bool? result = await DialogService.ShowMessageBox(
+                        "Warning", VarGlobals.MessageRoleEditPermit, yesText: "OK");
+            }
+        }
+        else
+        {
+            bool? result = await DialogService.ShowMessageBox(
+                                "Warning", VarGlobals.MessageRoleAuthrizedPermit, yesText: "OK");
+        }
+
+        return bRet;
+    }
+
+    private async Task<bool> CheckRoleDelete()
+    {
+        bool bRet = false;
+
+        if (Roles.ToList().Count > 0)
+        {
+            var iCorrect = Roles.ToList().FindIndex(a => a.Role_del == true);
+
+            if (iCorrect >= 0)
+            {
+                bRet = true;
+            }
+            else
+            {
+                bRet = false;
+            }
+
+            if (bRet == false)
+            {
+                bool? result = await DialogService.ShowMessageBox(
+                        "Warning", VarGlobals.MessageRoleDelPermit, yesText: "OK");
+            }
+        }
+        else
+        {
+            bool? result = await DialogService.ShowMessageBox(
+                                "Warning", VarGlobals.MessageRoleAuthrizedPermit, yesText: "OK");
+        }
+
+
+        return bRet;
+    }
+
+    private async Task<bool> CheckRoleApprove()
+    {
+        bool bRet = false;
+
+        if (Roles.ToList().Count > 0)
+        {
+            var iCorrect = Roles.ToList().FindIndex(a => a.Role_apv == true);
+
+            if (iCorrect >= 0)
+            {
+                bRet = true;
+            }
+            else
+            {
+                bRet = false;
+            }
+
+            if (bRet == false)
+            {
+                bool? result = await DialogService.ShowMessageBox(
+                        "Warning", VarGlobals.MessageRoleApprovePermit, yesText: "OK");
+            }
+        }
+        else
+        {
+            bool? result = await DialogService.ShowMessageBox(
+                                "Warning", VarGlobals.MessageRoleAuthrizedPermit, yesText: "OK");
+        }
+        return bRet;
+    }
+
+    private async Task<bool> CheckRoleReport()
+    {
+        bool bRet = false;
+
+        if (Roles.ToList().Count > 0)
+        {
+            var iCorrect = Roles.ToList().FindIndex(a => a.Role_rpt == true);
+
+            if (iCorrect >= 0)
+            {
+                bRet = true;
+            }
+            else
+            {
+                bRet = false;
+            }
+
+            if (bRet == false)
+            {
+                bool? result = await DialogService.ShowMessageBox(
+                        "Warning", VarGlobals.MessageRoleReportPermit, yesText: "OK");
+            }
+        }
+        else
+        {
+            bool? result = await DialogService.ShowMessageBox(
+                                "Warning", VarGlobals.MessageRoleAuthrizedPermit, yesText: "OK");
+        }
+
+        return bRet;
+    }
+    #endregion
 
 }

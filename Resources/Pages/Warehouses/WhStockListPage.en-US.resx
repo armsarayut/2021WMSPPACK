@@ -118,51 +118,51 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Area" xml:space="preserve">
-    <value />
+    <value>AREA</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value />
+    <value>DESCRIPTION</value>
   </data>
   <data name="EnterPalletcode" xml:space="preserve">
-    <value />
+    <value>EnterPalletcode</value>
   </data>
   <data name="Excel" xml:space="preserve">
-    <value />
+    <value>Excel</value>
   </data>
   <data name="Location" xml:space="preserve">
-    <value />
+    <value>BINNO</value>
   </data>
   <data name="MasterPallet" xml:space="preserve">
-    <value />
+    <value>PALLET</value>
   </data>
   <data name="Material" xml:space="preserve">
-    <value />
+    <value>MATERIAL</value>
   </data>
   <data name="PackID" xml:space="preserve">
-    <value />
+    <value>PACKID</value>
   </data>
   <data name="PageHeader" xml:space="preserve">
-    <value />
+    <value>PageHeader</value>
   </data>
   <data name="Pdf" xml:space="preserve">
-    <value />
+    <value>Pdf</value>
   </data>
   <data name="Search" xml:space="preserve">
-    <value />
+    <value>Search</value>
   </data>
   <data name="Stock" xml:space="preserve">
-    <value />
+    <value>STOCK</value>
   </data>
   <data name="StockGroup" xml:space="preserve">
-    <value />
+    <value>STOCKGROUP</value>
   </data>
   <data name="StockList" xml:space="preserve">
-    <value />
+    <value>STOCKLIST</value>
   </data>
   <data name="TotalMasterPallet" xml:space="preserve">
-    <value />
+    <value>TOTALPALLET</value>
   </data>
   <data name="TotalStock" xml:space="preserve">
-    <value />
+    <value>TOTALSTOCK</value>
   </data>
 </root>

@@ -30,7 +30,16 @@
         <MudButton OnClick="OnclickSearch" Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Search" Size="Size.Medium">Search</MudButton>
     </MudItem>
 </MudGrid>
-<MudGrid Class="py-2">
+
+<MudAppBar Color="Color.Transparent" Fixed="false" Dense="true">
+    <MudSpacer />
+    <MudTooltip Text=Export Color="Color.Inherit" Placement="Placement.Top">
+        <MudIconButton Icon="@Icons.Custom.FileFormats.FileExcel" Color="Color.Success"></MudIconButton>
+        <MudIconButton Icon="@Icons.Custom.FileFormats.FilePdf" Color="Color.Error"></MudIconButton>
+    </MudTooltip>
+</MudAppBar>
+
+
     <MudTable Items="@Elements"
               FixedHeader="@fixed_header"
               FixedFooter="@fixed_footer"
@@ -78,7 +87,6 @@
             <MudTablePager PageSizeOptions="new int[] { 10, 20, 50, 100 }" />
         </PagerContent>
     </MudTable>
-</MudGrid>
 
 <style type="text/css">
     bold-red {

@@ -117,52 +117,34 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Datetime" xml:space="preserve">
-    <value />
+  <data name="DATETIME" xml:space="preserve">
+    <value>DATE</value>
   </data>
-  <data name="EnterPackID" xml:space="preserve">
-    <value />
+  <data name="EXCEL" xml:space="preserve">
+    <value>Excel</value>
   </data>
-  <data name="EnterPalletcode" xml:space="preserve">
-    <value />
+  <data name="Export" xml:space="preserve">
+    <value>Export</value>
   </data>
-  <data name="Excel" xml:space="preserve">
-    <value />
+  <data name="ITEMCODE" xml:space="preserve">
+    <value>ITEMCODE</value>
   </data>
-  <data name="MappingSuccessfully" xml:space="preserve">
-    <value />
+  <data name="ITEMNAME" xml:space="preserve">
+    <value>ITEMNAME</value>
   </data>
-  <data name="MaterialCode" xml:space="preserve">
-    <value />
+  <data name="ORDERNO" xml:space="preserve">
+    <value>ORDERNO</value>
   </data>
-  <data name="MaterialName" xml:space="preserve">
-    <value />
+  <data name="PDF" xml:space="preserve">
+    <value>Pdf</value>
   </data>
-  <data name="Menudesc" xml:space="preserve">
-    <value />
-  </data>
-  <data name="OrderNo" xml:space="preserve">
-    <value />
-  </data>
-  <data name="PackID" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Pdf" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Qty" xml:space="preserve">
-    <value />
+  <data name="QTY" xml:space="preserve">
+    <value>QTY</value>
   </data>
   <data name="Search" xml:space="preserve">
-    <value />
+    <value>Search</value>
   </data>
-  <data name="User" xml:space="preserve">
-    <value />
-  </data>
-  <data name="View" xml:space="preserve">
-    <value />
-  </data>
-  <data name="WorkType" xml:space="preserve">
-    <value />
+  <data name="SEQ" xml:space="preserve">
+    <value>SEQ</value>
   </data>
 </root>

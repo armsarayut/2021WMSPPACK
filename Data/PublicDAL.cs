@@ -72,7 +72,7 @@ namespace GoWMS.Server.Data
             return lstobj;
         }
 
-        public IEnumerable<Class6_1> GetMenu6_1bydate(DateTime dtStart, DateTime dtStop )
+        public IEnumerable<Class6_1> GetMenu6_1byDate(DateTime dtStart, DateTime dtStop)
         {
             List<Class6_1> lstobj = new List<Class6_1>();
             using (NpgsqlConnection con = new NpgsqlConnection(connectionString))
@@ -130,7 +130,7 @@ namespace GoWMS.Server.Data
             return lstobj;
         }
 
-        public IEnumerable<Class6_1> GetMenu6_1bydatelimit(DateTime dtStart, DateTime dtStop,long limitrec, long currentPage)
+        public IEnumerable<Class6_1> GetMenu6_1byDatelimit(DateTime dtStart, DateTime dtStop, long limitrec, long currentPage)
         {
             List<Class6_1> lstobj = new List<Class6_1>();
             using (NpgsqlConnection con = new NpgsqlConnection(connectionString))
@@ -291,7 +291,7 @@ namespace GoWMS.Server.Data
                     sql.AppendLine("FROM public.sap_operateresult");
                     sql.AppendLine("WHERE (1=1)");
                     sql.AppendLine("AND (work_type in ('01'))");
-                    sql.AppendLine("AND created >= @startdate AND created < @stopdate)");
+                    sql.AppendLine("AND (created >= @startdate AND created < @stopdate)");
                     sql.AppendLine("ORDER BY created ASC");
                     // sql.AppendLine("limit " & LimitRecoard & " offset " & (LimitRecoard * CurrentPage) - LimitRecoard);
                     sql.AppendLine(";");
@@ -443,14 +443,14 @@ namespace GoWMS.Server.Data
                 {
                     StringBuilder sql = new StringBuilder();
                     sql.AppendLine("SELECT ");
-                    sql.AppendLine("created::date as created ,  batch_number, item_code,");
+                    sql.AppendLine("created::date as created , po_no, batch_number, item_code,");
                     sql.AppendLine("item_name, movement_type, movemet_reason, ");
                     sql.AppendLine("SUM(result_qty) as result_qty");
                     sql.AppendLine("FROM public.sap_operateresult");
                     sql.AppendLine("WHERE (1=1)");
                     sql.AppendLine("AND (work_type in ('01'))");
                     //sql.AppendLine("and (created>='" & dtpStart.ToString("s") & "' and created<='" & dtpStop.ToString("s") & "')");
-                    sql.AppendLine("GROUP BY created::date,  batch_number, item_code,");
+                    sql.AppendLine("GROUP BY created::date, po_no, batch_number, item_code,");
                     sql.AppendLine("item_name, movement_type, movemet_reason");
                     sql.AppendLine("ORDER BY created::date , item_code asc");
                     //sql.AppendLine("limit " & LimitRecoard & " offset " & (LimitRecoard * CurrentPage) - LimitRecoard);
@@ -473,7 +473,8 @@ namespace GoWMS.Server.Data
                             Item_Name = rdr["item_name"].ToString(),
                             Movement_Type = rdr["movement_type"].ToString(),
                             Movemet_Reason = rdr["movemet_reason"].ToString(),
-                            Result_Qty = rdr["result_qty"] == DBNull.Value ? null : (decimal?)rdr["result_qty"]
+                            Result_Qty = rdr["result_qty"] == DBNull.Value ? null : (decimal?)rdr["result_qty"],
+                            Po_no = rdr["po_no"].ToString()
                         };
                         lstobj.Add(objrd);
                     }
@@ -499,14 +500,14 @@ namespace GoWMS.Server.Data
                 {
                     StringBuilder sql = new StringBuilder();
                     sql.AppendLine("SELECT ");
-                    sql.AppendLine("created::date as created ,  batch_number, item_code,");
+                    sql.AppendLine("created::date as created , po_no, batch_number, item_code,");
                     sql.AppendLine("item_name, movement_type, movemet_reason, ");
                     sql.AppendLine("SUM(result_qty) as result_qty");
                     sql.AppendLine("FROM public.sap_operateresult");
                     sql.AppendLine("WHERE (1=1)");
                     sql.AppendLine("AND (work_type in ('01'))");
-                    sql.AppendLine("AND created >= @startdate AND created < @stopdate)");
-                    sql.AppendLine("GROUP BY created::date,  batch_number, item_code,");
+                    sql.AppendLine("AND (created >= @startdate AND created < @stopdate)");
+                    sql.AppendLine("GROUP BY created::date, po_no, batch_number, item_code,");
                     sql.AppendLine("item_name, movement_type, movemet_reason");
                     sql.AppendLine("ORDER BY created::date , item_code asc");
                     //sql.AppendLine("limit " & LimitRecoard & " offset " & (LimitRecoard * CurrentPage) - LimitRecoard);
@@ -531,7 +532,8 @@ namespace GoWMS.Server.Data
                             Item_Name = rdr["item_name"].ToString(),
                             Movement_Type = rdr["movement_type"].ToString(),
                             Movemet_Reason = rdr["movemet_reason"].ToString(),
-                            Result_Qty = rdr["result_qty"] == DBNull.Value ? null : (decimal?)rdr["result_qty"]
+                            Result_Qty = rdr["result_qty"] == DBNull.Value ? null : (decimal?)rdr["result_qty"],
+                            Po_no = rdr["po_no"].ToString()
                         };
                         lstobj.Add(objrd);
                     }
@@ -555,14 +557,14 @@ namespace GoWMS.Server.Data
             {
                 StringBuilder sql = new StringBuilder();
                 sql.AppendLine("SELECT ");
-                sql.AppendLine("created::date as created ,  batch_number, item_code,");
+                sql.AppendLine("created::date as created , po_no, batch_number, item_code,");
                 sql.AppendLine("item_name, movement_type, movemet_reason, ");
                 sql.AppendLine("SUM(result_qty) as result_qty");
                 sql.AppendLine("FROM public.sap_operateresult");
                 sql.AppendLine("WHERE (1=1)");
                 sql.AppendLine("AND (work_type in ('01'))");
                 sql.AppendLine("AND created >= @startdate AND created < @stopdate)");
-                sql.AppendLine("GROUP BY created::date,  batch_number, item_code,");
+                sql.AppendLine("GROUP BY created::date, po_no, batch_number, item_code,");
                 sql.AppendLine("item_name, movement_type, movemet_reason");
                 sql.AppendLine("ORDER BY created::date , item_code asc");
                 sql.AppendLine("LIMIT @limitrec  OFFSET @offsetrec");
@@ -589,7 +591,8 @@ namespace GoWMS.Server.Data
                         Item_Name = rdr["item_name"].ToString(),
                         Movement_Type = rdr["movement_type"].ToString(),
                         Movemet_Reason = rdr["movemet_reason"].ToString(),
-                        Result_Qty = rdr["result_qty"] == DBNull.Value ? null : (decimal?)rdr["result_qty"]
+                        Result_Qty = rdr["result_qty"] == DBNull.Value ? null : (decimal?)rdr["result_qty"],
+                        Po_no = rdr["po_no"].ToString()
                     };
                     lstobj.Add(objrd);
                 }
@@ -1305,7 +1308,7 @@ namespace GoWMS.Server.Data
                     sql.AppendLine("FROM public.sap_operateresult");
                     sql.AppendLine("WHERE (1=1)");
                     sql.AppendLine("AND (work_type in ('05'))");
-                    sql.AppendLine("AND (r.created >= @startdate and r.created < @stopdate)");
+                    sql.AppendLine("AND (created >= @startdate and created < @stopdate)");
                     sql.AppendLine("ORDER BY idx asc");
                     //sql.AppendLine("limit " & LimitRecoard & " offset " & (LimitRecoard * CurrentPage) - LimitRecoard);
                     sql.AppendLine(";");
@@ -2127,7 +2130,7 @@ namespace GoWMS.Server.Data
                         };
                         lstobj.Add(objrd);
                     }
-                  
+
                 }
                 catch (NpgsqlException ex)
                 {
@@ -3652,5 +3655,63 @@ namespace GoWMS.Server.Data
         }
 
         #endregion
+
+        public IEnumerable<Helpdesk> GetAllHelpdesk()
+        {
+            List<Helpdesk> lstobj = new List<Helpdesk>();
+            using (NpgsqlConnection con = new NpgsqlConnection(connectionString))
+            {
+                try
+                {
+                    StringBuilder sql = new StringBuilder();
+                    sql.AppendLine("SELECT");
+                    sql.Append("idx, created, entity_lock, modified, client_id, client_ip, ");
+                    sql.Append("hlp_name, hlp_desc, hlp_tel, hlp_mail");
+                    sql.AppendLine("FROM public.set_helpdesk ");
+                    sql.AppendLine("WHERE 1=1");
+                    //sql.AppendLine("and (w_date >='" & dtpStart.ToString("s") & "' and w_date < '" & dtpStop.ToString("s") & "')");
+                    sql.AppendLine("ORDER BY idx ASC ");
+                    //sql.AppendLine("limit " & LimitRecoard & " offset " & (LimitRecoard * CurrentPage) - LimitRecoard);
+                    sql.AppendLine(";");
+
+
+                    NpgsqlCommand cmd = new NpgsqlCommand(sql.ToString(), con)
+                    {
+                        CommandType = CommandType.Text
+                    };
+
+                    con.Open();
+
+                    NpgsqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        Helpdesk objrd = new Helpdesk
+                        {
+                            Idx = rdr["idx"] == DBNull.Value ? null : (long?)rdr["idx"],
+                            Created = rdr["created"] == DBNull.Value ? null : (DateTime?)rdr["created"],
+                            Entity_lock = rdr["entity_lock"] == DBNull.Value ? null : (int?)rdr["entity_lock"],
+                            Modified = rdr["modified"] == DBNull.Value ? null : (DateTime?)rdr["modified"],
+                            Client_id = rdr["client_id"] == DBNull.Value ? null : (long?)rdr["client_id"],
+                            Client_ip = rdr["client_ip"].ToString(),
+                            Hlp_name = rdr["hlp_name"].ToString(),
+                            Hlp_desc = rdr["hlp_desc"].ToString(),
+                            Hlp_tel = rdr["hlp_tel"].ToString(),
+                            Hlp_mail = rdr["hlp_mail"].ToString()
+                        };
+                        lstobj.Add(objrd);
+                    }
+                }
+                catch (NpgsqlException ex)
+                {
+                    Log.Error(ex.ToString());
+                }
+                finally
+                {
+                    con.Close();
+                }
+            }
+            return lstobj;
+        }
+
     }
 }

@@ -1,4 +1,4 @@
-﻿@page "/wh/cyc"
+﻿@page "/2/2_5"
 @using GoWMS.Server.Data
 @using GoWMS.Server.Controllers
 @using GoWMS.Server.Models
@@ -124,9 +124,9 @@ else
 }
 
 @code {
-    private string mPageHeader = "Counting Stock ASRS";
-    private string mPagedesc { get; set; } = "Counting Stock ASRS";
-    private string mPagename { get; set; } = "/wh/cyc";
+    private string mPageHeader = "2.5-Count Check";
+    private string mPagedesc { get; set; } = "2.5-Count Check";
+    private string mPagename { get; set; } = "/2/2_5";
     private string msgAction = "Enter MasterPallet";
     private string mPalletcode { get; set; } = "";
     private string mPackid { get; set; } = null;
@@ -285,11 +285,15 @@ else
                             bCheck = ObjWcsService.CreateCommandMC("G04", 88);
                             mPalletcode = "";
                             Snackbar.Add("Audit successfully", Severity.Success);
+
+                            Elements = await Task.Run(() => ObjWhService.GetPicklist(""));
+
                         }
                         else
                         {
                             Snackbar.Add("Complete Error", Severity.Error);
                         }
+
                     }
                     else
                     {
@@ -324,7 +328,6 @@ else
                 {
                     Snackbar.Add("Find not found PackID please enter again", Severity.Warning);
                 }
-
             }
         }
     }

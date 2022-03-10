@@ -1,4 +1,4 @@
-﻿@page "/rpt/asrsreject"
+﻿@page "/5/5_5_xx"
 
 @using GoWMS.Server.Controllers;
 @using GoWMS.Server.Models.Wcs;
@@ -35,47 +35,48 @@
             <MudButton OnClick="OnclickSearch" Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Search" Size="Size.Medium">Search</MudButton>
         </MudItem>
     </MudGrid>
-    <MudGrid Class="py-2">
-        <MudTable Items="@Elements"
-                  FixedHeader="@fixed_header"
-                  FixedFooter="@fixed_footer"
-                  Height="@(fixed_header || fixed_footer ? "500px" : "")"
-                  Dense="@dense"
-                  Hover="@hover"
-                  Bordered="@bordered" Striped="@striped" Filter="new Func<Rpt_Ejectgate, bool>(FilterFunc)" Style="width:100%;">
-            <ToolBarContent>
-                <MudTooltip Text="Export" Color="Color.Secondary" Placement="Placement.Top">
-                    <MudMenu Icon="@Icons.Filled.Download" Color="Color.Primary">
-                        <MudMenuItem @onclick="@DownloadExcelDocument">EXCEL</MudMenuItem>
-                        <MudMenuItem>PDF</MudMenuItem>
-                    </MudMenu>
-                </MudTooltip>
 
-                <MudToolBarSpacer />
-                <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
-            </ToolBarContent>
-            <HeaderContent>
-                <MudTh>DATETIME</MudTh>
-                <MudTh>PALLET</MudTh>
-                <MudTh>REASON</MudTh>
-                <MudTh>WEIGHT</MudTh>
-                <MudTh>SIZE</MudTh>
-                <MudTh>GATE</MudTh>
-            </HeaderContent>
-            <RowTemplate>
+    <MudAppBar Color="Color.Transparent" Fixed="false" Dense="true">
+        <MudSpacer />
+        <MudTooltip Text=Export Color="Color.Inherit" Placement="Placement.Top">
+            <MudIconButton Icon="@Icons.Custom.FileFormats.FileExcel" Color="Color.Success"></MudIconButton>
+            <MudIconButton Icon="@Icons.Custom.FileFormats.FilePdf" Color="Color.Error"></MudIconButton>
+        </MudTooltip>
+    </MudAppBar>
 
-                <MudTd DataLabel="DATETIME">@Convert.ToDateTime(context.Created).ToString(VarGlobals.FormatDT)</MudTd>
-                <MudTd DataLabel="PALLET">@context.Lpncode</MudTd>
-                <MudTd DataLabel="REASON">@context.Msg</MudTd>
-                <MudTd DataLabel="WEIGHT">@string.Format(VarGlobals.FormatN2, context.Actual_Weight)</MudTd>
-                <MudTd DataLabel="SIZE">@context.Actual_Size</MudTd>
-                <MudTd DataLabel="GATE">@context.Work_Gate</MudTd>
-            </RowTemplate>
-            <PagerContent>
-                <MudTablePager PageSizeOptions="new int[] { 10, 20, 50, 100 }" />
-            </PagerContent>
-        </MudTable>
-    </MudGrid>
+    <MudTable Items="@Elements"
+              FixedHeader="@fixed_header"
+              FixedFooter="@fixed_footer"
+              Height="@(fixed_header || fixed_footer ? "500px" : "")"
+              Dense="@dense"
+              Hover="@hover"
+              Bordered="@bordered" Striped="@striped" Filter="new Func<Rpt_Ejectgate, bool>(FilterFunc)" Style="width:100%;">
+        <ToolBarContent>
+            <MudToolBarSpacer />
+            <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh>DATETIME</MudTh>
+            <MudTh>PALLET</MudTh>
+            <MudTh>REASON</MudTh>
+            <MudTh>WEIGHT</MudTh>
+            <MudTh>SIZE</MudTh>
+            <MudTh>GATE</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+
+            <MudTd DataLabel="DATETIME">@Convert.ToDateTime(context.Created).ToString(VarGlobals.FormatDT)</MudTd>
+            <MudTd DataLabel="PALLET">@context.Lpncode</MudTd>
+            <MudTd DataLabel="REASON">@context.Msg</MudTd>
+            <MudTd DataLabel="WEIGHT">@string.Format(VarGlobals.FormatN2, context.Actual_Weight)</MudTd>
+            <MudTd DataLabel="SIZE">@context.Actual_Size</MudTd>
+            <MudTd DataLabel="GATE">@context.Work_Gate</MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager PageSizeOptions="new int[] { 10, 20, 50, 100 }" />
+        </PagerContent>
+    </MudTable>
+
 
 }
 

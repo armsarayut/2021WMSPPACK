@@ -1,4 +1,4 @@
-﻿@page "/erp/cylinder"
+﻿@page "/9/9_3"
 @using GoWMS.Server.Data
 @using GoWMS.Server.Controllers
 @using GoWMS.Server.Models
@@ -14,14 +14,9 @@
 else
 {
     <MudText Typo="Typo.h6" Color="Color.Primary"> @mPageHeader </MudText>
-    <MudTable Items="@Elements" FixedHeader="@fixed_header" FixedFooter="@fixed_footer" Height="@(fixed_header || fixed_footer ?"600px":"")" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<V_CylinderInfo,bool>(FilterFunc)" @bind-SelectedItem="selectedItem">
+
+    <MudTable Items="@Elements" FixedHeader="@fixed_header" FixedFooter="@fixed_footer" Height="@(fixed_header || fixed_footer ?VarGlobals.TableHeight:"")" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<V_CylinderInfo,bool>(FilterFunc)" @bind-SelectedItem="selectedItem">
         <ToolBarContent>
-            <MudTooltip Text="Export" Color="Color.Secondary" Placement="Placement.Top">
-                <MudMenu Icon="@Icons.Filled.Download" Color="Color.Primary">
-                    <MudMenuItem>Excel</MudMenuItem>
-                    <MudMenuItem>Pdf</MudMenuItem>
-                </MudMenu>
-            </MudTooltip>
             <MudSpacer />
             <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
         </ToolBarContent>
@@ -89,7 +84,9 @@ else
 }
 
 @code {
-    private string mPageHeader = "Cylinders";
+    private string mPageHeader = "9.3-Cylinders";
+    public string mPagedesc { get; set; } = "9.3-Cylinders";
+    private string mPagename { get; set; } = "/9/9_3";
     //private string msgAction = "Enter Palletcode";
     private string mPalletcode { get; set; } = "";
     private string mPackid { get; set; } = "";

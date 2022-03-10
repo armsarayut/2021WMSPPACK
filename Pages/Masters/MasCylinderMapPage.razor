@@ -1,4 +1,4 @@
-﻿@page "/mas/cylinder"
+﻿@page "/6/6_7"
 @using GoWMS.Server.Data
 @using GoWMS.Server.Controllers
 @using GoWMS.Server.Models
@@ -96,7 +96,11 @@ else
             <MudTd Class="clm-row-small" DataLabel="BARCODE">@context.Cylinderbar</MudTd>
             <MudTd Class="clm-row-small" DataLabel="COLOR">@context.Colorcode</MudTd>
             <MudTd DataLabel="ACTION">
-                <MudFab @onclick="@(()=>DeleteMap(@context.Cylindercode, "A"))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small" />
+                <MudFab @onclick="@(()=>DeleteMap(@context.Cylindercode, "A", context.Material))" 
+                        Color="Color.Secondary" 
+                        Icon="@Icons.Material.Filled.Delete" 
+                        Size="Size.Small" 
+                        IconSize="Size.Small" />
             </MudTd>
         </RowTemplate>
         <PagerContent>
@@ -106,7 +110,8 @@ else
 }
 
 @code {
-    private string mPageHeader = "Cylinder Mapping";
+    private string mPageHeader = "6.7-Cylinder";
+    private string mPagename { get; set; } = "/6/6_7";
     private string msgAction = "Enter MasterPallet";
     private string mPalletcode { get; set; } = "";
     private string mPackid { get; set; } = null;
@@ -126,6 +131,8 @@ else
     private IEnumerable<Mas_Pallet_Go> MasterPallets = new List<Mas_Pallet_Go>();
 
     private List<Cylinder> lstobj = new List<Cylinder>();
+
+    private IEnumerable<Mas_Cylinderlist_Go> PalletItemList = new List<Mas_Cylinderlist_Go>();
 
 
     public int elevation = 0;
@@ -173,6 +180,32 @@ else
                 Snackbar.Add("Enter Cylinder", Severity.Normal);
 
                 lstobj.Clear();
+
+                PalletItemList = ObjMasService.GetAllCylinderListGoByPallet(mPalletcode);
+
+                if (PalletItemList.ToList().Count>0)
+                {
+                    foreach (var s in PalletItemList)
+                    {
+                        Cylinder objrd = new Cylinder
+                        {
+                            Material = s.Material_Code,
+                            Material_Description = s.Material_Description,
+                            Customer_Code = s.Customer_Code,
+                            Customer_Description = s.Customer_Description,
+                            Customer_Reference = s.Customer_Reference,
+                            Previos_Ref = s.Previos_ref,
+                            Colorcode = s.Colorcode,
+                            Cylindercode = s.Cylindercode,
+                            Cylinderbar = s.Cylinderbar,
+                            Cylindeno = s.Cylinderno,
+                            IState = 0,
+                            Palletcode = mPalletcode
+                        };
+                        lstobj.Add(objrd);
+                    }
+                    Elements = lstobj.ToList();
+                }
             }
             else
             {
@@ -252,10 +285,6 @@ else
                     }
                 }
 
-
-
-
-
                 Elements = lstobj.ToList();
             }
         }
@@ -314,18 +343,18 @@ else
         return false;
     }
 
-    private void DeleteMap(string pack, string pallet)
+    private void DeleteMap(string pack, string pallet, string matcode)
     {
         msgAction = "Cancle successfully";
 
-        var itemToRemove = lstobj.Single(r => r.Cylindercode == pack);
+        var itemToRemove = lstobj.Single(r => r.Cylindercode == pack && r.Material == matcode);
         lstobj.Remove(itemToRemove);
 
         //ObjErpApiService.CancelReceivingOrderbypack(mPalletcode, pack);
 
-        cOld = Elements.Count();
+        // cOld = Elements.Count();
         // Elements = ObjErpApiService.GetAllApiRecevingorderGosypallet(mPalletcode);
-        cNew = Elements.Count();
+        // cNew = Elements.Count();
 
         Elements = lstobj.ToList();
 

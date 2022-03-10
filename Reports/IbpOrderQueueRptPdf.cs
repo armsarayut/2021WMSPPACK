@@ -15,7 +15,7 @@ namespace GoWMS.Server.Reports
         //-----------------------------
 
         #region Attributes
-        readonly string reportCaption = "Good Receive - Report";
+        readonly string reportCaption = "1.2.Good Receive - Report";
         readonly Boolean bPageLanscape = false;
         #endregion
 
@@ -226,12 +226,12 @@ namespace GoWMS.Server.Reports
             for (var i = 0; i < maxColum; i++) // Set up Colum Size
             {
                 if (i == 0) sizes[i] = 1.75f;
-                else if (i == 1) sizes[i] = 2f;
-                else if (i == 2) sizes[i] = 1f;
+                else if (i == 1) sizes[i] = 1.25f;
+                else if (i == 2) sizes[i] = 2f;
                 else if (i == 3) sizes[i] = 1f;
-                else if (i == 4) sizes[i] = 2f;
+                else if (i == 4) sizes[i] = 1.75f;
                 else if (i == 5) sizes[i] = 3f;
-                else if (i == 6) sizes[i] = 1f;
+                else if (i == 6) sizes[i] = 0.5f;
                 else if (i == 7) sizes[i] = 1f;
                 else sizes[i] = 1f;
             }
@@ -256,7 +256,7 @@ namespace GoWMS.Server.Reports
             };
             bodyTable.AddCell(cell);
 
-            cell = new PdfPCell(new Phrase("Masterpallet", _fontstyeheader))
+            cell = new PdfPCell(new Phrase("Pallet", _fontstyeheader))
             {
                 HorizontalAlignment = Element.ALIGN_LEFT,
                 VerticalAlignment = Element.ALIGN_MIDDLE,
@@ -265,7 +265,7 @@ namespace GoWMS.Server.Reports
             };
             bodyTable.AddCell(cell);
 
-            cell = new PdfPCell(new Phrase("Ducument", _fontstyeheader))
+            cell = new PdfPCell(new Phrase("DNNo", _fontstyeheader))
             {
                 HorizontalAlignment = Element.ALIGN_LEFT,
                 VerticalAlignment = Element.ALIGN_MIDDLE,
@@ -274,7 +274,7 @@ namespace GoWMS.Server.Reports
             };
             bodyTable.AddCell(cell);
 
-            cell = new PdfPCell(new Phrase("PackID", _fontstyeheader))
+            cell = new PdfPCell(new Phrase("DNSeq", _fontstyeheader))
             {
                 HorizontalAlignment = Element.ALIGN_LEFT,
                 VerticalAlignment = Element.ALIGN_MIDDLE,
@@ -283,7 +283,7 @@ namespace GoWMS.Server.Reports
             };
             bodyTable.AddCell(cell);
 
-            cell = new PdfPCell(new Phrase("Material", _fontstyeheader))
+            cell = new PdfPCell(new Phrase("ItemCode", _fontstyeheader))
             {
                 HorizontalAlignment = Element.ALIGN_LEFT,
                 VerticalAlignment = Element.ALIGN_MIDDLE,
@@ -292,7 +292,7 @@ namespace GoWMS.Server.Reports
             };
             bodyTable.AddCell(cell);
 
-            cell = new PdfPCell(new Phrase("Description", _fontstyeheader))
+            cell = new PdfPCell(new Phrase("ItemName", _fontstyeheader))
             {
                 HorizontalAlignment = Element.ALIGN_LEFT,
                 VerticalAlignment = Element.ALIGN_MIDDLE,
@@ -328,7 +328,7 @@ namespace GoWMS.Server.Reports
             iTextSharp.text.BaseColor LineBorderColor = BaseColor.LightGray;
             foreach (var listRpt in ListRpts)
             {
-                cell = new PdfPCell(new Phrase(listRpt.Created.ToString(), _fontstyebody))
+                cell = new PdfPCell(new Phrase(Convert.ToDateTime(listRpt.Created).ToString(VarGlobals.FormatDT), _fontstyebody))
                 {
                     HorizontalAlignment = Element.ALIGN_LEFT,
                     VerticalAlignment = Element.ALIGN_MIDDLE,
@@ -354,7 +354,7 @@ namespace GoWMS.Server.Reports
                 };
                 bodyTable.AddCell(cell);
 
-                cell = new PdfPCell(new Phrase(listRpt.Docno.ToString(), _fontstyebody))
+                cell = new PdfPCell(new Phrase(listRpt.Pono.ToString(), _fontstyebody))
                 {
                     HorizontalAlignment = Element.ALIGN_LEFT,
                     VerticalAlignment = Element.ALIGN_MIDDLE,
@@ -367,7 +367,7 @@ namespace GoWMS.Server.Reports
                 };
                 bodyTable.AddCell(cell);
 
-                cell = new PdfPCell(new Phrase(listRpt.Itemtag.ToString(), _fontstyebody))
+                cell = new PdfPCell(new Phrase(listRpt.Pallettag.ToString(), _fontstyebody))
                 {
                     HorizontalAlignment = Element.ALIGN_LEFT,
                     VerticalAlignment = Element.ALIGN_MIDDLE,
@@ -406,7 +406,7 @@ namespace GoWMS.Server.Reports
                 };
                 bodyTable.AddCell(cell);
 
-                cell = new PdfPCell(new Phrase(listRpt.Quantity.ToString(), _fontstyebody))
+                cell = new PdfPCell(new Phrase(string.Format(VarGlobals.FormatN0, listRpt.Quantity).ToString(), _fontstyebody))
                 {
                     HorizontalAlignment = Element.ALIGN_LEFT,
                     VerticalAlignment = Element.ALIGN_MIDDLE,
@@ -431,6 +431,30 @@ namespace GoWMS.Server.Reports
                     BorderColorTop = LineBorderColor
                 };
                 bodyTable.AddCell(cell);
+
+                bodyTable.CompleteRow();
+            }
+            #endregion
+
+            #region Table No Data
+            if (ListRpts.Count <= 0)
+            {
+                string snull = "";
+                for (var i = 0; i < maxColum; i++)
+                {
+                    cell = new PdfPCell(new Phrase(snull.ToString(), _fontstyebody))
+                    {
+                        HorizontalAlignment = Element.ALIGN_LEFT,
+                        VerticalAlignment = Element.ALIGN_MIDDLE,
+                        BackgroundColor = bodyBackcolor,
+                        BorderWidthTop = 0.5f,
+                        BorderWidthRight = 0f,
+                        BorderWidthBottom = 0f,
+                        BorderWidthLeft = 0f,
+                        BorderColorTop = LineBorderColor
+                    };
+                    bodyTable.AddCell(cell);
+                }
 
                 bodyTable.CompleteRow();
             }

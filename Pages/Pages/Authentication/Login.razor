@@ -11,31 +11,25 @@
 @using GoWMS.Server.Models;
 @inject IConfiguration Configuration
 @inject UserServices ObjUserService
+@inject ReportService UserlogService
 @inject ISnackbar Snackbar
 
 @inject NavigationManager navigationManager
 
 <MudText Typo="Typo.h4" GutterBottom="true">Sign In to GoWMS</MudText>
 
-<MudText>Don't have an account? <MudLink Href="/pages/authentication/register">Sign Up</MudLink></MudText>
+<MudText>Don't have an account? <MudLink Href="/pages/authentication/register" Color="Color.Error">Sign Up</MudLink></MudText>
 
 <MudTextField T="string" @bind-Value="@Userword" Label="UserID" Variant="Variant.Outlined" Class="my-6"></MudTextField>
 
-<MudTextField @bind-Value="@Password" Label="Password" Variant="Variant.Outlined" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="TogglePasswordVisibility" />
-@*
-    <div Class="d-flex justify-space-between align-center">
-        <MudCheckBox T="bool" Label="Remember me?" Color="Color.Primary" Class="ml-n1 my-3"></MudCheckBox>
-        <MudLink Href="/pages/authentication/forgot-password">Forgot pwd?</MudLink>
-    </div>
-*@
+<MudTextField @bind-Value="@Password" Label="Password" Variant="Variant.Outlined" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="TogglePasswordVisibility" OnKeyUp="KeyUp" />
+
 <br />
 
 
 <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" FullWidth="true" OnClick="@btnLogin_Click">Sign In</MudButton>
 
-@*
-    <MudButton Variant="Variant.Filled" Color="Color.Primary" Link="/dashboard" Size="Size.Large" FullWidth="true">Sign In</MudButton>
-*@
+
 
 @code {
     string Password { get; set; } = "@ei0u2020";
@@ -45,6 +39,15 @@
     bool PasswordVisibility;
     InputType PasswordInput = InputType.Password;
     string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+
+    string sUsername { get; set; } = "";
+    string sRole { get; set; } = "";
+    string sGroupID { get; set; } = "";
+    string sUserID { get; set; } = "";
+    public string mPagedesc { get; set; } = "Gowms";
+    private string mPagename { get; set; } = "/Login";
+
+    private string pageheader = "Gowms";
 
     void TogglePasswordVisibility()
     {
@@ -62,47 +65,61 @@
         }
     }
 
+    protected override async Task OnInitializedAsync()
+    {
+
+        await Task.Run(() => ObjUserService.InsertMenu(mPagename, mPagedesc));
+
+    }
 
     private async Task btnLogin_Click()
     {
 
-        if (Password.Length > 0 && Userword.Length > 0)
+        if (Userword.Length > 0)
         {
-            var key = Configuration.GetSection("Appkey")["Pass"].ToString();
-            //var encrypted = Security.EncryptString(Password, key);
-            var encrypted = EncryptProvider.DESEncrypt(Password, key);
-
-            UserElements = await Task.Run(() => ObjUserService.GetUser(Userword, encrypted));
-
-            if (UserElements.Count() > 0)
+            if (Password.Length > 0)
             {
-                var grouid = UserElements.Select(x => x.Usgid).FirstOrDefault();
+                var key = Configuration.GetSection("Appkey")["Pass"].ToString();
+                //var encrypted = Security.EncryptString(Password, key);
+                var encrypted = EncryptProvider.DESEncrypt(Password, key);
 
-                VarGlobals.User.GroupID = grouid.Value;
+                UserElements = await Task.Run(() => ObjUserService.GetUser(Userword, encrypted));
 
-                var authModule = await JSRunTime.InvokeAsync<IJSObjectReference>("import", "./js/auth.js");
-                await authModule.InvokeVoidAsync("SignIn", Userword, encrypted, grouid.ToString(), "/dashboard");
-                var authModules = authModule;
+                if (UserElements.Count() > 0)
+                {
+
+                    var grouid = UserElements.Select(x => x.Usgid).FirstOrDefault();
+
+                    var result1 = UserElements.Where(i => i.Usgid == grouid.Value).FirstOrDefault(); // = 0
+
+                    sUserID = result1.Usid.ToString();
+
+                    this.InsertAuditrial("SignIn User : " + Userword, pageheader);
+
+                    var authModule = await JSRunTime.InvokeAsync<IJSObjectReference>("import", "./js/auth.js");
+                    await authModule.InvokeVoidAsync("SignIn", Userword, encrypted, grouid.ToString(), sUserID, "/dashboard");
+                    var authModules = authModule;
+                }
+                else
+                {
+                    Snackbar.Add("The " + Userword + " user was not found in the system.", Severity.Error);
+                }
             }
             else
             {
-                Snackbar.Add("The " + Userword + " user was not found in the system.", Severity.Error);
+                Snackbar.Add("Please Enter Password", Severity.Warning);
             }
+
         }
         else
         {
-            Snackbar.Add("Please Enter User and Password", Severity.Error);
+            Snackbar.Add("Please Enter UserID", Severity.Warning);
         }
-
-
-
-
 
 
         //navigationManager.NavigateTo("/dashboard" );
 
         //SetUser();
-
 
     }
 
@@ -136,11 +153,24 @@
         VarGlobals.User.DeepID = 1;
         VarGlobals.User.GroupID = 1;
 
-        navigationManager.NavigateTo("/dashboard");
+        navigationManager.NavigateTo("/gowms");
 
         // navigationManager.NavigateTo("/");
 
         //navigationManager.NavigateTo("");
 
+    }
+
+    private void InsertAuditrial(String actdesc, String munname)
+    {
+        bool bRet = UserlogService.InsertAudittrial(actdesc, munname, long.Parse(sUserID));
+    }
+
+    private async void KeyUp(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            await Task.Run(() => btnLogin_Click());
+        }
     }
 }

@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GoWMS.Server.Data;
+using Blazored.Modal;
 // ******
 // BLAZOR COOKIE Auth Code (begin)
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -25,7 +26,6 @@ using Microsoft.AspNetCore.Mvc;
 // ******
 
 
-using Blazored.Modal;
 
 
 namespace GoWMS.Server

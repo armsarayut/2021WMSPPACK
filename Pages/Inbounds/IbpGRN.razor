@@ -1,4 +1,4 @@
-﻿@page "/Pag/1/1_1"
+﻿@page "/1/1_1"
 @using GoWMS.Server.Data
 @using GoWMS.Server.Models
 @using GoWMS.Server.Controllers
@@ -10,6 +10,7 @@
 @inject UserServices OpjUserService
 @inject NavigationManager MyNavigationManager
 
+
 @if (Elements == null)
 {
     // <p><em>Loading...</em></p>
@@ -18,10 +19,20 @@
 else
 {
     <MudText Typo="Typo.h6" Color="Color.Primary">@mPagedesc</MudText>
+
+
+    <MudAppBar Color="Color.Transparent" Fixed="false" Dense="true">
+        <MudSpacer />
+        <MudTooltip Text=Export Color="Color.Inherit" Placement="Placement.Top">
+            <MudIconButton Icon="@Icons.Custom.FileFormats.FileExcel" Color="Color.Success"></MudIconButton>
+            <MudIconButton Icon="@Icons.Custom.FileFormats.FilePdf" Color="Color.Error"></MudIconButton>
+        </MudTooltip>
+    </MudAppBar>
+
     <MudTable Items="@Elements"
               FixedHeader="@fixed_header"
               FixedFooter="@fixed_footer"
-              Height="@(fixed_header || fixed_footer ?"600px":"")"
+              Height="@(fixed_header || fixed_footer ?VarGlobals.TableHeight:"")"
               Dense="@dense"
               Hover="@hover"
               Bordered="@bordered"
@@ -30,12 +41,6 @@ else
               Breakpoint="Breakpoint.Sm"
               Filter="new Func<Inb_Goodreceipt_Go,bool>(FilterFunc)" @bind-SelectedItem="selectedItem">
         <ToolBarContent>
-            <MudTooltip Text="Export" Color="Color.Secondary" Placement="Placement.Top">
-                <MudMenu Icon="@Icons.Filled.Download" Color="Color.Primary">
-                    <MudMenuItem>EXCEL</MudMenuItem>
-                    <MudMenuItem>PDF</MudMenuItem>
-                </MudMenu>
-            </MudTooltip>
             <MudSpacer />
             <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
         </ToolBarContent>
@@ -73,7 +78,7 @@ else
 @code {
 
     public string mPagedesc { get; set; } = "1.1-ReceivingOrder";
-    private string mPagename { get; set; } = "/Pag/1/1_1";
+    private string mPagename { get; set; } = "/1/1_1";
     //private string mPagedesc { get; set; } = "1.1-Receiving Order";
     private string msgAction = "Enter Palletcode";
     private string mPalletcode { get; set; } = "";
@@ -86,6 +91,7 @@ else
     private bool fixed_header = true;
     private bool fixed_footer = true;
     private string searchString = "";
+    private bool ronly = false;
     private Inb_Goodreceipt_Go selectedItem = null;
     private HashSet<Inb_Goodreceipt_Go> selectedItems = new HashSet<Inb_Goodreceipt_Go>();
     private IEnumerable<Inb_Goodreceipt_Go> Elements = new List<Inb_Goodreceipt_Go>();
@@ -94,12 +100,14 @@ else
 
     private ResultReturn resultReturn = null;
 
-
+    [Inject] public IJSRuntime jsRuntime { get; set; }
+    private string stringIP { get; set; }
+    
 
 
     protected override async Task OnInitializedAsync()
     {
-        mPagename = "/Pag/1/1_1";
+        mPagename = "/1/1_1";
 
         InboundService objCS = new InboundService();
         //Elements = await Task.Run(() => objCS.GetReceivingOrdersbypallet(mPalletcode));
@@ -110,8 +118,11 @@ else
         resultReturn = await Task.Run(() => OpjUserService.InsertPrivilege(mPagename));
 
         //InsertAuditrial("1.1-Receiving Order","Admin");
+        //stringIP = await Task.Run(() => GetIpAddress());
+        //await GetIp();
     }
 
+ 
     private void setstr(string str)
     {
         if (mPalletcode.Length <= 0)

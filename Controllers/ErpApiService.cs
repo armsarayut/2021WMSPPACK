@@ -59,6 +59,14 @@ namespace GoWMS.Server.Controllers
             return "Cancel Successfully";
         }
 
+        public string ClaerReceivingOrdersBypallet(string pallet)
+        {
+            objDAL.ClaerReceivingOrdersBypallet(pallet);
+            return "Cancel Successfully";
+        }
+
+        
+
         public string UpdateReceivingOrderbypallet(string pallet)
         {
             objDAL.UpdateReceivingOrdersBypallet(pallet);
@@ -71,9 +79,9 @@ namespace GoWMS.Server.Controllers
             return "Update Successfully";
         }
 
-        public async Task<string> InsertReceivingOrderbypackAsync(List<Api_Receivingorders_Go> listOrder, string pallet)
+        public string InsertReceivingOrderbypackAsync(List<Api_Receivingorders_Go> listOrder, string pallet)
         {
-            await objDAL.InsertReceivingOrdersBypack(listOrder,pallet);
+            objDAL.InsertReceivingOrdersBypack(listOrder,pallet);
             return "Update Successfully";
         }
         public bool ClaerDeliveryOrder(string orderno)

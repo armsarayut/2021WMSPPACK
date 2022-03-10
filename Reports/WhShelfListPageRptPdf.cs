@@ -11,7 +11,7 @@ namespace GoWMS.Server.Reports
     public class WhShelfListPageRptPdf : PdfPageEvents
     {
         #region Attributes
-        readonly string reportCaption = "Location - Report";
+        readonly string reportCaption = "2.3.Location - Report";
         readonly Boolean bPageLanscape = false;
         #endregion
 
@@ -405,6 +405,30 @@ namespace GoWMS.Server.Reports
                     BorderColorTop = LineBorderColor
                 };
                 bodyTable.AddCell(cell);
+
+                bodyTable.CompleteRow();
+            }
+            #endregion
+
+            #region Table No Data
+            if (ListRpts.Count <= 0)
+            {
+                string snull = "";
+                for (var i = 0; i < maxColum; i++)
+                {
+                    cell = new PdfPCell(new Phrase(snull.ToString(), _fontstyebody))
+                    {
+                        HorizontalAlignment = Element.ALIGN_LEFT,
+                        VerticalAlignment = Element.ALIGN_MIDDLE,
+                        BackgroundColor = bodyBackcolor,
+                        BorderWidthTop = 0.5f,
+                        BorderWidthRight = 0f,
+                        BorderWidthBottom = 0f,
+                        BorderWidthLeft = 0f,
+                        BorderColorTop = LineBorderColor
+                    };
+                    bodyTable.AddCell(cell);
+                }
 
                 bodyTable.CompleteRow();
             }
