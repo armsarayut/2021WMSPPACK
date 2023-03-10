@@ -5,6 +5,10 @@
 @using GoWMS.Server.Models.Erp
 @using GoWMS.Server.Models.Inb
 @using GoWMS.Server.Models.Api
+@using System.Security.Claims
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IJSRuntime JSRuntime
 
 @inject NavigationManager UriHelper
 @inject ErpService ObjErpService
@@ -187,7 +191,7 @@ else if (elevation == 4) // Error
                         //ObjApiService.InsertDeliveryOrderAsync(V_List_OF_Materials_NeedsInfos.ToList());
 
                     }
-                    if (V_Reserved_MaterialsCylinderInfos.ToList().Count>0)
+                    if (V_Reserved_MaterialsCylinderInfos.ToList().Count > 0)
                     {
                         //ObjApiService.InsertDeliveryOrderAsync(V_Reserved_MaterialsCylinderInfos.ToList());
                     }
@@ -324,7 +328,6 @@ else if (elevation == 4) // Error
 
                     }
                     // loop to api
-
                 }
                 else
                 {
@@ -340,7 +343,7 @@ else if (elevation == 4) // Error
                         elevation = 1;
                         Filmlinkmo = setFilmlinkmo + mPalletcode;
                         Inklinkmo = setInklinkmo + mPalletcode;
-                        Cyllinkmo = setCyllinkmo + mMatcode +"/MAT";
+                        Cyllinkmo = setCyllinkmo + mMatcode + "/MAT";
                         Othlinkmo = setOthlinkmo + mPalletcode;
                         Alllinkmo = setAlllinkmo + mPalletcode;
                     }
@@ -595,7 +598,7 @@ else if (elevation == 4) // Error
             }
             UriHelper.NavigateTo(Cyllinkmo);
         }
-        else if(mMatcode.Length>0)
+        else if (mMatcode.Length > 0)
         {
             if (V_Reserved_MaterialsInfos.ToList().Count > 0)
             {

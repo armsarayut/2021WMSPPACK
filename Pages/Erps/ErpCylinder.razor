@@ -3,6 +3,10 @@
 @using GoWMS.Server.Controllers
 @using GoWMS.Server.Models
 @using GoWMS.Server.Models.Erp
+@using System.Security.Claims
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IJSRuntime JSRuntime
 
 @inject ErpService ObjErpService
 
@@ -119,6 +123,26 @@ else
         if (element.Material.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         if (element.Customer_Code.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Cylinder1.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Cylinder2.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Cylinder3.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Cylinder4.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Cylinder5.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Cylinder6.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Cylinder7.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Cylinder8.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Cylinder9.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Cylinder10.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         if ($"{element.Material_Description} {element.Customer_Reference} {element.Customer_Description}".Contains(searchString))
             return true;

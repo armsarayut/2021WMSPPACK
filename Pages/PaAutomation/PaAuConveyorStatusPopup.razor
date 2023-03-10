@@ -5,6 +5,10 @@
 @using GoWMS.Server.Models.Wcs;
 @using GoWMS.Server.Data;
 @using System.Net.NetworkInformation;
+@using System.Security.Claims
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IJSRuntime JSRuntime
 
 @inject WcsService ObjWcsService;
 @implements IDisposable;

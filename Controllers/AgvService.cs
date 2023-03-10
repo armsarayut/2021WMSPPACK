@@ -20,11 +20,25 @@ namespace GoWMS.Server.Controllers
             return retlist;
         }
 
+        public List<Tas_Agvworks> GetAllTaskAgvCuRoom()
+        {
+            List<Tas_Agvworks> retlist = objDAL.GetAllTaskAgvCuRoom().ToList();
+            return retlist;
+        }
+
         public List<Set_Agv_Gate> GetAllGateAgv()
         {
             List<Set_Agv_Gate> retlist = objDAL.GetAllGateAgv().ToList();
             return retlist;
         }
+
+        public List<Set_Agv_Gate> GetAllGateAgvCuRoom()
+        {
+            List<Set_Agv_Gate> retlist = objDAL.GetAllGateAgvCuRoom().ToList();
+            return retlist;
+        }
+
+        
 
         public List<Functionreturn> CreateAvgworks(string pallet, string worktype, string gatesource, string gatedest, Int32 workpriority)
 
@@ -32,6 +46,24 @@ namespace GoWMS.Server.Controllers
             List<Functionreturn> retlist = objDAL.CreateAvgworks(pallet, worktype, gatesource, gatedest, workpriority).ToList();
             return retlist;
         }
+
+        public List<Functionreturn> CreateAvgworksCuRoom(string pallet, string worktype, string gatesource, string gatedest, Int32 workpriority)
+
+        {
+            List<Functionreturn> retlist = objDAL.CreateAvgworksCuRoom(pallet, worktype, gatesource, gatedest, workpriority).ToList();
+            return retlist;
+        }
+
+        public List<Functionreturn> CreateAvgworksCuRoomBLL(string pallet, string worktype, string gatesource, string gatedest, Int32 workpriority)
+
+        {
+            List<Functionreturn> retlist = objDAL.CreateAvgworksCuRoomBLL(pallet, worktype, gatesource, gatedest, workpriority).ToList();
+            return retlist;
+        }
+
+        
+
+
 
         public List<Vrptqueueloadtimeagv> GetAllReportTaskAgv()
         {
@@ -44,6 +76,14 @@ namespace GoWMS.Server.Controllers
             List<Functionreturn> retlist = objDAL.CancleTaskAGV(pallet).ToList();
             return retlist;
         }
+
+        public List<Functionreturn> CancleTaskAGVCuRoom(string pallet)
+        {
+            List<Functionreturn> retlist = objDAL.CancleTaskAGVCuRoom(pallet).ToList();
+            return retlist;
+        }
+
+        
 
         public List<RptTaskHourCount> GetAllReportTaskPerHourAgv()
         {
@@ -61,9 +101,21 @@ namespace GoWMS.Server.Controllers
         {
             return objDAL.GetQueryAgvStatusApiName();
         }
+
+        public System.Data.DataTable GetQueryAgvCuStatusApiName()
+        {
+            return objDAL.GetQueryAgvCuStatusApiName();
+        }
+
+        
         public List<Agv_Status> GetAllAgvStatusDesc()
         {
             return objDAL.GetAllAgvStatusDesc();
+        }
+
+        public List<Agv_Status> GetAllAgvCuRoomStatusDesc()
+        {
+            return objDAL.GetAllAgvCuRoomStatusDesc();
         }
 
         public List<AgvRptEODStation> GetEndofDayStation()
@@ -77,6 +129,14 @@ namespace GoWMS.Server.Controllers
             string vFromDate = pFromDate.ToString("yyyy-MM-dd") + " " + pFromTime.ToString(@"hh\:mm\:ss");
             string vToDate = pToDate.ToString("yyyy-MM-dd") + " " + pToTime.ToString(@"hh\:mm\:ss");
             return objDAL.ApiAgvTask(vFromDate, vToDate);
+        }
+
+
+
+         public List<Functionreturn> UpdateStationmodeCuroom(string stationname, bool mode)
+        {
+            List<Functionreturn> retlist = objDAL.UpdateStationmodeCuroom(stationname, mode).ToList();
+            return retlist;
         }
     }
 }

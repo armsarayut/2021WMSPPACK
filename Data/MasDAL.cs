@@ -920,5 +920,151 @@ namespace GoWMS.Server.Data
             return bret;
         }
 
+        public void CancelCylinderListMasterBypack(string pallet, string pack)
+        {
+            using NpgsqlConnection con = new NpgsqlConnection(connectionString);
+            try
+            {
+                StringBuilder sql = new StringBuilder();
+                sql.AppendLine("Delete from  wms.mas_cylinderlist_go");
+                sql.AppendLine("Where itemtag = @Pack ");
+                sql.AppendLine("And palletno = @Pallet");
+                NpgsqlCommand cmd = new NpgsqlCommand(sql.ToString(), con)
+                {
+                    CommandType = CommandType.Text
+                };
+
+                cmd.Parameters.AddWithValue("@Pallet", pallet);
+                cmd.Parameters.AddWithValue("@Pack", pack);
+                con.Open();
+                cmd.ExecuteNonQuery();
+            }
+            catch (NpgsqlException ex)
+            {
+                Log.Error(ex.ToString());
+            }
+            finally
+            {
+                con.Close();
+            }
+        }
+
+        public IEnumerable<Cusetgatemode> GetAllGatecuroomList()
+        {
+            List<Cusetgatemode> lstobj = new List<Cusetgatemode>();
+            using (NpgsqlConnection con = new NpgsqlConnection(connectionString))
+            {
+                try
+                {
+                    StringBuilder Sql = new StringBuilder();
+
+
+                    Sql.AppendLine("select gate_name, ena_inbound, ena_outbound");
+                    Sql.AppendLine("from hagv.set_agv_gate");
+                    Sql.AppendLine("where area_group = 3 and entity_lock = 0");
+                    Sql.AppendLine("order by gate_name");
+                    Sql.AppendLine(";");
+
+                    NpgsqlCommand cmd = new NpgsqlCommand(Sql.ToString(), con)
+                    {
+                        CommandType = CommandType.Text
+                    };
+                    con.Open();
+                    NpgsqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        Cusetgatemode objrd = new Cusetgatemode
+                        {
+                            Gate_name = rdr["gate_name"].ToString(),
+                              Ena_inbound = rdr["ena_inbound"] == DBNull.Value ? false : (bool?)rdr["ena_inbound"],
+                            Ena_outbound = rdr["ena_outbound"] == DBNull.Value ? false : (bool?)rdr["ena_outbound"],
+                        };
+                        lstobj.Add(objrd);
+                    }
+                }
+                catch (NpgsqlException ex)
+                {
+                    Log.Error(ex.ToString());
+                }
+                finally
+                {
+                    con.Close();
+                }
+            }
+            return lstobj;
+        }
+
+
+        public IEnumerable<Mas_Curingtime> GetAllCuringtimeList()
+        {
+            List<Mas_Curingtime> lstobj = new List<Mas_Curingtime>();
+            using (NpgsqlConnection con = new NpgsqlConnection(connectionString))
+            {
+                try
+                {
+                    StringBuilder Sql = new StringBuilder();
+
+
+                    Sql.AppendLine("SELECT efidx, efstatus, created, modified, innovator, device");
+                    Sql.AppendLine(", job, job_code, item_code, adhesive1_std, adhesive2_std, adhesive3_std, adhesive4_std");
+                    Sql.AppendLine(", type, film1, film2, film3, film4, film5, adhesive, hardener, layers, temp_c, time_hr, id");
+                    Sql.AppendLine("FROM wms.mas_curingtime_go");
+                    //Sql.AppendLine("where area_group = 3 and entity_lock = 0");
+                    Sql.AppendLine("order by job, job_code, item_code");
+                    Sql.AppendLine(";");
+
+                    NpgsqlCommand cmd = new NpgsqlCommand(Sql.ToString(), con)
+                    {
+                        CommandType = CommandType.Text
+                    };
+                    con.Open();
+                    NpgsqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        Mas_Curingtime objrd = new Mas_Curingtime
+                        {
+
+
+                            Efidx = rdr["efidx"] == DBNull.Value ? null : (Int64?)rdr["efidx"],
+                            Efstatus = rdr["efstatus"] == DBNull.Value ? null : (Int32?)rdr["efstatus"],
+                            Created = rdr["created"] == DBNull.Value ? null : (DateTime?)rdr["created"],
+                            Modified = rdr["modified"] == DBNull.Value ? null : (DateTime?)rdr["modified"],
+                            Innovator = rdr["innovator"] == DBNull.Value ? null : (Int64?)rdr["innovator"],
+                            Device = rdr["device"].ToString(),
+
+                            Job = rdr["job"].ToString(),
+                            Job_Code = rdr["job_code"].ToString(),
+                            Item_Code = rdr["item_code"].ToString(),
+                            Adhesive1_STD = rdr["adhesive1_std"].ToString(),
+                            Adhesive2_STD = rdr["adhesive2_std"].ToString(),
+                            Adhesive3_STD = rdr["adhesive3_std"].ToString(),
+                            Adhesive4_STD = rdr["adhesive4_std"].ToString(),
+                            Type = rdr["type"].ToString(),
+                            Film1 = rdr["film1"].ToString(),
+                            Film2 = rdr["film2"].ToString(),
+                            Film3 = rdr["film3"].ToString(),
+                            Film4 = rdr["film4"].ToString(),
+                            Film5 = rdr["film5"].ToString(),
+                            Adhesive = rdr["adhesive"].ToString(),
+                            Hardener = rdr["hardener"].ToString(),
+                            Layers = rdr["layers"] == DBNull.Value ? null : (Int32?)rdr["layers"],
+                            TempC = rdr["temp_c"] == DBNull.Value ? null : (Int32?)rdr["temp_c"],
+                            TimeH = rdr["time_hr"] == DBNull.Value ? null : (Int32?)rdr["time_hr"],
+                            ID = rdr["id"].ToString()
+                        };
+                        lstobj.Add(objrd);
+                    }
+                }
+                catch (NpgsqlException ex)
+                {
+                    Log.Error(ex.ToString());
+                }
+                finally
+                {
+                    con.Close();
+                }
+            }
+            return lstobj;
+        }
     }
 }

@@ -13,7 +13,11 @@
 @using GoWMS.Server.Models.Wcs
 @using GoWMS.Server.Reports
 
+@using System.Security.Claims
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IJSRuntime JSRuntime
+
 @inject AgvService AgvObjService
 @inject UserServices OpjUserService
 
@@ -48,6 +52,7 @@ else
             <MudTh>AGV</MudTh>
             <MudTh>Q-STATUS</MudTh>
             <MudTh>TASKCODE</MudTh>
+            <MudTh>DETECTION</MudTh>
             <MudTh>CANCEL</MudTh>
         </HeaderContent>
         <RowTemplate>
@@ -57,7 +62,6 @@ else
             <MudTd DataLabel="TO">@context.Gate_Dest</MudTd>
             <MudTd DataLabel="TASKTYPE">@context.Work_Code</MudTd>
             <MudTd DataLabel="AGV">@context.Agv_Name</MudTd>
-
             <MudTd DataLabel="Q-STATUS">
                 @if (@context.Work_Status == 0)
                     {
@@ -91,6 +95,29 @@ else
                     }
             </MudTd>
             <MudTd DataLabel="TASKCODE">@context.Task_code</MudTd>
+            <MudTd DataLabel="DETECTION">
+
+                 @switch (@context.DestMsg)
+                        {
+                            case "Unavaliable":
+                                <MudChip Variant="Variant.Filled" Color="Color.Warning">@context.DestMsg</MudChip>
+                                break;
+                            case "Avaliable":
+                                <MudChip Variant="Variant.Filled" Color="Color.Success">@context.DestMsg</MudChip>
+                                break;
+                            case "Emptypallet":
+                                <MudChip Variant="Variant.Filled" Color="Color.Info">@context.DestMsg</MudChip>
+                                break;
+                            case "":
+                                <MudChip Variant="Variant.Filled" Color="Color.Dark">no detection</MudChip>
+                                break;
+                            default:
+                                <MudChip Variant="Variant.Filled" Color="Color.Error">@context.DestMsg</MudChip>
+                                break;
+                        }
+
+            </MudTd>
+
             <MudTd DataLabel="CANCEL">
                 <MudFab @onclick="@(()=>CancleTask(@context.Lpncode))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Cancel" Size="Size.Small" IconSize="Size.Small" />
             </MudTd>

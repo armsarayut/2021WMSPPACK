@@ -120,6 +120,9 @@
   <data name="1.Inbound" xml:space="preserve">
     <value>1.ขาเข้า</value>
   </data>
+  <data name="10.CU" xml:space="preserve">
+    <value>10.ห้องอบ</value>
+  </data>
   <data name="2.Warehouse" xml:space="preserve">
     <value>2.คลังสินค้า</value>
   </data>

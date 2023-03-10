@@ -85,6 +85,12 @@ namespace GoWMS.Server.Controllers
             return objDAL.GetSumOrderAllOubGoodPickingGo();
         }
 
+        public List<Inb_GrCutime> GetGRCutime(string pallet)
+        {
+            List<Inb_GrCutime> retlist = objDAL.GetGRCutime(pallet).ToList();
+            return retlist;
+        }
+
 
     }
 }

@@ -22,7 +22,7 @@
                 <MudIcon Icon="@Icons.Material.Filled.Receipt" Color="Color.Primary" Class="mx-4" Style="width:40px; height:40px;"></MudIcon>
                 <div>
                     <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@L["PendingReceving"]</MudText>
-                    <MudText Typo="Typo.subtitle1">0</MudText>
+                    <MudText Typo="Typo.subtitle1">@orderPut</MudText>
                 </div>
             </MudPaper>
         </MudItem>
@@ -31,7 +31,7 @@
                 <MudIcon Icon="@Icons.Material.Filled.Queue" Color="Color.Secondary" Class="mx-4" Style="width:40px; height:40px;"></MudIcon>
                 <div>
                     <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@L["PendingPutaway"]</MudText>
-                    <MudText Typo="Typo.subtitle1">0</MudText>
+                    <MudText Typo="Typo.subtitle1">@palletPut</MudText>
                 </div>
             </MudPaper>
         </MudItem>
@@ -40,7 +40,7 @@
                 <MudIcon Icon="@Icons.Material.Filled.ShoppingCart" Color="Color.Success" Class="mx-4" Style="width:40px; height:40px;"></MudIcon>
                 <div>
                     <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@L["Pendingpicking"]</MudText>
-                    <MudText Typo="Typo.subtitle1">0</MudText>
+                    <MudText Typo="Typo.subtitle1">@orderPicking</MudText>
                 </div>
             </MudPaper>
         </MudItem>
@@ -49,7 +49,7 @@
                 <MudIcon Icon="@Icons.Material.Filled.EventAvailable" Color="Color.Warning" Class="mx-4" Style="width:40px; height:40px;"></MudIcon>
                 <div>
                     <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">@L["CompleteOrder"]</MudText>
-                    <MudText Typo="Typo.subtitle1">0</MudText>
+                    <MudText Typo="Typo.subtitle1">@orderCompletePut/@orderCompletePick</MudText>
                 </div>
             </MudPaper>
         </MudItem>
@@ -279,7 +279,7 @@
 
     private IEnumerable<Vrpt_operationresult_sum> Elementorders = new List<Vrpt_operationresult_sum>();
 
-
+    /*
     EarningReport[] earningReports = new EarningReport[]
 {
         new EarningReport { Name = "SRM01", Title = "Disconnect", Avatar = "https://avatars2.githubusercontent.com/u/71094850?s=460&u=66c16f5bb7d27dc751f6759a82a3a070c8c7fe4b&v=4", Salary = "10:01", Severity = Color.Error, SeverityTitle = "High"},
@@ -296,6 +296,7 @@
         public string SeverityTitle;
         public string Salary;
     }
+    */
 
     private Int64 L1Total = 0;
     private Int64 L1Use = 0;
@@ -397,6 +398,22 @@
         ShowASRSTask();
 
         bPageintial = true;
+
+        if (Elementorders.ToList().Count > 0)
+        {
+            var vorderCompletePut = Elementorders.Select(a => a.C01).Single();
+            orderCompletePut = (Int64)vorderCompletePut;
+
+            var vorderCompletePick = Elementorders.Select(a => a.C05).Single();
+            orderCompletePick = (Int64)vorderCompletePick;
+        }
+        else
+        {
+            orderCompletePut = 0;
+            orderCompletePick = 0;
+
+        }
+
     }
 
     private void setstr(string str)

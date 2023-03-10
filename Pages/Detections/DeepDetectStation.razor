@@ -4,6 +4,11 @@
 @using GoWMS.Server.Controllers;
 @using GoWMS.Server.Models;
 @using GoWMS.Server.Data;
+@using System.Security.Claims
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IJSRuntime JSRuntime
+
 @inject IHttpClientFactory _clientFactory;
 @inject IModalService modal;
 @inject UserServices ObjUser;
@@ -38,7 +43,7 @@ else
             <MudTd>@context.Modified</MudTd>
             <MudTd>@context.CameraIp</MudTd>
             <MudTd>@context.GateName</MudTd>
-            <MudTd >
+            <MudTd>
                 @switch (@context.ObjectName)
                     {
                         case "Unavaliable":
@@ -57,9 +62,9 @@ else
             </MudTd>
             <MudTd>
                 @*<MudIconButton Color="@Color.Default" Icon="@Icons.Filled.Image" @onclick="@(()=> modal.Show<Automations.DeepDetectImgPopup>("Detection Image Capture"))">
-        </MudIconButton>*@
+                    </MudIconButton>*@
                 @*<MudIconButton Color="@Color.Default" Icon="@Icons.Filled.PhotoCamera" @onclick="@(()=> OnclickImgPopup(context.CameraIp, context.GateName, context.ObjectName))">
-                </MudIconButton>*@
+                    </MudIconButton>*@
 
                 <MudIconButton Color="@Color.Default" Icon="@Icons.Filled.PhotoCamera" @onclick="@(()=> OnclickImgPopupAPI( context.CameraName))">
                 </MudIconButton>
@@ -100,7 +105,7 @@ else
     {
         //InitialTimer();
         //ExecuteApi();
-        Roles =  await Task.Run(() => ObjUser.GetUserRole(mPagename, VarGlobals.User.GroupID ));
+        Roles = await Task.Run(() => ObjUser.GetUserRole(mPagename, VarGlobals.User.GroupID));
         await Task.Run(() => DbGetDetectionAPI());
         await Task.Run(() => DbGetDeepDetect());
 
@@ -156,7 +161,7 @@ else
         }
         if (vDt.Rows.Count == 0)
             return;
-        for(int i=0; i<vDt.Rows.Count; i++)
+        for (int i = 0; i < vDt.Rows.Count; i++)
         {
             dataModel vTemp = new dataModel();
             vTemp.CameraIp = vDt.Rows[i]["camera_ip"].ToString();
@@ -169,7 +174,7 @@ else
     }
     async void OnclickImgPopup(string pCameraIp, string sGate, string sObject)
     {
-        if (Roles.Where(x => x.Role_apv == true).Count()>0)
+        if (Roles.Where(x => x.Role_apv == true).Count() > 0)
         {
             //var httpRequestMessage = new HttpRequestMessage(
             //HttpMethod.Get, detectionUrl + @"/DeepDetectStationCaptureImage?gateName=" + pGateName);
@@ -217,7 +222,7 @@ else
             }
             var parameters = new ModalParameters();
             parameters.Add(nameof(Detections.DeepDetectImgPopup.ImgBase64), vBase64);
-            modal.Show<Detections.DeepDetectImgPopup>("CAMERA: " + pCameraIp + " STATION:" + sGate + " OBJECT:" + sObject , parameters);
+            modal.Show<Detections.DeepDetectImgPopup>("CAMERA: " + pCameraIp + " STATION:" + sGate + " OBJECT:" + sObject, parameters);
         }
         else
         {
@@ -225,7 +230,7 @@ else
         }
     }
 
-    void ShowSnackbar(string message, string position, Severity Severity )
+    void ShowSnackbar(string message, string position, Severity Severity)
     {
         Snackbar.Clear();
         Snackbar.Configuration.PositionClass = position;

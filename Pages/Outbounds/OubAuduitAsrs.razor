@@ -4,6 +4,11 @@
 @using GoWMS.Server.Models
 @using GoWMS.Server.Models.Inv
 @using System.Text.Json
+@using System.Security.Claims
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IJSRuntime JSRuntime
+
 @inject InvService ObjService
 @inject PublicFunServices ObjFunService
 @inject IDialogService DialogService
@@ -32,53 +37,53 @@ else
             <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Done"
                        Color="Color.Success"
                        OnClick=@OnButtonOrderSelected>START</MudButton>
-                    <MudSpacer />
-                </MudAppBar>
+            <MudSpacer />
+        </MudAppBar>
 
-                <MudTable Items="@Elements.Where(x => x.Efstatus == iState)"
-                          FixedHeader="@fixed_header"
-                          FixedFooter="@fixed_footer"
-                          Height="@(fixed_header || fixed_footer ?VarGlobals.TableHeight:"")"
-                          MultiSelection="true"
-                          Dense="@dense"
-                          Hover="@hover"
-                          Bordered="@bordered"
-                          Striped="@striped"
-                          Filter="new Func<Inv_Stock_GoInfo,bool>(FilterFunc)"
-                          @bind-SelectedItems="selectedItems">
-                    <ToolBarContent>
-                        <MudToolBarSpacer />
-                        <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
-                    </ToolBarContent>
-                    <HeaderContent>
-                        <MudTh>MO</MudTh>
-                        <MudTh>MATERIAL</MudTh>
-                        <MudTh>DESCRIPTION</MudTh>
-                        <MudTh>STOCK</MudTh>
-                        <MudTh>PACKID</MudTh>
-                        <MudTh>ROLLID</MudTh>
-                        <MudTh Style="width: 120px;">PALLET</MudTh>
-                        <MudTh>STOREDATE</MudTh>
-                    </HeaderContent>
-                    <RowTemplate>
-                        <MudTd Class="clm-row-small" DataLabel="MO">@context.Docno</MudTd>
-                        <MudTd Class="clm-row-small" DataLabel="MATERIAL">@context.Itemcode</MudTd>
-                        <MudTd Class="clm-row-small" DataLabel="DESCRIPTION">@context.Itemname</MudTd>
-                        <MudTd Class="clm-row-small" DataLabel="STOCK" Style="text-align:right">@string.Format(VarGlobals.FormatN2, context.Quantity)</MudTd>
-                        <MudTd Class="clm-row-small" DataLabel="PACKID">@context.Pallettag</MudTd>
-                        <MudTd Class="clm-row-small" DataLabel="ROLLID">@context.Itemtag</MudTd>
-                        <MudTd Class="clm-row-small" DataLabel="PALLET">@context.Pallteno</MudTd>
-                        <MudTd Class="clm-row-small" DataLabel="STOREDATE">@Convert.ToDateTime(context.Storagetime).ToString(VarGlobals.FormatDT)</MudTd>
-                    </RowTemplate>
-                    <PagerContent>
-                        <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />
-                    </PagerContent>
-                </MudTable>
-            }
-            else
-            {
+        <MudTable Items="@Elements.Where(x => x.Efstatus == iState)"
+                  FixedHeader="@fixed_header"
+                  FixedFooter="@fixed_footer"
+                  Height="@(fixed_header || fixed_footer ?VarGlobals.TableHeight:"")"
+                  MultiSelection="true"
+                  Dense="@dense"
+                  Hover="@hover"
+                  Bordered="@bordered"
+                  Striped="@striped"
+                  Filter="new Func<Inv_Stock_GoInfo,bool>(FilterFunc)"
+                  @bind-SelectedItems="selectedItems">
+            <ToolBarContent>
+                <MudToolBarSpacer />
+                <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+            </ToolBarContent>
+            <HeaderContent>
+                <MudTh>MO</MudTh>
+                <MudTh>MATERIAL</MudTh>
+                <MudTh>DESCRIPTION</MudTh>
+                <MudTh>STOCK</MudTh>
+                <MudTh>PACKID</MudTh>
+                <MudTh>ROLLID</MudTh>
+                <MudTh Style="width: 120px;">PALLET</MudTh>
+                <MudTh>STOREDATE</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd Class="clm-row-small" DataLabel="MO">@context.Docno</MudTd>
+                <MudTd Class="clm-row-small" DataLabel="MATERIAL">@context.Itemcode</MudTd>
+                <MudTd Class="clm-row-small" DataLabel="DESCRIPTION">@context.Itemname</MudTd>
+                <MudTd Class="clm-row-small" DataLabel="STOCK" Style="text-align:right">@string.Format(VarGlobals.FormatN2, context.Quantity)</MudTd>
+                <MudTd Class="clm-row-small" DataLabel="PACKID">@context.Pallettag</MudTd>
+                <MudTd Class="clm-row-small" DataLabel="ROLLID">@context.Itemtag</MudTd>
+                <MudTd Class="clm-row-small" DataLabel="PALLET">@context.Pallteno</MudTd>
+                <MudTd Class="clm-row-small" DataLabel="STOREDATE">@Convert.ToDateTime(context.Storagetime).ToString(VarGlobals.FormatDT)</MudTd>
+            </RowTemplate>
+            <PagerContent>
+                <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />
+            </PagerContent>
+        </MudTable>
+    }
+    else
+    {
 
-            }
+    }
 
     <MudMessageBox @ref="mbox" Title="@mboxheader" CancelText="Cancel">
         <MessageContent>

@@ -3,6 +3,10 @@
 @using GoWMS.Server.Controllers;
 @using GoWMS.Server.Models.Wcs;
 @using GoWMS.Server.Data;
+@using System.Security.Claims
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IJSRuntime JSRuntime
 
 @inject WcsService ObjWcsService
 @inject UserServices OpjUserService

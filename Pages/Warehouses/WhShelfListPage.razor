@@ -12,6 +12,10 @@
 @using GoWMS.Server.Models
 @using GoWMS.Server.Models.Inv
 @using GoWMS.Server.Reports
+@using System.Security.Claims
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IJSRuntime JSRuntime
 
 @inject IJSRuntime JSRuntime
 @inject InvService ObjService
@@ -64,9 +68,9 @@ else
             <MudTd Class="clm-row-small" DataLabel="LEVEL">@context.Shelflevel</MudTd>
             <MudTd Class="clm-row-small" DataLabel="PALLET">@context.Lpncode</MudTd>
             <MudTd Class="clm-row-small" DataLabel="UPDATED">
-                @if (context.Modified != null)
+                    @if (context.Modified != null)
                     {
-                    @Convert.ToDateTime(context.Modified).ToString(VarGlobals.FormatDT)
+                        @Convert.ToDateTime(context.Modified).ToString(VarGlobals.FormatDT)
                     }
             </MudTd>
             <MudTd Class="clm-row-small" DataLabel="STATUS">

@@ -126,6 +126,9 @@
   <data name="Itemtag" xml:space="preserve">
     <value>หมายเลข</value>
   </data>
+  <data name="MOBA" xml:space="preserve">
+    <value>เลขMO</value>
+  </data>
   <data name="pageHeader" xml:space="preserve">
     <value>เบิกแมนนวล</value>
   </data>

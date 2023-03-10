@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using GoWMS.Server.Data;
 using GoWMS.Server.Models;
 using GoWMS.Server.Models.Api;
+using GoWMS.Server.Models.Erp;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GoWMS.Server.Controllers
@@ -179,15 +180,42 @@ namespace GoWMS.Server.Controllers
             return sret;
         }
 
+        public string SetPickingUnplaned_curoom(string jsonRes, ref Int32 iret, ref string sret)
+        {
+            objDAL.SetPickingUnplaned_curoom(jsonRes, ref iret, ref sret);
+            return sret;
+        }
+
+        
+
         public string SetAuduitASrsUnplaned(string jsonRes, ref Int32 iret, ref string sret)
         {
             objDAL.SetAuduitASrsUnplaned(jsonRes, ref iret, ref sret);
             return sret;
         }
 
-      
 
+        //public string InsertReceivingOrderbypackAsync(List<Api_Receivingorders_Go> listOrder, string pallet)
+        //{
+        //    objDAL.InsertReceivingOrdersBypack(listOrder, pallet);
+        //    return "Update Successfully";
+        //}
 
+        public bool UpdateCutime(List<Cutime> listOrder)
+
+        {
+            bool bret;
+
+            bret = objDAL.UpdateCutime(listOrder.ToList());
+
+            return bret;
+        }
+
+        public void InsertHangingBypallet(string pallet)
+        {
+            objDAL.InsertHangingBypallet(pallet);
+          
+        }
 
     }
 }

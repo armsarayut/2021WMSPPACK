@@ -13,6 +13,10 @@
 @using GoWMS.Server.Models.Wcs
 @using GoWMS.Server.Models.Hagv
 @using GoWMS.Server.Reports
+@using System.Security.Claims
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IJSRuntime JSRuntime
 
 @inject IJSRuntime JSRuntime
 @inject AgvService AgvObjService

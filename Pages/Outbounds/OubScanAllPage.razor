@@ -8,6 +8,10 @@
 @using System.Reflection
 @using System.Text.Json
 @using GoWMS.Server.Models.Hagv
+@using System.Security.Claims
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IJSRuntime JSRuntime
 
 @inject ErpApiService ObjApiService
 @inject UserServices OpjUserService
@@ -74,6 +78,7 @@ else
                 <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Material_Code)">MATERIAL</MudTableSortLabel></MudTh>
                 <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Material_Description)">DESCRIPTION</MudTableSortLabel></MudTh>
                 <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Quantity)">QTY</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Picked)">PICK</MudTableSortLabel></MudTh>
                 <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Unit)">UNIT</MudTableSortLabel></MudTh>
             </HeaderContent>
             <RowTemplate>
@@ -84,6 +89,7 @@ else
                 <MudTd DataLabel="MATERIAL">@context.Material_Code</MudTd>
                 <MudTd DataLabel="DESCRIPTION">@context.Material_Description</MudTd>
                 <MudTd DataLabel="QTY">@string.Format(VarGlobals.FormatN2, context.Quantity)</MudTd>
+                <MudTd DataLabel="PICK"><MudNumericField @bind-Value="@context.Picked" Required Min="0" Max="@context.Quantity" /></MudTd>
                 <MudTd DataLabel="Unit">@context.Unit</MudTd>
             </RowTemplate>
             <PagerContent>
@@ -144,12 +150,14 @@ else
                 <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Finished_Product)">PRODUCT</MudTableSortLabel></MudTh>
                 <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Material_Code)">MATERIAL</MudTableSortLabel></MudTh>
                 <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Quantity)">QTY</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Picked)">PICK</MudTableSortLabel></MudTh>
                 <MudTh><MudTableSortLabel SortBy="new Func<Api_Deliveryorder_Go, object>(x=>x.Unit)">UNIT</MudTableSortLabel></MudTh>
             </HeaderContent>
             <RowTemplate>
                 <MudTd DataLabel="PRODUCT">@context.Finished_Product</MudTd>
                 <MudTd DataLabel="MATERIAL">@context.Material_Code</MudTd>
                 <MudTd DataLabel="QTY">@string.Format(VarGlobals.FormatN2, context.Quantity)</MudTd>
+                <MudTd DataLabel="PICK"><MudNumericField @bind-Value="@context.Picked" Required Min="0" Max="@context.Quantity" /></MudTd>
                 <MudTd DataLabel="UNIT">@context.Unit</MudTd>
             </RowTemplate>
             <PagerContent>
@@ -346,7 +354,7 @@ else
         DeliveryDate = dat.Add(tim);
         string agvdestination = destvalue;
 
-        var strLON = selectLON.OrderBy(x => x.Efidx).Select(x => new { efidx = x.Efidx, quantity = x.Quantity, packageid = x.Package_Id, materialcode = x.Material_Code }).ToList();
+        var strLON = selectLON.OrderBy(x => x.Efidx).Select(x => new { efidx = x.Efidx, quantity = x.Picked, packageid = x.Package_Id, materialcode = x.Material_Code }).ToList();
         var strRES = selectRES.OrderBy(x => x.Efidx).Select(x => new { efidx = x.Efidx, quantity = x.Quantity, packageid = x.Package_Id, materialcode = x.Material_Code }).ToList();
 
 

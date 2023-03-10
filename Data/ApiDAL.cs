@@ -8,9 +8,11 @@ using System.Threading.Tasks;
 using GoWMS.Server.Controllers;
 using GoWMS.Server.Models;
 using GoWMS.Server.Models.Api;
+using GoWMS.Server.Models.Erp;
 using NpgsqlTypes;
 using System.Text;
 using Serilog;
+
 
 namespace GoWMS.Server.Data
 {
@@ -381,6 +383,11 @@ namespace GoWMS.Server.Data
             }
         }
 
+
+
+
+
+
         public void ClaerReceivingOrdersBypack( string pack)
         {
 
@@ -568,6 +575,7 @@ namespace GoWMS.Server.Data
                 con.Close();
             }
         }
+
 
         public bool ClaerDeliveryOrder(string orderno)
         {
@@ -1282,6 +1290,48 @@ namespace GoWMS.Server.Data
             }
         }
 
+
+        public void SetPickingUnplaned_curoom(string jsonRES, ref Int32 Refiret, ref string Refsret)
+        {
+            Int32? iRet = 0;
+            string sRet = "Calling";
+            NpgsqlConnection con = new NpgsqlConnection(connectionString);
+            try
+            {
+                con.Open();
+                StringBuilder sql = new StringBuilder();
+
+                sql.AppendLine("CALL wms.poc_oub_deliveryorderselectunplanned_curoom(");
+                sql.AppendLine(":jsonbook, :retchk, :retmsg)");
+                NpgsqlCommand cmd = new NpgsqlCommand(sql.ToString(), con)
+                {
+                    CommandType = CommandType.Text
+                };
+
+                cmd.Parameters.AddWithValue("jsonbook", NpgsqlDbType.Json, jsonRES);
+                cmd.Parameters.AddWithValue("retchk", NpgsqlDbType.Integer, iRet);
+                cmd.Parameters.AddWithValue("retmsg", NpgsqlDbType.Varchar, sRet);
+                NpgsqlDataReader rdr = cmd.ExecuteReader();
+                while (rdr.Read())
+                {
+                    iRet = rdr["retchk"] == DBNull.Value ? null : (Int32?)rdr["retchk"];
+                    sRet = rdr["retmsg"].ToString();
+
+                }
+                Refiret = (int)iRet;
+                Refsret = sRet;
+
+            }
+            catch (NpgsqlException exp)
+            {
+                //Response.Write(exp.ToString());
+            }
+            finally
+            {
+                con.Close();
+            }
+        }
+
         public void SetAuduitASrsUnplaned(string jsonRES, ref Int32 Refiret, ref string Refsret)
         {
             Int32? iRet = 0;
@@ -1316,6 +1366,132 @@ namespace GoWMS.Server.Data
             catch (NpgsqlException exp)
             {
                 //Response.Write(exp.ToString());
+            }
+            finally
+            {
+                con.Close();
+            }
+        }
+
+
+
+        public bool UpdateCutime(List<Cutime> listOrder)
+        {
+            bool bret = false;
+
+            using NpgsqlConnection con = new NpgsqlConnection(connectionString);
+            try
+            {
+                StringBuilder sql = new StringBuilder();
+                StringBuilder npgInsertQurey = new StringBuilder();
+                npgInsertQurey.AppendLine("SELECT wms.fuc_update_curing( ");
+                npgInsertQurey.AppendLine("(ARRAY[ ");
+
+
+
+              
+                var i = 0;
+              
+                
+
+                foreach (var s in listOrder)
+                {
+
+                    if (i != 0) npgInsertQurey.AppendLine(",");
+
+                    npgInsertQurey.Append("'(");
+                   npgInsertQurey.Append("" + s.Job + ",");
+                    npgInsertQurey.Append("" + s.Job_Code  + ",");
+                    npgInsertQurey.Append("" + s.Item_Code + ",");
+                    npgInsertQurey.Append("" + s.Adhesive1_STD + ",");
+                    npgInsertQurey.Append("" + s.Adhesive2_STD + ",");
+                    npgInsertQurey.Append("" + s.Adhesive3_STD + ",");
+                    npgInsertQurey.Append("" + s.Adhesive4_STD + ",");
+                    npgInsertQurey.Append("" + s.Type + ",");
+                    npgInsertQurey.Append("" + s.Film1 + ",");
+                    npgInsertQurey.Append("" + s.Film2 + ",");
+                    npgInsertQurey.Append("" + s.Film3 + ",");
+                    npgInsertQurey.Append("" + s.Film4 + ",");
+                    npgInsertQurey.Append("" + s.Film5 + ",");
+                    npgInsertQurey.Append("" + s.Adhesive + ",");
+                    npgInsertQurey.Append("" + s.Hardener + ",");
+                    npgInsertQurey.Append("" + s.Layers + ",");
+                    npgInsertQurey.Append("" + s.TempC + ",");
+                    npgInsertQurey.Append("" + s.TimeH + ",");
+                    npgInsertQurey.Append("" + s.ID );
+
+                    npgInsertQurey.AppendLine(")'");
+
+
+                    i++;
+                }
+                npgInsertQurey.AppendLine("])");
+
+
+                npgInsertQurey.AppendLine("::wms." + @"""" + "tyCuring" + @"""" + "[]);");
+
+                //::wms."tyCuring"[]);
+
+
+                NpgsqlCommand cmd = new NpgsqlCommand(npgInsertQurey.ToString(), con)
+                {
+                    CommandType = CommandType.Text
+                };
+
+
+
+
+
+
+                con.Open();
+                cmd.ExecuteNonQuery();
+                bret = true;
+            }
+            catch (NpgsqlException ex)
+            {
+                Log.Error(ex.ToString());
+                bret = false;
+            }
+            finally
+            {
+                con.Close();
+            }
+
+
+            return bret;
+        }
+
+
+        public void InsertHangingBypallet(string pallet)
+        {
+
+            Int32? iRet = 0;
+            string sRet = "Calling";
+            NpgsqlConnection con = new NpgsqlConnection(connectionString);
+            try
+            {
+                con.Open();
+                StringBuilder sql = new StringBuilder();
+                sql.AppendLine("Call wms.poc_inb_insertapi_hanging(");
+                sql.AppendLine("@spalletno, @retchk, @retmsg)");
+                NpgsqlCommand cmd = new NpgsqlCommand(sql.ToString(), con)
+                {
+                    CommandType = CommandType.Text
+                };
+
+                cmd.Parameters.AddWithValue("@spalletno", pallet);
+                cmd.Parameters.AddWithValue("@retchk", iRet);
+                cmd.Parameters.AddWithValue("@retmsg", sRet);
+                NpgsqlDataReader rdr = cmd.ExecuteReader();
+                while (rdr.Read())
+                {
+                    iRet = rdr["retchk"] == DBNull.Value ? null : (Int32?)rdr["retchk"];
+                    sRet = rdr["retmsg"].ToString();
+                }
+            }
+            catch (NpgsqlException ex)
+            {
+                Log.Error(ex.ToString());
             }
             finally
             {

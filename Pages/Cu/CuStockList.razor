@@ -1,0 +1,262 @@
+﻿@page "/10/10_4"
+@using GoWMS.Server.Data
+@using GoWMS.Server.Controllers
+@using GoWMS.Server.Models
+@using GoWMS.Server.Models.Inv
+@using GoWMS.Server.Pdf
+@using GoWMS.Server.Reports
+@using System.Security.Claims
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IJSRuntime JSRuntime
+
+@inject InvService ObjService
+@inject UserServices OpjUserService
+@inject ReportService UserlogService
+@inject IJSRuntime JSRuntime
+
+@if (Elements == null)
+{
+    // <p><em>Loading...</em></p>
+    <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
+}
+else
+{
+    <MudText Typo="Typo.h6" Color="Color.Primary"> @mPagecaption </MudText>
+    <MudAppBar Color="Color.Transparent" Fixed="false" Dense="true">
+        <MudSwitch T="bool" CheckedChanged="@OnSelectChange" Color="Color.Primary" Label="Select View Stock" />
+        <MudSpacer />
+        <MudTooltip Text=Export Color="Color.Inherit" Placement="Placement.Top">
+            <MudIconButton Icon="@Icons.Custom.FileFormats.FileExcel" Color="Color.Success" OnClick="DownloadExcelDocument"></MudIconButton>
+            <MudIconButton Icon="@Icons.Custom.FileFormats.FilePdf" Color="Color.Error"></MudIconButton>
+        </MudTooltip>
+    </MudAppBar>
+
+    @if (StkGroup)
+    {
+        <MudTable Items="@Elements" FixedHeader="@fixed_header" FixedFooter="@fixed_footer" Height="@(fixed_header || fixed_footer ?VarGlobals.TableHeight:"")" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<InvStockList,bool>(FilterFunc)" @bind-SelectedItem="selectedItem">
+            <ToolBarContent>
+                <MudSpacer />
+                <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+            </ToolBarContent>
+            <HeaderContent>
+                <MudTh>OVERTIME</MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<InvStockList, object>(x=>x.Item_code)">MATERIAL</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<InvStockList, object>(x=>x.Item_name)">DESCRIPTION</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<InvStockList, object>(x=>x.Qty)">STOCK</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<InvStockList, object>(x=>x.Su_no)">PACKID</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<InvStockList, object>(x=>x.Tag_no)">ROLLID</MudTableSortLabel></MudTh>
+                <MudTh Style="width: 120px;"><MudTableSortLabel SortBy="new Func<InvStockList, object>(x=>x.Palletcode)">PALLET</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<InvStockList, object>(x=>x.StorageArae)">AREA</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<InvStockList, object>(x=>x.Shelfname)">STROAGEBIN</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<InvStockList, object>(x=>x.AgeTimes)">AGES</MudTableSortLabel></MudTh>
+                <MudTh><MudTableSortLabel SortBy="new Func<InvStockList, object>(x=>x.LimitTime)">LIMIT(Hr)</MudTableSortLabel></MudTh>
+                <MudTh>ACTION</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+
+                @if ((context.LimitTime * 60) < context.AgeMinutes)
+                        {
+                    <MudTd DataLabel="OVERTIME">
+                        <MudIcon Icon="@Icons.Filled.EmojiEmotions" Color="Color.Success" />
+                    </MudTd>
+                        }
+                        else
+                        {
+                    <MudTd DataLabel="OVERTIME">
+                        <MudIcon Icon="@Icons.Filled.MoodBad" Color="Color.Error" />
+                    </MudTd>
+                        }
+
+                <MudTd Class="clm-row-small" DataLabel="MATERIAL">@context.Item_code</MudTd>
+                <MudTd Class="clm-row-small" DataLabel="DESCRIPTION">@context.Item_name</MudTd>
+                <MudTd Class="clm-row-small" DataLabel="STOCK" Style="text-align:right">@string.Format(VarGlobals.FormatN2, context.Qty)</MudTd>
+                <MudTd Class="clm-row-small" DataLabel="PACKID">@context.Su_no</MudTd>
+                <MudTd Class="clm-row-small" DataLabel="ROLLID">@context.Tag_no</MudTd>
+                <MudTd Class="clm-row-small" DataLabel="PALLET">@context.Palletcode</MudTd>
+                <MudTd Class="clm-row-small" DataLabel="AREA">@context.StorageArae</MudTd>
+                <MudTd Class="clm-row-small" DataLabel="STROAGEBIN">@context.Shelfname</MudTd>
+                <MudTd Class="clm-row-small" DataLabel="AGES">@context.AgeTimes</MudTd>
+                <MudTd Class="clm-row-small" DataLabel="LIMIT(Hr)">@context.LimitTime</MudTd>
+                <MudTd DataLabel="ACTION">
+
+                    <MudFab @onclick="@(()=>ClearStockCuroom(1, @context.Palletcode,@context.Shelfname ))" Color="Color.Inherit" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small" />
+
+
+                </MudTd>
+
+
+
+            </RowTemplate>
+            <PagerContent>
+                <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />
+            </PagerContent>
+        </MudTable>
+    }
+    else
+    {
+        <MudTable Items="@Elements_" FixedHeader="@fixed_header" FixedFooter="@fixed_footer" Height="@(fixed_header || fixed_footer ?VarGlobals.TableHeight:"")" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<InvStockSum,bool>(FilterFunc_)" @bind-SelectedItem="selectedItem_">
+            <ToolBarContent>
+                <MudSpacer />
+                <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+            </ToolBarContent>
+            <HeaderContent>
+                <MudTh>MATERIAL</MudTh>
+                <MudTh>DESCRIPTION</MudTh>
+                <MudTh>STOCK</MudTh>
+                <MudTh>COUNT(PACK)</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd Class="clm-row-small" DataLabel="MATERIAL">@context.Item_code</MudTd>
+                <MudTd Class="clm-row-small" DataLabel="DESCRIPTION">@context.Item_name</MudTd>
+                <MudTd Class="clm-row-small" DataLabel="STOCK" Style="text-align:right">@string.Format(VarGlobals.FormatN2, context.Totalstock)</MudTd>
+                <MudTd Class="clm-row-small" DataLabel="COUNT(PACK)" Style="text-align:right">@string.Format(VarGlobals.FormatN0, context.Countpallet)</MudTd>
+            </RowTemplate>
+            <PagerContent>
+                <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />
+            </PagerContent>
+        </MudTable>
+    }
+}
+
+@code {
+
+    private string mPagecaption = "10.4-StockList";
+    private string mPagename { get; set; } = "/10/10_4";
+    private string msgAction = "Enter Palletcode";
+    private string pageheader = "10.4-StockList";
+    private string mPalletcode { get; set; } = "";
+    private string mPackid { get; set; } = "";
+    private string palletcode { get; set; }
+    private bool dense = true;
+    private bool hover = true;
+    private bool striped = true;
+    private bool bordered = false;
+    private bool fixed_header = true;
+    private bool fixed_footer = true;
+    private string searchString = "";
+    private InvStockList selectedItem = null;
+    private HashSet<InvStockList> selectedItems = new HashSet<InvStockList>();
+    private IEnumerable<InvStockList> Elements = new List<InvStockList>();
+
+    private InvStockSum selectedItem_ = null;
+    private HashSet<InvStockSum> selectedItems_ = new HashSet<InvStockSum>();
+    private IEnumerable<InvStockSum> Elements_ = new List<InvStockSum>();
+
+    public int elevation = 0;
+
+    public bool StkGroup { get; set; }
+
+    string sUsername { get; set; } = "";
+    string sRole { get; set; } = "";
+    string sGroupID { get; set; } = "";
+    string sUserID { get; set; } = "";
+    List<Userroleinfo> Roles = new List<Userroleinfo>();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        InvService objCS = new InvService();
+        //Elements = await Task.Run(() => objCS.GetReceivingOrdersbypallet(mPalletcode));
+        Elements = await Task.Run(() => objCS.GetStockListCuRoom());
+        Elements_ = await Task.Run(() => objCS.GetStockSumCuRoom());
+        await GetUserAthu();
+        this.InsertAuditrial("View", pageheader);
+        OnSelectChange();
+    }
+
+    async Task GetUserAthu()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        sGroupID = user.Claims.FirstOrDefault(
+        c => c.Type == ClaimTypes.Role)?.Value;
+
+        sUserID = user.Claims.FirstOrDefault(
+            c => c.Type == ClaimTypes.Actor)?.Value;
+    }
+
+
+    protected void OnSelectChange()
+    {
+        StkGroup = !StkGroup;
+        if (StkGroup)
+        {
+            mPagecaption = "10.4-StockList";
+        }
+        else
+        {
+            mPagecaption = "10.4-StockList";
+        }
+    }
+
+
+
+    private bool FilterFunc(InvStockList element)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.Item_code.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Palletcode.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Su_no.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if ($"{element.Item_name} {element.Shelfname}".Contains(searchString))
+            return true;
+        return false;
+    }
+
+    private bool FilterFunc_(InvStockSum element)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.Item_code.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if ($"{element.Item_name} ".Contains(searchString))
+            return true;
+        return false;
+    }
+
+    public async Task DownloadExcelDocument()
+    {
+        try
+        {
+            WhStockListRptExcel excelReport = new WhStockListRptExcel();
+            List<InvStockList> listExcelReport = new List<InvStockList>();
+            listExcelReport = Elements.ToList();
+            var fileName = $"{mPagecaption.ToString()}-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+            await JSRuntime.InvokeAsync<object>("jsSaveAsFile", fileName, Convert.ToBase64String(excelReport.Report(listExcelReport)));
+        }
+        catch (Exception e)
+        {
+            var exmsg = e.Message.ToString();
+        }
+    }
+
+
+    private async Task ClearStockCuroom(Int32 iStatus, string sPallet, string sBin)
+    {
+
+        await Task.Run(() => ObjService.ClearStockCuroom(iStatus, sPallet, sBin));
+
+        this.InsertAuditrial("Clear Stock from pallet : " + sPallet + " , Binno : " + sBin, pageheader);
+        await RefreshPage();
+    }
+
+    private async Task RefreshPage()
+    {
+        Elements = await Task.Run(() => ObjService.GetStockListCuRoom());
+        Elements_ = await Task.Run(() => ObjService.GetStockSumCuRoom());
+
+        this.StateHasChanged();
+    }
+
+    private void InsertAuditrial(String actdesc, String munname)
+    {
+        bool bRet = UserlogService.InsertAudittrial(actdesc, munname, long.Parse(sUserID));
+    }
+
+
+}

@@ -20,6 +20,9 @@ namespace GoWMS.Server.Models.Inv
         public Int32? Efstatus { get; set; }
 
         public string Tag_no { get; set; }
+        public string AgeTimes { get; set; }
+        public Double? AgeMinutes { get; set; }
 
+        public Int32? LimitTime { get; set; }
     }
 }

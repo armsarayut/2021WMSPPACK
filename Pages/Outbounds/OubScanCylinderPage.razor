@@ -8,6 +8,10 @@
 @using System.Reflection
 @using System.Text.Json
 @using GoWMS.Server.Models.Hagv
+@using System.Security.Claims
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IJSRuntime JSRuntime
 
 @inject ErpApiService ObjApiService
 @inject UserServices OpjUserService
@@ -143,14 +147,14 @@ else
         ErpApiService objCS = new ErpApiService();
         //Elements = await Task.Run(() => objCS.GetReceivingOrdersbypallet(mPalletcode));
 
-        if (Motype=="MO")
+        if (Motype == "MO")
         {
             Elements = await Task.Run(() => objCS.GetAllApiDeliveryorderByMo(Mocode));
         }
         else if (Motype == "MAT")
-            {
-                Elements = await Task.Run(() => objCS.GetAllDeliveryorderGoByMat(Mocode));
-            }
+        {
+            Elements = await Task.Run(() => objCS.GetAllDeliveryorderGoByMat(Mocode));
+        }
 
         AgvService objAgv = new AgvService();
         MasterGate = await Task.Run(() => objAgv.GetAllGateAgv());
@@ -259,7 +263,7 @@ else
         DeliveryDate = dat.Add(tim);
         string agvdestination = destvalue;
 
-        var strLON = selectLON.OrderBy(x => x.Efidx).Select(x => new { efidx = x.Efidx, quantity = x.Quantity, packageid = x.Package_Id, materialcode = x.Material_Code }).ToList();
+        var strLON = selectLON.OrderBy(x => x.Efidx).Select(x => new { efidx = x.Efidx, quantity = x.Picked, packageid = x.Package_Id, materialcode = x.Material_Code }).ToList();
         var strRES = selectRES.OrderBy(x => x.Efidx).Select(x => new { efidx = x.Efidx, quantity = x.Quantity, packageid = x.Package_Id, materialcode = x.Material_Code }).ToList();
 
         var jsonLON = JsonSerializer.Serialize(strLON, serializeOptions);
@@ -269,7 +273,7 @@ else
         Int64 iStation = 1;
 
         ObjApiService.SetPickingByStationCylinder(jsonLON, jsonRES, DeliveryDate, agvdestination, ref iReturn, ref sReturn);
-        
+
         if (iReturn == 0)
         {
             Snackbar.Add("SET PICKING >> " + sReturn, Severity.Error);

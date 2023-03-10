@@ -277,6 +277,52 @@ namespace GoWMS.Server.Data
             return bRet;
         }
 
+        public Boolean CreateBatchOrder_curoom(DateTime deliverydate, Int32 deliveryprio, string orderno, string shiptocode, string sSeq)
+        {
+            Boolean bRet = false;
+            string sRet = "";
+            Int32? iRet = 0;
+            using (NpgsqlConnection con = new NpgsqlConnection(connectionString))
+            {
+                try
+                {
+                    StringBuilder sqlQurey = new StringBuilder();
+                    sqlQurey.AppendLine("select _retchk, _retmsg from public.fuc_create_batchorder_curoom(:deliverydate , :deliveryprio, :orderno, :shiptocode, :sSeq);");
+                    NpgsqlCommand cmd = new NpgsqlCommand(sqlQurey.ToString(), con)
+                    {
+                        CommandType = CommandType.Text
+                    };
+                    cmd.Parameters.AddWithValue(":deliverydate", NpgsqlDbType.Timestamp, deliverydate);
+                    cmd.Parameters.AddWithValue(":deliveryprio", NpgsqlDbType.Integer, deliveryprio);
+                    cmd.Parameters.AddWithValue(":orderno", NpgsqlDbType.Varchar, orderno);
+                    cmd.Parameters.AddWithValue(":shiptocode", NpgsqlDbType.Varchar, shiptocode);
+                    cmd.Parameters.AddWithValue(":sSeq", NpgsqlDbType.Varchar, sSeq);
+
+                    con.Open();
+                    NpgsqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        iRet = rdr["_retchk"] == DBNull.Value ? null : (Int32?)rdr["_retchk"];
+                        sRet = rdr["_retmsg"].ToString();
+                    }
+                }
+                catch (NpgsqlException ex)
+                {
+                    Log.Error(ex.ToString());
+                }
+                finally
+                {
+                    con.Close();
+                }
+
+                if (iRet == 1)
+                {
+                    bRet = true;
+                }
+            }
+            return bRet;
+        }
+
         public Boolean CreateBatchSetting (string sSeq, Int32 istation)
         {
             Boolean bRet = false;
@@ -332,6 +378,50 @@ namespace GoWMS.Server.Data
                 {
                     StringBuilder sqlQurey = new StringBuilder();
                     sqlQurey.AppendLine("select _retchk, _retmsg from public.fuc_start_batchsetting(:sSeq , :istation);");
+                    NpgsqlCommand cmd = new NpgsqlCommand(sqlQurey.ToString(), con)
+                    {
+                        CommandType = CommandType.Text
+                    };
+                    cmd.Parameters.AddWithValue(":sSeq", NpgsqlDbType.Varchar, sSeq);
+                    cmd.Parameters.AddWithValue(":istation", NpgsqlDbType.Integer, istation);
+
+                    con.Open();
+                    NpgsqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        iRet = rdr["_retchk"] == DBNull.Value ? null : (Int32?)rdr["_retchk"];
+                        sRet = rdr["_retmsg"].ToString();
+                    }
+                }
+                catch (NpgsqlException ex)
+                {
+                    Log.Error(ex.ToString());
+                }
+                finally
+                {
+                    con.Close();
+                }
+
+                if (iRet == 1)
+                {
+                    bRet = true;
+                }
+            }
+            return bRet;
+        }
+
+
+        public Boolean StartBatchsetting_curoom(string sSeq, Int32 istation)
+        {
+            Boolean bRet = false;
+            string sRet = "";
+            Int32? iRet = 0;
+            using (NpgsqlConnection con = new NpgsqlConnection(connectionString))
+            {
+                try
+                {
+                    StringBuilder sqlQurey = new StringBuilder();
+                    sqlQurey.AppendLine("select _retchk, _retmsg from public.fuc_start_batchsetting_curoom(:sSeq , :istation);");
                     NpgsqlCommand cmd = new NpgsqlCommand(sqlQurey.ToString(), con)
                     {
                         CommandType = CommandType.Text
@@ -539,7 +629,7 @@ namespace GoWMS.Server.Data
                 {
                     StringBuilder Sql = new StringBuilder();
                     Sql.AppendLine("select *");
-                    Sql.AppendLine("from wms.oub_delivery_go");
+                    Sql.AppendLine("from wms.oub_deliveryorder_go");
                     Sql.AppendLine("where package_id = @package_id");
 
                     NpgsqlCommand cmd = new NpgsqlCommand(Sql.ToString(), con)

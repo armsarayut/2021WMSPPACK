@@ -7,6 +7,10 @@
 @using GoWMS.Server.Models.Wcs
 @using GoWMS.Server.Models.Hagv
 @using System.Collections.Generic
+@using System.Security.Claims
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IJSRuntime JSRuntime
 
 
 @inject MasService ObjMasService

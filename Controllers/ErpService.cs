@@ -87,5 +87,12 @@ namespace GoWMS.Server.Controllers
             return ListRet;
         }
 
+         public List<Cutime> GetErpCuringtimebyID(string SqlFilter)
+        {
+            List<Cutime> ListRet = objDAL.GetErpCuringtimebyID(SqlFilter).ToList();
+            return ListRet;
+        }
+
+
     }
 }

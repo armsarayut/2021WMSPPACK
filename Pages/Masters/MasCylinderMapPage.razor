@@ -6,7 +6,10 @@
 @using GoWMS.Server.Models.Mas
 @using GoWMS.Server.Models.Erp
 @using System.Threading
+@using System.Security.Claims
 
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IJSRuntime JSRuntime
 
 @inject ErpService ObjErpService
 @inject ErpApiService ObjErpApiService
@@ -96,10 +99,10 @@ else
             <MudTd Class="clm-row-small" DataLabel="BARCODE">@context.Cylinderbar</MudTd>
             <MudTd Class="clm-row-small" DataLabel="COLOR">@context.Colorcode</MudTd>
             <MudTd DataLabel="ACTION">
-                <MudFab @onclick="@(()=>DeleteMap(@context.Cylindercode, "A", context.Material))" 
-                        Color="Color.Secondary" 
-                        Icon="@Icons.Material.Filled.Delete" 
-                        Size="Size.Small" 
+                <MudFab @onclick="@(()=>DeleteMap(@context.Cylindercode, "A", context.Material))"
+                        Color="Color.Secondary"
+                        Icon="@Icons.Material.Filled.Delete"
+                        Size="Size.Small"
                         IconSize="Size.Small" />
             </MudTd>
         </RowTemplate>
@@ -183,7 +186,7 @@ else
 
                 PalletItemList = ObjMasService.GetAllCylinderListGoByPallet(mPalletcode);
 
-                if (PalletItemList.ToList().Count>0)
+                if (PalletItemList.ToList().Count > 0)
                 {
                     foreach (var s in PalletItemList)
                     {
@@ -226,7 +229,6 @@ else
 
                     string msgret = await Task.Run(() => ObjMasService.InsertCylinderListMaster(lstobj.ToList(), mPalletcode));
 
-
                     ObjErpApiService.SetMappedPalletCylinder(mPalletcode);
 
                     mPalletcode = "";
@@ -246,7 +248,7 @@ else
                 mPackid = str;
 
                 bool exists = lstobj.Where(w => w.Cylinderbar.Contains(mPackid)).Any();
-                if (exists==false)
+                if (exists == false)
                 {
                     MapPalletItem = null;
                     MapPalletItem = ObjErpService.GetAllErpCylindersbytag(mPackid);
@@ -349,6 +351,9 @@ else
 
         var itemToRemove = lstobj.Single(r => r.Cylindercode == pack && r.Material == matcode);
         lstobj.Remove(itemToRemove);
+
+        ObjMasService.CancelCylinderListMasterBypack(mPalletcode, pack);
+
 
         //ObjErpApiService.CancelReceivingOrderbypack(mPalletcode, pack);
 

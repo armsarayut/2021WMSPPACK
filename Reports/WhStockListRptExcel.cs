@@ -48,12 +48,11 @@ namespace GoWMS.Server.Reports
                     worksheet.Cell(rptRows, 1).Value = rpt.Item_code;
                     worksheet.Cell(rptRows, 2).Value = rpt.Item_name;
                     worksheet.Cell(rptRows, 3).Value = rpt.Qty;
-                    worksheet.Cell(rptRows, 4).Value = rpt.Su_no;
+                    worksheet.Cell(rptRows, 4).Value = "'" + rpt.Su_no;
                     worksheet.Cell(rptRows, 5).Value = rpt.Tag_no;
                     worksheet.Cell(rptRows, 6).Value = rpt.Palletcode;
                     worksheet.Cell(rptRows, 7).Value = rpt.StorageArae;
-                    worksheet.Cell(rptRows, 8).Value = rpt.Shelfname;
-                
+                    worksheet.Cell(rptRows, 8).Value = "'" + rpt.Shelfname;
                 }
                 #endregion
                 workbook.SaveAs(_memoryStream);

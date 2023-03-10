@@ -3,6 +3,10 @@
 @using GoWMS.Server.Controllers
 @using GoWMS.Server.Models
 @using GoWMS.Server.Models.Oub
+@using System.Security.Claims
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IJSRuntime JSRuntime
 
 @inject StoreoutService ObjService
 @inject UserServices OpjUserService
@@ -137,6 +141,8 @@ else
         StoreoutService objCS = new StoreoutService();
         //Elements = await Task.Run(() => objCS.GetReceivingOrdersbypallet(mPalletcode));
         Elements = await Task.Run(() => objCS.GetSapStoreoutSetBatch());
+
+        //Elements = await Task.Run(() => objCS.GetSapStoreoutSetBatch().Where(x => x.Ship_To_Code == "AGV01"));
     }
 
     private void setstr(string str)

@@ -5,6 +5,10 @@
 @using GoWMS.Server.Models.Hagv;
 @using GoWMS.Server.Data;
 @using System.Net.NetworkInformation;
+@using System.Security.Claims
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IJSRuntime JSRuntime
 
 
 @inject AgvService ObjAgvService;

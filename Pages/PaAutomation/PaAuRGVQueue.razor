@@ -13,6 +13,11 @@
 @using GoWMS.Server.Models.Inb
 @using GoWMS.Server.Models.Wcs
 
+@using System.Security.Claims
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IJSRuntime JSRuntime
+
 @inject WcsService ObjWcsService
 @inject UserServices OpjUserService
 

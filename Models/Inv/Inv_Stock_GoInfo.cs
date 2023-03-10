@@ -43,5 +43,8 @@ namespace GoWMS.Server.Models.Inv
         public Int64? Gnrefer { get; set; }
         public Decimal? Allocatequantity { get; set; }
         public Decimal? Allocateweight { get; set; }
+
+        public string AgeTimes { get; set; }
+        public Double? AgeMinutes { get; set; }
     }
 }

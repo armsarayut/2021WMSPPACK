@@ -5,6 +5,10 @@
 @using GoWMS.Server.Models.Inv
 @using GoWMS.Server.Pdf
 @using GoWMS.Server.Reports
+@using System.Security.Claims
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IJSRuntime JSRuntime
 
 @inject InvService ObjService
 @inject UserServices OpjUserService
@@ -22,7 +26,7 @@ else
         <MudSwitch T="bool" CheckedChanged="@OnSelectChange" Color="Color.Primary" Label="Select View Stock" />
         <MudSpacer />
         <MudTooltip Text=Export Color="Color.Inherit" Placement="Placement.Top">
-            <MudIconButton Icon="@Icons.Custom.FileFormats.FileExcel" Color="Color.Success"></MudIconButton>
+            <MudIconButton Icon="@Icons.Custom.FileFormats.FileExcel" Color="Color.Success" OnClick="DownloadExcelDocument"></MudIconButton>
             <MudIconButton Icon="@Icons.Custom.FileFormats.FilePdf" Color="Color.Error"></MudIconButton>
         </MudTooltip>
     </MudAppBar>

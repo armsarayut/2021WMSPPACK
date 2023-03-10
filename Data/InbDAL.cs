@@ -232,6 +232,51 @@ namespace GoWMS.Server.Data
             return bret;
         }
 
+        public IEnumerable<Inb_GrCutime> GetGRCutime(string palletcode)
+        {
+            List<Inb_GrCutime> lstobj = new List<Inb_GrCutime>();
+            using (NpgsqlConnection con = new NpgsqlConnection(connectionString))
+            {
+                try
+                {
+                    StringBuilder sql = new StringBuilder();
+
+                    sql.AppendLine("SELECT COALESCE (itemnotstock, '-') AS itemnotstock, pallteno ");
+                    sql.AppendLine("from wms.vgrcheckmastercuringtime_all");
+                    sql.AppendLine("where pallteno = @pallteno ");
+                    sql.AppendLine("order by itemnotstock");
+
+                    NpgsqlCommand cmd = new NpgsqlCommand(sql.ToString(), con)
+                    {
+                        CommandType = CommandType.Text
+                    };
+                    con.Open();
+                    cmd.Parameters.AddWithValue("@pallteno", NpgsqlDbType.Varchar, palletcode);
+                    NpgsqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        Inb_GrCutime objrd = new Inb_GrCutime
+                        {
+                            Itemkey = rdr["itemnotstock"].ToString(),
+                            Palletcode = rdr["pallteno"].ToString()
+                        };
+                        lstobj.Add(objrd);
+                    }
+                }
+                catch (NpgsqlException ex)
+                {
+                    Log.Error(ex.ToString());
+                }
+                finally
+                {
+                    con.Close();
+                }
+            }
+            return lstobj;
+        }
+
+
+
         public IEnumerable<Inb_Putaway_Go> GetAllInbPutawayGoAgv()
         {
             List<Inb_Putaway_Go> lstobj = new List<Inb_Putaway_Go>();

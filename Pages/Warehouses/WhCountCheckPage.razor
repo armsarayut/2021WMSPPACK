@@ -4,6 +4,10 @@
 @using GoWMS.Server.Models
 @using GoWMS.Server.Models.Public
 @using System.Threading
+@using System.Security.Claims
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IJSRuntime JSRuntime
 
 @inject WhService ObjWhService
 @inject WcsService ObjWcsService
@@ -273,7 +277,6 @@ else
 
                     //ObjErpApiService.SetMappedPallet(mPalletcode);
 
-                    // Set Update Count
                     bool bCheck = ObjWhService.UpdateCount(Elements.ToList());
 
                     // Set SAP Complete
@@ -286,7 +289,10 @@ else
                             mPalletcode = "";
                             Snackbar.Add("Audit successfully", Severity.Success);
 
-                            Elements = await Task.Run(() => ObjWhService.GetPicklist(""));
+                            var vElements = Elements.Where(s => s.Pallet_No == "0");
+
+                            // Set Update Count
+                            Elements = vElements;
 
                         }
                         else
@@ -299,6 +305,7 @@ else
                     {
                         Snackbar.Add("Adjust Stick Error", Severity.Error);
                     }
+
                 }
                 else
                 {

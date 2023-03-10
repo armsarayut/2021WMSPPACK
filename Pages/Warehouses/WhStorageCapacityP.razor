@@ -3,6 +3,10 @@
 @using GoWMS.Server.Controllers
 @using GoWMS.Server.Models
 @using Microsoft.EntityFrameworkCore
+@using System.Security.Claims
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IJSRuntime JSRuntime
 
 @inject WhService ObjService
 @inject UserServices OpjUserService

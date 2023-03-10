@@ -87,6 +87,12 @@ namespace GoWMS.Server.Controllers
             return retlist;
         }
 
+        public List<Mas_Cylinderlist_Go> GetAllCylinderListGo()
+        {
+            List<Mas_Cylinderlist_Go> retlist = objDAL.GetAllCylinderList().ToList();
+            return retlist;
+        }
+
         public List<Mas_Cylinderlist_Go> GetAllCylinderListGoByPallet(string pallet)
         {
             List<Mas_Cylinderlist_Go> retlist = objDAL.GetAllCylinderListByPallet(pallet).ToList();
@@ -110,6 +116,14 @@ namespace GoWMS.Server.Controllers
             
         }
 
+        public string CancelCylinderListMasterBypack(string pallet, string pack)
+        {
+            objDAL.CancelCylinderListMasterBypack(pallet, pack);
+            return "Cancel Successfully";
+        }
+
+        
+
         public async Task<string> InsertCylinderListMaster(List<Cylinder> listOrder, string mpallet)
         {
             bool bret;
@@ -124,11 +138,19 @@ namespace GoWMS.Server.Controllers
             {
                 return "Insert Fail";
             }
+        }
 
+        public List<Cusetgatemode> GetAllGatecuroomList()
+        {
+            List<Cusetgatemode> retlist = objDAL.GetAllGatecuroomList().ToList();
+            return retlist;
         }
 
 
-
-
+        public List<Mas_Curingtime> GetAllCuringtimeList()
+        {
+            List<Mas_Curingtime> retlist = objDAL.GetAllCuringtimeList().ToList();
+            return retlist;
+        }
     }
 }

@@ -1,0 +1,430 @@
+﻿@page "/10/10_6"
+@using GoWMS.Server.Data
+@using GoWMS.Server.Controllers
+@using GoWMS.Server.Models
+@using GoWMS.Server.Models.Inv
+@using GoWMS.Server.Models.Hagv
+@using System.Text.Json
+@using System.Security.Claims
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IJSRuntime JSRuntime
+
+@inject InvService ObjService
+@inject PublicFunServices ObjFunService
+@inject IDialogService DialogService
+
+
+
+@inject WgcService ObjErpService
+@inject StoreoutService ObjStoreoutService
+@inject ISnackbar Snackbar
+@inject ErpApiService ObjApiService
+@inject UserServices OpjUserService
+@inject IStringLocalizer<CuGiUnplaned> L
+
+<style>
+    .mud-table-cell-custom-group {
+        font-weight: 500;
+    }
+
+    .mud-table-cell-custom-group-footer {
+        padding-bottom: 50px;
+        text-align: left;
+    }
+</style>
+
+
+@if (Elements == null)
+{
+    // <p><em>Loading...</em></p>
+    <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
+}
+else
+{
+
+    @if (StkGroup)
+    {
+        <MudText Typo="Typo.h6" Color="Color.Primary"> @mPageHeader</MudText>
+
+        <MudAppBar Color="Color.Transparent" Fixed="false" Dense="true">
+            <MudButton Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.SaveAlt" Style="background-color: mediumseagreen; color: white; width: 160px; height: 30px;" OnClick=@OnButtonOrderSelected>
+                START
+            </MudButton>
+            <MudSpacer />
+            <MudSelect T="string"
+                       Label="Destination Station"
+                       @bind-Value="destvalue">
+                @foreach (var state in myGatesArray)
+                {
+                    <MudSelectItem T="string" Value="@state">@state</MudSelectItem>
+                }
+            </MudSelect>
+            <MudSpacer />
+        </MudAppBar>
+
+        <MudTable Items="@Elements.Where(x => x.Efstatus == iState)"
+                  FixedHeader="@fixed_header"
+                  FixedFooter="@fixed_footer"
+                  Height="@(fixed_header || fixed_footer ?VarGlobals.TableHeight:"")"
+                  GroupBy="@_groupDefinition"
+                  GroupHeaderStyle="background-color:var(--mud-palette-background-white)"
+                  GroupFooterClass="mb-4"
+                  MultiSelection="true"
+                  Dense="@dense"
+                  Hover="@hover"
+                  Bordered="@bordered"
+                  Striped="@striped"
+                  Filter="new Func<Inv_Stock_GoInfo,bool>(FilterFunc)"
+                  @bind-SelectedItems="selectedItems">
+            <ToolBarContent>
+                <MudToolBarSpacer />
+                <MudTextField @bind-Value="searchString"
+                              Placeholder="Search"
+                              Adornment="Adornment.Start"
+                              AdornmentIcon="@Icons.Material.Filled.Search"
+                              IconSize="Size.Medium"
+                              Class="mt-0">
+                </MudTextField>
+            </ToolBarContent>
+            <ColGroup>
+                @if (_multiSelect)
+                        {
+                    <col style="width: 60px;" />
+                        }
+                @if (_groupDefinition.Expandable)
+                        {
+                    <col style="width: 60px;" />
+                        }
+                <col />
+                <col />
+                <col />
+                <col />
+                <col />
+                <col />
+            </ColGroup>
+            <HeaderContent>
+                <MudTh>@L["ItemCode"]</MudTh>
+                <MudTh>@L["ItemName"]</MudTh>
+                <MudTh>@L["Stock"]</MudTh>
+                <MudTh>@L["SEQ"]</MudTh>
+
+                <MudTh>@L["MOBA"]</MudTh>
+            </HeaderContent>
+            <GroupHeaderTemplate>
+                <MudTh Class="mud-table-cell-custom-group" colspan="10">@($"{context.GroupName}: {context.Key} ")</MudTh>
+            </GroupHeaderTemplate>
+            <RowTemplate>
+                <MudTd DataLabel=@L["ItemCode"]>@context.Itemcode</MudTd>
+                <MudTd DataLabel=@L["ItemName"]>@context.Itemname</MudTd>
+                <MudTd DataLabel=@L["Stock"]>@string.Format(VarGlobals.FormatN2, context.Quantity)</MudTd>
+                <MudTd DataLabel=@L["SEQ"]>@context.Pallettag</MudTd>
+
+                @if (@context.Docno.Length > 0 || @context.Docnote.Length > 0)
+                        {
+                            <MudTd DataLabel=@L["MOBA"]>@context.Docno / @context.Docnote </MudTd>
+                        }
+                        else
+                        {
+                            <MudTd DataLabel=@L["MOBA"]></MudTd>
+                        }
+
+
+            </RowTemplate>
+            <GroupFooterTemplate>
+                <MudTh Class="mud-table-cell-custom-group mud-table-cell-custom-group-footer" colspan="10">Total Qty : @string.Format(VarGlobals.FormatN2, @context.Items.Sum((e) => e.Quantity)) </MudTh>
+                
+            </GroupFooterTemplate>
+
+        </MudTable>
+    }
+    else
+    {
+
+    }
+
+    <MudMessageBox @ref="mbox" Title="@mboxheader" CancelText="Cancel">
+        <MessageContent>
+            @foreach (var item in References)
+            {
+                <br />
+                @item
+            }
+        </MessageContent>
+        <YesButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Success" StartIcon="@Icons.Material.Filled.DataSaverOn">Confirm!</MudButton>
+        </YesButton>
+    </MudMessageBox>
+}
+
+@code {
+
+    MudMessageBox mbox { get; set; }
+
+    private bool _dense = false;
+    private bool _multiSelect = true;
+
+    private string mPagedesc = "10.6-GI-Manual";
+    private string mPagename { get; set; } = "/10/10_6";
+
+    private string mPageHeader = "10.6-GI-Manual";
+    //private string mPagedesc { get; set; } = "3.5-Unplaned";
+    //private string mPagename { get; set; } = "/3/3_5";
+    private string msgAction = "Enter Palletcode";
+    private string mPalletcode { get; set; } = "";
+    private string mPackid { get; set; } = "";
+    private string palletcode { get; set; }
+    private bool dense = true;
+    private bool hover = true;
+    private bool striped = true;
+    private bool bordered = false;
+    private bool fixed_header = true;
+    private bool fixed_footer = true;
+    private string searchString = "";
+    private Inv_Stock_GoInfo selectedItem = null;
+    private HashSet<Inv_Stock_GoInfo> selectedItems = new HashSet<Inv_Stock_GoInfo>();
+    private IEnumerable<Inv_Stock_GoInfo> Elements = new List<Inv_Stock_GoInfo>();
+
+    string state = "Message box hasn't been opened yet";
+
+    string mboxheader { get; set; } = "รายการที่ขอเบิก";
+    string mboxcontent { get; set; } = "";
+    string mboxmessage { get; set; } = "";
+
+    public int elevation = 0;
+    private string sStorageno = "ASRS";
+    public bool StkGroup { get; set; }
+
+    protected List<string> References { get; set; } = new List<string>();
+
+    private IEnumerable<Set_Agv_Gate> MasterGate = new List<Set_Agv_Gate>();
+    public string[] myGatesArray;
+    private string destvalue { get; set; }
+    private IEnumerable<string> destoptions { get; set; } = new List<string>() { "00" };
+    private Int32 iState { get; set; } = 0;
+
+    private TableGroupDefinition<Inv_Stock_GoInfo> _groupDefinition = new()
+    {
+        GroupName = "AGE",
+        Indentation = true,
+        Expandable = true,
+        IsInitiallyExpanded = false,
+        Selector = (e) => e.AgeTimes,
+        InnerGroup = new TableGroupDefinition<Inv_Stock_GoInfo>()
+        {
+            GroupName = "PALLET",
+            Indentation = true,
+            Expandable = true,
+            IsInitiallyExpanded = false,
+            Selector = (e) => e.Pallteno
+        }
+    };
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        InvService objCS = new InvService();
+        //Elements = await Task.Run(() => objCS.GetReceivingOrdersbypallet(mPalletcode));
+        AgvService objAgv = new AgvService();
+        MasterGate = await Task.Run(() => objAgv.GetAllGateAgv().Where(s => s.Gate_Name != "ASRS-G02"));
+        //MasterGate = await Task.Run(() => objAgv.GetAllGateAgv());
+
+        myGatesArray = MasterGate.Select(x => x.Gate_Name).ToArray();
+
+        Elements = await Task.Run(() => objCS.GetStockListInfo().Result.Where(x => x.Storageno != sStorageno));
+
+        OnSelectChange();
+    }
+
+    protected void OnSelectChange()
+    {
+        StkGroup = !StkGroup;
+        /*
+        if (StkGroup)
+        {
+            mPageHeader = "Cycle Count ";
+        }
+        else
+        {
+            mPageHeader = "Stock Group";
+        }
+        */
+    }
+
+
+
+    private bool FilterFunc(Inv_Stock_GoInfo element)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.Itemcode.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Pallteno.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Pallettag.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Itemtag.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Docno.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if ($"{element.Itemname} {element.Storagebin}".Contains(searchString))
+            return true;
+        return false;
+    }
+
+    private bool FilterFunc_(InvStockSum element)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.Item_code.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Item_code.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        if ($"{element.Item_name} ".Contains(searchString))
+            return true;
+        return false;
+    }
+
+    async Task SelectOrder()
+    {
+        var result = selectedItems.GroupBy(t => t.Itemcode)
+                   .Select(t => new
+                   {
+                       Itemcode = t.Key,
+                       Qty = t.Sum(ta => ta.Quantity),
+                   }).ToList();
+
+        System.Text.StringBuilder strPopup = new System.Text.StringBuilder();
+        Int16 i = 0;
+
+        foreach (var rec in result)
+        {
+            i++;
+            strPopup.Append(i.ToString() + ". รายการ : ");
+            strPopup.Append(rec.Itemcode.ToString());
+            strPopup.Append(" จำนวน : ");
+            strPopup.AppendLine(rec.Qty.ToString());
+        }
+
+        System.Text.StringBuilder popup = new System.Text.StringBuilder();
+        popup.AppendLine("รายการที่ขอเบิก");
+        popup.Append(strPopup.ToString());
+
+        string sContentText = popup.ToString();
+
+        var parameters = new DialogParameters();
+        parameters.Add("ContentText", sContentText);
+        parameters.Add("ButtonText", "Yes");
+        parameters.Add("Color", Color.Success);
+
+        var formModal = DialogService.Show<DialogTemplateExample_Dialog>("Confirm", parameters);
+        var resultModal = await Task.Run(() => formModal.Result);
+        var formModal1 = await Task.Run(() => DialogService.ShowMessageBox("AA", "XX"));
+    }
+
+    private async void OnButtonOrderSelected()
+    {
+        var resultlist = selectedItems.GroupBy(t => t.Itemcode)
+                 .Select(t => new
+                 {
+                     Itemcode = t.Key,
+                     Qty = t.Sum(ta => ta.Quantity),
+                 }).ToList();
+
+        System.Text.StringBuilder strPopup = new System.Text.StringBuilder();
+        Int16 i = 0;
+        mboxcontent = "";
+
+        References.Clear();
+
+        if (resultlist.Count > 0)
+        {
+            foreach (var rec in resultlist)
+            {
+                i++;
+                strPopup.Clear();
+                strPopup.Append(i.ToString() + ". รายการ : ");
+                strPopup.Append(rec.Itemcode.ToString());
+                strPopup.Append(" จำนวน : ");
+                strPopup.AppendLine(rec.Qty.ToString());
+
+                References.Add(strPopup.ToString());
+            }
+            bool? result = await mbox.Show();
+            state = result == null ? "Cancelled" : "Confirmed";
+
+            if (state == "Confirmed")
+            {
+                SelectOrderPick();
+            }
+
+
+            this.StateHasChanged();
+        }
+
+    }
+
+    private async void SelectOrderPick()
+    {
+        var serializeOptions = new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            WriteIndented = true
+        };
+
+
+        if (destvalue != null)
+        {
+            string cus = "MANUAL";
+            //string so = "U-" + DateTime.Now.ToString("yyMMddHH");
+            string so = ObjFunService.GetRunning("sq002", 4);
+            string agvdestination = destvalue;
+
+            string lot = "-";
+            string batch = "-";
+            DateTime requestdate = DateTime.Today.Date;
+
+            //var strRES = selectedItems.OrderBy(x => x.Pallettag).Select(x => new { efidx = x.Efidx, quantity = x.Quantity, packageid = x.Pallettag, materialcode = x.Itemcode, palletno = x.Pallteno, sono = so, customer = cus, lotno = lot, batchno = batch, matematerialdescription = x.Itemname, unit = x.Unit, deliverydate = requestdate , stationto = destvalue }).ToList();
+
+            var strRES = selectedItems.OrderBy(x => x.Pallettag).Select(x => new { efidx = x.Efidx, quantity = x.Quantity, packageid = x.Pallettag, materialcode = x.Itemcode, palletno = x.Pallteno, sono = so, customer = cus, lotno = lot, batchno = batch, matematerialdescription = x.Itemname, unit = x.Unit, deliverydate = requestdate }).ToList();
+
+            var jsonRES = JsonSerializer.Serialize(strRES, serializeOptions);
+
+            var iReturn = 0;
+            var sReturn = "Call";
+
+            if (selectedItems.Count > 0)
+            {
+
+                ObjApiService.SetPickingUnplaned_curoom(jsonRES, ref iReturn, ref sReturn);
+
+                if (iReturn == 0)
+                {
+                    Snackbar.Add(sReturn, Severity.Error);
+                }
+                else
+                {
+
+                    //update
+                    ObjStoreoutService.SetDestinationAGV(so, agvdestination);
+                    Snackbar.Add("Order picking created", Severity.Success);
+
+                    //Elements = await ObjService.GetStockListInfo();
+                    Elements = await Task.Run(() => ObjService.GetStockListInfo().Result.Where(x => x.Storageno != sStorageno));
+                }
+            }
+            else
+            {
+                Snackbar.Add("Please select order picking", Severity.Warning);
+            }
+        }
+        else
+        {
+            Snackbar.Add("Please select Destination Station", Severity.Warning);
+        }
+    }
+
+   
+
+}

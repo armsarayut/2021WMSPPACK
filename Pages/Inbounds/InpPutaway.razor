@@ -4,6 +4,10 @@
 @using GoWMS.Server.Models
 @using GoWMS.Server.Models.Mas
 @using GoWMS.Server.Models.Inb
+@using System.Security.Claims
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IJSRuntime JSRuntime
 
 @inject MasService ObjMasService
 @inject InboundService ObjInboundService

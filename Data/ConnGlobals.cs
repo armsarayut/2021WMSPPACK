@@ -16,18 +16,19 @@ namespace GoWMS.Server.Data
 
         //private static readonly string NpgServer = "localhost"; // Develop
         private static readonly string NpgServer = "192.168.200.141"; // Production
-       // private static readonly string NpgServer = "10.50.68.11"; // Production Public
+        //private static readonly string NpgServer = "10.50.68.11"; // Production Public
         //private static readonly string NpgServer = "192.168.1.14"; // Production Public
 
+        //private static readonly string NpgServer = "203.159.93.86"; // Host Test
 
-        //private static readonly string NpgDB = "PGPACK"; // Develop
+        //private static readonly string NpgDB = "PPACK"; // Develop
         private static readonly string NpgDB = "Gowes"; // Production
 
         private static readonly string NpgUser = "postgres";
         private static readonly string NpgPass = "@ei0u2020";
         private static readonly string NpgPort = "5432";
         private static readonly string NpgContime = "60";
-        private static readonly string NpgComtime = "0";
+        private static readonly string NpgComtime = "0"; 
 
         /// <summary>
         /// GetConnLocalDBPG

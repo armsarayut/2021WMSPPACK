@@ -38,5 +38,8 @@ namespace GoWMS.Server.Models.Wcs
 		public DateTime? Etime { get; set; }
 		public Int32? Gate_Out { get; set; }
 		public Int32? Work_Priority { get; set; }
+
+		public Int32? dectstatus { get; set; }
+		public string dectmsg { get; set; }
 	}
 }

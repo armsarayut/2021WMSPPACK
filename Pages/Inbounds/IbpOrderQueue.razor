@@ -17,6 +17,7 @@
 
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IJSRuntime JSRuntime
+
 @inject ReportService UserlogService
 @inject InboundService ObjInboundService
 @inject UserServices OpjUserService
@@ -116,7 +117,7 @@ else
         <GroupFooterTemplate>
             <MudTh Class="mud-table-cell-custom-group mud-table-cell-custom-group-footer" colspan="10">Total Qty : @string.Format(VarGlobals.FormatN2, @context.Items.Sum((e) => e.Quantity)) </MudTh>
         </GroupFooterTemplate>
-   
+
 
     </MudTable>
 

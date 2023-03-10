@@ -16,10 +16,11 @@
 @using System.Security.Claims
 
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IJSRuntime JSRuntime
+
 @inject ReportService UserlogService
 @inject InboundService ObjInboundService
 @inject UserServices OpjUserService
-@inject IJSRuntime JSRuntime
 @inject IStringLocalizer<IbpWcsQueue> L
 @attribute [Authorize]
 

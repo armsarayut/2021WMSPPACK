@@ -1383,6 +1383,89 @@ namespace GoWMS.Server.Data
         }
 
 
+        public IEnumerable<Cutime> GetErpCuringtimebyID(string SqlFilter)
+        {
+            List<Cutime> lstobj = new List<Cutime>();
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                try
+                {
+
+                    StringBuilder sqlQurey = new StringBuilder();
+
+
+                    sqlQurey.AppendLine("SELECT COALESCE([Job], '') AS [Job] ");
+                    sqlQurey.AppendLine(", COALESCE([Job_Code], '') AS [Job_Code] ");
+                    sqlQurey.AppendLine(", COALESCE([Item_Code], '') AS [Item_Code] ");
+                    sqlQurey.AppendLine(", COALESCE([Adhesive1_STD], '') AS [Adhesive1_STD] ");
+                    sqlQurey.AppendLine(", COALESCE([Adhesive2_STD], '') AS [Adhesive2_STD] ");
+                    sqlQurey.AppendLine(", COALESCE([Adhesive3_STD], '') AS [Adhesive3_STD] ") ;
+                    sqlQurey.AppendLine(", COALESCE([Adhesive4_STD], '') AS [Adhesive4_STD] ");
+                    sqlQurey.AppendLine(", COALESCE([Type], '') AS [Type] ");
+                    sqlQurey.AppendLine(", COALESCE([Film1], '') AS [Film1] ");
+                    sqlQurey.AppendLine(", COALESCE([Film2], '') AS [Film2] ");
+                    sqlQurey.AppendLine(", COALESCE([Film3], '') AS [Film3] ");
+                    sqlQurey.AppendLine(", COALESCE([Film4], '') AS [Film4] ");
+                    sqlQurey.AppendLine(", COALESCE([Film5], '') AS [Film5] ");
+                    sqlQurey.AppendLine(", COALESCE([Adhesive], '') AS [Adhesive] ");
+                    sqlQurey.AppendLine(", COALESCE([Hardener], '') AS [Hardener] ");
+                    sqlQurey.AppendLine(", COALESCE([Layers], 0) AS [Layers] ");
+                    sqlQurey.AppendLine(", COALESCE([Temp (C)], 0) AS [TempC] ");
+                    sqlQurey.AppendLine(", COALESCE([Time (Hr.)], 0) AS [TimeH] ");
+                    sqlQurey.AppendLine(", COALESCE([ID], '') AS [ID] ");
+                    sqlQurey.AppendLine("FROM Staging.dbo.CuringTime");
+                    sqlQurey.AppendLine("WHERE [ID] in (" + SqlFilter.ToString() + ")");
+                    sqlQurey.AppendLine(";");
+
+                    SqlCommand cmd = new SqlCommand(sqlQurey.ToString(), con)
+
+                    {
+                        CommandType = CommandType.Text
+                    };
+
+                    con.Open();
+                    
+                    SqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        Cutime objrd = new Cutime
+                        {
+                            Job = rdr["Job"].ToString(),
+                            Job_Code = rdr["Job_Code"].ToString(),
+                            Item_Code = rdr["Item_Code"].ToString(),
+                            Adhesive1_STD = rdr["Adhesive1_STD"].ToString(),
+                            Adhesive2_STD = rdr["Adhesive2_STD"].ToString(),
+                            Adhesive3_STD = rdr["Adhesive3_STD"].ToString(),
+                            Adhesive4_STD = rdr["Adhesive4_STD"].ToString(),
+                            Type = rdr["Type"].ToString(),
+                            Film1 = rdr["Film1"].ToString(),
+                            Film2= rdr["Film2"].ToString(),
+                            Film3= rdr["Film3"].ToString(),
+                            Film4= rdr["Film4"].ToString(),
+                            Film5= rdr["Film5"].ToString(),
+                            Adhesive = rdr["Adhesive"].ToString(),
+                            Hardener = rdr["Hardener"].ToString(),
+                            Layers = rdr["Layers"] == DBNull.Value ? null : (Int32?)rdr["Layers"],
+                            TempC = rdr["TempC"] == DBNull.Value ? null : (Int32?)rdr["TempC"],
+                            TimeH = rdr["TimeH"] == DBNull.Value ? null : (Int32?)rdr["TimeH"],
+                            ID = rdr["ID"].ToString()
+                        };
+                        lstobj.Add(objrd);
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    Log.Error(ex.ToString());
+                }
+                finally
+                {
+                    con.Close();
+                }
+            }
+            return lstobj;
+        }
+
+
 
 
     }

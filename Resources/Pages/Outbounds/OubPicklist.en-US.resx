@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="DNSEQ" xml:space="preserve">
-    <value>DNSEQ</value>
+    <value>PACKID</value>
   </data>
   <data name="Excel" xml:space="preserve">
     <value>Excel</value>
@@ -133,7 +133,7 @@
     <value>Queue Picking</value>
   </data>
   <data name="PALLETGO" xml:space="preserve">
-    <value>PALLETGO</value>
+    <value>PALLET</value>
   </data>
   <data name="PDF" xml:space="preserve">
     <value>PDF</value>

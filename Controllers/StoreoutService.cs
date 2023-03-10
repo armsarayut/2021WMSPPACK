@@ -40,6 +40,14 @@ namespace GoWMS.Server.Controllers
             return bRet;
         }
 
+        public Boolean CreateBatchOrder_curoom(DateTime deliverydate, Int32 deliveryprio, string orderno, string shiptocode, string sSeq)
+        {
+            Boolean bRet = false;
+            bRet = objDAL.CreateBatchOrder_curoom(deliverydate, deliveryprio, orderno, shiptocode, sSeq);
+            return bRet;
+        }
+
+        
         public Boolean CreateBatchSetting(string sSeq, Int32 istation)
         {
             Boolean bRet = false;
@@ -60,6 +68,15 @@ namespace GoWMS.Server.Controllers
             bRet = objDAL.StartBatchsetting(sSeq, istation);
             return bRet;
         }
+
+        public Boolean StartBatchsetting_curoom(string sSeq, Int32 istation)
+        {
+            Boolean bRet = false;
+            bRet = objDAL.StartBatchsetting_curoom(sSeq, istation);
+            return bRet;
+        }
+
+        
 
         public Boolean SetDestinationAGV(string batch_no, string station)
         {

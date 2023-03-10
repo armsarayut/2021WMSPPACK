@@ -3,6 +3,10 @@
 @using GoWMS.Server.Controllers
 @using GoWMS.Server.Models
 @using GoWMS.Server.Models.Erp
+@using System.Security.Claims
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IJSRuntime JSRuntime
 
 @inject ErpService ObjErpService
 
@@ -27,7 +31,7 @@ else
         </HeaderContent>
         <RowTemplate>
             <MudTd Class="clm-row-small" DataLabel="Material">@context.Material_Code</MudTd>
-            <MudTd Class="clm-row-small" DataLabel="Description">@context.Material_Description</MudTd>     
+            <MudTd Class="clm-row-small" DataLabel="Description">@context.Material_Description</MudTd>
             <MudTd Class="clm-row-small" DataLabel="Unit">@context.Unit</MudTd>
         </RowTemplate>
         <PagerContent>

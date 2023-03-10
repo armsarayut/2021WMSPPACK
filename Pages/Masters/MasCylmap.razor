@@ -1,4 +1,4 @@
-﻿@page "/mas/cylindermap"
+﻿@page "/2/2_8"
 @using GoWMS.Server.Data
 @using GoWMS.Server.Controllers
 @using GoWMS.Server.Models
@@ -6,6 +6,10 @@
 @using GoWMS.Server.Models.Mas
 @using GoWMS.Server.Models.Erp
 @using System.Threading
+@using System.Security.Claims
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IJSRuntime JSRuntime
 
 
 @inject ErpService ObjErpService
@@ -15,49 +19,6 @@
 @inject ISnackbar Snackbar
 
 <MudText Typo="Typo.h6" Color="Color.Primary">@mPageHeader</MudText>
-
-<MudGrid>
-    <MudItem xs="12">
-        @if (@elevation == 0) //Defult
-        {
-            <MudAlert Severity="Severity.Normal" Variant="Variant.Outlined">@msgAction</MudAlert>
-        }
-        else if (@elevation == 1) //Info
-        {
-            <MudAlert Severity="Severity.Info" Variant="Variant.Outlined">@msgAction</MudAlert>
-        }
-        else if (@elevation == 2) //Success
-        {
-            <MudAlert Severity="Severity.Success" Variant="Variant.Outlined">@msgAction</MudAlert>
-        }
-        else if (@elevation == 3) // Warning
-        {
-            <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">@msgAction</MudAlert>
-        }
-        else if (@elevation == 4) // Error
-        {
-            <MudAlert Severity="Severity.Error" Variant="Variant.Outlined">@msgAction</MudAlert>
-        }
-    </MudItem>
-
-    <MudItem xs=12 sm=6>
-        <div class="form-group">
-            <input style="width: 100%; height: 40px" type="text" class="form-control" @bind-value="stringputkey" @onkeyup="@DoTheThingProd" placeholder="Enter Productcode" />
-        </div>
-    </MudItem>
-    <MudItem xs=12 sm=6>
-        <div class="form-group">
-            <input style="width: 100%; height: 40px" type="text" class="form-control" @bind-value="stringpalletkey" @onkeyup="@DoTheThing" placeholder="Enter Pallet" />
-        </div>
-    </MudItem>
-    <MudItem xs=12 sm=6>
-        <MudButton Variant="Variant.Filled" Size="Size.Medium" Color="Color.Tertiary" OnClick="@InsertCylinder">Setmap</MudButton>
-    </MudItem>
-
-</MudGrid>
-
-<br />
-
 
 @if (Elements == null)
 {
@@ -74,7 +35,7 @@ else
               Filter="new Func<Mas_Cylinderlist_Go,bool>(FilterFunc)"
               @bind-SelectedItem="selectedItem">
         <ToolBarContent>
-            <MudText Typo="Typo.h6">PRODUCT:[@mProductcode]  PALLET:[@mPalletcode]</MudText>
+           
             <MudSpacer />
             <MudTextField @bind-Value="searchString"
                           Placeholder="Search"
@@ -90,7 +51,7 @@ else
             <MudTh><MudTableSortLabel SortBy="new Func<Mas_Cylinderlist_Go, object>(x=>x.Previos_ref)">PREVIOUS</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel SortBy="new Func<Mas_Cylinderlist_Go, object>(x=>x.Cylindercode)">CYLINDER</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel SortBy="new Func<Mas_Cylinderlist_Go, object>(x=>x.Colorcode)">COLOR</MudTableSortLabel></MudTh>
-            <MudTh>ACTION</MudTh>
+           
         </HeaderContent>
         <RowTemplate>
             <MudTd Class="clm-row-small" DataLabel="MATERIAL">@context.Material_Code</MudTd>
@@ -99,9 +60,7 @@ else
             <MudTd Class="clm-row-small" DataLabel="PREVIOUS">@context.Previos_ref</MudTd>
             <MudTd Class="clm-row-small" DataLabel="CYLINDER">@context.Cylindercode</MudTd>
             <MudTd Class="clm-row-small" DataLabel="COLOR">@context.Colorcode</MudTd>
-            <MudTd DataLabel="ACTION">
-                <MudFab @onclick="@(()=>DeleteMap(@context.Itemtag))" Color="Color.Secondary" Icon="@Icons.Material.Filled.Delete" Size="Size.Small" IconSize="Size.Small" />
-            </MudTd>
+          
         </RowTemplate>
         <PagerContent>
             <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />
@@ -110,11 +69,13 @@ else
 }
 
 @code {
+    private string mPageHeader = "2.8-Cylinder";
+    private string mPagename { get; set; } = "/2/2_8";
 
-    private string mPageHeader = "Cylinder Mapping";
+    //private string mPageHeader = "Cylinder Mapping";
     private string msgAction = "Enter MasterPallet";
     public string mPagedesc { get; set; } = "Cylinder Mapping";
-    private string mPagename { get; set; } = "/mas/cylindermap";
+    //private string mPagename { get; set; } = "/mas/cylindermap";
     private string mPalletcode { get; set; } = "";
     private string mProductcode { get; set; } = "";
     private string mPackid { get; set; } = null;
@@ -160,9 +121,9 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        //ErpApiService objCS = new ErpApiService();
+        MasService objCS = new MasService();
         //cOld = Elements.Count();
-        //Elements = await Task.Run(() => objCS.GetAllApiRecevingorderGosypallet(mPalletcode));
+        Elements = await Task.Run(() => objCS.GetAllCylinderListGo());
         //cNew = Elements.Count();
     }
 
@@ -191,12 +152,12 @@ else
                             Customer_Code = s.Customer_Code,
                             Customer_Description = s.Customer_Description,
                             Customer_Reference = s.Customer_Reference,
-                            Previos_ref= s.PREVIOUS_REF,
+                            Previos_ref = s.PREVIOUS_REF,
                             Colorcode = s.Color_1,
                             Cylindercode = s.Cylinder1,
                             Cylinderbar = s.Barcode_1,
                             Cylinderno = 1,
-                            Itemtag =  s.Cylinder1
+                            Itemtag = s.Cylinder1
 
                         };
                         lstobj.Add(objrd);
@@ -216,7 +177,7 @@ else
                             Cylindercode = s.Cylinder2,
                             Cylinderbar = s.Barcode_2,
                             Cylinderno = 2,
-                            Itemtag =  s.Cylinder2
+                            Itemtag = s.Cylinder2
 
                         };
 
@@ -237,7 +198,7 @@ else
                             Cylindercode = s.Cylinder3,
                             Cylinderbar = s.Barcode_3,
                             Cylinderno = 3,
-                            Itemtag =  s.Cylinder3
+                            Itemtag = s.Cylinder3
 
                         };
                         lstobj.Add(objrd);
@@ -257,7 +218,7 @@ else
                             Cylindercode = s.Cylinder4,
                             Cylinderbar = s.Barcode_4,
                             Cylinderno = 4,
-                            Itemtag =  s.Cylinder4
+                            Itemtag = s.Cylinder4
 
                         };
                         lstobj.Add(objrd);
@@ -277,7 +238,7 @@ else
                             Cylindercode = s.Cylinder5,
                             Cylinderbar = s.Barcode_5,
                             Cylinderno = 5,
-                            Itemtag =  s.Cylinder5
+                            Itemtag = s.Cylinder5
 
                         };
                         lstobj.Add(objrd);
@@ -297,7 +258,7 @@ else
                             Cylindercode = s.Cylinder6,
                             Cylinderbar = s.Barcode_6,
                             Cylinderno = 6,
-                            Itemtag =  s.Cylinder6
+                            Itemtag = s.Cylinder6
 
                         };
                         lstobj.Add(objrd);
@@ -317,7 +278,7 @@ else
                             Cylindercode = s.Cylinder7,
                             Cylinderbar = s.Barcode_7,
                             Cylinderno = 7,
-                            Itemtag =  s.Cylinder7
+                            Itemtag = s.Cylinder7
 
                         };
                         lstobj.Add(objrd);
@@ -337,7 +298,7 @@ else
                             Cylindercode = s.Cylinder8,
                             Cylinderbar = s.Barcode_8,
                             Cylinderno = 8,
-                            Itemtag =  s.Cylinder8
+                            Itemtag = s.Cylinder8
 
                         };
                         lstobj.Add(objrd);
@@ -357,7 +318,7 @@ else
                             Cylindercode = s.Cylinder9,
                             Cylinderbar = s.Barcode_9,
                             Cylinderno = 9,
-                            Itemtag =  s.Cylinder9
+                            Itemtag = s.Cylinder9
 
                         };
                         lstobj.Add(objrd);
@@ -377,7 +338,7 @@ else
                             Cylindercode = s.Cylinder10,
                             Cylinderbar = s.Barcode_10,
                             Cylinderno = 10,
-                            Itemtag  = s.Cylinder10
+                            Itemtag = s.Cylinder10
                         };
                         lstobj.Add(objrd);
                     }
@@ -430,7 +391,7 @@ else
             await Task.Run(() => setstr(pallettemp));
 
         }
-        stringputkey  = null;
+        stringputkey = null;
         this.StateHasChanged();
     }
 

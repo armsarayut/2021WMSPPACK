@@ -13,6 +13,11 @@
 @using GoWMS.Server.Models.Inb
 @using GoWMS.Server.Models.Wcs
 
+@using System.Security.Claims
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IJSRuntime JSRuntime
+
 @inject WcsService ObjWcsService
 @inject UserServices OpjUserService
 
@@ -45,6 +50,9 @@ else
             <MudTh><MudTableSortLabel SortBy="new Func<Tas_Mcworks, object>(x=>x.Srm_From)">SOURCE</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel SortBy="new Func<Tas_Mcworks, object>(x=>x.Srm_To)">DESTINATION</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel SortBy="new Func<Tas_Mcworks, object>(x=>x.Stime)">STARTED</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Tas_Mcworks, object>(x=>x.Modified)">REQUSET-TIME</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Tas_Mcworks, object>(x=>x.Client_Ip)">AGV-DESTINATION</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Tas_Mcworks, object>(x=>x.dectmsg)">STATUS-DESTINATION</MudTableSortLabel></MudTh>
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="QUEUING">@Convert.ToDateTime(context.Ctime).ToString(VarGlobals.FormatDT)</MudTd>
@@ -59,6 +67,53 @@ else
                     @Convert.ToDateTime(context.Stime).ToString(VarGlobals.FormatDT)
                     }
             </MudTd>
+
+            <MudTd DataLabel="REQUSET-TIME">
+                @if (@context.Work_Code == "05")
+                    {
+                    @if (context.Modified != null)
+                        {
+                        @Convert.ToDateTime(context.Modified).ToString(VarGlobals.FormatDT)
+                        }
+
+                    }
+            </MudTd>
+            <MudTd DataLabel="AGV-DESTINATION">
+                @if (@context.Work_Code == "05")
+                    {
+                    <MudChip Variant="Variant.Filled" Color="Color.Info">@context.Client_Ip</MudChip>
+                    }
+            </MudTd>
+
+            <MudTd DataLabel="STATUS-DESTINATION">
+                @if (@context.Work_Code == "05")
+                    {
+
+                    @switch (@context.dectmsg)
+                        {
+                            case "Unavaliable":
+                                <MudChip Variant="Variant.Filled" Color="Color.Warning">@context.dectmsg</MudChip>
+                                break;
+                            case "Avaliable":
+                                <MudChip Variant="Variant.Filled" Color="Color.Success">@context.dectmsg</MudChip>
+                                break;
+                            case "Emptypallet":
+                                <MudChip Variant="Variant.Filled" Color="Color.Info">@context.dectmsg</MudChip>
+                                break;
+                            case "WAIT RGV":
+                                <MudChip Variant="Variant.Filled" Color="Color.Secondary">@context.dectmsg</MudChip>
+                                break;
+                            case "No Detection":
+                                <MudChip Variant="Variant.Filled" Color="Color.Dark">@context.dectmsg</MudChip>
+                                break;
+                            default:
+                                <MudChip Variant="Variant.Filled" Color="Color.Error">@context.dectmsg</MudChip>
+                                break;
+                        }
+
+                    }
+            </MudTd>
+
         </RowTemplate>
         <PagerContent>
             <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />

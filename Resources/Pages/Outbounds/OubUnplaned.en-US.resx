@@ -126,6 +126,9 @@
   <data name="Itemtag" xml:space="preserve">
     <value>ROLLID</value>
   </data>
+  <data name="MOBA" xml:space="preserve">
+    <value>MO no.</value>
+  </data>
   <data name="pageHeader" xml:space="preserve">
     <value>Unplanned</value>
   </data>

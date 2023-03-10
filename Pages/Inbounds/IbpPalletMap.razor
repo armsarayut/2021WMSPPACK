@@ -5,6 +5,10 @@
 @using GoWMS.Server.Models.Api
 @using GoWMS.Server.Models.Mas
 @using System.Threading
+@using System.Security.Claims
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IJSRuntime JSRuntime
 
 
 @inject ErpService ObjErpService
@@ -189,6 +193,8 @@ else
                 msgAction = "Enter PackID";
                 elevation = 1;
                 Snackbar.Add("Enter PackID", Severity.Normal);
+                
+                ObjErpApiService.ClaerReceivingOrdersBypallet(mPalletcode);
             }
             else
             {
@@ -241,6 +247,7 @@ else
                     //retString =  await Task.Run(() => ObjErpApiService.InsertReceivingOrderbypackAsync(MapPalletItem.ToList(), mPalletcode));
 
                     //ObjErpApiService.UpdateReceivingOrderbypack(mPalletcode, mPackid);
+
                     msgAction = "Enter PackID or Pallet code for complete";
                     elevation = 1;
                     Snackbar.Add("Enter PackID or Pallet code for complete", Severity.Info);

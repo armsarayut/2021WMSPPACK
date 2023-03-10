@@ -330,15 +330,45 @@ namespace GoWMS.Server.Data
                 try
                 {
                     StringBuilder sql = new StringBuilder();
+
+                    //sql.AppendLine("SELECT idx, created, entity_lock, modified, client_id, client_ip");
+                    //sql.AppendLine(", lpncode, work_code, work_status, work_id");
+                    //sql.AppendLine(", srm_no, srm_from, srm_to, srm_status");
+                    //sql.AppendLine(", rgv_no, rgv_from, rgv_to, rgv_status");
+                    //sql.AppendLine(", cvy_no, cvy_from, cvy_to, cvy_status");
+                    //sql.AppendLine(", pallet_no, pallet_hight, pallet_width, pallet_size");
+                    //sql.AppendLine(", ctime, stime, etime, gate_out, work_priority");
+                    //sql.AppendLine("FROM wcs.tas_mcworks");
+                    //sql.AppendLine("order by ctime");
+
+                    /*
+                    sql.AppendLine("SELECT t1.idx, t1.created, t1.entity_lock, t1.modified, t1.client_id, t1.client_ip");
+                    sql.AppendLine(", t1.lpncode, t1.work_code, t1.work_status, t1.work_id");
+                    sql.AppendLine(", t1.srm_no, t1.srm_from, t1.srm_to, t1.srm_status");
+                    sql.AppendLine(", t1.rgv_no, t1.rgv_from, t1.rgv_to, t1.rgv_status");
+                    sql.AppendLine(", t1.cvy_no, t1.cvy_from, t1.cvy_to, t1.cvy_status");
+                    sql.AppendLine(", t1.pallet_no, t1.pallet_hight, t1.pallet_width, t1.pallet_size");
+                    sql.AppendLine(", t1.ctime, t1.stime, t1.etime, t1.gate_out, t1.work_priority");
+                    sql.AppendLine(", t2.gate_status, t2.gate_status_desc");
+                    sql.AppendLine("FROM wcs.tas_mcworks t1");
+                    sql.AppendLine("left join cira.vagvgate_status t2 ");
+                    sql.AppendLine("on t1.client_ip=t2.gate_name");
+                    sql.AppendLine("order by t1.ctime");
+                    */
+
+
                     sql.AppendLine("SELECT idx, created, entity_lock, modified, client_id, client_ip");
                     sql.AppendLine(", lpncode, work_code, work_status, work_id");
                     sql.AppendLine(", srm_no, srm_from, srm_to, srm_status");
                     sql.AppendLine(", rgv_no, rgv_from, rgv_to, rgv_status");
                     sql.AppendLine(", cvy_no, cvy_from, cvy_to, cvy_status");
                     sql.AppendLine(", pallet_no, pallet_hight, pallet_width, pallet_size");
-                    sql.AppendLine(", ctime, stime, etime, gate_out, work_priority");
-                    sql.AppendLine("FROM wcs.tas_mcworks");
-                    sql.AppendLine("order by ctime");
+                    sql.AppendLine(", ctime, stime, etime");
+                    sql.AppendLine(", gate_out, work_priority, gate_status, gate_status_desc");
+                    sql.AppendLine(" FROM wcs.vtas_mcworks");
+                    sql.AppendLine(" order by ctime");
+
+
 
                     NpgsqlCommand cmd = new NpgsqlCommand(sql.ToString(), con)
                     {
@@ -389,8 +419,10 @@ namespace GoWMS.Server.Data
                             Stime = rdr["stime"] == DBNull.Value ? null : (DateTime?)rdr["stime"],
                             Etime = rdr["etime"] == DBNull.Value ? null : (DateTime?)rdr["etime"],
                             Gate_Out = rdr["gate_out"] == DBNull.Value ? null : (Int32?)rdr["gate_out"],
-                            Work_Priority = rdr["work_priority"] == DBNull.Value ? null : (Int32?)rdr["work_priority"]
+                            Work_Priority = rdr["work_priority"] == DBNull.Value ? null : (Int32?)rdr["work_priority"],
 
+                            dectstatus = rdr["gate_status"] == DBNull.Value ? null : (Int32?)rdr["gate_status"],
+                            dectmsg = rdr["gate_status_desc"].ToString()
                         };
                         lstobj.Add(objrd);
                     }

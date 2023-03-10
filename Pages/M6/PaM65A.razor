@@ -87,7 +87,7 @@ else
         <HeaderContent>
             <MudTh><MudTableSortLabel SortBy="new Func<Class6_5_A, object>(x=>x.Created)">@L["CREATED"]</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel SortBy="new Func<Class6_5_A, object>(x=>x.Mccode)">@L["MC"]</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<Class6_5_A, object>(x=>x.Status)">@L["STATUS"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Class6_5_A, object>(x=>x.St_No)">@L["STATUS"]</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel SortBy="new Func<Class6_5_A, object>(x=>x.Desc_Th)">@L["DESCRIPTION(TH)"]</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel SortBy="new Func<Class6_5_A, object>(x=>x.Desc_En)">@L["DESCRIPTION(EN)"]</MudTableSortLabel></MudTh>
 
@@ -95,7 +95,7 @@ else
         <RowTemplate>
             <MudTd DataLabel=@L["CREATED"]>@Convert.ToDateTime(context.Created).ToString(VarGlobals.FormatDT)</MudTd>
             <MudTd DataLabel=@L["MC"]>@context.Mccode</MudTd>
-            <MudTd DataLabel=@L["STATUS"]>@context.Status</MudTd>
+            <MudTd DataLabel=@L["STATUS"]>@context.St_No</MudTd>
             <MudTd DataLabel=@L["DESCRIPTION(TH)"]>@context.Desc_Th</MudTd>
             <MudTd DataLabel=@L["DESCRIPTION(EN)"]>@context.Desc_En</MudTd>
         </RowTemplate>

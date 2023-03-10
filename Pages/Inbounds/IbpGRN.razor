@@ -4,6 +4,10 @@
 @using GoWMS.Server.Controllers
 @using GoWMS.Server.Models.Api
 @using GoWMS.Server.Models.Inb
+@using System.Security.Claims
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IJSRuntime JSRuntime
 
 @inject CustomerService ObjCustomService
 @inject ReportService UserlogService
@@ -102,7 +106,15 @@ else
 
     [Inject] public IJSRuntime jsRuntime { get; set; }
     private string stringIP { get; set; }
-    
+
+    string sUsername { get; set; } = "";
+    string sRole { get; set; } = "";
+    string sGroupID { get; set; } = "";
+    string sUserID { get; set; } = "";
+    List<Userroleinfo> Roles = new List<Userroleinfo>();
+    [Inject] private IDialogService DialogService { get; set; }
+
+
 
 
     protected override async Task OnInitializedAsync()
@@ -122,7 +134,26 @@ else
         //await GetIp();
     }
 
- 
+    async Task GetUserAthu()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        sGroupID = user.Claims.FirstOrDefault(
+        c => c.Type == ClaimTypes.Role)?.Value;
+
+        sUserID = user.Claims.FirstOrDefault(
+            c => c.Type == ClaimTypes.Actor)?.Value;
+    }
+
+    private void InsertAuditrial(String actdesc, String munname)
+    {
+        bool bRet = UserlogService.InsertAudittrial(actdesc, munname, long.Parse(sUserID));
+    }
+
+
+
+
     private void setstr(string str)
     {
         if (mPalletcode.Length <= 0)
@@ -182,9 +213,5 @@ else
 
     }
 
-    private void InsertAuditrial(String actdesc, String munname)
-    {
-        bool bRet = UserlogService.InsertAudittrial(actdesc, VarGlobals.CurrentUserName);
-    }
 
 }

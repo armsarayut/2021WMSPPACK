@@ -6,6 +6,10 @@
 @using GoWMS.Server.Models.Api
 @using System.Globalization
 @using System.Reflection
+@using System.Security.Claims
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IJSRuntime JSRuntime
 
 @inject UserServices OpjUserService
 
@@ -164,8 +168,6 @@ else
             </PagerContent>
         </MudTable>
     </MudHidden>
-
-
 
 }
 
