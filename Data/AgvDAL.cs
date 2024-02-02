@@ -159,6 +159,58 @@ namespace GoWMS.Server.Data
         }
 
 
+        public IEnumerable<Vrptqueueloadtimeagv> GetAllReportTaskAgvCu()
+        {
+            List<Vrptqueueloadtimeagv> lstobj = new List<Vrptqueueloadtimeagv>();
+            using (NpgsqlConnection con = new NpgsqlConnection(connectionString))
+            {
+                try
+                {
+                    StringBuilder sql = new StringBuilder();
+
+                    sql.AppendLine("SELECT * ");
+                    sql.AppendLine("FROM aitech.vrptqueueloadtimeagv");
+                    sql.AppendLine(";");
+
+                    NpgsqlCommand cmd = new NpgsqlCommand(sql.ToString(), con)
+                    {
+                        CommandType = CommandType.Text
+                    };
+                    con.Open();
+
+                    NpgsqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        Vrptqueueloadtimeagv objrd = new Vrptqueueloadtimeagv
+                        {
+                            Lpncode = rdr["lpncode"].ToString(),
+                            Work_code = rdr["work_code"].ToString(),
+                            Work_status = rdr["work_status"] == DBNull.Value ? null : (Int32?)rdr["work_status"],
+                            Agv_name = rdr["agv_name"].ToString(),
+                            Gate_source = rdr["gate_source"].ToString(),
+                            Gate_dest = rdr["gate_dest"].ToString(),
+                            Ctime = rdr["ctime"] == DBNull.Value ? null : (DateTime?)rdr["ctime"],
+                            Stime = rdr["stime"] == DBNull.Value ? null : (DateTime?)rdr["stime"],
+                            Etime = rdr["etime"] == DBNull.Value ? null : (DateTime?)rdr["etime"],
+                            Loadtime = rdr["loadtime"].ToString(),
+                            Work_mode = rdr["work_mode"].ToString()
+                        };
+                        lstobj.Add(objrd);
+                    }
+                }
+                catch (NpgsqlException ex)
+                {
+                    Log.Error(ex.ToString());
+                }
+                finally
+                {
+                    con.Close();
+                }
+            }
+            return lstobj;
+        }
+
+
         public IEnumerable<Set_Agv_Gate> GetAllGateAgv()
         {
             List<Set_Agv_Gate> lstobj = new List<Set_Agv_Gate>();

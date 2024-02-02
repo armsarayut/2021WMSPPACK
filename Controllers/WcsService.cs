@@ -22,6 +22,13 @@ namespace GoWMS.Server.Controllers
             List<Vmachine_command> retlist = objDAL.GetCommandMachine(mccode).ToList();
             return retlist;
         }
+
+        public List<Set_Rgvgate> GetRGVGate()
+        {
+            List<Set_Rgvgate> retlist = objDAL.GetRGVGate().ToList();
+            return retlist;
+        }
+
         public Boolean CreateCommandMC(string mccode, Int32 command)
         {
             Boolean bRet = false;
@@ -58,6 +65,12 @@ namespace GoWMS.Server.Controllers
         public List<Tas_Rgvworks> GetRGVWorks()
         {
             List<Tas_Rgvworks> retlist = objDAL.GetRGVWorks().ToList();
+            return retlist;
+        }
+
+        public List<Tas_Rgvworks> GetRGVWorksPD()
+        {
+            List<Tas_Rgvworks> retlist = objDAL.GetRGVWorksPD().ToList();
             return retlist;
         }
 
@@ -116,5 +129,20 @@ namespace GoWMS.Server.Controllers
             return retlist;
         }
 
-    }
+        public string SetRgvGate(string pallet, string gate, ref Int32 iret, ref string sret )
+        {
+            objDAL.SetRgvChangeGate(pallet, gate , ref iret , ref sret);
+            
+            return sret;
+        }
+
+        public bool SetUrgentAsrsQueueByPallet(string spallet)
+        {
+            bool bret = objDAL.SetUrgentAsrsQueueByPallet(spallet);
+
+            return bret;
+        }
+
+
+    } 
 }

@@ -238,8 +238,26 @@ else
                     {
                         bool bRet;
 
-                        bRet = ObjErpApiService.UpdateCutime(GetCutime.ToList());
+                        string strQurey = "";
 
+                        bRet = ObjErpApiService.UpdateCutime(GetCutime.ToList(), ref strQurey);
+
+                        //bRet = ObjErpApiService.UpdateCutime(GetCutime.ToList());
+
+                        if (bRet)
+                        {
+                            Snackbar.Add("Add Master Curing Ok", Severity.Warning);
+                        }
+                        else
+                        {
+                            //Snackbar.Add("Add Master Curing Error", Severity.Error);
+                            Snackbar.Add("Add Master Curing Error | " + strQurey.ToString(), Severity.Error);
+                        }
+
+                    }
+                    else
+                    {
+                        Snackbar.Add("No Master Curing ", Severity.Error);
                     }
                 }
 
@@ -303,9 +321,23 @@ else
                     {
                         bool bRet;
 
+                        string strQurey = "";
 
-                        bRet = ObjErpApiService.UpdateCutime(GetCutime.ToList());
+                        bRet = ObjErpApiService.UpdateCutime(GetCutime.ToList(), ref strQurey);
 
+                        if (bRet)
+                        {
+                            Snackbar.Add("Add Master Curing Ok", Severity.Warning);
+                        }
+                        else
+                        {
+                            Snackbar.Add("Add Master Curing Error | " + strQurey.ToString(), Severity.Error);
+                        }
+
+                    }
+                    else
+                    {
+                        Snackbar.Add("No Master Curing ", Severity.Error);
                     }
 
 

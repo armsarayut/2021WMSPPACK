@@ -15,8 +15,8 @@ namespace GoWMS.Server.Data
         #region Load Database
 
         //private static readonly string NpgServer = "localhost"; // Develop
-        private static readonly string NpgServer = "192.168.200.141"; // Production
-        //private static readonly string NpgServer = "10.50.68.11"; // Production Public
+        //private static readonly string NpgServer = "192.168.200.141"; // Production
+        private static readonly string NpgServer = "10.50.68.11"; // Production Public
         //private static readonly string NpgServer = "192.168.1.14"; // Production Public
 
         //private static readonly string NpgServer = "203.159.93.86"; // Host Test
@@ -52,9 +52,9 @@ namespace GoWMS.Server.Data
         }
 
         #region ERP Database
-        private static readonly string ErpServer = "203.150.202.44";
+        //private static readonly string ErpServer = "203.150.202.44";
 
-        //private static readonly string ErpServer = "192.188.180.38";
+        private static readonly string ErpServer = "10.28.148.87"; // New Server 2023/12/11
         private static readonly string ErpDB = "Staging";
         //private static readonly string ErpUser = "ASRS";
         //private static readonly string ErpPass = "ASRS";

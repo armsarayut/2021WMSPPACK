@@ -201,12 +201,12 @@ namespace GoWMS.Server.Controllers
         //    return "Update Successfully";
         //}
 
-        public bool UpdateCutime(List<Cutime> listOrder)
+        public bool UpdateCutime(List<Cutime> listOrder , ref string StrQurey)
 
         {
             bool bret;
 
-            bret = objDAL.UpdateCutime(listOrder.ToList());
+            bret = objDAL.UpdateCutime(listOrder.ToList(), ref StrQurey);
 
             return bret;
         }

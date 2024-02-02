@@ -166,17 +166,8 @@
                        where c.Mccode == valueTO
                        select new { c.St_no, c.Mccode }).Single();
 
-
         int Gateno_FM = queryFM.St_no.Value;
         int Gateno_TO = queryTO.St_no.Value;
-
-
-
-
-
-
-
-
 
         if (Gateno_FM != null && Gateno_TO != null)
         {
@@ -199,5 +190,7 @@
         bRet = ObjWcsService.CreateCommandMC(Mccode, iCmd);
     }
 
+
+  
 
 }

@@ -1375,7 +1375,7 @@ namespace GoWMS.Server.Data
 
 
 
-        public bool UpdateCutime(List<Cutime> listOrder)
+        public bool UpdateCutime(List<Cutime> listOrder , ref string StrQurey)
         {
             bool bret = false;
 
@@ -1387,9 +1387,6 @@ namespace GoWMS.Server.Data
                 npgInsertQurey.AppendLine("SELECT wms.fuc_update_curing( ");
                 npgInsertQurey.AppendLine("(ARRAY[ ");
 
-
-
-              
                 var i = 0;
               
                 
@@ -1429,6 +1426,8 @@ namespace GoWMS.Server.Data
 
 
                 npgInsertQurey.AppendLine("::wms." + @"""" + "tyCuring" + @"""" + "[]);");
+
+                StrQurey = npgInsertQurey.ToString();
 
                 //::wms."tyCuring"[]);
 

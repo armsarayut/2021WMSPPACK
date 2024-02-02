@@ -1,0 +1,127 @@
+﻿@using GoWMS.Server.Controllers;
+@using GoWMS.Server.Models.Wcs;
+@using System.Security.Claims
+@using GoWMS.Server.Data
+@using GoWMS.Server.Models
+
+@inject WcsService ObjWcsService;
+@inject ISnackbar Snackbar
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject UserServices OpjUserService
+@inject ReportService UserlogService
+
+<MudDialog>
+    <DialogContent>
+        <MudSelect Label="GATE " HelperText="Pick the Gate" @bind-SelectedValues="selectedItems">
+            @foreach (var cmd in Elements)
+            {
+                <MudSelectItem Value="@cmd">@cmd.Gate_No - @cmd.Gate_Id</MudSelectItem>
+            }
+        </MudSelect>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">Ok</MudButton>
+    </DialogActions>
+</MudDialog>
+
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    [Parameter] public string Palletcode { get; set; }
+
+    private string pageheader { get; set; } = "4.6-RGV-QUEUE";
+
+    private HashSet<Set_Rgvgate> selectedItems = new HashSet<Set_Rgvgate>();
+    private IEnumerable<Set_Rgvgate> Elements = new List<Set_Rgvgate>();
+
+    string sUsername { get; set; } = "";
+    string sRole { get; set; } = "";
+    string sGroupID { get; set; } = "";
+    string sUserID { get; set; } = "";
+    List<Userroleinfo> Roles = new List<Userroleinfo>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetUserAthu();
+        Elements = await Task.Run(() => ObjWcsService.GetRGVGate());
+    }
+
+    async Task GetUserAthu()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        sGroupID = user.Claims.FirstOrDefault(
+        c => c.Type == ClaimTypes.Role)?.Value;
+
+        sUserID = user.Claims.FirstOrDefault(
+            c => c.Type == ClaimTypes.Actor)?.Value;
+    }
+
+    private void InsertAuditrial(String actdesc, String munname)
+    {
+        bool bRet = UserlogService.InsertAudittrial(actdesc, munname, long.Parse(sUserID));
+    }
+
+    void Submit()
+    {
+        if (selectedItems != null)
+        {
+            string sGate = "";
+
+            string RetFunc ="";
+            Int32 iRet = 0;
+            string sRet = "";
+
+            foreach (var item in selectedItems)
+            {
+   
+                sGate = item.Gate_Id;
+            }
+
+
+            RetFunc = ObjWcsService.SetRgvGate(Palletcode, sGate, ref iRet, ref sRet);
+
+            if (iRet==1)
+            {
+                Snackbar.Add("Set Chenge RGV Gate OK", Severity.Success);
+                this.InsertAuditrial("PALLET [" + Palletcode + "] Set Chenge RGV Gate[" + sGate + "] OK", pageheader);
+            }
+            else
+            {
+                Snackbar.Add("Set Chenge RGV Gat Failed", Severity.Error);
+                this.InsertAuditrial("PALLET [" + Palletcode + "] Set Chenge RGV Gate[" + sGate + "] Failed", pageheader);
+            }
+
+            MudDialog.Close(DialogResult.Ok(true));
+        }
+
+    }
+
+    void Cancel() => MudDialog.Cancel();
+
+
+    void SetCommand()
+    {
+        if (selectedItems != null)
+        {
+            string sGate = "";
+
+            string RetFunc = "";
+            Int32 iRet = 0;
+            string sRet = "";
+
+            foreach (var item in selectedItems)
+            {
+       
+                sGate = item.Gate_Id;
+
+            }
+            RetFunc = ObjWcsService.SetRgvGate(Palletcode, sGate, ref iRet, ref sRet);
+
+        }
+    }
+
+}

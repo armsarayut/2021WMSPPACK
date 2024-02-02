@@ -152,5 +152,19 @@ namespace GoWMS.Server.Controllers
             List<Mas_Curingtime> retlist = objDAL.GetAllCuringtimeList().ToList();
             return retlist;
         }
+
+        public List<Set_agv_gate> GetAllAgvgate()
+        {
+            List<Set_agv_gate> retlist = objDAL.GetAllAgvgate().ToList();
+            return retlist;
+        }
+
+        public bool SetGateDetection(string setcode, Int32 setval)
+        {
+            bool bret = objDAL.SetGateDetection(setcode, setval);
+
+            return bret;
+        }
+
     }
 }

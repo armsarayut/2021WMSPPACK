@@ -71,6 +71,14 @@ namespace GoWMS.Server.Controllers
             return retlist;
         }
 
+        public List<Vrptqueueloadtimeagv> GetAllReportTaskAgvCu()
+        {
+            List<Vrptqueueloadtimeagv> retlist = objDAL.GetAllReportTaskAgvCu().ToList();
+            return retlist;
+        }
+
+        
+
         public List<Functionreturn> CancleTaskAGV(string pallet)
         {
             List<Functionreturn> retlist = objDAL.CancleTaskAGV(pallet).ToList();

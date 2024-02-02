@@ -12,6 +12,8 @@ using GoWMS.Server.Models.Mas;
 using GoWMS.Server.Models.Erp;
 using NpgsqlTypes;
 using Serilog;
+using GoWMS.Server.Models.Hagv;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace GoWMS.Server.Data
 {
@@ -961,7 +963,8 @@ namespace GoWMS.Server.Data
 
                     Sql.AppendLine("select gate_name, ena_inbound, ena_outbound");
                     Sql.AppendLine("from hagv.set_agv_gate");
-                    Sql.AppendLine("where area_group = 3 and entity_lock = 0");
+                    Sql.AppendLine("where area_group = @area_group and entity_lock = @entity_lock");
+                    //Sql.AppendLine("where area_group = 3 and entity_lock = 0");
                     Sql.AppendLine("order by gate_name");
                     Sql.AppendLine(";");
 
@@ -969,6 +972,8 @@ namespace GoWMS.Server.Data
                     {
                         CommandType = CommandType.Text
                     };
+                    cmd.Parameters.AddWithValue("@area_group", 3);
+                    cmd.Parameters.AddWithValue("@entity_lock", 0);
                     con.Open();
                     NpgsqlDataReader rdr = cmd.ExecuteReader();
                     while (rdr.Read())
@@ -1066,5 +1071,100 @@ namespace GoWMS.Server.Data
             }
             return lstobj;
         }
+
+        public IEnumerable<Set_agv_gate> GetAllAgvgate()
+        {
+            List<Set_agv_gate> lstobj = new List<Set_agv_gate>();
+            using (NpgsqlConnection con = new NpgsqlConnection(connectionString))
+            {
+                try
+                {
+                    StringBuilder Sql = new StringBuilder();
+
+
+                    Sql.AppendLine("SELECT gate_name, client_id as detection_enable");
+                    Sql.AppendLine("FROM hagv.set_agv_gate");
+                    //Sql.AppendLine("Where entity_lock = @entity_lock ");
+                    Sql.AppendLine(";");
+
+                    NpgsqlCommand cmd = new NpgsqlCommand(Sql.ToString(), con)
+                    {
+                        CommandType = CommandType.Text
+                    };
+
+                    //cmd.Parameters.AddWithValue("@entity_lock", 0);
+
+                    con.Open();
+                    NpgsqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+                        Set_agv_gate objrd = new Set_agv_gate
+                        {
+
+                            Gate_name = rdr["gate_name"].ToString(),
+
+                            Detection_enable = rdr["detection_enable"] == DBNull.Value ? null : (Int64?)rdr["detection_enable"],
+
+                            Enable = rdr["detection_enable"] == DBNull.Value ? true : Convert.ToBoolean(rdr["detection_enable"])
+                        };
+                        lstobj.Add(objrd);
+                    }
+                }
+                catch (NpgsqlException ex)
+                {
+                    Log.Error(ex.ToString());
+                }
+                finally
+                {
+                    con.Close();
+                }
+            }
+            return lstobj;
+        }
+
+        public bool SetGateDetection(string setcode, Int32 setval)
+        {
+            bool bRet = false;
+
+            using NpgsqlConnection con = new NpgsqlConnection(connectionString);
+            try
+            {
+
+                StringBuilder sql = new StringBuilder();
+
+                using var cmd = new NpgsqlCommand(connection: con, cmdText: null);
+
+   
+                sql.AppendLine("UPDATE hagv.set_agv_gate");
+                sql.AppendLine("SET client_id = @val_int");
+                //sql.AppendLine("WHERE entity_lock = @entity_lock");
+                sql.AppendLine("WHERE gate_name = @gate_name");
+                sql.AppendLine(";");
+
+                cmd.Parameters.AddWithValue("@val_int", setval);
+                cmd.Parameters.AddWithValue("@gate_name", setcode);
+                //cmd.Parameters.AddWithValue("@entity_lock", 0);
+
+                con.Open();
+                cmd.CommandText = sql.ToString();
+                cmd.ExecuteNonQuery();
+
+                bRet = true;
+
+            }
+            catch (NpgsqlException ex)
+            {
+                Log.Error(ex.ToString());
+                bRet = false;
+            }
+            finally
+            {
+                con.Close();
+            }
+
+
+            return bRet;
+        }
+
     }
 }

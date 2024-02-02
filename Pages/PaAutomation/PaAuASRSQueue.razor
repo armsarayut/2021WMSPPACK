@@ -17,10 +17,13 @@
 
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IJSRuntime JSRuntime
+@inject ISnackbar Snackbar
 
 @inject WcsService ObjWcsService
 @inject UserServices OpjUserService
+@inject IDialogService DialogService
 
+@inject ReportService UserlogService
 
 @if (Elements == null)
 {
@@ -53,6 +56,7 @@ else
             <MudTh><MudTableSortLabel SortBy="new Func<Tas_Mcworks, object>(x=>x.Modified)">REQUSET-TIME</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel SortBy="new Func<Tas_Mcworks, object>(x=>x.Client_Ip)">AGV-DESTINATION</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel SortBy="new Func<Tas_Mcworks, object>(x=>x.dectmsg)">STATUS-DESTINATION</MudTableSortLabel></MudTh>
+            <MudTh>URGENT</MudTh>
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="QUEUING">@Convert.ToDateTime(context.Ctime).ToString(VarGlobals.FormatDT)</MudTd>
@@ -114,6 +118,20 @@ else
                     }
             </MudTd>
 
+            <MudTd Class="clm-row-small" DataLabel="URGENT">
+                @if (context.Work_Code == "05")
+                {
+                    <MudFab Color="Color.Error" OnClick="(()=> UpdateUrgent( context.Lpncode))" Icon="@Icons.Material.Filled.ArrowUpward" Size="Size.Small" IconSize="Size.Small" />
+                }
+            </MudTd>
+
+            <MudTd Class="clm-row-small" DataLabel="URGENT">
+                @if (@context.Work_Code == "05" && context.Work_Status == 1 && context.Rgv_To <= 3)
+                {
+                    <MudFab @onclick="@(()=>OpenDialog(@context.Lpncode, @context.Rgv_To.ToString()))" Color="Color.Secondary" Icon="@Icons.Material.Filled.MenuOpen" Size="Size.Small" IconSize="Size.Small" />
+                }
+            </MudTd>
+
         </RowTemplate>
         <PagerContent>
             <MudTablePager PageSizeOptions="new int[]{10,20,50,100}" />
@@ -123,6 +141,7 @@ else
 
 @code {
     private string mPageHeader = "4.2-ASRS-QUEUE";
+    private string pageheader = "4.2-ASRS-QUEUE";
     private string mPagedesc { get; set; } = "4.2-ASRS-QUEUE";
     private string mPagename { get; set; } = "/4/4_2";
     private string msgAction = "Enter Palletcode";
@@ -142,11 +161,50 @@ else
 
     public int elevation = 0;
 
+        private ResultReturn resultReturn = null;
+     string sUsername { get; set; } = "";
+    string sRole { get; set; } = "";
+    string sGroupID { get; set; } = "";
+    string sUserID { get; set; } = "";
+    List<Userroleinfo> Roles = new List<Userroleinfo>();
+
+
+
     protected override async Task OnInitializedAsync()
     {
+
+          //////// Intial Menu and Privilege//////
+        resultReturn = await Task.Run(() => OpjUserService.InsertMenu(mPagename, mPagedesc));
+        resultReturn = await Task.Run(() => OpjUserService.InsertPrivilege(mPagename));
+        ////////////////////////////////////////
+        ///
+
+        await GetUserAthu();
+        this.InsertAuditrial("View", pageheader);
+        Roles = await Task.Run(() => OpjUserService.GetUserRole(mPagename, long.Parse(sGroupID)));
+    
+
+
         WcsService objCS = new WcsService();
         //Elements = await Task.Run(() => objCS.GetReceivingOrdersbypallet(mPalletcode));
         Elements = await Task.Run(() => objCS.GetASRSWorks());
+    }
+
+          async Task GetUserAthu()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        sGroupID = user.Claims.FirstOrDefault(
+        c => c.Type == ClaimTypes.Role)?.Value;
+
+        sUserID = user.Claims.FirstOrDefault(
+            c => c.Type == ClaimTypes.Actor)?.Value;
+    }
+
+    private void InsertAuditrial(String actdesc, String munname)
+    {
+        bool bRet = UserlogService.InsertAudittrial(actdesc, munname, long.Parse(sUserID));
     }
 
     private void setstr(string str)
@@ -176,4 +234,209 @@ else
         return false;
     }
 
+    private async Task UpdateUrgent(string pallet)
+    {
+
+        //bool? result = true;
+        bool? result = await CheckRoleEdit();
+        if (result == true)
+        {
+            if (ObjWcsService.SetUrgentAsrsQueueByPallet(pallet) == true)
+            {
+                this.InsertAuditrial("PALLET [" + pallet +"] set urgent succeed", pageheader);
+
+                Snackbar.Add("Update Urgent succeed", Severity.Success);
+                //this.InsertAuditrial("Set UpdateUrgent : " + pallet.ToString(), pageheader);
+                Elements = await Task.Run(() => ObjWcsService.GetASRSWorks());
+                this.StateHasChanged();
+            }
+            else
+            {
+                Snackbar.Add("UpdateUrgent unsuccessful", Severity.Error);
+                this.InsertAuditrial("PALLET [" + pallet + "] set urgent unsuccessful", pageheader);
+            }
+        }
+
+    }
+
+    private async Task OpenDialog(string palletcode, string gatefrom)
+    {
+
+         bool? result = await CheckRoleEdit();
+        if (result == true)
+        {
+            DialogOptions closeOnEscapeKey = new DialogOptions() { CloseButton = true };
+            var parameters = new DialogParameters { ["Palletcode"] = palletcode };
+            string sdialogTitle = "[" + palletcode + "] GATE : " + gatefrom;
+
+            var dialog = DialogService.Show<DialogRGVChangeGate>(sdialogTitle, parameters);
+        }
+
+    }
+
+
+
+
+    #region "Role"
+    private async Task<bool> CheckRoleAdd()
+    {
+        bool bRet = false;
+
+        if (Roles.ToList().Count > 0)
+        {
+            var iCorrect = Roles.ToList().FindIndex(a => a.Role_add == true);
+
+            if (iCorrect >= 0)
+            {
+                bRet = true;
+            }
+            else
+            {
+                bRet = false;
+            }
+
+            if (bRet == false)
+            {
+                bool? result = await DialogService.ShowMessageBox(
+                        "Warning", VarGlobals.MessageRoleAddPermit, yesText: "OK");
+            }
+
+        }
+        else
+        {
+            bool? result = await DialogService.ShowMessageBox(
+                                "Warning", VarGlobals.MessageRoleAuthrizedPermit, yesText: "OK");
+        }
+
+        return bRet;
+    }
+
+    private async Task<bool> CheckRoleEdit()
+    {
+        bool bRet = false;
+
+        if (Roles.ToList().Count > 0)
+        {
+            var iCorrect = Roles.ToList().FindIndex(a => a.Role_edit == true);
+
+            if (iCorrect >= 0)
+            {
+                bRet = true;
+            }
+            else
+            {
+                bRet = false;
+            }
+
+            if (bRet == false)
+            {
+                bool? result = await DialogService.ShowMessageBox(
+                        "Warning", VarGlobals.MessageRoleEditPermit, yesText: "OK");
+            }
+        }
+        else
+        {
+            bool? result = await DialogService.ShowMessageBox(
+                                "Warning", VarGlobals.MessageRoleAuthrizedPermit, yesText: "OK");
+        }
+
+        return bRet;
+    }
+
+    private async Task<bool> CheckRoleDelete()
+    {
+        bool bRet = false;
+
+        if (Roles.ToList().Count > 0)
+        {
+            var iCorrect = Roles.ToList().FindIndex(a => a.Role_del == true);
+
+            if (iCorrect >= 0)
+            {
+                bRet = true;
+            }
+            else
+            {
+                bRet = false;
+            }
+
+            if (bRet == false)
+            {
+                bool? result = await DialogService.ShowMessageBox(
+                        "Warning", VarGlobals.MessageRoleDelPermit, yesText: "OK");
+            }
+        }
+        else
+        {
+            bool? result = await DialogService.ShowMessageBox(
+                                "Warning", VarGlobals.MessageRoleAuthrizedPermit, yesText: "OK");
+        }
+
+
+        return bRet;
+    }
+
+    private async Task<bool> CheckRoleApprove()
+    {
+        bool bRet = false;
+
+        if (Roles.ToList().Count > 0)
+        {
+            var iCorrect = Roles.ToList().FindIndex(a => a.Role_apv == true);
+
+            if (iCorrect >= 0)
+            {
+                bRet = true;
+            }
+            else
+            {
+                bRet = false;
+            }
+
+            if (bRet == false)
+            {
+                bool? result = await DialogService.ShowMessageBox(
+                        "Warning", VarGlobals.MessageRoleApprovePermit, yesText: "OK");
+            }
+        }
+        else
+        {
+            bool? result = await DialogService.ShowMessageBox(
+                                "Warning", VarGlobals.MessageRoleAuthrizedPermit, yesText: "OK");
+        }
+        return bRet;
+    }
+
+    private async Task<bool> CheckRoleReport()
+    {
+        bool bRet = false;
+
+        if (Roles.ToList().Count > 0)
+        {
+            var iCorrect = Roles.ToList().FindIndex(a => a.Role_rpt == true);
+
+            if (iCorrect >= 0)
+            {
+                bRet = true;
+            }
+            else
+            {
+                bRet = false;
+            }
+
+            if (bRet == false)
+            {
+                bool? result = await DialogService.ShowMessageBox(
+                        "Warning", VarGlobals.MessageRoleReportPermit, yesText: "OK");
+            }
+        }
+        else
+        {
+            bool? result = await DialogService.ShowMessageBox(
+                                "Warning", VarGlobals.MessageRoleAuthrizedPermit, yesText: "OK");
+        }
+
+        return bRet;
+    }
+    #endregion
 }

@@ -17,5 +17,6 @@ namespace GoWMS.Server.Models.Hagv
         public DateTime? Stime { get; set; }
         public DateTime? Etime { get; set; }
         public string Loadtime { get; set; }
+        public string Work_mode { get; set; }
     }
 }

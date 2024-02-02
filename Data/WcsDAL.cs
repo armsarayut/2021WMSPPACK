@@ -110,6 +110,53 @@ namespace GoWMS.Server.Data
             return lstobj;
         }
 
+        public IEnumerable<Set_Rgvgate> GetRGVGate()
+        {
+            List<Set_Rgvgate> lstobj = new List<Set_Rgvgate>();
+            using (NpgsqlConnection con = new NpgsqlConnection(connectionString))
+            {
+                try
+                {
+                    StringBuilder sql = new StringBuilder();
+                    sql.AppendLine("select idx, created, entity_lock, modified, client_id, client_ip, gate_id, gate_no, gate_desc");
+                    sql.AppendLine("from wcs.set_rgvgate");
+                    sql.AppendLine("order by gate_id");
+                    NpgsqlCommand cmd = new NpgsqlCommand(sql.ToString(), con)
+                    {
+                        CommandType = CommandType.Text
+                    };
+                    con.Open();
+
+                    NpgsqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+
+                        Set_Rgvgate objrd = new Set_Rgvgate
+                        {
+                            Idx = rdr["idx"] == DBNull.Value ? null : (Int64?)rdr["idx"],
+                            Created = rdr["created"] == DBNull.Value ? null : (DateTime?)rdr["created"],
+                            Entity_Lock = rdr["entity_lock"] == DBNull.Value ? null : (Int32?)rdr["entity_lock"],
+                            Modified = rdr["modified"] == DBNull.Value ? null : (DateTime?)rdr["modified"],
+                            Client_Id = rdr["client_id"] == DBNull.Value ? null : (Int64?)rdr["client_id"],
+                            Gate_Id= rdr["gate_id"].ToString(),
+                            Gate_No = rdr["gate_no"] == DBNull.Value ? null : (Int32?)rdr["gate_no"],
+                            Gate_Desc = rdr["gate_desc"].ToString()
+                        };
+                        lstobj.Add(objrd);
+                    }
+                }
+                catch (NpgsqlException ex)
+                {
+                    Log.Error(ex.ToString());
+                }
+                finally
+                {
+                    con.Close();
+                }
+            }
+            return lstobj;
+        }
+
         public Boolean CreateCommandMC(string mccode, Int32 command )
         {
             Boolean bRet = false;
@@ -517,6 +564,83 @@ namespace GoWMS.Server.Data
             return lstobj;
         }
 
+        public IEnumerable<Tas_Rgvworks> GetRGVWorksPD()
+        {
+            List<Tas_Rgvworks> lstobj = new List<Tas_Rgvworks>();
+            using (NpgsqlConnection con = new NpgsqlConnection(connectionString))
+            {
+                try
+                {
+                    StringBuilder sql = new StringBuilder();
+                    sql.AppendLine("SELECT idx, created, entity_lock, modified, client_id, client_ip");
+                    sql.AppendLine(", lpncode, work_code, work_status, work_id");
+                    sql.AppendLine(", rgv_no, rgv_from, rgv_to, rgv_status");
+                    sql.AppendLine(", cvy_no, cvy_from, cvy_to, cvy_status");
+                    sql.AppendLine(", pallet_no, pallet_hight, pallet_width, pallet_size");
+                    sql.AppendLine(", ctime, stime, etime, gate_out, work_priority");
+                    sql.AppendLine("FROM wcs.vqueue_rgv_pdstation");
+                    sql.AppendLine("order by ctime");
+
+                    NpgsqlCommand cmd = new NpgsqlCommand(sql.ToString(), con)
+                    {
+                        CommandType = CommandType.Text
+                    };
+                    con.Open();
+
+
+                    NpgsqlDataReader rdr = cmd.ExecuteReader();
+                    while (rdr.Read())
+                    {
+
+                        Tas_Rgvworks objrd = new Tas_Rgvworks
+                        {
+                            Idx = rdr["idx"] == DBNull.Value ? null : (Int64?)rdr["idx"],
+                            Created = rdr["created"] == DBNull.Value ? null : (DateTime?)rdr["created"],
+                            Entity_Lock = rdr["entity_lock"] == DBNull.Value ? null : (Int32?)rdr["entity_lock"],
+                            Modified = rdr["modified"] == DBNull.Value ? null : (DateTime?)rdr["modified"],
+                            Client_Id = rdr["client_id"] == DBNull.Value ? null : (Int64?)rdr["client_id"],
+                            Client_Ip = rdr["client_ip"].ToString(),
+                            Lpncode = rdr["lpncode"].ToString(),
+                            Work_Code = rdr["work_code"].ToString(),
+                            Work_Status = rdr["work_status"] == DBNull.Value ? null : (Int32?)rdr["work_status"],
+                            Work_Id = rdr["work_id"] == DBNull.Value ? null : (Int64?)rdr["work_id"],
+
+                            Rgv_No = rdr["rgv_no"] == DBNull.Value ? null : (Int32?)rdr["rgv_no"],
+                            Rgv_From = rdr["rgv_from"] == DBNull.Value ? null : (Int32?)rdr["rgv_from"],
+                            Rgv_To = rdr["rgv_to"] == DBNull.Value ? null : (Int32?)rdr["rgv_to"],
+                            Rgv_Status = rdr["rgv_status"] == DBNull.Value ? null : (Int32?)rdr["rgv_status"],
+
+                            Cvy_No = rdr["cvy_no"] == DBNull.Value ? null : (Int32?)rdr["cvy_no"],
+                            Cvy_From = rdr["cvy_from"] == DBNull.Value ? null : (Int32?)rdr["cvy_from"],
+                            Cvy_To = rdr["cvy_to"] == DBNull.Value ? null : (Int32?)rdr["cvy_to"],
+                            Cvy_Status = rdr["cvy_status"] == DBNull.Value ? null : (Int32?)rdr["cvy_status"],
+
+                            Pallet_No = rdr["pallet_no"] == DBNull.Value ? null : (Int32?)rdr["pallet_no"],
+                            Pallet_Hight = rdr["pallet_hight"] == DBNull.Value ? null : (Int32?)rdr["pallet_hight"],
+                            Pallet_Width = rdr["pallet_width"] == DBNull.Value ? null : (Int32?)rdr["pallet_width"],
+                            Pallet_Size = rdr["pallet_size"] == DBNull.Value ? null : (Int32?)rdr["pallet_size"],
+
+                            Ctime = rdr["ctime"] == DBNull.Value ? null : (DateTime?)rdr["ctime"],
+                            Stime = rdr["stime"] == DBNull.Value ? null : (DateTime?)rdr["stime"],
+                            Etime = rdr["etime"] == DBNull.Value ? null : (DateTime?)rdr["etime"],
+                            Gate_Out = rdr["gate_out"] == DBNull.Value ? null : (Int32?)rdr["gate_out"],
+                            Work_Priority = rdr["work_priority"] == DBNull.Value ? null : (Int32?)rdr["work_priority"]
+
+                        };
+                        lstobj.Add(objrd);
+                    }
+                }
+                catch (NpgsqlException ex)
+                {
+                    Log.Error(ex.ToString());
+                }
+                finally
+                {
+                    con.Close();
+                }
+            }
+            return lstobj;
+        }
 
         public IEnumerable<AsrsPerformance> GetAsrsPerformance(DateTime Fmtime , DateTime Totime)
         {
@@ -978,8 +1102,88 @@ namespace GoWMS.Server.Data
             return lstobj;
         }
 
+        public void SetRgvChangeGate(string pallet, string gate , ref Int32 Refiret, ref string Refsret)
+        {
+            Int32? iRet = 0;
+            string sRet = "Calling";
+            NpgsqlConnection con = new NpgsqlConnection(connectionString);
+            try
+            {
+                con.Open();
+                StringBuilder sql = new StringBuilder();
+                sql.AppendLine("Call wcs.poc_rgv_changegate(");
+                sql.AppendLine("@spalletno, @sgate, @retchk, @retmsg)");
+                NpgsqlCommand cmd = new NpgsqlCommand(sql.ToString(), con)
+                {
+                    CommandType = CommandType.Text
+                };
+
+                cmd.Parameters.AddWithValue("@spalletno", pallet);
+                cmd.Parameters.AddWithValue("@sgate", gate);
+                cmd.Parameters.AddWithValue("@retchk", iRet);
+                cmd.Parameters.AddWithValue("@retmsg", sRet);
+                NpgsqlDataReader rdr = cmd.ExecuteReader();
+                while (rdr.Read())
+                {
+                    iRet = rdr["retchk"] == DBNull.Value ? null : (Int32?)rdr["retchk"];
+                    sRet = rdr["retmsg"].ToString();
+                }
+
+                Refiret = (int)iRet;
+                Refsret = sRet;
+            }
+            catch (NpgsqlException ex)
+            {
+                Log.Error(ex.ToString());
+                sRet = ex.ToString();
+                Refsret = sRet;
+            }
+            finally
+            {
+                con.Close();
+            }
+        }
 
 
+
+        public bool SetUrgentAsrsQueueByPallet(string spallet)
+        {
+            bool bret = false;
+            using (NpgsqlConnection con = new NpgsqlConnection(connectionString))
+            {
+                try
+                {
+                    StringBuilder sql = new StringBuilder();
+                    sql.AppendLine("Update wcs.tas_mcworks");
+                    sql.AppendLine("Set ctime = (SELECT MIN(ctime) + INTERVAL '-1 Minutes' FROM wcs.tas_mcworks WHERE work_code = @work_code)");
+                    sql.AppendLine("where lpncode = @Pallet");
+
+                    NpgsqlCommand cmd = new NpgsqlCommand(sql.ToString(), con)
+                    {
+                        CommandType = CommandType.Text
+                    };
+
+                    cmd.Parameters.AddWithValue("@work_code", "05");
+                    cmd.Parameters.AddWithValue("@Pallet", spallet);
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    con.Close();
+
+                    bret = true;
+                }
+                catch (NpgsqlException ex)
+                {
+                    bret = false;
+                    Log.Error(ex.ToString());
+                }
+                finally
+                {
+                    con.Close();
+                }
+            }
+
+            return bret;
+        }
 
 
 
